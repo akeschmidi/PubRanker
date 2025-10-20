@@ -1,0 +1,407 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000001 /* PubRankerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000 /* PubRankerApp.swift */; };
+		A10000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000002 /* ContentView.swift */; };
+		A10000101 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000100 /* Quiz.swift */; };
+		A10000103 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000102 /* Team.swift */; };
+		A10000105 /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000104 /* Round.swift */; };
+		A10000201 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000200 /* QuizViewModel.swift */; };
+		A10000301 /* QuizListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000300 /* QuizListView.swift */; };
+		A10000303 /* QuizDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000302 /* QuizDetailView.swift */; };
+		A10000305 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000304 /* LeaderboardView.swift */; };
+		A10000307 /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000306 /* TeamManagementView.swift */; };
+		A10000309 /* RoundManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000308 /* RoundManagementView.swift */; };
+		A10000311 /* ScoreEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000310 /* ScoreEntryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000000 /* PubRankerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubRankerApp.swift; sourceTree = "<group>"; };
+		A10000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A10000100 /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		A10000102 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
+		A10000104 /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
+		A10000200 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
+		A10000300 /* QuizListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizListView.swift; sourceTree = "<group>"; };
+		A10000302 /* QuizDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizDetailView.swift; sourceTree = "<group>"; };
+		A10000304 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		A10000306 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
+		A10000308 /* RoundManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundManagementView.swift; sourceTree = "<group>"; };
+		A10000310 /* ScoreEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEntryView.swift; sourceTree = "<group>"; };
+		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1FFFFFFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1000010 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10000100 /* Quiz.swift */,
+				A10000102 /* Team.swift */,
+				A10000104 /* Round.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A1000020 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A10000200 /* QuizViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A1000030 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10000300 /* QuizListView.swift */,
+				A10000302 /* QuizDetailView.swift */,
+				A10000304 /* LeaderboardView.swift */,
+				A10000306 /* TeamManagementView.swift */,
+				A10000308 /* RoundManagementView.swift */,
+				A10000310 /* ScoreEntryView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A1FFFFFB = {
+			isa = PBXGroup;
+			children = (
+				A1FFFFFD /* PubRanker */,
+				A1FFFFFC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1FFFFFC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1FFFFFFF /* PubRanker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1FFFFFD /* PubRanker */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000 /* PubRankerApp.swift */,
+				A10000002 /* ContentView.swift */,
+				A1000010 /* Models */,
+				A1000020 /* ViewModels */,
+				A1000030 /* Views */,
+			);
+			path = PubRanker;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1FFFFFE /* PubRanker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1000040 /* Build configuration list for PBXNativeTarget "PubRanker" */;
+			buildPhases = (
+				A1FFFFFA /* Sources */,
+				A1FFFFFFE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PubRanker;
+			productName = PubRanker;
+			productReference = A1FFFFFFF /* PubRanker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1FFFFFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					A1FFFFFE = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A1000041 /* Build configuration list for PBXProject "PubRanker" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				de,
+				Base,
+			);
+			mainGroup = A1FFFFFB;
+			productRefGroup = A1FFFFFC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1FFFFFE /* PubRanker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1FFFFFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000001 /* PubRankerApp.swift in Sources */,
+				A10000003 /* ContentView.swift in Sources */,
+				A10000101 /* Quiz.swift in Sources */,
+				A10000103 /* Team.swift in Sources */,
+				A10000105 /* Round.swift in Sources */,
+				A10000201 /* QuizViewModel.swift in Sources */,
+				A10000301 /* QuizListView.swift in Sources */,
+				A10000303 /* QuizDetailView.swift in Sources */,
+				A10000305 /* LeaderboardView.swift in Sources */,
+				A10000307 /* TeamManagementView.swift in Sources */,
+				A10000309 /* RoundManagementView.swift in Sources */,
+				A10000311 /* ScoreEntryView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1000042 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				AUTOMATION_APPLE_EVENTS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 34DTFQCK2V;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Debug;
+		};
+		A1000043 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				AUTOMATION_APPLE_EVENTS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 34DTFQCK2V;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = YES;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1000040 /* Build configuration list for PBXNativeTarget "PubRanker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000042 /* Debug */,
+				A1000043 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1000041 /* Build configuration list for PBXProject "PubRanker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000042 /* Debug */,
+				A1000043 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1FFFFFF /* Project object */;
+}

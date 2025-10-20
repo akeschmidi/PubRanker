@@ -1,0 +1,31 @@
+//
+//  Round.swift
+//  PubRanker
+//
+//  Created on 20.10.2025
+//
+
+import Foundation
+import SwiftData
+
+@Model
+final class Round {
+    var id: UUID
+    var name: String
+    var maxPoints: Int
+    var orderIndex: Int
+    var isCompleted: Bool
+    var createdAt: Date
+    
+    @Relationship(deleteRule: .nullify, inverse: \Quiz.rounds)
+    var quiz: Quiz?
+    
+    init(name: String, maxPoints: Int = 10, orderIndex: Int = 0) {
+        self.id = UUID()
+        self.name = name
+        self.maxPoints = maxPoints
+        self.orderIndex = orderIndex
+        self.isCompleted = false
+        self.createdAt = Date()
+    }
+}
