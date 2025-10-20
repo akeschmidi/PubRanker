@@ -86,7 +86,7 @@ struct LeaderboardView: View {
                         // Podium View for Top 3 ranks (may include more than 3 teams if tied)
                         let rankedTeams = calculateRanks()
                         let topRanks = rankedTeams.filter { $0.rank <= 3 }
-                        if topRanks.count >= 3 && topRanks.count <= 5 {
+                        if topRanks.count >= 3 {
                             PodiumView(rankedTeams: topRanks)
                                 .padding(.bottom, 20)
                         }
@@ -119,35 +119,131 @@ struct PodiumView: View {
         let rank2Teams = rankedTeams.filter { $0.rank == 2 }
         let rank3Teams = rankedTeams.filter { $0.rank == 3 }
         
-        HStack(alignment: .bottom, spacing: 20) {
-            // 2nd Place
-            if !rank2Teams.isEmpty {
-                VStack(spacing: 8) {
-                    ForEach(rank2Teams, id: \.team.id) { item in
-                        PodiumPlace(team: item.team, rank: 2, height: 120, isShared: rank2Teams.count > 1)
+        // Wenn zu viele Teams für Podium, zeige kompakte Version
+        let totalTeams = rank1Teams.count + rank2Teams.count + rank3Teams.count
+        
+        if totalTeams > 5 {
+            // Kompakte Podium-Ansicht
+            VStack(spacing: 16) {
+                Text("🏆 Top 3 Ränge")
+                    .font(.title2)
+                    .bold()
+                
+                VStack(spacing: 12) {
+                    if !rank1Teams.isEmpty {
+                        CompactRankRow(teams: rank1Teams, rank: 1)
+                    }
+                    if !rank2Teams.isEmpty {
+                        CompactRankRow(teams: rank2Teams, rank: 2)
+                    }
+                    if !rank3Teams.isEmpty {
+                        CompactRankRow(teams: rank3Teams, rank: 3)
                     }
                 }
             }
-            
-            // 1st Place
-            if !rank1Teams.isEmpty {
-                VStack(spacing: 8) {
-                    ForEach(rank1Teams, id: \.team.id) { item in
-                        PodiumPlace(team: item.team, rank: 1, height: 150, isShared: rank1Teams.count > 1)
+            .padding(.vertical, 20)
+        } else {
+            // Standard Podium
+            HStack(alignment: .bottom, spacing: 20) {
+                // 2nd Place
+                if !rank2Teams.isEmpty {
+                    VStack(spacing: 8) {
+                        ForEach(rank2Teams, id: \.team.id) { item in
+                            PodiumPlace(team: item.team, rank: 2, height: 120, isShared: rank2Teams.count > 1)
+                        }
+                    }
+                }
+                
+                // 1st Place
+                if !rank1Teams.isEmpty {
+                    VStack(spacing: 8) {
+                        ForEach(rank1Teams, id: \.team.id) { item in
+                            PodiumPlace(team: item.team, rank: 1, height: 150, isShared: rank1Teams.count > 1)
+                        }
+                    }
+                }
+                
+                // 3rd Place
+                if !rank3Teams.isEmpty {
+                    VStack(spacing: 8) {
+                        ForEach(rank3Teams, id: \.team.id) { item in
+                            PodiumPlace(team: item.team, rank: 3, height: 100, isShared: rank3Teams.count > 1)
+                        }
                     }
                 }
             }
+            .padding(.vertical, 20)
+        }
+    }
+}
+
+// Kompakte Zeile für Ränge mit vielen Teams
+struct CompactRankRow: View {
+    let teams: [(team: Team, rank: Int)]
+    let rank: Int
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(rankEmoji)
+                    .font(.title)
+                Text("Platz \(rank)")
+                    .font(.headline)
+                    .foregroundStyle(rankColor)
+                if teams.count > 1 {
+                    Text("(geteilt)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Text("\(teams.first?.team.totalScore ?? 0) Punkte")
+                    .font(.headline)
+                    .foregroundStyle(rankColor)
+            }
             
-            // 3rd Place
-            if !rank3Teams.isEmpty {
-                VStack(spacing: 8) {
-                    ForEach(rank3Teams, id: \.team.id) { item in
-                        PodiumPlace(team: item.team, rank: 3, height: 100, isShared: rank3Teams.count > 1)
+            // Teams
+            HStack(spacing: 8) {
+                ForEach(teams, id: \.team.id) { item in
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(Color(hex: item.team.color) ?? .blue)
+                            .frame(width: 8, height: 8)
+                        Text(item.team.name)
+                            .font(.caption)
+                            .lineLimit(1)
                     }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(rankColor.opacity(0.15))
+                    .clipShape(Capsule())
                 }
             }
         }
-        .padding(.vertical, 20)
+        .padding(12)
+        .background(rankColor.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(rankColor.opacity(0.3), lineWidth: 2)
+        )
+    }
+    
+    private var rankEmoji: String {
+        switch rank {
+        case 1: return "🥇"
+        case 2: return "🥈"
+        case 3: return "🥉"
+        default: return ""
+        }
+    }
+    
+    private var rankColor: Color {
+        switch rank {
+        case 1: return .yellow
+        case 2: return .gray
+        case 3: return Color(red: 0.8, green: 0.5, blue: 0.2)
+        default: return .blue
+        }
     }
 }
 
