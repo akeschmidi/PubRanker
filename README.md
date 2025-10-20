@@ -2,6 +2,15 @@
 
 Eine moderne macOS und iPadOS App für QuizMaster, um Punkte bei Pub Quiz-Veranstaltungen zu verwalten und Ranglisten zu erstellen.
 
+## Status
+
+![Build & Test](https://github.com/akeschmidi/PubRanker/actions/workflows/build.yml/badge.svg)
+![SwiftLint](https://github.com/akeschmidi/PubRanker/actions/workflows/swiftlint.yml/badge.svg)
+![Release](https://github.com/akeschmidi/PubRanker/actions/workflows/release.yml/badge.svg)
+![Platform](https://img.shields.io/badge/platform-macOS-blue)
+![Swift](https://img.shields.io/badge/swift-5.9-orange)
+![License](https://img.shields.io/github/license/akeschmidi/PubRanker)
+
 ## Überblick
 
 PubRanker hilft QuizMastern dabei, Pub Quiz-Veranstaltungen effizient zu organisieren:
@@ -22,7 +31,7 @@ PubRanker hilft QuizMastern dabei, Pub Quiz-Veranstaltungen effizient zu organis
 - ✅ Export der Ergebnisse
 
 ### Geplante Features
-- 📱 Sync zwischen macOS und iPadOS
+- 📱 Sync zwischen macOS und iPadOS mittels iCloud
 - 🎨 Customizable Themes
 - 📊 Statistiken und Analysen
 - 🏆 Achievements und Trophäen

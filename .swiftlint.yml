@@ -1,0 +1,137 @@
+# SwiftLint Configuration für PubRanker
+
+# Welche Dateien sollen geprüft werden
+included:
+  - PubRanker
+
+# Welche Dateien sollen ignoriert werden
+excluded:
+  - Pods
+  - build
+  - .build
+  - DerivedData
+  - .swiftpm
+
+# Regeln die deaktiviert werden sollen
+disabled_rules:
+  - trailing_whitespace
+  - todo
+  - line_length  # Manchmal sind längere Zeilen OK
+
+# Aktivierte Opt-In Regeln
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - explicit_init
+  - first_where
+  - sorted_first_last
+  - closure_spacing
+  - contains_over_first_not_nil
+  - empty_collection_literal
+  - fallthrough
+  - fatal_error_message
+  - file_header
+  - force_unwrapping
+  - implicit_return
+  - joined_default_parameter
+  - last_where
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_literal_brackets
+  - multiline_parameters
+  - operator_usage_whitespace
+  - overridden_super_call
+  - pattern_matching_keywords
+  - prefer_self_type_over_type_of_self
+  - private_action
+  - private_outlet
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - toggle_bool
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - yoda_condition
+
+# Regeln Konfiguration
+line_length:
+  warning: 120
+  error: 200
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_urls: true
+
+file_length:
+  warning: 500
+  error: 1000
+  ignore_comment_only_lines: true
+
+function_body_length:
+  warning: 50
+  error: 100
+
+type_body_length:
+  warning: 300
+  error: 500
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+large_tuple:
+  warning: 3
+  error: 4
+
+type_name:
+  min_length: 3
+  max_length:
+    warning: 40
+    error: 50
+
+identifier_name:
+  min_length:
+    warning: 2
+  max_length:
+    warning: 40
+    error: 50
+  excluded:
+    - id
+    - ID
+    - URL
+    - i
+    - j
+    - x
+    - y
+    - z
+
+nesting:
+  type_level:
+    warning: 2
+  function_level:
+    warning: 3
+
+# Custom Rules
+custom_rules:
+  double_space:
+    include: "*.swift"
+    name: "Double space"
+    regex: '([a-z,A-Z] \s+)'
+    message: "Doppelte Leerzeichen sollten vermieden werden"
+    severity: warning
+    
+  empty_first_line:
+    name: "Empty First Line"
+    regex: '(^[ a-zA-Z ]*(?:protocol|extension|class|struct) (?!(?:var|let))[ a-zA-Z:]*\{\n *\S+)'
+    message: "Es sollte eine Leerzeile nach der Klassendefinition geben"
+    severity: warning
+
+# Reporter
+reporter: "xcode"
+
+# Analyzer Rules (benötigt vollständige Builds)
+analyzer_rules:
+  - unused_declaration
+  - unused_import

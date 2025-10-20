@@ -1,0 +1,91 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  checks:
+    name: Pull Request Checks
+    runs-on: macos-14
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.4'
+        
+    - name: Check Build
+      id: build
+      run: |
+        xcodebuild build \
+          -project PubRanker.xcodeproj \
+          -scheme PubRanker \
+          -destination 'platform=macOS' \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+      continue-on-error: true
+      
+    - name: Check SwiftLint
+      id: lint
+      run: |
+        brew install swiftlint
+        swiftlint lint --quiet
+      continue-on-error: true
+      
+    - name: Check File Changes
+      run: |
+        echo "📝 Geänderte Dateien:"
+        git diff --name-only origin/main...HEAD
+        
+    - name: Summary
+      run: |
+        echo "## Pull Request Checks 🔍" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ steps.build.outcome }}" == "success" ]; then
+          echo "✅ Build: Erfolgreich" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Build: Fehlgeschlagen" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ steps.lint.outcome }}" == "success" ]; then
+          echo "✅ SwiftLint: Keine Fehler" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ SwiftLint: Warnings gefunden" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Prüfen Sie die Details oben für mehr Informationen." >> $GITHUB_STEP_SUMMARY
+        
+    - name: Comment PR
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const buildStatus = '${{ steps.build.outcome }}' === 'success' ? '✅' : '❌';
+          const lintStatus = '${{ steps.lint.outcome }}' === 'success' ? '✅' : '⚠️';
+          
+          const comment = `## 🤖 PR Check Results
+          
+          | Check | Status |
+          |-------|--------|
+          | Build | ${buildStatus} |
+          | SwiftLint | ${lintStatus} |
+          
+          Workflow run: [View Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

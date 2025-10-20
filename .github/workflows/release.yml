@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: macos-14
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.4'
+        
+    - name: Extract Version
+      id: version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "📦 Version: $VERSION"
+        
+    - name: Build Release
+      run: |
+        xcodebuild build \
+          -project PubRanker.xcodeproj \
+          -scheme PubRanker \
+          -destination 'platform=macOS' \
+          -configuration Release \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+          
+    - name: Create Archive
+      run: |
+        xcodebuild archive \
+          -project PubRanker.xcodeproj \
+          -scheme PubRanker \
+          -destination 'platform=macOS' \
+          -archivePath ./build/PubRanker.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+      continue-on-error: true
+        
+    - name: Create Release Notes
+      run: |
+        cat > release_notes.md << 'EOF'
+        # PubRanker v${{ steps.version.outputs.version }}
+        
+        ## 🎉 Neue Features in dieser Version
+        
+        Prüfen Sie die Commit-Historie für Details.
+        
+        ## 📥 Installation
+        
+        1. Laden Sie `PubRanker.app` herunter
+        2. Verschieben Sie die App in Ihren Programme-Ordner
+        3. Öffnen Sie die App (Rechtsklick → Öffnen beim ersten Start)
+        
+        ## 🔧 Systemanforderungen
+        
+        - macOS 14.0 (Sonoma) oder neuer
+        - Apple Silicon oder Intel Mac
+        
+        ## 📝 Changelog
+        
+        Siehe [CHANGELOG.md](CHANGELOG.md) für alle Änderungen.
+        EOF
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: PubRanker v${{ steps.version.outputs.version }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Release Complete
+      run: |
+        echo "✅ Release v${{ steps.version.outputs.version }} erstellt!"
+        echo "🔗 https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"

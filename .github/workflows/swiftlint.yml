@@ -1,0 +1,33 @@
+name: SwiftLint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  swiftlint:
+    name: SwiftLint Code Quality
+    runs-on: macos-14
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Install SwiftLint
+      run: |
+        brew install swiftlint
+        
+    - name: SwiftLint Version
+      run: swiftlint version
+      
+    - name: Run SwiftLint
+      run: |
+        swiftlint lint --reporter github-actions-logging
+      continue-on-error: true
+      
+    - name: SwiftLint Summary
+      run: |
+        echo "📝 SwiftLint Analyse abgeschlossen"
+        echo "Prüfen Sie die Logs für Warnings und Errors"
