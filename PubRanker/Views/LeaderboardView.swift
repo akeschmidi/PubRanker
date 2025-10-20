@@ -11,17 +11,18 @@ struct LeaderboardView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     
-    // Calculate ranks with tied teams getting the same rank
+    // Calculate ranks with tied teams getting the same rank (Dense Ranking)
+    // Example: Team A=100pts (Rank 1), Team B=100pts (Rank 1), Team C=95pts (Rank 2)
     private func calculateRanks() -> [(team: Team, rank: Int)] {
         let sortedTeams = quiz.sortedTeamsByScore
         var result: [(team: Team, rank: Int)] = []
         var currentRank = 1
         var previousScore: Int?
         
-        for (index, team) in sortedTeams.enumerated() {
+        for team in sortedTeams {
             if let prevScore = previousScore, team.totalScore != prevScore {
-                // Different score - update rank to current position
-                currentRank = index + 1
+                // Different score - increment rank by 1 (Dense Ranking)
+                currentRank += 1
             }
             result.append((team: team, rank: currentRank))
             previousScore = team.totalScore
