@@ -1,0 +1,201 @@
+═══════════════════════════════════════════════════════════════
+  PUBRANKER - APP STORE KOPIERVORLAGEN
+  Direktes Copy & Paste für App Store Connect
+═══════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────┐
+│ 1. APP NAME (30 Zeichen max)                                │
+└─────────────────────────────────────────────────────────────┘
+PubRanker - Pub Quiz Manager
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 2. SUBTITLE (30 Zeichen max)                                │
+└─────────────────────────────────────────────────────────────┘
+Quiz-Punkte einfach verwalten
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 3. PROMOTIONAL TEXT (170 Zeichen max)                       │
+└─────────────────────────────────────────────────────────────┘
+Neu: Geteilte Plätze! Teams mit gleicher Punktzahl teilen sich den Rang. Perfekt für faire Quiz-Veranstaltungen. Jetzt mit Auto-Save für alle Punkteingaben!
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 4. KEYWORDS (100 Zeichen max, komma-getrennt)               │
+└─────────────────────────────────────────────────────────────┘
+pub quiz,trivia,quiz manager,punkteverwaltung,quiz veranstalter,pub night,rangliste,team quiz,quiz app,scoreboard
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 5. BESCHREIBUNG (4000 Zeichen max)                          │
+└─────────────────────────────────────────────────────────────┘
+Die perfekte App für Pub Quiz Veranstalter! Verwalten Sie Teams, Runden und Punkte mit Leichtigkeit.
+
+✨ HIGHLIGHTS:
+• Live-Rangliste mit Podium
+• Team-Management mit Auto-Farben
+• Punkteeingabe mit Auto-Save
+• Geteilte Plätze unterstützt
+• Runden-Wizard für schnelles Setup
+• Offline-fähig mit SwiftData
+
+🎯 PERFEKT FÜR:
+• Pub Quiz Veranstalter
+• Trivia Night Hosts
+• Firmenevents & Team-Building
+• Private Quiz-Partys
+
+───────────────────────────────────────────
+
+**Die professionelle Lösung für Pub Quiz Veranstaltungen**
+
+PubRanker macht die Organisation von Pub Quiz-Veranstaltungen zum Kinderspiel. Egal ob Sie regelmäßige Pub Quizzes veranstalten oder eine einmalige Trivia Night planen – mit PubRanker behalten Sie immer den Überblick.
+
+**HAUPTFUNKTIONEN**
+
+📊 Live-Rangliste mit Podium
+Automatische Berechnung der Rankings mit schöner Podium-Darstellung für die Top 3. Geteilte Plätze bei Punktegleichstand werden fair dargestellt.
+
+👥 Intelligentes Team-Management
+Der Team-Wizard erstellt mehrere Teams auf einmal mit automatischer Farbzuweisung. Team-Namen sind frei anpassbar.
+
+🎯 Runden-basierte Punktevergabe
+Erstellen Sie beliebig viele Runden mit individuellen Punktzahlen. Der Runden-Wizard macht das Setup zum Kinderspiel. Auto-Save bei jeder Eingabe.
+
+📱 Moderne macOS Integration
+Native SwiftUI-Oberfläche optimiert für macOS Sonoma und neuer. Mit Tastatur-Shortcuts, Dunkelmodus und Retina-Grafiken.
+
+💾 Zuverlässige Datenspeicherung
+SwiftData sorgt für sichere Persistenz. Automatische Speicherung ohne Cloud-Verbindung. Offline voll funktionsfähig.
+
+**FÜR WEN IST PUBRANKER?**
+
+Pub Quiz Veranstalter: Perfekt für regelmäßige Pub Quiz-Abende
+Trivia Night Hosts: Organisieren Sie spektakuläre Trivia Nights
+Event-Manager: Planen Sie Firmenevents mit Quiz-Elementen
+Hobby-QuizMaster: Veranstalten Sie private Quiz-Partys
+
+**TYPISCHER ABLAUF**
+1. Quiz erstellen mit Name und Ort
+2. Teams hinzufügen via Team-Wizard
+3. Runden definieren mit Punktzahlen
+4. Punkte vergeben nach jeder Runde
+5. Rangliste zeigen auf großem Bildschirm
+6. Gewinner küren mit automatischem Podium
+
+**DATENSCHUTZ & SICHERHEIT**
+Alle Daten bleiben auf Ihrem Mac. Keine Cloud-Synchronisation erforderlich. App Sandbox für maximale Sicherheit. Keine Werbung, keine Tracker, keine Benutzerkonten.
+
+**IN DIESER VERSION**
+• Live-Rangliste mit Podium
+• Team-Management mit Wizard
+• Runden-basierte Punktevergabe
+• Auto-Save Funktion
+• Geteilte Plätze
+• Native macOS Design
+• Offline-fähig
+
+Machen Sie Ihre nächste Quiz-Veranstaltung zum Erfolg mit PubRanker!
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 6. RELEASE NOTES / WAS IST NEU (4000 Zeichen max)           │
+└─────────────────────────────────────────────────────────────┘
+🎉 Willkommen bei PubRanker!
+
+Die erste Version ist da! Verwalten Sie Pub Quiz-Veranstaltungen professionell und einfach.
+
+✨ Features:
+• Live-Rangliste mit Podium
+• Team-Management mit Wizard
+• Runden-basierte Punktevergabe
+• Auto-Save Funktion
+• Geteilte Plätze unterstützt
+• Native macOS Design
+• Offline-fähig
+
+Viel Erfolg bei Ihrer nächsten Quiz-Veranstaltung!
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 7. SUPPORT URL                                               │
+└─────────────────────────────────────────────────────────────┘
+https://github.com/akeschmidi/PubRanker
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 8. MARKETING URL                                             │
+└─────────────────────────────────────────────────────────────┘
+https://github.com/akeschmidi/PubRanker
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 9. KATEGORIEN                                                │
+└─────────────────────────────────────────────────────────────┘
+Primär: Produktivität (Productivity)
+Sekundär: Unterhaltung (Entertainment)
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 10. COPYRIGHT                                                │
+└─────────────────────────────────────────────────────────────┘
+© 2025 akeschmidi. Alle Rechte vorbehalten.
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 11. PREISEMPFEHLUNG                                          │
+└─────────────────────────────────────────────────────────────┘
+€4,99 - €9,99 (Einmalzahlung)
+
+oder
+
+Freemium: Kostenlos (3 Teams/Runden) + €9,99 Pro-Version
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ 12. ALTERSFREIGABE                                           │
+└─────────────────────────────────────────────────────────────┘
+4+ (Keine anstößigen Inhalte)
+
+
+═══════════════════════════════════════════════════════════════
+  SOCIAL MEDIA POSTS
+═══════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────┐
+│ TWITTER/X (280 Zeichen)                                      │
+└─────────────────────────────────────────────────────────────┘
+🎯 Veranstalten Sie Pub Quiz? PubRanker macht die Punkteverwaltung zum Kinderspiel! 
+✨ Live-Rangliste
+👥 Team-Management
+📝 Auto-Save
+🏆 Podium-Darstellung
+Jetzt im Mac App Store! #PubQuiz #macOS #App
+
+
+┌─────────────────────────────────────────────────────────────┐
+│ INSTAGRAM CAPTION                                            │
+└─────────────────────────────────────────────────────────────┘
+🎯 Quiz Night perfektioniert! ✨
+
+PubRanker ist da - die App, die jeder Pub Quiz Veranstalter braucht! 
+
+Keine chaotischen Zettel mehr 📝
+Keine manuellen Berechnungen mehr 🧮
+Nur noch pure Quiz-Freude! 🎉
+
+Features:
+🏆 Live-Rangliste mit Podium
+👥 Einfaches Team-Management
+⚡️ Auto-Save bei jeder Eingabe
+🎨 Schönes modernes Design
+
+Link im App Store → [Link in Bio]
+
+#PubQuiz #QuizNight #macOS #App #IndieApp #TriviaNight #QuizMaster
+
+
+═══════════════════════════════════════════════════════════════
+  ENDE
+═══════════════════════════════════════════════════════════════

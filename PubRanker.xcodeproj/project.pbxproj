@@ -19,6 +19,7 @@
 		A10000307 /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000306 /* TeamManagementView.swift */; };
 		A10000309 /* RoundManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000308 /* RoundManagementView.swift */; };
 		A10000311 /* ScoreEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000310 /* ScoreEntryView.swift */; };
+		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +35,9 @@
 		A10000306 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
 		A10000308 /* RoundManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundManagementView.swift; sourceTree = "<group>"; };
 		A10000310 /* ScoreEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEntryView.swift; sourceTree = "<group>"; };
+		A10000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A10000500 /* PubRanker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PubRanker.entitlements; sourceTree = "<group>"; };
 		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9B5A0412EA694D500C6ACD8 /* App-Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "App-Icon.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +87,6 @@
 			children = (
 				A1FFFFFD /* PubRanker */,
 				A1FFFFFC /* Products */,
-				C9B5A0412EA694D500C6ACD8 /* App-Icon.png */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +106,8 @@
 				A1000010 /* Models */,
 				A1000020 /* ViewModels */,
 				A1000030 /* Views */,
+				A10000400 /* Assets.xcassets */,
+				A10000500 /* PubRanker.entitlements */,
 			);
 			path = PubRanker;
 			sourceTree = "<group>";
@@ -117,6 +120,7 @@
 			buildConfigurationList = A1000040 /* Build configuration list for PBXNativeTarget "PubRanker" */;
 			buildPhases = (
 				A1FFFFFA /* Sources */,
+				A1FFFFFB9 /* Resources */,
 				A1FFFFFFE /* Frameworks */,
 			);
 			buildRules = (
@@ -161,6 +165,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		A1FFFFFB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000401 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A1FFFFFA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -188,7 +203,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App-Icon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
@@ -220,8 +235,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = PubRanker/PubRanker.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -293,7 +310,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App-Icon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
@@ -325,8 +342,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = PubRanker/PubRanker.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
