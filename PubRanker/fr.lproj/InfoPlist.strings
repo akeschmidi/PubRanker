@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings - Français
+  PubRanker
+*/
+
+"CFBundleDisplayName" = "PubRanker";
+"CFBundleName" = "PubRanker";
+"NSHumanReadableCopyright" = "© 2025 akeschmidi. Tous droits réservés.";

@@ -1,0 +1,137 @@
+/* 
+  Localizable.strings - English
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Back";
+"navigation.done" = "Done";
+"navigation.cancel" = "Cancel";
+"navigation.save" = "Save";
+"navigation.edit" = "Edit";
+"navigation.delete" = "Delete";
+"navigation.add" = "Add";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "New Quiz";
+"quiz.name" = "Quiz Name";
+"quiz.location" = "Location";
+"quiz.date" = "Date";
+"quiz.teams" = "Teams";
+"quiz.rounds" = "Rounds";
+"quiz.totalPoints" = "Total Points";
+"quiz.delete.confirm" = "Delete Quiz?";
+"quiz.delete.message" = "This action cannot be undone.";
+
+// MARK: - Teams
+"team.title" = "Teams";
+"team.new" = "New Team";
+"team.name" = "Team Name";
+"team.color" = "Color";
+"team.points" = "Points";
+"team.rank" = "Rank";
+"team.wizard" = "Team Wizard";
+"team.wizard.howMany" = "How many teams?";
+"team.wizard.create" = "Create Teams";
+"team.delete.confirm" = "Delete Team?";
+"team.delete.message" = "%@ will be removed from the quiz.";
+"team.count" = "%d Teams";
+"team.management" = "Team Management";
+
+// MARK: - Rounds
+"round.title" = "Rounds";
+"round.new" = "New Round";
+"round.name" = "Round Name";
+"round.number" = "Round %d";
+"round.maxPoints" = "Maximum Points";
+"round.currentRound" = "Current Round";
+"round.wizard" = "Round Wizard";
+"round.wizard.howMany" = "How many rounds?";
+"round.wizard.create" = "Create Rounds";
+"round.delete.confirm" = "Delete Round?";
+"round.delete.message" = "All points for this round will be lost.";
+"round.status.active" = "Active";
+"round.status.completed" = "Completed";
+"round.status.pending" = "Pending";
+"round.count" = "%d Rounds";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Leaderboard";
+"leaderboard.rank" = "Rank";
+"leaderboard.team" = "Team";
+"leaderboard.points" = "Points";
+"leaderboard.winner" = "Winner";
+"leaderboard.podium" = "Podium";
+"leaderboard.topThree" = "Top 3";
+"leaderboard.noTeams" = "No Teams";
+"leaderboard.noPoints" = "No points yet";
+
+// MARK: - Score Entry
+"score.title" = "Score Entry";
+"score.enter" = "Enter Score";
+"score.save" = "Save Score";
+"score.saved" = "Saved";
+"score.autoSave" = "Auto-Save";
+"score.autoSave.enabled" = "Auto-Save enabled";
+"score.total" = "Total";
+"score.perRound" = "Per Round";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Error";
+"alert.success" = "Success";
+"alert.warning" = "Warning";
+"alert.info" = "Information";
+"alert.ok" = "OK";
+"alert.yes" = "Yes";
+"alert.no" = "No";
+
+"error.generic" = "An error occurred";
+"error.saveFailed" = "Save failed";
+"error.loadFailed" = "Load failed";
+"error.deleteFailed" = "Delete failed";
+"error.invalidInput" = "Invalid input";
+"error.nameRequired" = "Name required";
+"error.pointsRequired" = "Points required";
+
+"success.saved" = "Successfully saved";
+"success.deleted" = "Successfully deleted";
+"success.created" = "Successfully created";
+
+// MARK: - Common
+"common.name" = "Name";
+"common.description" = "Description";
+"common.date" = "Date";
+"common.time" = "Time";
+"common.location" = "Location";
+"common.search" = "Search";
+"common.filter" = "Filter";
+"common.sort" = "Sort";
+"common.settings" = "Settings";
+"common.about" = "About";
+"common.help" = "Help";
+"common.close" = "Close";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "e.g. October Pub Quiz";
+"placeholder.teamName" = "e.g. Quiz Masters";
+"placeholder.roundName" = "e.g. Geography";
+"placeholder.location" = "e.g. Murphy's Pub";
+"placeholder.points" = "Enter points";
+
+// MARK: - Statistics
+"stats.average" = "Average";
+"stats.highest" = "Highest";
+"stats.lowest" = "Lowest";
+"stats.total" = "Total";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "No Quizzes";
+"empty.noQuizzes.message" = "Create your first quiz";
+"empty.noTeams" = "No Teams";
+"empty.noTeams.message" = "Add teams to get started";
+"empty.noRounds" = "No Rounds";
+"empty.noRounds.message" = "Create rounds for your quiz";
+"empty.noScores" = "No Scores";
+"empty.noScores.message" = "Enter points for rounds";

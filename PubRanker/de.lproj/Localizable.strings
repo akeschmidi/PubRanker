@@ -1,0 +1,137 @@
+/* 
+  Localizable.strings - Deutsch
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Zurück";
+"navigation.done" = "Fertig";
+"navigation.cancel" = "Abbrechen";
+"navigation.save" = "Speichern";
+"navigation.edit" = "Bearbeiten";
+"navigation.delete" = "Löschen";
+"navigation.add" = "Hinzufügen";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "Neues Quiz";
+"quiz.name" = "Quiz-Name";
+"quiz.location" = "Ort";
+"quiz.date" = "Datum";
+"quiz.teams" = "Teams";
+"quiz.rounds" = "Runden";
+"quiz.totalPoints" = "Gesamt Punkte";
+"quiz.delete.confirm" = "Quiz wirklich löschen?";
+"quiz.delete.message" = "Diese Aktion kann nicht rückgängig gemacht werden.";
+
+// MARK: - Teams
+"team.title" = "Teams";
+"team.new" = "Neues Team";
+"team.name" = "Team-Name";
+"team.color" = "Farbe";
+"team.points" = "Punkte";
+"team.rank" = "Rang";
+"team.wizard" = "Team-Wizard";
+"team.wizard.howMany" = "Wie viele Teams?";
+"team.wizard.create" = "Teams erstellen";
+"team.delete.confirm" = "Team löschen?";
+"team.delete.message" = "%@ wird aus dem Quiz entfernt.";
+"team.count" = "%d Teams";
+"team.management" = "Team-Verwaltung";
+
+// MARK: - Rounds
+"round.title" = "Runden";
+"round.new" = "Neue Runde";
+"round.name" = "Runden-Name";
+"round.number" = "Runde %d";
+"round.maxPoints" = "Maximale Punkte";
+"round.currentRound" = "Aktuelle Runde";
+"round.wizard" = "Runden-Wizard";
+"round.wizard.howMany" = "Wie viele Runden?";
+"round.wizard.create" = "Runden erstellen";
+"round.delete.confirm" = "Runde löschen?";
+"round.delete.message" = "Alle Punkte dieser Runde gehen verloren.";
+"round.status.active" = "Aktiv";
+"round.status.completed" = "Abgeschlossen";
+"round.status.pending" = "Ausstehend";
+"round.count" = "%d Runden";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Rangliste";
+"leaderboard.rank" = "Rang";
+"leaderboard.team" = "Team";
+"leaderboard.points" = "Punkte";
+"leaderboard.winner" = "Gewinner";
+"leaderboard.podium" = "Podium";
+"leaderboard.topThree" = "Top 3";
+"leaderboard.noTeams" = "Keine Teams vorhanden";
+"leaderboard.noPoints" = "Noch keine Punkte vergeben";
+
+// MARK: - Score Entry
+"score.title" = "Punkteeingabe";
+"score.enter" = "Punkte eingeben";
+"score.save" = "Punkte speichern";
+"score.saved" = "Gespeichert";
+"score.autoSave" = "Auto-Speichern";
+"score.autoSave.enabled" = "Auto-Speichern aktiviert";
+"score.total" = "Gesamt";
+"score.perRound" = "Pro Runde";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Fehler";
+"alert.success" = "Erfolg";
+"alert.warning" = "Warnung";
+"alert.info" = "Information";
+"alert.ok" = "OK";
+"alert.yes" = "Ja";
+"alert.no" = "Nein";
+
+"error.generic" = "Ein Fehler ist aufgetreten";
+"error.saveFailed" = "Speichern fehlgeschlagen";
+"error.loadFailed" = "Laden fehlgeschlagen";
+"error.deleteFailed" = "Löschen fehlgeschlagen";
+"error.invalidInput" = "Ungültige Eingabe";
+"error.nameRequired" = "Name erforderlich";
+"error.pointsRequired" = "Punkte erforderlich";
+
+"success.saved" = "Erfolgreich gespeichert";
+"success.deleted" = "Erfolgreich gelöscht";
+"success.created" = "Erfolgreich erstellt";
+
+// MARK: - Common
+"common.name" = "Name";
+"common.description" = "Beschreibung";
+"common.date" = "Datum";
+"common.time" = "Uhrzeit";
+"common.location" = "Ort";
+"common.search" = "Suchen";
+"common.filter" = "Filtern";
+"common.sort" = "Sortieren";
+"common.settings" = "Einstellungen";
+"common.about" = "Über";
+"common.help" = "Hilfe";
+"common.close" = "Schließen";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "z.B. Pub Quiz Oktober";
+"placeholder.teamName" = "z.B. Quiz Masters";
+"placeholder.roundName" = "z.B. Geographie";
+"placeholder.location" = "z.B. Murphy's Pub";
+"placeholder.points" = "Punkte eingeben";
+
+// MARK: - Statistics
+"stats.average" = "Durchschnitt";
+"stats.highest" = "Höchste";
+"stats.lowest" = "Niedrigste";
+"stats.total" = "Gesamt";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "Keine Quizzes";
+"empty.noQuizzes.message" = "Erstellen Sie Ihr erstes Quiz";
+"empty.noTeams" = "Keine Teams";
+"empty.noTeams.message" = "Fügen Sie Teams hinzu um zu starten";
+"empty.noRounds" = "Keine Runden";
+"empty.noRounds.message" = "Erstellen Sie Runden für Ihr Quiz";
+"empty.noScores" = "Keine Punkte";
+"empty.noScores.message" = "Geben Sie Punkte für die Runden ein";
