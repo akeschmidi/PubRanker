@@ -11,6 +11,25 @@ struct LeaderboardView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     
+    // Calculate ranks with tied teams getting the same rank
+    private func calculateRanks() -> [(team: Team, rank: Int)] {
+        let sortedTeams = quiz.sortedTeamsByScore
+        var result: [(team: Team, rank: Int)] = []
+        var currentRank = 1
+        var previousScore: Int?
+        
+        for (index, team) in sortedTeams.enumerated() {
+            if let prevScore = previousScore, team.totalScore != prevScore {
+                // Different score - update rank to current position
+                currentRank = index + 1
+            }
+            result.append((team: team, rank: currentRank))
+            previousScore = team.totalScore
+        }
+        
+        return result
+    }
+    
     var body: some View {
         Group {
             if quiz.teams.isEmpty {
@@ -64,20 +83,22 @@ struct LeaderboardView: View {
             } else {
                 ScrollView {
                     VStack(spacing: 0) {
-                        // Podium View for Top 3
-                        if quiz.teams.count >= 3 {
-                            PodiumView(teams: Array(quiz.sortedTeamsByScore.prefix(3)))
+                        // Podium View for Top 3 ranks (may include more than 3 teams if tied)
+                        let rankedTeams = calculateRanks()
+                        let topRanks = rankedTeams.filter { $0.rank <= 3 }
+                        if topRanks.count >= 3 && topRanks.count <= 5 {
+                            PodiumView(rankedTeams: topRanks)
                                 .padding(.bottom, 20)
                         }
                         
                         // All Teams List
                         LazyVStack(spacing: 8) {
-                            ForEach(Array(quiz.sortedTeamsByScore.enumerated()), id: \.element.id) { index, team in
+                            ForEach(calculateRanks(), id: \.team.id) { item in
                                 LeaderboardRowView(
-                                    team: team,
-                                    rank: index + 1,
+                                    team: item.team,
+                                    rank: item.rank,
                                     quiz: quiz,
-                                    isTopThree: index < 3
+                                    isTopThree: item.rank <= 3
                                 )
                             }
                         }
@@ -90,23 +111,40 @@ struct LeaderboardView: View {
 }
 
 struct PodiumView: View {
-    let teams: [Team]
+    let rankedTeams: [(team: Team, rank: Int)]
     
     var body: some View {
+        // Group teams by rank
+        let rank1Teams = rankedTeams.filter { $0.rank == 1 }
+        let rank2Teams = rankedTeams.filter { $0.rank == 2 }
+        let rank3Teams = rankedTeams.filter { $0.rank == 3 }
+        
         HStack(alignment: .bottom, spacing: 20) {
             // 2nd Place
-            if teams.count > 1 {
-                PodiumPlace(team: teams[1], rank: 2, height: 120)
+            if !rank2Teams.isEmpty {
+                VStack(spacing: 8) {
+                    ForEach(rank2Teams, id: \.team.id) { item in
+                        PodiumPlace(team: item.team, rank: 2, height: 120, isShared: rank2Teams.count > 1)
+                    }
+                }
             }
             
             // 1st Place
-            if teams.count > 0 {
-                PodiumPlace(team: teams[0], rank: 1, height: 150)
+            if !rank1Teams.isEmpty {
+                VStack(spacing: 8) {
+                    ForEach(rank1Teams, id: \.team.id) { item in
+                        PodiumPlace(team: item.team, rank: 1, height: 150, isShared: rank1Teams.count > 1)
+                    }
+                }
             }
             
             // 3rd Place
-            if teams.count > 2 {
-                PodiumPlace(team: teams[2], rank: 3, height: 100)
+            if !rank3Teams.isEmpty {
+                VStack(spacing: 8) {
+                    ForEach(rank3Teams, id: \.team.id) { item in
+                        PodiumPlace(team: item.team, rank: 3, height: 100, isShared: rank3Teams.count > 1)
+                    }
+                }
             }
         }
         .padding(.vertical, 20)
@@ -117,14 +155,15 @@ struct PodiumPlace: View {
     let team: Team
     let rank: Int
     let height: CGFloat
+    let isShared: Bool
     
     var body: some View {
         VStack(spacing: 8) {
             Text(rankEmoji)
-                .font(.system(size: 40))
+                .font(.system(size: isShared ? 32 : 40))
             
             Text("\(team.totalScore)")
-                .font(.system(size: 28, weight: .bold))
+                .font(.system(size: isShared ? 22 : 28, weight: .bold))
                 .foregroundStyle(rankColor)
             
             Text(team.name)
@@ -135,10 +174,10 @@ struct PodiumPlace: View {
             
             RoundedRectangle(cornerRadius: 8)
                 .fill(rankColor.opacity(0.2))
-                .frame(width: 100, height: height)
+                .frame(width: isShared ? 80 : 100, height: isShared ? height * 0.8 : height)
                 .overlay(
                     Text("\(rank).")
-                        .font(.system(size: 36, weight: .bold))
+                        .font(.system(size: isShared ? 28 : 36, weight: .bold))
                         .foregroundStyle(rankColor)
                 )
         }
@@ -169,6 +208,12 @@ struct LeaderboardRowView: View {
     let quiz: Quiz
     let isTopThree: Bool
     
+    // Check if this team shares the rank with others
+    private var isSharedRank: Bool {
+        let rankedTeams = quiz.sortedTeamsByScore.filter { $0.totalScore == team.totalScore }
+        return rankedTeams.count > 1
+    }
+    
     var body: some View {
         HStack(spacing: 20) {
             // Rank Badge
@@ -185,10 +230,17 @@ struct LeaderboardRowView: View {
                         .frame(width: 50, height: 50)
                 }
                 
-                Text("\(rank)")
-                    .font(isTopThree ? .title : .title3)
-                    .bold()
-                    .foregroundStyle(isTopThree ? .white : .primary)
+                VStack(spacing: 0) {
+                    if isSharedRank {
+                        Text("=")
+                            .font(.caption2)
+                            .foregroundStyle(isTopThree ? .white.opacity(0.7) : .secondary)
+                    }
+                    Text("\(rank)")
+                        .font(isTopThree ? .title : .title3)
+                        .bold()
+                        .foregroundStyle(isTopThree ? .white : .primary)
+                }
             }
             .frame(width: 60)
             

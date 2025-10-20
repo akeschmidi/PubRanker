@@ -35,6 +35,7 @@
 		A10000308 /* RoundManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundManagementView.swift; sourceTree = "<group>"; };
 		A10000310 /* ScoreEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEntryView.swift; sourceTree = "<group>"; };
 		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9B5A0412EA694D500C6ACD8 /* App-Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "App-Icon.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +85,7 @@
 			children = (
 				A1FFFFFD /* PubRanker */,
 				A1FFFFFC /* Products */,
+				C9B5A0412EA694D500C6ACD8 /* App-Icon.png */,
 			);
 			sourceTree = "<group>";
 		};
@@ -186,7 +188,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App-Icon";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -254,6 +258,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
+				INFOPLIST_KEY_UILaunchStoryboardName = "App-Icon";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -288,7 +293,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App-Icon";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -350,6 +357,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
+				INFOPLIST_KEY_UILaunchStoryboardName = "App-Icon";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
