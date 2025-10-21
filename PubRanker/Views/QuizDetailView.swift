@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppKit
 
 struct QuizDetailView: View {
     @Bindable var quiz: Quiz
@@ -118,6 +119,8 @@ struct QuizDetailView: View {
 struct QuizHeaderView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
+    @State private var showingExportDialog = false
+    @State private var exportedFileURL: URL?
     
     var body: some View {
         VStack(spacing: 12) {
@@ -169,6 +172,29 @@ struct QuizHeaderView: View {
                 
                 // Action Buttons
                 HStack(spacing: 12) {
+                    // Export Button (immer verfügbar, aber prominent bei abgeschlossenen Quizzen)
+                    Menu {
+                        Button {
+                            exportQuiz(format: .json)
+                        } label: {
+                            Label("Als JSON exportieren", systemImage: "doc.text")
+                        }
+                        
+                        Button {
+                            exportQuiz(format: .csv)
+                        } label: {
+                            Label("Als CSV exportieren", systemImage: "tablecells")
+                        }
+                    } label: {
+                        if quiz.isCompleted {
+                            Label("Exportieren", systemImage: "square.and.arrow.up")
+                        } else {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                    }
+                    .buttonStyle(quiz.isCompleted ? .bordered : .borderless)
+                    .help("Quiz exportieren")
+                    
                     if quiz.isActive {
                         Button {
                             viewModel.completeQuiz(quiz)
@@ -219,5 +245,30 @@ struct QuizHeaderView: View {
                 endPoint: .bottom
             )
         )
+        .alert("Quiz exportiert", isPresented: $showingExportDialog) {
+            if let fileURL = exportedFileURL {
+                Button("Im Finder anzeigen") {
+                    NSWorkspace.shared.selectFile(fileURL.path, inFileViewerRootedAtPath: "")
+                }
+                Button("Teilen...") {
+                    let picker = NSSharingServicePicker(items: [fileURL])
+                    if let view = NSApp.keyWindow?.contentView {
+                        picker.show(relativeTo: .zero, of: view, preferredEdge: .minY)
+                    }
+                }
+            }
+            Button("OK") {}
+        } message: {
+            if let fileURL = exportedFileURL {
+                Text("Das Quiz wurde erfolgreich exportiert:\n\(fileURL.lastPathComponent)")
+            }
+        }
+    }
+    
+    private func exportQuiz(format: ExportFormat) {
+        if let fileURL = viewModel.saveQuizExport(quiz: quiz, format: format) {
+            exportedFileURL = fileURL
+            showingExportDialog = true
+        }
     }
 }
