@@ -17,6 +17,27 @@ struct PubRankerApp: App {
             ContentView()
                 .environment(viewModel)
         }
-        .modelContainer(for: [Quiz.self, Team.self, Round.self])
+        .modelContainer(sharedModelContainer)
     }
+    
+    // MARK: - iCloud Model Container
+    var sharedModelContainer: ModelContainer = {
+        let schema = Schema([
+            Quiz.self,
+            Team.self,
+            Round.self
+        ])
+        
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .automatic
+        )
+        
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
 }

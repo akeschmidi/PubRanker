@@ -29,13 +29,12 @@ PubRanker hilft QuizMastern dabei, Pub Quiz-Veranstaltungen effizient zu organis
 - ✅ Live-Aktualisierung der Rankings
 - ✅ Historie der Punktestände
 - ✅ Export der Ergebnisse
+- ✅ **iCloud Backup & Sync** - Automatische Synchronisation über alle Geräte
 
 ### Geplante Features
-- 📱 Sync zwischen macOS und iPadOS mittels iCloud
 - 🎨 Customizable Themes
 - 📊 Statistiken und Analysen
 - 🏆 Achievements und Trophäen
-- 💾 Cloud-Backup
 - 📤 PDF-Export der Endergebnisse
 
 ## Technologie-Stack
@@ -43,8 +42,9 @@ PubRanker hilft QuizMastern dabei, Pub Quiz-Veranstaltungen effizient zu organis
 - **Framework**: SwiftUI
 - **Plattformen**: macOS 14.0+, iPadOS 17.0+
 - **Sprache**: Swift 5.9+
-- **Datenpersistenz**: SwiftData / Core Data
+- **Datenpersistenz**: SwiftData mit iCloud CloudKit Sync
 - **UI-Framework**: SwiftUI mit modernem Design
+- **Cloud**: iCloud CloudKit für automatisches Backup
 
 ## Installation
 
@@ -63,6 +63,11 @@ cd PubRanker
 # Xcode-Projekt öffnen
 open PubRanker.xcodeproj
 ```
+
+### iCloud Setup
+
+Für die Aktivierung von iCloud Backup und Sync, siehe detaillierte Anleitung:
+📄 **[ICLOUD_SETUP.md](ICLOUD_SETUP.md)**
 
 ## Verwendung
 
