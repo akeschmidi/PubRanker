@@ -281,7 +281,7 @@ struct TeamSetupWizard: View {
     }
     
     private func generateRandomNames() {
-        var availableNames = randomTeamNames.shuffled()
+        let availableNames = randomTeamNames.shuffled()
         for index in 0..<numberOfTeams {
             if index < availableNames.count {
                 while teamNames.count <= index {

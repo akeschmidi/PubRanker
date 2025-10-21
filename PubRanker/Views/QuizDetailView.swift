@@ -13,6 +13,7 @@ struct QuizDetailView: View {
     @State private var selectedTab: DetailTab = .leaderboard
     @State private var showingTeamWizard = false
     @State private var showingRoundWizard = false
+    @State private var showingSetupDialog = false
     @State private var hasCheckedInitialSetup = false
     
     enum DetailTab: String, CaseIterable, Identifiable {
@@ -78,6 +79,22 @@ struct QuizDetailView: View {
         .sheet(isPresented: $showingRoundWizard) {
             RoundWizardSheet(quiz: quiz, viewModel: viewModel)
         }
+        .alert("🎯 Quiz-Setup", isPresented: $showingSetupDialog) {
+            Button("Später einrichten", role: .cancel) {
+                showingSetupDialog = false
+            }
+            Button("Jetzt starten 🚀") {
+                showingSetupDialog = false
+                // Kleine Verzögerung für bessere UX
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    showingTeamWizard = true
+                    selectedTab = .teams
+                }
+            }
+            .keyboardShortcut(.defaultAction)
+        } message: {
+            Text("Möchten Sie jetzt Teams und Runden einrichten?\n\n✓ Teams hinzufügen\n✓ Runden definieren\n\nSie können dies auch später über die Tabs machen.")
+        }
         .onAppear {
             checkInitialSetup()
         }
@@ -88,12 +105,11 @@ struct QuizDetailView: View {
         guard !hasCheckedInitialSetup else { return }
         hasCheckedInitialSetup = true
         
-        // Wenn Quiz neu ist (keine Teams UND keine Runden), Setup-Wizards anzeigen
+        // Wenn Quiz neu ist (keine Teams UND keine Runden), Setup-Dialog anzeigen
         if quiz.safeTeams.isEmpty && quiz.safeRounds.isEmpty {
             // Kleine Verzögerung für bessere UX
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                showingTeamWizard = true
-                selectedTab = .teams
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                showingSetupDialog = true
             }
         }
     }
