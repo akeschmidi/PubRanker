@@ -162,7 +162,7 @@ struct QuizHeaderView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         
-                        Label("\(quiz.safeTeams.count) Teams", systemImage: "person.3")
+                        Label(String(format: NSLocalizedString("quiz.teams.count", comment: "Teams count"), quiz.safeTeams.count), systemImage: "person.3")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }

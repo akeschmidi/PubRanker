@@ -16,10 +16,20 @@
 // MARK: - Quiz
 "quiz.title" = "Quiz";
 "quiz.new" = "Neues Quiz";
-"quiz.name" = "Quiz-Name";
+"quiz.new.create" = "Neues Quiz erstellen";
+"quiz.new.description" = "Erstellen Sie ein neues Pub Quiz und fügen Sie Teams sowie Runden hinzu";
+"quiz.name" = "Quiz Name";
+"quiz.name.placeholder" = "z.B. Pub Quiz im Löwen, Weihnachts-Quiz...";
 "quiz.location" = "Ort";
+"quiz.location.label" = "Veranstaltungsort";
+"quiz.location.placeholder" = "z.B. Gasthaus zum Löwen";
 "quiz.date" = "Datum";
+"quiz.date.label" = "Datum & Uhrzeit";
+"quiz.create" = "Quiz erstellen";
+"quiz.select.none" = "Kein Quiz ausgewählt";
+"quiz.select.prompt" = "Wählen Sie ein Quiz aus der Liste oder erstellen Sie ein neues.";
 "quiz.teams" = "Teams";
+"quiz.teams.count" = "%d Teams";
 "quiz.rounds" = "Runden";
 "quiz.totalPoints" = "Gesamt Punkte";
 "quiz.delete.confirm" = "Quiz wirklich löschen?";
@@ -28,6 +38,12 @@
 // MARK: - Teams
 "team.title" = "Teams";
 "team.new" = "Neues Team";
+"team.new.single" = "Einzelnes Team";
+"team.new.single.add" = "Einzelnes Team hinzufügen";
+"team.new.multiple" = "Mehrere Teams";
+"team.new.multiple.create" = "Mehrere Teams erstellen...";
+"team.add" = "Team hinzufügen";
+"team.add.multiple" = "Teams hinzufügen";
 "team.name" = "Team-Name";
 "team.color" = "Farbe";
 "team.points" = "Punkte";
@@ -43,9 +59,17 @@
 // MARK: - Rounds
 "round.title" = "Runden";
 "round.new" = "Neue Runde";
+"round.new.single" = "Einzelne Runde";
+"round.new.single.add" = "Einzelne Runde hinzufügen";
+"round.new.multiple" = "Mehrere Runden";
+"round.new.multiple.create" = "Mehrere Runden erstellen...";
+"round.add" = "Runde hinzufügen";
+"round.add.multiple" = "Runden hinzufügen";
 "round.name" = "Runden-Name";
+"round.name.placeholder" = "z.B. Geographie, Musik, Sport...";
 "round.number" = "Runde %d";
 "round.maxPoints" = "Maximale Punkte";
+"round.maxPoints.label" = "Maximale Punktzahl";
 "round.currentRound" = "Aktuelle Runde";
 "round.wizard" = "Runden-Wizard";
 "round.wizard.howMany" = "Wie viele Runden?";
@@ -55,6 +79,8 @@
 "round.status.active" = "Aktiv";
 "round.status.completed" = "Abgeschlossen";
 "round.status.pending" = "Ausstehend";
+"round.complete" = "Runde abschließen";
+"round.complete.help" = "Aktuelle Runde abschließen (⌘K)";
 "round.count" = "%d Runden";
 
 // MARK: - Leaderboard

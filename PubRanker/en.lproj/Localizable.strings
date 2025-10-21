@@ -16,18 +16,32 @@
 // MARK: - Quiz
 "quiz.title" = "Quiz";
 "quiz.new" = "New Quiz";
+"quiz.new.create" = "Create New Quiz";
+"quiz.new.description" = "Create a new pub quiz and add teams and rounds";
 "quiz.name" = "Quiz Name";
+"quiz.name.placeholder" = "e.g. Pub Quiz at Lion's, Christmas Quiz...";
 "quiz.location" = "Location";
+"quiz.location.label" = "Venue";
+"quiz.location.placeholder" = "e.g. Lion's Pub";
 "quiz.date" = "Date";
+"quiz.date.label" = "Date & Time";
+"quiz.create" = "Create Quiz";
+"quiz.select.none" = "No Quiz Selected";
+"quiz.select.prompt" = "Select a quiz from the list or create a new one.";
 "quiz.teams" = "Teams";
+"quiz.teams.count" = "%d Teams";
 "quiz.rounds" = "Rounds";
 "quiz.totalPoints" = "Total Points";
-"quiz.delete.confirm" = "Delete Quiz?";
+"quiz.delete.confirm" = "Delete quiz?";
 "quiz.delete.message" = "This action cannot be undone.";
 
 // MARK: - Teams
 "team.title" = "Teams";
 "team.new" = "New Team";
+"team.new.single" = "Single Team";
+"team.new.single.add" = "Add Single Team";
+"team.new.multiple" = "Multiple Teams";
+"team.new.multiple.create" = "Create Multiple Teams...";
 "team.name" = "Team Name";
 "team.color" = "Color";
 "team.points" = "Points";
@@ -35,7 +49,7 @@
 "team.wizard" = "Team Wizard";
 "team.wizard.howMany" = "How many teams?";
 "team.wizard.create" = "Create Teams";
-"team.delete.confirm" = "Delete Team?";
+"team.delete.confirm" = "Delete team?";
 "team.delete.message" = "%@ will be removed from the quiz.";
 "team.count" = "%d Teams";
 "team.management" = "Team Management";
@@ -43,14 +57,19 @@
 // MARK: - Rounds
 "round.title" = "Rounds";
 "round.new" = "New Round";
+"round.new.single" = "Single Round";
+"round.new.single.add" = "Add Single Round";
+"round.new.multiple" = "Multiple Rounds";
+"round.new.multiple.create" = "Create Multiple Rounds...";
 "round.name" = "Round Name";
+"round.name.placeholder" = "e.g. Geography, Music, Sports...";
 "round.number" = "Round %d";
 "round.maxPoints" = "Maximum Points";
 "round.currentRound" = "Current Round";
 "round.wizard" = "Round Wizard";
 "round.wizard.howMany" = "How many rounds?";
 "round.wizard.create" = "Create Rounds";
-"round.delete.confirm" = "Delete Round?";
+"round.delete.confirm" = "Delete round?";
 "round.delete.message" = "All points for this round will be lost.";
 "round.status.active" = "Active";
 "round.status.completed" = "Completed";

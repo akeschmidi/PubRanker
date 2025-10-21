@@ -66,9 +66,9 @@ struct QuizListView: View {
                 QuizDetailView(quiz: selectedQuiz, viewModel: viewModel)
             } else {
                 ContentUnavailableView(
-                    "Kein Quiz ausgewählt",
+                    NSLocalizedString("quiz.select.none", comment: "No quiz selected"),
                     systemImage: "list.bullet.clipboard",
-                    description: Text("Wählen Sie ein Quiz aus der Liste oder erstellen Sie ein neues.")
+                    description: Text(NSLocalizedString("quiz.select.prompt", comment: "Select quiz prompt"))
                 )
                 .frame(minWidth: 600, minHeight: 400)
             }
@@ -190,11 +190,11 @@ struct QuizRowView: View {
             }
             
             HStack {
-                Label("\(quiz.safeTeams.count) Teams", systemImage: "person.3")
+                Label(String(format: NSLocalizedString("quiz.teams.count", comment: "Teams count"), quiz.safeTeams.count), systemImage: "person.3")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 
-                Label("\(quiz.safeRounds.count) Runden", systemImage: "list.number")
+                Label(String(format: NSLocalizedString("round.count", comment: "Rounds count"), quiz.safeRounds.count), systemImage: "list.number")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 
@@ -242,11 +242,11 @@ struct NewQuizSheet: View {
                 }
                 
                 VStack(spacing: 8) {
-                    Text("Neues Quiz erstellen")
+                    Text(NSLocalizedString("quiz.new.create", comment: "Create new quiz"))
                         .font(.title)
                         .bold()
                     
-                    Text("Erstellen Sie ein neues Pub Quiz und fügen Sie Teams sowie Runden hinzu")
+                    Text(NSLocalizedString("quiz.new.description", comment: "Create quiz description"))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -262,11 +262,11 @@ struct NewQuizSheet: View {
                     HStack {
                         Image(systemName: "text.quote")
                             .foregroundStyle(.blue)
-                        Text("Quiz Name")
+                        Text(NSLocalizedString("quiz.name", comment: "Quiz name"))
                             .font(.headline)
                     }
                     
-                    TextField("z.B. Pub Quiz im Löwen, Weihnachts-Quiz...", text: $quizName)
+                    TextField(NSLocalizedString("quiz.name.placeholder", comment: "Quiz name placeholder"), text: $quizName)
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                         .focused($focusedField, equals: .name)
@@ -277,11 +277,11 @@ struct NewQuizSheet: View {
                     HStack {
                         Image(systemName: "mappin.circle.fill")
                             .foregroundStyle(.red)
-                        Text("Veranstaltungsort")
+                        Text(NSLocalizedString("quiz.location.label", comment: "Venue label"))
                             .font(.headline)
                     }
                     
-                    TextField("z.B. Gasthaus zum Löwen, Mein Wohnzimmer...", text: $venue)
+                    TextField(NSLocalizedString("quiz.location.placeholder", comment: "Location placeholder"), text: $venue)
                         .textFieldStyle(.roundedBorder)
                         .font(.body)
                         .focused($focusedField, equals: .venue)
@@ -292,7 +292,7 @@ struct NewQuizSheet: View {
                     HStack {
                         Image(systemName: "calendar.circle.fill")
                             .foregroundStyle(.green)
-                        Text("Datum & Uhrzeit")
+                        Text(NSLocalizedString("quiz.date.label", comment: "Date time label"))
                             .font(.headline)
                     }
                     
@@ -323,7 +323,7 @@ struct NewQuizSheet: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark.circle.fill")
-                        Text("Quiz erstellen")
+                        Text(NSLocalizedString("quiz.create", comment: "Create quiz button"))
                     }
                     .frame(maxWidth: .infinity)
                 }

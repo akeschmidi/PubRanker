@@ -36,7 +36,7 @@ struct TeamManagementView: View {
                         Button {
                             showingTeamWizard = true
                         } label: {
-                            Label("Mehrere Teams", systemImage: "person.3.fill")
+                            Label(NSLocalizedString("team.new.multiple", comment: "Multiple teams"), systemImage: "person.3.fill")
                                 .font(.headline)
                         }
                         .buttonStyle(.borderedProminent)
@@ -45,7 +45,7 @@ struct TeamManagementView: View {
                         Button {
                             showingAddTeamSheet = true
                         } label: {
-                            Label("Einzelnes Team", systemImage: "plus.circle")
+                            Label(NSLocalizedString("team.new.single", comment: "Single team"), systemImage: "plus.circle")
                                 .font(.headline)
                         }
                         .buttonStyle(.bordered)
@@ -73,18 +73,18 @@ struct TeamManagementView: View {
                     Button {
                         showingTeamWizard = true
                     } label: {
-                        Label("Mehrere Teams erstellen...", systemImage: "person.3.fill")
+                        Label(NSLocalizedString("team.new.multiple.create", comment: "Create multiple teams"), systemImage: "person.3.fill")
                     }
                     
                     Button {
                         showingAddTeamSheet = true
                     } label: {
-                        Label("Einzelnes Team hinzufügen", systemImage: "plus.circle")
+                        Label(NSLocalizedString("team.new.single.add", comment: "Add single team"), systemImage: "plus.circle")
                     }
                 } label: {
-                    Label("Team hinzufügen", systemImage: "plus")
+                    Label(NSLocalizedString("team.add", comment: "Add team"), systemImage: "plus")
                 }
-                .help("Teams hinzufügen")
+                .help(NSLocalizedString("team.add.multiple", comment: "Add teams"))
             }
         }
         .sheet(isPresented: $showingAddTeamSheet) {

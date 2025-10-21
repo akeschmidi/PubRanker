@@ -243,18 +243,18 @@ struct RoundManagementView: View {
                 Button {
                     showingRoundWizard = true
                 } label: {
-                    Label("Mehrere Runden erstellen...", systemImage: "rectangle.stack.fill")
+                    Label(NSLocalizedString("round.new.multiple.create", comment: "Create multiple rounds"), systemImage: "rectangle.stack.fill")
                 }
                 
                 Button {
                     showingAddRoundSheet = true
                 } label: {
-                    Label("Einzelne Runde hinzufügen", systemImage: "plus.circle")
+                    Label(NSLocalizedString("round.new.single.add", comment: "Add single round"), systemImage: "plus.circle")
                 }
             } label: {
-                Label("Runde hinzufügen", systemImage: "plus.circle.fill")
+                Label(NSLocalizedString("round.add", comment: "Add round"), systemImage: "plus.circle.fill")
             }
-            .help("Runden hinzufügen")
+            .help(NSLocalizedString("round.add.multiple", comment: "Add rounds"))
         }
         
         if let currentRound = quiz.currentRound {
@@ -262,10 +262,10 @@ struct RoundManagementView: View {
                 Button {
                     viewModel.completeRound(currentRound)
                 } label: {
-                    Label("Runde abschließen", systemImage: "checkmark.circle")
+                    Label(NSLocalizedString("round.complete", comment: "Complete round"), systemImage: "checkmark.circle")
                 }
                 .keyboardShortcut("k", modifiers: .command)
-                .help("Aktuelle Runde abschließen (⌘K)")
+                .help(NSLocalizedString("round.complete.help", comment: "Complete current round"))
             }
         }
     }
@@ -322,7 +322,7 @@ struct RoundManagementView: View {
                 Button {
                     showingRoundWizard = true
                 } label: {
-                    Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
+                    Label(NSLocalizedString("round.new.multiple", comment: "Multiple rounds"), systemImage: "rectangle.stack.fill")
                         .font(.headline)
                 }
                 .buttonStyle(.borderedProminent)
@@ -331,7 +331,7 @@ struct RoundManagementView: View {
                 Button {
                     showingAddRoundSheet = true
                 } label: {
-                    Label("Einzelne Runde", systemImage: "plus.circle")
+                    Label(NSLocalizedString("round.new.single", comment: "Single round"), systemImage: "plus.circle")
                         .font(.headline)
                 }
                 .buttonStyle(.bordered)
@@ -408,7 +408,7 @@ struct CurrentRoundBanner: View {
                         Button {
                             viewModel.completeRound(currentRound)
                         } label: {
-                            Label("Runde abschließen", systemImage: "checkmark.circle.fill")
+                            Label(NSLocalizedString("round.complete", comment: "Complete round"), systemImage: "checkmark.circle.fill")
                                 .font(.headline)
                         }
                         .buttonStyle(.borderedProminent)
@@ -694,17 +694,17 @@ struct QuickRoundSheet: View {
             // Form
             VStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Runden-Name")
+                    Text(NSLocalizedString("round.name", comment: "Round name"))
                         .font(.headline)
                     
-                    TextField("z.B. Geographie, Musik, Sport...", text: $roundName)
+                    TextField(NSLocalizedString("round.name.placeholder", comment: "Round name placeholder"), text: $roundName)
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                         .focused($focusedField)
                 }
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Maximale Punktzahl")
+                    Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
                         .font(.headline)
                     
                     HStack {
