@@ -80,11 +80,11 @@ struct QuizDetailView: View {
         .sheet(isPresented: $showingRoundWizard) {
             RoundWizardSheet(quiz: quiz, viewModel: viewModel)
         }
-        .alert("Quiz einrichten", isPresented: $showingSetupDialog) {
-            Button("Später einrichten", role: .cancel) {
+        .alert(NSLocalizedString("setup.dialog.title", comment: "Setup dialog title"), isPresented: $showingSetupDialog) {
+            Button(NSLocalizedString("setup.dialog.later", comment: "Setup later button"), role: .cancel) {
                 showingSetupDialog = false
             }
-            Button("Jetzt starten 🚀") {
+            Button(NSLocalizedString("setup.dialog.start", comment: "Start setup now button")) {
                 showingSetupDialog = false
                 // Kleine Verzögerung für bessere UX
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -94,7 +94,7 @@ struct QuizDetailView: View {
             }
             .keyboardShortcut(.defaultAction)
         } message: {
-            Text("Möchten Sie jetzt Teams und Runden einrichten?\n\n✓ Teams hinzufügen\n✓ Runden definieren\n\nSie können dies auch später über die Tabs machen.")
+            Text(NSLocalizedString("setup.dialog.message", comment: "Setup dialog message"))
         }
         .onAppear {
             checkInitialSetup()
@@ -133,7 +133,7 @@ struct QuizHeaderView: View {
                             .bold()
                         
                         if quiz.isActive {
-                            Label("Live", systemImage: "circle.fill")
+                            Label(NSLocalizedString("status.live", comment: "Live status"), systemImage: "circle.fill")
                                 .font(.caption)
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 8)
@@ -141,7 +141,7 @@ struct QuizHeaderView: View {
                                 .background(Color.green)
                                 .clipShape(Capsule())
                         } else if quiz.isCompleted {
-                            Label("Beendet", systemImage: "checkmark.circle.fill")
+                            Label(NSLocalizedString("status.completed", comment: "Completed status"), systemImage: "checkmark.circle.fill")
                                 .font(.caption)
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 8)
@@ -177,43 +177,43 @@ struct QuizHeaderView: View {
                         Button {
                             exportQuiz(format: .json)
                         } label: {
-                            Label("Als JSON exportieren", systemImage: "doc.text")
+                            Label(NSLocalizedString("export.json", comment: "Export as JSON"), systemImage: "doc.text")
                         }
                         
                         Button {
                             exportQuiz(format: .csv)
                         } label: {
-                            Label("Als CSV exportieren", systemImage: "tablecells")
+                            Label(NSLocalizedString("export.csv", comment: "Export as CSV"), systemImage: "tablecells")
                         }
                     } label: {
                         if quiz.isCompleted {
-                            Label("Exportieren", systemImage: "square.and.arrow.up")
+                            Label(NSLocalizedString("export.title", comment: "Export"), systemImage: "square.and.arrow.up")
                         } else {
                             Image(systemName: "square.and.arrow.up")
                         }
                     }
-                    .help("Quiz exportieren")
+                    .help(NSLocalizedString("export.title", comment: "Export quiz"))
                     
                     if quiz.isActive {
                         Button {
                             viewModel.completeQuiz(quiz)
                         } label: {
-                            Label("Quiz beenden", systemImage: "flag.checkered")
+                            Label(NSLocalizedString("status.complete", comment: "Complete quiz"), systemImage: "flag.checkered")
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(.red)
                         .keyboardShortcut("e", modifiers: .command)
-                        .help("Quiz beenden (⌘E)")
+                        .help(NSLocalizedString("status.complete", comment: "Complete quiz") + " (⌘E)")
                     } else if !quiz.isCompleted {
                         Button {
                             viewModel.startQuiz(quiz)
                         } label: {
-                            Label("Quiz starten", systemImage: "play.fill")
+                            Label(NSLocalizedString("status.start", comment: "Start quiz"), systemImage: "play.fill")
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(.green)
                         .keyboardShortcut("s", modifiers: .command)
-                        .help("Quiz starten (⌘S)")
+                        .help(NSLocalizedString("status.start", comment: "Start quiz") + " (⌘S)")
                     }
                 }
             }
@@ -222,11 +222,11 @@ struct QuizHeaderView: View {
             if quiz.safeRounds.count > 0 {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Fortschritt")
+                        Text(NSLocalizedString("status.progress", comment: "Progress"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Spacer()
-                        Text("\(quiz.completedRoundsCount) von \(quiz.safeRounds.count) Runden")
+                        Text(String(format: NSLocalizedString("status.roundsCompleted", comment: "Rounds completed"), quiz.completedRoundsCount, quiz.safeRounds.count))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -244,12 +244,12 @@ struct QuizHeaderView: View {
                 endPoint: .bottom
             )
         )
-        .alert("Quiz exportiert", isPresented: $showingExportDialog) {
+        .alert(NSLocalizedString("export.success.title", comment: "Export success title"), isPresented: $showingExportDialog) {
             if let fileURL = exportedFileURL {
-                Button("Im Finder anzeigen") {
+                Button(NSLocalizedString("export.showInFinder", comment: "Show in Finder")) {
                     NSWorkspace.shared.selectFile(fileURL.path, inFileViewerRootedAtPath: "")
                 }
-                Button("Teilen...") {
+                Button(NSLocalizedString("export.share", comment: "Share")) {
                     let picker = NSSharingServicePicker(items: [fileURL])
                     if let view = NSApp.keyWindow?.contentView {
                         picker.show(relativeTo: .zero, of: view, preferredEdge: .minY)
@@ -259,7 +259,7 @@ struct QuizHeaderView: View {
             Button("OK") {}
         } message: {
             if let fileURL = exportedFileURL {
-                Text("Das Quiz wurde erfolgreich exportiert:\n\(fileURL.lastPathComponent)")
+                Text(String(format: NSLocalizedString("export.success.message", comment: "Export success message"), fileURL.lastPathComponent))
             }
         }
     }

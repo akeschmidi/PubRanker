@@ -574,10 +574,7 @@ struct ScoreCell: View {
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
                             }
-                            Text("\(round.maxPoints)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                            Text(" Pkt")
+                            Text(String(format: NSLocalizedString("score.points", comment: "Points"), round.maxPoints))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -614,7 +611,7 @@ struct ScoreCell: View {
                     }
                 }
                 .buttonStyle(.plain)
-                .help(currentScore != nil ? "Klicken um \(currentScore!) Punkte zu bearbeiten" : "Klicken um Punkte zu vergeben")
+                .help(currentScore != nil ? String(format: NSLocalizedString("score.clickToEdit", comment: "Click to edit"), currentScore!) : NSLocalizedString("score.clickToAdd", comment: "Click to add"))
             }
         }
         .onChange(of: isEditing) { oldValue, newValue in
@@ -1071,7 +1068,7 @@ struct RoundWizardSheet: View {
                                             .frame(width: 80)
                                             .multilineTextAlignment(.trailing)
                                             
-                                            Text("Pkt")
+                                            Text(NSLocalizedString("score.pointsUnit", comment: "Points unit"))
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                         }

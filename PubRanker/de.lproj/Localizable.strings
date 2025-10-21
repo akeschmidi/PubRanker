@@ -162,6 +162,7 @@
 // MARK: - Score Display
 "score.notRated" = "–";
 "score.points" = "%d Pkt";
+"score.pointsUnit" = "Pkt";
 "score.of" = "%d / %d";
 "score.clickToEdit" = "Klicken um %d Punkte zu bearbeiten";
 "score.clickToAdd" = "Klicken um Punkte zu vergeben";
