@@ -19,6 +19,8 @@
 		A10000307 /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000306 /* TeamManagementView.swift */; };
 		A10000309 /* RoundManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000308 /* RoundManagementView.swift */; };
 		A10000311 /* ScoreEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000310 /* ScoreEntryView.swift */; };
+		A10000313 /* TeamSetupWizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000312 /* TeamSetupWizard.swift */; };
+		A10000315 /* QuickRoundSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000314 /* QuickRoundSetupView.swift */; };
 		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +37,8 @@
 		A10000306 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
 		A10000308 /* RoundManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundManagementView.swift; sourceTree = "<group>"; };
 		A10000310 /* ScoreEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEntryView.swift; sourceTree = "<group>"; };
+		A10000312 /* TeamSetupWizard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamSetupWizard.swift; sourceTree = "<group>"; };
+		A10000314 /* QuickRoundSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRoundSetupView.swift; sourceTree = "<group>"; };
 		A10000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000500 /* PubRanker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PubRanker.entitlements; sourceTree = "<group>"; };
 		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +82,8 @@
 				A10000306 /* TeamManagementView.swift */,
 				A10000308 /* RoundManagementView.swift */,
 				A10000310 /* ScoreEntryView.swift */,
+				A10000312 /* TeamSetupWizard.swift */,
+				A10000314 /* QuickRoundSetupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -193,6 +199,8 @@
 				A10000307 /* TeamManagementView.swift in Sources */,
 				A10000309 /* RoundManagementView.swift in Sources */,
 				A10000311 /* ScoreEntryView.swift in Sources */,
+				A10000313 /* TeamSetupWizard.swift in Sources */,
+				A10000315 /* QuickRoundSetupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
