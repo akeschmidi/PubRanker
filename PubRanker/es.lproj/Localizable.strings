@@ -127,11 +127,55 @@
 "stats.total" = "Total";
 
 // MARK: - Empty States
-"empty.noQuizzes" = "Sin Quizzes";
-"empty.noQuizzes.message" = "Crea tu primer quiz";
-"empty.noTeams" = "Sin Equipos";
-"empty.noTeams.message" = "Añade equipos para comenzar";
-"empty.noRounds" = "Sin Rondas";
-"empty.noRounds.message" = "Crea rondas para tu quiz";
-"empty.noScores" = "Sin Puntos";
-"empty.noScores.message" = "Ingresa puntos para las rondas";
+"empty.noQuizzes" = "No hay cuestionarios";
+"empty.noQuizzes.message" = "Crea tu primer cuestionario";
+"empty.noTeams" = "No hay equipos";
+"empty.noTeams.message" = "Añade equipos para empezar";
+"empty.noRounds" = "No hay rondas";
+"empty.noRounds.message" = "Crea rondas para tu cuestionario";
+"empty.noScores" = "Sin puntuaciones";
+"empty.noScores.message" = "Introduce puntos para las rondas";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Configurar Quiz";
+"setup.dialog.message" = "¿Quieres configurar equipos y rondas ahora?\n\n✓ Añadir equipos\n✓ Definir rondas\n\nTambién puedes hacerlo más tarde desde las pestañas.";
+"setup.dialog.later" = "Configurar después";
+"setup.dialog.start" = "Empezar ahora 🚀";
+
+// MARK: - Export
+"export.title" = "Exportar";
+"export.json" = "Exportar como JSON";
+"export.csv" = "Exportar como CSV";
+"export.success.title" = "Quiz Exportado";
+"export.success.message" = "El quiz se exportó correctamente:\n%@";
+"export.showInFinder" = "Mostrar en Finder";
+"export.share" = "Compartir...";
+
+// MARK: - Quiz Status
+"status.live" = "En vivo";
+"status.completed" = "Completado";
+"status.start" = "Iniciar Quiz";
+"status.complete" = "Completar Quiz";
+"status.progress" = "Progreso";
+"status.roundsCompleted" = "%d de %d Rondas";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d ptos";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Clic para editar %d puntos";
+"score.clickToAdd" = "Clic para asignar puntos";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Lugar";
+"csv.date" = "Fecha";
+"csv.completed" = "Completado";
+"csv.yes" = "Sí";
+"csv.no" = "No";
+"csv.finalRanking" = "CLASIFICACIÓN FINAL";
+"csv.rank" = "Rango";
+"csv.team" = "Equipo";
+"csv.totalScore" = "Puntuación Total";
+"csv.color" = "Color";
+"csv.detailedScores" = "PUNTUACIONES DETALLADAS";
+"csv.total" = "Total";

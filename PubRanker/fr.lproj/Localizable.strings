@@ -127,11 +127,55 @@
 "stats.total" = "Total";
 
 // MARK: - Empty States
-"empty.noQuizzes" = "Aucun Quiz";
+"empty.noQuizzes" = "Aucun quiz";
 "empty.noQuizzes.message" = "Créez votre premier quiz";
-"empty.noTeams" = "Aucune Équipe";
+"empty.noTeams" = "Aucune équipe";
 "empty.noTeams.message" = "Ajoutez des équipes pour commencer";
-"empty.noRounds" = "Aucune Manche";
+"empty.noRounds" = "Aucune manche";
 "empty.noRounds.message" = "Créez des manches pour votre quiz";
-"empty.noScores" = "Aucun Point";
-"empty.noScores.message" = "Entrez des points pour les manches";
+"empty.noScores" = "Aucun score";
+"empty.noScores.message" = "Entrez les points pour les manches";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Configurer le Quiz";
+"setup.dialog.message" = "Voulez-vous configurer les équipes et les manches maintenant?\n\n✓ Ajouter des équipes\n✓ Définir les manches\n\nVous pouvez également le faire plus tard via les onglets.";
+"setup.dialog.later" = "Configurer plus tard";
+"setup.dialog.start" = "Commencer maintenant 🚀";
+
+// MARK: - Export
+"export.title" = "Exporter";
+"export.json" = "Exporter en JSON";
+"export.csv" = "Exporter en CSV";
+"export.success.title" = "Quiz Exporté";
+"export.success.message" = "Le quiz a été exporté avec succès:\n%@";
+"export.showInFinder" = "Afficher dans Finder";
+"export.share" = "Partager...";
+
+// MARK: - Quiz Status
+"status.live" = "En direct";
+"status.completed" = "Terminé";
+"status.start" = "Démarrer le Quiz";
+"status.complete" = "Terminer le Quiz";
+"status.progress" = "Progression";
+"status.roundsCompleted" = "%d sur %d Manches";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d pts";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Cliquer pour modifier %d points";
+"score.clickToAdd" = "Cliquer pour attribuer des points";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Lieu";
+"csv.date" = "Date";
+"csv.completed" = "Terminé";
+"csv.yes" = "Oui";
+"csv.no" = "Non";
+"csv.finalRanking" = "CLASSEMENT FINAL";
+"csv.rank" = "Rang";
+"csv.team" = "Équipe";
+"csv.totalScore" = "Score Total";
+"csv.color" = "Couleur";
+"csv.detailedScores" = "SCORES DÉTAILLÉS";
+"csv.total" = "Total";

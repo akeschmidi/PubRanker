@@ -135,3 +135,47 @@
 "empty.noRounds.message" = "Crea round per il tuo quiz";
 "empty.noScores" = "Nessun Punteggio";
 "empty.noScores.message" = "Inserisci punti per i round";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Configura Quiz";
+"setup.dialog.message" = "Vuoi configurare squadre e round ora?\n\n✓ Aggiungi squadre\n✓ Definisci round\n\nPuoi anche farlo più tardi tramite le schede.";
+"setup.dialog.later" = "Configura dopo";
+"setup.dialog.start" = "Inizia ora 🚀";
+
+// MARK: - Export
+"export.title" = "Esporta";
+"export.json" = "Esporta come JSON";
+"export.csv" = "Esporta come CSV";
+"export.success.title" = "Quiz Esportato";
+"export.success.message" = "Il quiz è stato esportato con successo:\n%@";
+"export.showInFinder" = "Mostra nel Finder";
+"export.share" = "Condividi...";
+
+// MARK: - Quiz Status
+"status.live" = "In diretta";
+"status.completed" = "Completato";
+"status.start" = "Avvia Quiz";
+"status.complete" = "Completa Quiz";
+"status.progress" = "Progresso";
+"status.roundsCompleted" = "%d di %d Round";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d pti";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Clicca per modificare %d punti";
+"score.clickToAdd" = "Clicca per assegnare punti";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Luogo";
+"csv.date" = "Data";
+"csv.completed" = "Completato";
+"csv.yes" = "Sì";
+"csv.no" = "No";
+"csv.finalRanking" = "CLASSIFICA FINALE";
+"csv.rank" = "Posizione";
+"csv.team" = "Squadra";
+"csv.totalScore" = "Punteggio Totale";
+"csv.color" = "Colore";
+"csv.detailedScores" = "PUNTEGGI DETTAGLIATI";
+"csv.total" = "Totale";
