@@ -11,6 +11,9 @@ struct QuizDetailView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     @State private var selectedTab: DetailTab = .leaderboard
+    @State private var showingTeamWizard = false
+    @State private var showingRoundWizard = false
+    @State private var hasCheckedInitialSetup = false
     
     enum DetailTab: String, CaseIterable, Identifiable {
         case leaderboard = "Rangliste"
@@ -58,6 +61,39 @@ struct QuizDetailView: View {
                 }
                 .pickerStyle(.segmented)
                 .frame(width: 400)
+            }
+        }
+        .sheet(isPresented: $showingTeamWizard, onDismiss: {
+            // Nach Team-Setup: Prüfe ob Runden-Setup nötig ist
+            // Nur wenn tatsächlich Teams hinzugefügt wurden
+            if !quiz.safeTeams.isEmpty && quiz.safeRounds.isEmpty {
+                // Kleine Verzögerung für bessere UX
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    showingRoundWizard = true
+                }
+            }
+        }) {
+            TeamSetupWizard(quiz: quiz, viewModel: viewModel)
+        }
+        .sheet(isPresented: $showingRoundWizard) {
+            RoundWizardSheet(quiz: quiz, viewModel: viewModel)
+        }
+        .onAppear {
+            checkInitialSetup()
+        }
+    }
+    
+    private func checkInitialSetup() {
+        // Nur beim ersten Mal prüfen
+        guard !hasCheckedInitialSetup else { return }
+        hasCheckedInitialSetup = true
+        
+        // Wenn Quiz neu ist (keine Teams UND keine Runden), Setup-Wizards anzeigen
+        if quiz.safeTeams.isEmpty && quiz.safeRounds.isEmpty {
+            // Kleine Verzögerung für bessere UX
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                showingTeamWizard = true
+                selectedTab = .teams
             }
         }
     }
