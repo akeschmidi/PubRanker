@@ -59,7 +59,7 @@ struct QuizListView: View {
                     deleteQuiz(quiz)
                 }
             } message: { quiz in
-                Text("Möchten Sie \"\(quiz.name)\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+                Text(String(format: NSLocalizedString("common.delete.confirm", comment: "Delete confirmation"), quiz.name))
             }
         } detail: {
             if let selectedQuiz = selection {

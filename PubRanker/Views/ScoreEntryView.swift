@@ -68,7 +68,7 @@ struct ScoreEntryView: View {
                             .monospacedDigit()
                             .foregroundStyle(.blue)
                         
-                        Text("von \(round.maxPoints) Punkten")
+                        Text(String(format: NSLocalizedString("common.points.of", comment: "Points of"), round.maxPoints))
                             .font(.title3)
                             .foregroundStyle(.secondary)
                     }

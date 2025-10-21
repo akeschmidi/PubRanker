@@ -188,16 +188,16 @@ struct CompactRankRow: View {
             HStack {
                 Text(rankEmoji)
                     .font(.title)
-                Text("Platz \(rank)")
+                Text(String(format: NSLocalizedString("leaderboard.rank.position", comment: "Rank position"), rank))
                     .font(.headline)
                     .foregroundStyle(rankColor)
                 if teams.count > 1 {
-                    Text("(geteilt)")
+                    Text(NSLocalizedString("leaderboard.rank.tied", comment: "Tied rank"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text("\(teams.first?.team.totalScore ?? 0) Punkte")
+                Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), teams.first?.team.totalScore ?? 0))
                     .font(.headline)
                     .foregroundStyle(rankColor)
             }
@@ -387,7 +387,7 @@ struct LeaderboardRowView: View {
                     .foregroundStyle(isTopThree ? rankColor : .primary)
                     .monospacedDigit()
                 
-                Text("Punkte")
+                Text(NSLocalizedString("common.points", comment: "Points"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .textCase(.uppercase)

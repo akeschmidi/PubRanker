@@ -121,7 +121,7 @@ struct TeamRowView: View {
             
             Spacer()
             
-            Text("\(team.totalScore) Punkte")
+            Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), team.totalScore))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             

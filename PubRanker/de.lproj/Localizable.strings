@@ -67,7 +67,10 @@
 "round.add.multiple" = "Runden hinzufügen";
 "round.name" = "Runden-Name";
 "round.name.placeholder" = "z.B. Geographie, Musik, Sport...";
+"round.names.custom" = "Runden-Namen & Punkte";
+"round.names.only" = "Runden-Namen";
 "round.number" = "Runde %d";
+"round.count.label" = "%d Runden";
 "round.maxPoints" = "Maximale Punkte";
 "round.maxPoints.label" = "Maximale Punktzahl";
 "round.currentRound" = "Aktuelle Runde";
@@ -86,6 +89,8 @@
 // MARK: - Leaderboard
 "leaderboard.title" = "Rangliste";
 "leaderboard.rank" = "Rang";
+"leaderboard.rank.position" = "Platz %d";
+"leaderboard.rank.tied" = "(geteilt)";
 "leaderboard.team" = "Team";
 "leaderboard.points" = "Punkte";
 "leaderboard.winner" = "Gewinner";
@@ -138,6 +143,16 @@
 "common.about" = "Über";
 "common.help" = "Hilfe";
 "common.close" = "Schließen";
+"common.points" = "Punkte";
+"common.points.count" = "%d Punkte";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Punkte";
+"common.points.of" = "von %d Punkten";
+"common.points.perRound" = "Max. Punkte pro Runde";
+"common.points.custom" = "Individuelle Punkte pro Runde";
+"common.missing" = "%d fehlen noch";
+"common.delete.confirm" = "Möchten Sie \"%@\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"common.quickSelect" = "Schnellauswahl";
 
 // MARK: - Placeholders
 "placeholder.quizName" = "z.B. Pub Quiz Oktober";

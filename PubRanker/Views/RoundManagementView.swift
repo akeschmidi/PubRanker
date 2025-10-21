@@ -108,7 +108,7 @@ struct RoundManagementView: View {
                                         .lineLimit(2)
                                         .multilineTextAlignment(.center)
                                     
-                                    Text("Max: \(round.maxPoints)")
+                                    Text(String(format: NSLocalizedString("common.points.max", comment: "Max points"), round.maxPoints))
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                         .padding(.horizontal, 8)
@@ -209,7 +209,7 @@ struct RoundManagementView: View {
                                         .monospacedDigit()
                                         .foregroundStyle(.primary)
                                     
-                                    Text("Punkte")
+                                    Text(NSLocalizedString("common.points", comment: "Points"))
                                         .font(.caption2)
                                         .foregroundStyle(.secondary)
                                         .textCase(.uppercase)
@@ -416,10 +416,10 @@ struct CurrentRoundBanner: View {
                         .controlSize(.large)
                     } else {
                         VStack(alignment: .trailing, spacing: 2) {
-                            Text("\(totalTeams - completedTeamsCount) fehlen noch")
+                            Text(String(format: NSLocalizedString("common.missing", comment: "Missing count"), totalTeams - completedTeamsCount))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("Max: \(currentRound.maxPoints) Punkte")
+                            Text(String(format: NSLocalizedString("common.points.maxLabel", comment: "Max points label"), currentRound.maxPoints))
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
@@ -738,13 +738,13 @@ struct QuickRoundSheet: View {
                 
                 // Quick Presets
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Schnellauswahl")
+                    Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     
                     HStack(spacing: 12) {
                         ForEach([5, 10, 15, 20], id: \.self) { points in
-                            Button("\(points) Punkte") {
+                            Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
                                 maxPoints = points
                             }
                             .buttonStyle(.bordered)
@@ -841,7 +841,7 @@ struct RoundWizardSheet: View {
                 VStack(spacing: 32) {
                     // Preset Formats
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Schnellauswahl")
+                        Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
                             .font(.headline)
                         
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -853,9 +853,9 @@ struct RoundWizardSheet: View {
                                     VStack(spacing: 8) {
                                         Text(preset.0)
                                             .font(.headline)
-                                        Text("\(preset.1) Runden")
+                                        Text(String(format: NSLocalizedString("round.count.label", comment: "Rounds count"), preset.1))
                                             .font(.caption)
-                                        Text("\(preset.2) Punkte")
+                                        Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), preset.2))
                                             .font(.caption2)
                                             .foregroundStyle(.secondary)
                                     }
@@ -945,7 +945,7 @@ struct RoundWizardSheet: View {
                             HStack {
                                 Image(systemName: "star.circle.fill")
                                     .foregroundStyle(.yellow)
-                                Text("Max. Punkte pro Runde")
+                                Text(NSLocalizedString("common.points.perRound", comment: "Max points per round"))
                                     .font(.headline)
                             }
                             
@@ -999,7 +999,7 @@ struct RoundWizardSheet: View {
                         HStack {
                             Image(systemName: "star.circle.fill")
                                 .foregroundStyle(.yellow)
-                            Text("Individuelle Punkte pro Runde")
+                            Text(NSLocalizedString("common.points.custom", comment: "Custom points per round"))
                                 .font(.headline)
                         }
                     }
@@ -1029,7 +1029,7 @@ struct RoundWizardSheet: View {
                     // Custom Names and/or Points List
                     if useCustomNames || useCustomPoints {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text(useCustomNames && useCustomPoints ? "Runden-Namen & Punkte" : useCustomNames ? "Runden-Namen" : "Max. Punkte")
+                            Text(useCustomNames && useCustomPoints ? NSLocalizedString("round.names.custom", comment: "Round names and points") : useCustomNames ? NSLocalizedString("round.names.only", comment: "Round names only") : NSLocalizedString("common.points.perRound", comment: "Max points"))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                             
@@ -1055,7 +1055,7 @@ struct RoundWizardSheet: View {
                                     
                                     if useCustomPoints {
                                         HStack {
-                                            TextField("Punkte", value: Binding(
+                                            TextField(NSLocalizedString("common.points", comment: "Points"), value: Binding(
                                                 get: { roundPoints.indices.contains(index) ? roundPoints[index] : maxPointsPerRound },
                                                 set: { newValue in
                                                     while roundPoints.count <= index {
@@ -1092,7 +1092,7 @@ struct RoundWizardSheet: View {
                                         .font(.subheadline)
                                         .bold()
                                     Spacer()
-                                    Text("\(getRoundPoints(for: index)) Punkte")
+                                    Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), getRoundPoints(for: index)))
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
