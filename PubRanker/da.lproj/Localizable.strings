@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - Dansk
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Back";
+"navigation.done" = "Done";
+"navigation.cancel" = "Cancel";
+"navigation.save" = "Save";
+"navigation.edit" = "Edit";
+"navigation.delete" = "Delete";
+"navigation.add" = "Add";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "New Quiz";
+"quiz.new.create" = "Create New Quiz";
+"quiz.new.description" = "Create a new pub quiz and add teams and rounds";
+"quiz.name" = "Quiz Name";
+"quiz.name.placeholder" = "e.g. Pub Quiz at Lion's, Christmas Quiz...";
+"quiz.location" = "Location";
+"quiz.location.label" = "Venue";
+"quiz.location.placeholder" = "e.g. Lion's Pub";
+"quiz.date" = "Date";
+"quiz.date.label" = "Date & Time";
+"quiz.create" = "Create Quiz";
+"quiz.select.none" = "No Quiz Selected";
+"quiz.select.prompt" = "Select a quiz from the list or create a new one.";
+"quiz.teams" = "Teams";
+"quiz.teams.count" = "%d Teams";
+"quiz.rounds" = "Rounds";
+"quiz.totalPoints" = "Total Points";
+"quiz.delete.confirm" = "Delete quiz?";
+"quiz.delete.message" = "This action cannot be undone.";
+
+// MARK: - Teams
+"team.title" = "Teams";
+"team.new" = "New Team";
+"team.new.single" = "Single Team";
+"team.new.single.add" = "Add Single Team";
+"team.new.multiple" = "Multiple Teams";
+"team.new.multiple.create" = "Create Multiple Teams...";
+"team.add" = "Add Team";
+"team.add.multiple" = "Add Teams";
+"team.name" = "Team Name";
+"team.color" = "Color";
+"team.points" = "Points";
+"team.rank" = "Rank";
+"team.wizard" = "Team Wizard";
+"team.wizard.howMany" = "How many teams?";
+"team.wizard.create" = "Create Teams";
+"team.delete.confirm" = "Delete team?";
+"team.delete.message" = "%@ will be removed from the quiz.";
+"team.count" = "%d Teams";
+"team.management" = "Team Management";
+
+// MARK: - Rounds
+"round.title" = "Rounds";
+"round.new" = "New Round";
+"round.new.single" = "Single Round";
+"round.new.single.add" = "Add Single Round";
+"round.new.multiple" = "Multiple Rounds";
+"round.new.multiple.create" = "Create Multiple Rounds...";
+"round.add" = "Add Round";
+"round.add.multiple" = "Add Rounds";
+"round.name" = "Round Name";
+"round.name.placeholder" = "e.g. Geography, Music, Sports...";
+"round.names.custom" = "Round Names & Points";
+"round.names.only" = "Round Names";
+"round.number" = "Round %d";
+"round.count.label" = "%d Rounds";
+"round.maxPoints" = "Maximum Points";
+"round.maxPoints.label" = "Maximum Score";
+"round.currentRound" = "Current Round";
+"round.wizard" = "Round Wizard";
+"round.wizard.howMany" = "How many rounds?";
+"round.wizard.create" = "Create Rounds";
+"round.delete.confirm" = "Delete round?";
+"round.delete.message" = "All points for this round will be lost.";
+"round.status.active" = "Active";
+"round.status.completed" = "Completed";
+"round.status.pending" = "Pending";
+"round.complete" = "Complete Round";
+"round.complete.help" = "Complete current round (⌘K)";
+"round.count" = "%d Rounds";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Leaderboard";
+"leaderboard.rank" = "Rank";
+"leaderboard.rank.position" = "Rank %d";
+"leaderboard.rank.tied" = "(tied)";
+"leaderboard.team" = "Team";
+"leaderboard.points" = "Points";
+"leaderboard.winner" = "Winner";
+"leaderboard.podium" = "Podium";
+"leaderboard.topThree" = "Top 3";
+"leaderboard.noTeams" = "No Teams";
+"leaderboard.noPoints" = "No points yet";
+
+// MARK: - Score Entry
+"score.title" = "Score Entry";
+"score.enter" = "Enter Score";
+"score.save" = "Save Score";
+"score.saved" = "Saved";
+"score.autoSave" = "Auto-Save";
+"score.autoSave.enabled" = "Auto-Save enabled";
+"score.total" = "Total";
+"score.perRound" = "Per Round";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Error";
+"alert.success" = "Success";
+"alert.warning" = "Warning";
+"alert.info" = "Information";
+"alert.ok" = "OK";
+"alert.yes" = "Yes";
+"alert.no" = "No";
+
+"error.generic" = "An error occurred";
+"error.saveFailed" = "Save failed";
+"error.loadFailed" = "Load failed";
+"error.deleteFailed" = "Delete failed";
+"error.invalidInput" = "Invalid input";
+"error.nameRequired" = "Name required";
+"error.pointsRequired" = "Points required";
+
+"success.saved" = "Successfully saved";
+"success.deleted" = "Successfully deleted";
+"success.created" = "Successfully created";
+
+// MARK: - Common
+"common.name" = "Name";
+"common.description" = "Description";
+"common.date" = "Date";
+"common.time" = "Time";
+"common.location" = "Location";
+"common.search" = "Search";
+"common.filter" = "Filter";
+"common.sort" = "Sort";
+"common.settings" = "Settings";
+"common.about" = "About";
+"common.help" = "Help";
+"common.close" = "Close";
+"common.points" = "Points";
+"common.points.count" = "%d Points";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Points";
+"common.points.of" = "of %d Points";
+"common.points.perRound" = "Max. Points per Round";
+"common.points.custom" = "Individual Points per Round";
+"common.missing" = "%d still missing";
+"common.delete.confirm" = "Do you really want to delete \"%@\"? This action cannot be undone.";
+"common.quickSelect" = "Quick Select";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "e.g. October Pub Quiz";
+"placeholder.teamName" = "e.g. Quiz Masters";
+"placeholder.roundName" = "e.g. Geography";
+"placeholder.location" = "e.g. Murphy's Pub";
+"placeholder.points" = "Enter points";
+
+// MARK: - Statistics
+"stats.average" = "Average";
+"stats.highest" = "Highest";
+"stats.lowest" = "Lowest";
+"stats.total" = "Total";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "No Quizzes";
+"empty.noQuizzes.message" = "Create your first quiz";
+"empty.noTeams" = "No Teams";
+"empty.noTeams.message" = "Add teams to get started";
+"empty.noTeams.leaderboard" = "Add teams to see the leaderboard.";
+"empty.noTeams.leaderboard.action" = "Switch to the Teams tab to add teams.";
+"empty.noTeams.management" = "Add teams to start the quiz.";
+"empty.noTeams.beforeRounds" = "Add teams first before creating rounds.";
+"empty.noTeams.score" = "Add teams to assign points.";
+"empty.noRounds" = "No Rounds";
+"empty.noRounds.message" = "Create rounds for your quiz";
+"empty.noRounds.management" = "Add rounds to assign points.";
+"empty.noRounds.leaderboard.action" = "Switch to the Rounds tab to add rounds.";
+"empty.noScores" = "No Scores";
+"empty.noScores.message" = "Enter points for rounds";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Setup Quiz";
+"setup.dialog.message" = "Would you like to set up teams and rounds now?\n\n✓ Add teams\n✓ Define rounds\n\nYou can also do this later via the tabs.";
+"setup.dialog.later" = "Set up later";
+"setup.dialog.start" = "Start now 🚀";
+
+// MARK: - Export
+"export.title" = "Export";
+"export.json" = "Export as JSON";
+"export.csv" = "Export as CSV";
+"export.success.title" = "Quiz Exported";
+"export.success.message" = "The quiz was successfully exported:\n%@";
+"export.showInFinder" = "Show in Finder";
+"export.share" = "Share...";
+
+// MARK: - Quiz Status
+"status.live" = "Live";
+"status.completed" = "Completed";
+"status.start" = "Start Quiz";
+"status.complete" = "Complete Quiz";
+"status.progress" = "Progress";
+"status.roundsCompleted" = "%d of %d Rounds";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d pts";
+"score.pointsUnit" = "pts";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Click to edit %d points";
+"score.clickToAdd" = "Click to assign points";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Venue";
+"csv.date" = "Date";
+"csv.completed" = "Completed";
+"csv.yes" = "Yes";
+"csv.no" = "No";
+"csv.finalRanking" = "FINAL RANKING";
+"csv.rank" = "Rank";
+"csv.team" = "Team";
+"csv.totalScore" = "Total Score";
+"csv.color" = "Color";
+"csv.detailedScores" = "DETAILED SCORES";
+"csv.total" = "Total";

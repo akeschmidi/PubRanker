@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - Svenska
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Tillbaka";
+"navigation.done" = "Klar";
+"navigation.cancel" = "Avbryt";
+"navigation.save" = "Spara";
+"navigation.edit" = "Redigera";
+"navigation.delete" = "Radera";
+"navigation.add" = "Lägg till";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "Nytt Quiz";
+"quiz.new.create" = "Skapa Nytt Quiz";
+"quiz.new.description" = "Skapa ett nytt pub quiz och lägg till lag och omgångar";
+"quiz.name" = "Quiznamn";
+"quiz.name.placeholder" = "t.ex. Pub Quiz på Lejonet, Julquiz...";
+"quiz.location" = "Plats";
+"quiz.location.label" = "Plats";
+"quiz.location.placeholder" = "t.ex. Lejonets Pub";
+"quiz.date" = "Datum";
+"quiz.date.label" = "Datum & Tid";
+"quiz.create" = "Skapa Quiz";
+"quiz.select.none" = "Inget Quiz Valt";
+"quiz.select.prompt" = "Välj ett quiz från listan eller skapa ett nytt.";
+"quiz.teams" = "Lag";
+"quiz.teams.count" = "%d Lag";
+"quiz.rounds" = "Omgångar";
+"quiz.totalPoints" = "Totala Poäng";
+"quiz.delete.confirm" = "Radera quiz?";
+"quiz.delete.message" = "Denna åtgärd kan inte ångras.";
+
+// MARK: - Teams
+"team.title" = "Lag";
+"team.new" = "Nytt Lag";
+"team.new.single" = "Enskilt Lag";
+"team.new.single.add" = "Lägg till Enskilt Lag";
+"team.new.multiple" = "Flera Lag";
+"team.new.multiple.create" = "Skapa Flera Lag...";
+"team.add" = "Lägg till Lag";
+"team.add.multiple" = "Lägg till Lag";
+"team.name" = "Lagnamn";
+"team.color" = "Färg";
+"team.points" = "Poäng";
+"team.rank" = "Rang";
+"team.wizard" = "Lagguide";
+"team.wizard.howMany" = "Hur många lag?";
+"team.wizard.create" = "Skapa Lag";
+"team.delete.confirm" = "Radera lag?";
+"team.delete.message" = "%@ kommer att tas bort från quizet.";
+"team.count" = "%d Lag";
+"team.management" = "Laghantering";
+
+// MARK: - Rounds
+"round.title" = "Omgångar";
+"round.new" = "Ny Omgång";
+"round.new.single" = "Enskild Omgång";
+"round.new.single.add" = "Lägg till Enskild Omgång";
+"round.new.multiple" = "Flera Omgångar";
+"round.new.multiple.create" = "Skapa Flera Omgångar...";
+"round.add" = "Lägg till Omgång";
+"round.add.multiple" = "Lägg till Omgångar";
+"round.name" = "Omgångsnamn";
+"round.name.placeholder" = "t.ex. Geografi, Musik, Sport...";
+"round.names.custom" = "Omgångsnamn & Poäng";
+"round.names.only" = "Omgångsnamn";
+"round.number" = "Omgång %d";
+"round.count.label" = "%d Omgångar";
+"round.maxPoints" = "Maximala Poäng";
+"round.maxPoints.label" = "Maximala Poäng";
+"round.currentRound" = "Aktuell Omgång";
+"round.wizard" = "Omgångsguide";
+"round.wizard.howMany" = "Hur många omgångar?";
+"round.wizard.create" = "Skapa Omgångar";
+"round.delete.confirm" = "Radera omgång?";
+"round.delete.message" = "Alla poäng för denna omgång kommer att förloras.";
+"round.status.active" = "Aktiv";
+"round.status.completed" = "Slutförd";
+"round.status.pending" = "Väntande";
+"round.complete" = "Slutför Omgång";
+"round.complete.help" = "Slutför aktuell omgång (⌘K)";
+"round.count" = "%d Omgångar";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Resultattavla";
+"leaderboard.rank" = "Plats";
+"leaderboard.rank.position" = "Plats %d";
+"leaderboard.rank.tied" = "(delad)";
+"leaderboard.team" = "Lag";
+"leaderboard.points" = "Poäng";
+"leaderboard.winner" = "Vinnare";
+"leaderboard.podium" = "Pallen";
+"leaderboard.topThree" = "Topp 3";
+"leaderboard.noTeams" = "Inga Lag";
+"leaderboard.noPoints" = "Inga poäng ännu";
+
+// MARK: - Score Entry
+"score.title" = "Poängregistrering";
+"score.enter" = "Ange Poäng";
+"score.save" = "Spara Poäng";
+"score.saved" = "Sparad";
+"score.autoSave" = "Auto-Spara";
+"score.autoSave.enabled" = "Auto-Spara aktiverad";
+"score.total" = "Totalt";
+"score.perRound" = "Per Omgång";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Fel";
+"alert.success" = "Framgång";
+"alert.warning" = "Varning";
+"alert.info" = "Information";
+"alert.ok" = "OK";
+"alert.yes" = "Ja";
+"alert.no" = "Nej";
+
+"error.generic" = "Ett fel uppstod";
+"error.saveFailed" = "Misslyckades att spara";
+"error.loadFailed" = "Misslyckades att ladda";
+"error.deleteFailed" = "Misslyckades att radera";
+"error.invalidInput" = "Ogiltig inmatning";
+"error.nameRequired" = "Namn krävs";
+"error.pointsRequired" = "Poäng krävs";
+
+"success.saved" = "Sparades framgångsrikt";
+"success.deleted" = "Raderades framgångsrikt";
+"success.created" = "Skapades framgångsrikt";
+
+// MARK: - Common
+"common.name" = "Namn";
+"common.description" = "Beskrivning";
+"common.date" = "Datum";
+"common.time" = "Tid";
+"common.location" = "Plats";
+"common.search" = "Sök";
+"common.filter" = "Filtrera";
+"common.sort" = "Sortera";
+"common.settings" = "Inställningar";
+"common.about" = "Om";
+"common.help" = "Hjälp";
+"common.close" = "Stäng";
+"common.points" = "Poäng";
+"common.points.count" = "%d Poäng";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Poäng";
+"common.points.of" = "av %d Poäng";
+"common.points.perRound" = "Max. Poäng per Omgång";
+"common.points.custom" = "Individuella Poäng per Omgång";
+"common.missing" = "%d saknas fortfarande";
+"common.delete.confirm" = "Vill du verkligen radera \"%@\"? Denna åtgärd kan inte ångras.";
+"common.quickSelect" = "Snabbval";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "t.ex. Oktober Pub Quiz";
+"placeholder.teamName" = "t.ex. Quiz Masters";
+"placeholder.roundName" = "t.ex. Geografi";
+"placeholder.location" = "t.ex. Murphy's Pub";
+"placeholder.points" = "Ange poäng";
+
+// MARK: - Statistics
+"stats.average" = "Genomsnitt";
+"stats.highest" = "Högsta";
+"stats.lowest" = "Lägsta";
+"stats.total" = "Totalt";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "Inga Quiz";
+"empty.noQuizzes.message" = "Skapa ditt första quiz";
+"empty.noTeams" = "Inga Lag";
+"empty.noTeams.message" = "Lägg till lag för att komma igång";
+"empty.noTeams.leaderboard" = "Lägg till lag för att se resultattavlan.";
+"empty.noTeams.leaderboard.action" = "Byt till fliken Lag för att lägga till lag.";
+"empty.noTeams.management" = "Lägg till lag för att börja quizet.";
+"empty.noTeams.beforeRounds" = "Lägg till lag först innan du skapar omgångar.";
+"empty.noTeams.score" = "Lägg till lag för att tilldela poäng.";
+"empty.noRounds" = "Inga Omgångar";
+"empty.noRounds.message" = "Skapa omgångar för ditt quiz";
+"empty.noRounds.management" = "Lägg till omgångar för att tilldela poäng.";
+"empty.noRounds.leaderboard.action" = "Byt till fliken Omgångar för att lägga till omgångar.";
+"empty.noScores" = "Inga Poäng";
+"empty.noScores.message" = "Ange poäng för omgångarna";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Konfigurera Quiz";
+"setup.dialog.message" = "Vill du konfigurera lag och omgångar nu?\n\n✓ Lägg till lag\n✓ Definiera omgångar\n\nDu kan också göra detta senare via flikarna.";
+"setup.dialog.later" = "Konfigurera senare";
+"setup.dialog.start" = "Starta nu 🚀";
+
+// MARK: - Export
+"export.title" = "Exportera";
+"export.json" = "Exportera som JSON";
+"export.csv" = "Exportera som CSV";
+"export.success.title" = "Quiz Exporterat";
+"export.success.message" = "Quizet exporterades framgångsrikt:\n%@";
+"export.showInFinder" = "Visa i Finder";
+"export.share" = "Dela...";
+
+// MARK: - Quiz Status
+"status.live" = "Live";
+"status.completed" = "Slutförd";
+"status.start" = "Starta Quiz";
+"status.complete" = "Slutför Quiz";
+"status.progress" = "Framsteg";
+"status.roundsCompleted" = "%d av %d Omgångar";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d p";
+"score.pointsUnit" = "p";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Klicka för att redigera %d poäng";
+"score.clickToAdd" = "Klicka för att tilldela poäng";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Plats";
+"csv.date" = "Datum";
+"csv.completed" = "Slutförd";
+"csv.yes" = "Ja";
+"csv.no" = "Nej";
+"csv.finalRanking" = "SLUTLIG RANKNING";
+"csv.rank" = "Plats";
+"csv.team" = "Lag";
+"csv.totalScore" = "Totala Poäng";
+"csv.color" = "Färg";
+"csv.detailedScores" = "DETALJERADE POÄNG";
+"csv.total" = "Totalt";
