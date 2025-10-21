@@ -23,7 +23,6 @@
 		A10000315 /* QuickRoundSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000314 /* QuickRoundSetupView.swift */; };
 		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
 		C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */; };
-		C941F1FF2EA7FA30004EE1C9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FA2EA7FA30004EE1C9 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -135,18 +134,9 @@
 				A1000030 /* Views */,
 				A10000400 /* Assets.xcassets */,
 				A10000500 /* PubRanker.entitlements */,
-				C941F1FD2EA7FA30004EE1C9 /* de.lproj */,
-			);
-			path = PubRanker;
-			sourceTree = "<group>";
-		};
-		C941F1FD2EA7FA30004EE1C9 /* de.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				C941F1FA2EA7FA30004EE1C9 /* InfoPlist.strings */,
 				C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */,
 			);
-			path = de.lproj;
+			path = PubRanker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,7 +216,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */,
-				C941F1FF2EA7FA30004EE1C9 /* InfoPlist.strings in Resources */,
 				A10000401 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,13 +247,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		C941F1FA2EA7FA30004EE1C9 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -376,7 +358,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -477,7 +459,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;
