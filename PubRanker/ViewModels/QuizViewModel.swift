@@ -183,19 +183,19 @@ final class QuizViewModel {
     
     func exportQuizAsCSV(quiz: Quiz) -> String {
         var csv = "Quiz: \(quiz.name)\n"
-        csv += "Venue: \(quiz.venue)\n"
-        csv += "Date: \(quiz.date.formatted(date: .long, time: .shortened))\n"
-        csv += "Completed: \(quiz.isCompleted ? "Yes" : "No")\n\n"
+        csv += "Veranstaltungsort: \(quiz.venue)\n"
+        csv += "Datum: \(quiz.date.formatted(date: .long, time: .shortened))\n"
+        csv += "Abgeschlossen: \(quiz.isCompleted ? "Ja" : "Nein")\n\n"
         
         // Teams Ranking
-        csv += "FINAL RANKING\n"
-        csv += "Rank,Team,Total Score,Color\n"
+        csv += "FINALE RANGLISTE\n"
+        csv += "Rang,Team,Gesamtpunktzahl,Farbe\n"
         for (index, team) in quiz.sortedTeamsByScore.enumerated() {
             csv += "\(index + 1),\(team.name),\(team.totalScore),\(team.color)\n"
         }
         
-        csv += "\n\nDETAILED SCORES\n"
-        csv += "Team," + quiz.sortedRounds.map { $0.name }.joined(separator: ",") + ",Total\n"
+        csv += "\n\nDETAILLIERTE PUNKTZAHLEN\n"
+        csv += "Team," + quiz.sortedRounds.map { $0.name }.joined(separator: ",") + ",Gesamt\n"
         
         for team in quiz.sortedTeamsByScore {
             var row = team.name

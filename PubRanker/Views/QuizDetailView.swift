@@ -80,7 +80,7 @@ struct QuizDetailView: View {
         .sheet(isPresented: $showingRoundWizard) {
             RoundWizardSheet(quiz: quiz, viewModel: viewModel)
         }
-        .alert("🎯 Quiz-Setup", isPresented: $showingSetupDialog) {
+        .alert("Quiz einrichten", isPresented: $showingSetupDialog) {
             Button("Später einrichten", role: .cancel) {
                 showingSetupDialog = false
             }
