@@ -192,7 +192,6 @@ struct QuizHeaderView: View {
                             Image(systemName: "square.and.arrow.up")
                         }
                     }
-                    .buttonStyle(quiz.isCompleted ? .bordered : .borderless)
                     .help("Quiz exportieren")
                     
                     if quiz.isActive {
