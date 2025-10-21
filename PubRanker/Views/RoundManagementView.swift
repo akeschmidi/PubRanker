@@ -43,9 +43,9 @@ struct RoundManagementView: View {
     
     private var contentArea: some View {
         Group {
-            if quiz.rounds.isEmpty || quiz.teams.isEmpty {
+            if quiz.safeRounds.isEmpty || quiz.safeTeams.isEmpty {
                     VStack(spacing: 20) {
-                        if quiz.teams.isEmpty {
+                        if quiz.safeTeams.isEmpty {
                             emptyTeamsView
                         } else {
                             emptyRoundsView
@@ -62,7 +62,7 @@ struct RoundManagementView: View {
                                 Text("Team")
                                     .font(.title3)
                                     .bold()
-                                Text("\(quiz.teams.count) Teams")
+                                Text("\(quiz.safeTeams.count) Teams")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -154,7 +154,7 @@ struct RoundManagementView: View {
                         Divider()
                         
                         // Team Rows
-                        ForEach(Array(quiz.teams.enumerated()), id: \.element.id) { index, team in
+                        ForEach(Array(quiz.safeTeams.enumerated()), id: \.element.id) { index, team in
                             HStack(spacing: 0) {
                                 // Team Name
                                 HStack(spacing: 12) {
@@ -349,11 +349,11 @@ struct CurrentRoundBanner: View {
     @Bindable var viewModel: QuizViewModel
     
     var completedTeamsCount: Int {
-        quiz.teams.filter { $0.getScore(for: currentRound) > 0 }.count
+        quiz.safeTeams.filter { $0.getScore(for: currentRound) > 0 }.count
     }
     
     var totalTeams: Int {
-        quiz.teams.count
+        quiz.safeTeams.count
     }
     
     var progress: Double {
@@ -449,11 +449,11 @@ struct RoundCompletionIndicator: View {
     let round: Round
     
     var teamsWithScores: Int {
-        quiz.teams.filter { $0.getScore(for: round) > 0 }.count
+        quiz.safeTeams.filter { $0.getScore(for: round) > 0 }.count
     }
     
     var totalTeams: Int {
-        quiz.teams.count
+        quiz.safeTeams.count
     }
     
     var body: some View {
@@ -665,7 +665,7 @@ struct QuickRoundSheet: View {
                     .font(.title2)
                     .bold()
                 
-                Text("Runde \(quiz.rounds.count + 1)")
+                Text("Runde \(quiz.safeRounds.count + 1)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

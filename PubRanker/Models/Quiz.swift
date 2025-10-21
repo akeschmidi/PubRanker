@@ -10,19 +10,19 @@ import SwiftData
 
 @Model
 final class Quiz {
-    var id: UUID
-    var name: String
-    var venue: String
-    var date: Date
-    var isActive: Bool
-    var isCompleted: Bool
-    var createdAt: Date
+    var id: UUID = UUID()
+    var name: String = ""
+    var venue: String = ""
+    var date: Date = Date()
+    var isActive: Bool = false
+    var isCompleted: Bool = false
+    var createdAt: Date = Date()
     
     @Relationship(deleteRule: .cascade)
-    var teams: [Team]
+    var teams: [Team]? = []
     
     @Relationship(deleteRule: .cascade)
-    var rounds: [Round]
+    var rounds: [Round]? = []
     
     init(name: String, venue: String = "", date: Date = Date()) {
         self.id = UUID()
@@ -36,12 +36,21 @@ final class Quiz {
         self.rounds = []
     }
     
+    // Safe accessors for optional arrays
+    var safeTeams: [Team] {
+        teams ?? []
+    }
+    
+    var safeRounds: [Round] {
+        rounds ?? []
+    }
+    
     var sortedRounds: [Round] {
-        rounds.sorted { $0.orderIndex < $1.orderIndex }
+        safeRounds.sorted { $0.orderIndex < $1.orderIndex }
     }
     
     var sortedTeamsByScore: [Team] {
-        teams.sorted { $0.totalScore > $1.totalScore }
+        safeTeams.sorted { $0.totalScore > $1.totalScore }
     }
     
     var currentRound: Round? {
@@ -49,11 +58,11 @@ final class Quiz {
     }
     
     var completedRoundsCount: Int {
-        rounds.filter { $0.isCompleted }.count
+        safeRounds.filter { $0.isCompleted }.count
     }
     
     var progress: Double {
-        guard !rounds.isEmpty else { return 0 }
-        return Double(completedRoundsCount) / Double(rounds.count)
+        guard !safeRounds.isEmpty else { return 0 }
+        return Double(completedRoundsCount) / Double(safeRounds.count)
     }
 }

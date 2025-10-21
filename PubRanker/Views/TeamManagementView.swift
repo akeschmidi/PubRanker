@@ -15,7 +15,7 @@ struct TeamManagementView: View {
     
     var body: some View {
         VStack {
-            if quiz.teams.isEmpty {
+            if quiz.safeTeams.isEmpty {
                 VStack(spacing: 24) {
                     Image(systemName: "person.3.fill")
                         .font(.system(size: 60))
@@ -56,12 +56,12 @@ struct TeamManagementView: View {
                 .padding()
             } else {
                 List {
-                    ForEach(quiz.teams) { team in
+                    ForEach(quiz.safeTeams) { team in
                         TeamRowView(team: team, quiz: quiz, viewModel: viewModel)
                     }
                     .onDelete { indexSet in
                         for index in indexSet {
-                            viewModel.deleteTeam(quiz.teams[index], from: quiz)
+                            viewModel.deleteTeam(quiz.safeTeams[index], from: quiz)
                         }
                     }
                 }

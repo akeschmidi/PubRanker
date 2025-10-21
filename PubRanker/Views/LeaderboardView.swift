@@ -33,7 +33,7 @@ struct LeaderboardView: View {
     
     var body: some View {
         Group {
-            if quiz.teams.isEmpty {
+            if quiz.safeTeams.isEmpty {
                 VStack(spacing: 24) {
                     Image(systemName: "trophy.fill")
                         .font(.system(size: 60))
@@ -57,7 +57,7 @@ struct LeaderboardView: View {
                         .padding(.horizontal)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if quiz.rounds.isEmpty {
+            } else if quiz.safeRounds.isEmpty {
                 VStack(spacing: 24) {
                     Image(systemName: "list.number.circle.fill")
                         .font(.system(size: 60))

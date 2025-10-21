@@ -73,7 +73,10 @@ final class QuizViewModel {
         
         let team = Team(name: name, color: color)
         team.quiz = quiz
-        quiz.teams.append(team)
+        if quiz.teams == nil {
+            quiz.teams = []
+        }
+        quiz.teams?.append(team)
         context.insert(team)
         
         saveContext()
@@ -82,8 +85,8 @@ final class QuizViewModel {
     func deleteTeam(_ team: Team, from quiz: Quiz) {
         guard let context = modelContext else { return }
         
-        if let index = quiz.teams.firstIndex(where: { $0.id == team.id }) {
-            quiz.teams.remove(at: index)
+        if let index = quiz.teams?.firstIndex(where: { $0.id == team.id }) {
+            quiz.teams?.remove(at: index)
         }
         context.delete(team)
         
@@ -100,10 +103,13 @@ final class QuizViewModel {
     func addRound(to quiz: Quiz, name: String, maxPoints: Int = 10) {
         guard let context = modelContext else { return }
         
-        let orderIndex = quiz.rounds.count
+        if quiz.rounds == nil {
+            quiz.rounds = []
+        }
+        let orderIndex = quiz.rounds?.count ?? 0
         let round = Round(name: name, maxPoints: maxPoints, orderIndex: orderIndex)
         round.quiz = quiz
-        quiz.rounds.append(round)
+        quiz.rounds?.append(round)
         context.insert(round)
         
         saveContext()
@@ -112,8 +118,8 @@ final class QuizViewModel {
     func deleteRound(_ round: Round, from quiz: Quiz) {
         guard let context = modelContext else { return }
         
-        if let index = quiz.rounds.firstIndex(where: { $0.id == round.id }) {
-            quiz.rounds.remove(at: index)
+        if let index = quiz.rounds?.firstIndex(where: { $0.id == round.id }) {
+            quiz.rounds?.remove(at: index)
         }
         context.delete(round)
         

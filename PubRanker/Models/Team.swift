@@ -10,12 +10,12 @@ import SwiftData
 
 @Model
 final class Team {
-    var id: UUID
-    var name: String
-    var color: String
-    var totalScore: Int
-    var roundScores: [RoundScore]
-    var createdAt: Date
+    var id: UUID = UUID()
+    var name: String = ""
+    var color: String = "#007AFF"
+    var totalScore: Int = 0
+    var roundScores: [RoundScore] = []
+    var createdAt: Date = Date()
     
     @Relationship(deleteRule: .nullify, inverse: \Quiz.teams)
     var quiz: Quiz?

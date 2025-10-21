@@ -107,7 +107,7 @@ struct QuizHeaderView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         
-                        Label("\(quiz.teams.count) Teams", systemImage: "person.3")
+                        Label("\(quiz.safeTeams.count) Teams", systemImage: "person.3")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -142,14 +142,14 @@ struct QuizHeaderView: View {
             }
             
             // Progress Bar
-            if quiz.rounds.count > 0 {
+            if quiz.safeRounds.count > 0 {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text("Fortschritt")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Spacer()
-                        Text("\(quiz.completedRoundsCount) von \(quiz.rounds.count) Runden")
+                        Text("\(quiz.completedRoundsCount) von \(quiz.safeRounds.count) Runden")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

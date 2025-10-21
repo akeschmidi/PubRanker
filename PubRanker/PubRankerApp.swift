@@ -20,7 +20,7 @@ struct PubRankerApp: App {
         .modelContainer(sharedModelContainer)
     }
     
-    // MARK: - iCloud Model Container
+    // MARK: - Model Container with iCloud Support
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Quiz.self,
@@ -28,16 +28,40 @@ struct PubRankerApp: App {
             Round.self
         ])
         
-        let modelConfiguration = ModelConfiguration(
+        #if DEBUG
+        // Use local storage in debug mode for faster development
+        let configuration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
+        #else
+        // Use iCloud in release mode
+        let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
             cloudKitDatabase: .automatic
         )
+        #endif
         
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [configuration])
+            print("✅ ModelContainer created successfully")
+            return container
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            print("❌ ModelContainer Error: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            
+            // Last resort: try in-memory only
+            do {
+                let memoryConfiguration = ModelConfiguration(
+                    schema: schema,
+                    isStoredInMemoryOnly: true
+                )
+                print("⚠️ Using in-memory storage as fallback")
+                return try ModelContainer(for: schema, configurations: [memoryConfiguration])
+            } catch {
+                fatalError("Fatal: Could not create ModelContainer at all: \(error)")
+            }
         }
     }()
 }

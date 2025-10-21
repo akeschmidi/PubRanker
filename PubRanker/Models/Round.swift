@@ -10,12 +10,12 @@ import SwiftData
 
 @Model
 final class Round {
-    var id: UUID
-    var name: String
-    var maxPoints: Int
-    var orderIndex: Int
-    var isCompleted: Bool
-    var createdAt: Date
+    var id: UUID = UUID()
+    var name: String = ""
+    var maxPoints: Int = 10
+    var orderIndex: Int = 0
+    var isCompleted: Bool = false
+    var createdAt: Date = Date()
     
     @Relationship(deleteRule: .nullify, inverse: \Quiz.rounds)
     var quiz: Quiz?

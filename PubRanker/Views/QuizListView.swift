@@ -190,15 +190,15 @@ struct QuizRowView: View {
             }
             
             HStack {
-                Label("\(quiz.teams.count) Teams", systemImage: "person.3")
+                Label("\(quiz.safeTeams.count) Teams", systemImage: "person.3")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 
-                Label("\(quiz.rounds.count) Runden", systemImage: "list.number")
+                Label("\(quiz.safeRounds.count) Runden", systemImage: "list.number")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 
-                if quiz.rounds.count > 0 {
+                if quiz.safeRounds.count > 0 {
                     ProgressView(value: quiz.progress)
                         .frame(width: 60)
                 }

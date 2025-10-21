@@ -16,7 +16,7 @@ struct ScoreEntryView: View {
     @State private var currentTeamIndex = 0
     
     var sortedTeams: [Team] {
-        quiz.teams.sorted { $0.name < $1.name }
+        quiz.safeTeams.sorted { $0.name < $1.name }
     }
     
     var currentTeam: Team? {
@@ -26,7 +26,7 @@ struct ScoreEntryView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if quiz.teams.isEmpty {
+            if quiz.safeTeams.isEmpty {
                 ContentUnavailableView(
                     "Keine Teams",
                     systemImage: "person.3.slash",
@@ -165,14 +165,14 @@ struct ScoreEntryView: View {
         }
         .onAppear {
             // Initialize scores with current values
-            for team in quiz.teams {
+            for team in quiz.safeTeams {
                 teamScores[team.id] = team.getScore(for: round)
             }
         }
     }
     
     private func saveScores() {
-        for team in quiz.teams {
+        for team in quiz.safeTeams {
             if let score = teamScores[team.id] {
                 viewModel.updateScore(for: team, in: round, points: score)
             }
