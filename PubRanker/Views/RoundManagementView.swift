@@ -555,27 +555,28 @@ struct ScoreCell: View {
                                 currentScore == 0 ? .secondary : .primary
                             )
                         
-                        if currentScore > 0 {
-                            HStack(spacing: 2) {
+                        HStack(spacing: 2) {
+                            if currentScore > 0 {
                                 Text("\(currentScore)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 Text("/")
                                     .font(.caption2)
                                     .foregroundStyle(.secondary)
-                                Text("\(round.maxPoints)")
+                            }
+                            Text("\(round.maxPoints)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            if currentScore == 0 {
+                                Text(" Pkt")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 2)
-                            .background(Color.secondary.opacity(0.1))
-                            .clipShape(Capsule())
-                        } else {
-                            Text("—")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
                         }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 2)
+                        .background(Color.secondary.opacity(0.1))
+                        .clipShape(Capsule())
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
@@ -609,11 +610,9 @@ struct ScoreCell: View {
                 inputText = currentScore > 0 ? "\(currentScore)" : ""
                 isFocused = true
             } else {
-                // Auto-save beim Verlassen
+                // Auto-save beim Verlassen (auch bei leerem Feld = 0 Punkte)
                 saveTimer?.invalidate()
-                if !inputText.isEmpty {
-                    saveScore()
-                }
+                saveScore()
             }
         }
         .onChange(of: isFocused) { oldValue, newValue in
@@ -627,20 +626,27 @@ struct ScoreCell: View {
     private func scheduleAutoSave() {
         saveTimer?.invalidate()
         saveTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
-            if !inputText.isEmpty {
-                saveScore()
-            }
+            // Auto-Save auch bei leerem Feld (= 0 Punkte)
+            saveScore()
         }
     }
     
     private func saveScore() {
         saveTimer?.invalidate()
+        
+        // Leeres Feld = 0 Punkte (erlaubt Score-Reset)
+        if inputText.isEmpty {
+            viewModel.updateScore(for: team, in: round, points: 0)
+            onDismiss()
+            return
+        }
+        
+        // Validiere eingegebene Zahl
         if let score = Int(inputText), score >= 0, score <= round.maxPoints {
             viewModel.updateScore(for: team, in: round, points: score)
             onDismiss()
-        } else if inputText.isEmpty {
-            onDismiss()
         }
+        // Ungültige Eingabe = ignorieren und Dialog offen lassen
     }
 }
 
