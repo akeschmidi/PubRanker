@@ -28,9 +28,9 @@ struct ScoreEntryView: View {
         VStack(spacing: 0) {
             if quiz.safeTeams.isEmpty {
                 ContentUnavailableView(
-                    "Keine Teams",
+                    NSLocalizedString("empty.noTeams", comment: "No teams"),
                     systemImage: "person.3.slash",
-                    description: Text("Fügen Sie Teams hinzu, um Punkte zu vergeben.")
+                    description: Text(NSLocalizedString("empty.noTeams.score", comment: "Add teams to assign points"))
                 )
             } else if let team = currentTeam {
                 // Header

@@ -40,18 +40,18 @@ struct LeaderboardView: View {
                         .foregroundStyle(.yellow)
                     
                     VStack(spacing: 8) {
-                        Text("Keine Teams")
+                        Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
                             .font(.title2)
                             .bold()
                         
-                        Text("Fügen Sie Teams hinzu, um die Rangliste zu sehen.")
+                        Text(NSLocalizedString("empty.noTeams.leaderboard", comment: "Add teams to see leaderboard"))
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
                     
-                    Text("Wechseln Sie zum Teams-Tab, um Teams hinzuzufügen.")
+                    Text(NSLocalizedString("empty.noTeams.leaderboard.action", comment: "Switch to teams tab"))
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .padding(.horizontal)
@@ -64,18 +64,18 @@ struct LeaderboardView: View {
                         .foregroundStyle(.blue)
                     
                     VStack(spacing: 8) {
-                        Text("Keine Runden")
+                        Text(NSLocalizedString("empty.noRounds", comment: "No rounds"))
                             .font(.title2)
                             .bold()
                         
-                        Text("Erstellen Sie Runden, um Punkte zu vergeben und die Rangliste zu sehen.")
+                        Text(NSLocalizedString("empty.noRounds.message", comment: "Create rounds for quiz"))
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
                     
-                    Text("Wechseln Sie zum Runden-Tab, um Runden hinzuzufügen.")
+                    Text(NSLocalizedString("empty.noRounds.leaderboard.action", comment: "Switch to rounds tab"))
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .padding(.horizontal)

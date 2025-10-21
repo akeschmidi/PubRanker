@@ -131,8 +131,15 @@
 "empty.noQuizzes.message" = "Crea tu primer cuestionario";
 "empty.noTeams" = "No hay equipos";
 "empty.noTeams.message" = "Añade equipos para empezar";
+"empty.noTeams.leaderboard" = "Añade equipos para ver la clasificación.";
+"empty.noTeams.leaderboard.action" = "Cambia a la pestaña Equipos para añadir equipos.";
+"empty.noTeams.management" = "Añade equipos para comenzar el quiz.";
+"empty.noTeams.beforeRounds" = "Añade equipos primero antes de crear rondas.";
+"empty.noTeams.score" = "Añade equipos para asignar puntos.";
 "empty.noRounds" = "No hay rondas";
 "empty.noRounds.message" = "Crea rondas para tu cuestionario";
+"empty.noRounds.management" = "Añade rondas para asignar puntos.";
+"empty.noRounds.leaderboard.action" = "Cambia a la pestaña Rondas para añadir rondas.";
 "empty.noScores" = "Sin puntuaciones";
 "empty.noScores.message" = "Introduce puntos para las rondas";
 

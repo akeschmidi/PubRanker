@@ -131,8 +131,15 @@
 "empty.noQuizzes.message" = "Créez votre premier quiz";
 "empty.noTeams" = "Aucune équipe";
 "empty.noTeams.message" = "Ajoutez des équipes pour commencer";
+"empty.noTeams.leaderboard" = "Ajoutez des équipes pour voir le classement.";
+"empty.noTeams.leaderboard.action" = "Passez à l'onglet Équipes pour ajouter des équipes.";
+"empty.noTeams.management" = "Ajoutez des équipes pour commencer le quiz.";
+"empty.noTeams.beforeRounds" = "Ajoutez d'abord des équipes avant de créer des manches.";
+"empty.noTeams.score" = "Ajoutez des équipes pour attribuer des points.";
 "empty.noRounds" = "Aucune manche";
 "empty.noRounds.message" = "Créez des manches pour votre quiz";
+"empty.noRounds.management" = "Ajoutez des manches pour attribuer des points.";
+"empty.noRounds.leaderboard.action" = "Passez à l'onglet Manches pour ajouter des manches.";
 "empty.noScores" = "Aucun score";
 "empty.noScores.message" = "Entrez les points pour les manches";
 

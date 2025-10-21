@@ -288,11 +288,11 @@ struct RoundManagementView: View {
                 .foregroundStyle(.secondary)
             
             VStack(spacing: 8) {
-                Text("Keine Teams")
+                Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
                     .font(.title2)
                     .bold()
                 
-                Text("Fügen Sie zuerst Teams hinzu, bevor Sie Runden erstellen.")
+                Text(NSLocalizedString("empty.noTeams.beforeRounds", comment: "Add teams before rounds"))
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -308,11 +308,11 @@ struct RoundManagementView: View {
                 .foregroundStyle(.blue)
             
             VStack(spacing: 8) {
-                Text("Keine Runden")
+                Text(NSLocalizedString("empty.noRounds", comment: "No rounds"))
                     .font(.title2)
                     .bold()
                 
-                Text("Fügen Sie Runden hinzu, um Punkte zu vergeben.")
+                Text(NSLocalizedString("empty.noRounds.management", comment: "Add rounds to assign points"))
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

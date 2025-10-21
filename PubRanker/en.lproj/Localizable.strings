@@ -131,8 +131,15 @@
 "empty.noQuizzes.message" = "Create your first quiz";
 "empty.noTeams" = "No Teams";
 "empty.noTeams.message" = "Add teams to get started";
+"empty.noTeams.leaderboard" = "Add teams to see the leaderboard.";
+"empty.noTeams.leaderboard.action" = "Switch to the Teams tab to add teams.";
+"empty.noTeams.management" = "Add teams to start the quiz.";
+"empty.noTeams.beforeRounds" = "Add teams first before creating rounds.";
+"empty.noTeams.score" = "Add teams to assign points.";
 "empty.noRounds" = "No Rounds";
 "empty.noRounds.message" = "Create rounds for your quiz";
+"empty.noRounds.management" = "Add rounds to assign points.";
+"empty.noRounds.leaderboard.action" = "Switch to the Rounds tab to add rounds.";
 "empty.noScores" = "No Scores";
 "empty.noScores.message" = "Enter points for rounds";
 

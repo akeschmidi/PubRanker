@@ -22,11 +22,11 @@ struct TeamManagementView: View {
                         .foregroundStyle(.secondary)
                     
                     VStack(spacing: 8) {
-                        Text("Keine Teams")
+                        Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
                             .font(.title2)
                             .bold()
                         
-                        Text("Fügen Sie Teams hinzu, um mit dem Quiz zu beginnen.")
+                        Text(NSLocalizedString("empty.noTeams.management", comment: "Add teams to start quiz"))
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)

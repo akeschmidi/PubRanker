@@ -131,8 +131,15 @@
 "empty.noQuizzes.message" = "Erstellen Sie Ihr erstes Quiz";
 "empty.noTeams" = "Keine Teams";
 "empty.noTeams.message" = "Fügen Sie Teams hinzu um zu starten";
+"empty.noTeams.leaderboard" = "Fügen Sie Teams hinzu, um die Rangliste zu sehen.";
+"empty.noTeams.leaderboard.action" = "Wechseln Sie zum Teams-Tab, um Teams hinzuzufügen.";
+"empty.noTeams.management" = "Fügen Sie Teams hinzu, um mit dem Quiz zu beginnen.";
+"empty.noTeams.beforeRounds" = "Fügen Sie zuerst Teams hinzu, bevor Sie Runden erstellen.";
+"empty.noTeams.score" = "Fügen Sie Teams hinzu, um Punkte zu vergeben.";
 "empty.noRounds" = "Keine Runden";
 "empty.noRounds.message" = "Erstellen Sie Runden für Ihr Quiz";
+"empty.noRounds.management" = "Fügen Sie Runden hinzu, um Punkte zu vergeben.";
+"empty.noRounds.leaderboard.action" = "Wechseln Sie zum Runden-Tab, um Runden hinzuzufügen.";
 "empty.noScores" = "Keine Punkte";
 "empty.noScores.message" = "Geben Sie Punkte für die Runden ein";
 
