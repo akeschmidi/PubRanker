@@ -144,11 +144,9 @@ final class QuizViewModel {
     }
     
     func clearScore(for team: Team, in round: Round) {
-        if let index = team.roundScores.firstIndex(where: { $0.roundId == round.id }) {
-            team.roundScores.remove(at: index)
-            team.calculateTotalScore()
-            saveContext()
-        }
+        team.roundScores.removeAll(where: { $0.roundId == round.id })
+        team.calculateTotalScore()
+        saveContext()
     }
     
     // MARK: - Helper Methods
@@ -202,7 +200,11 @@ final class QuizViewModel {
         for team in quiz.sortedTeamsByScore {
             var row = team.name
             for round in quiz.sortedRounds {
-                row += ",\(team.getScore(for: round))"
+                if let score = team.getScore(for: round) {
+                    row += ",\(score)"
+                } else {
+                    row += ",-"
+                }
             }
             row += ",\(team.totalScore)\n"
             csv += row

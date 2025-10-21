@@ -63,7 +63,7 @@ struct ScoreEntryView: View {
                     
                     // Score Display
                     VStack(spacing: 8) {
-                        Text("\(teamScores[team.id] ?? team.getScore(for: round))")
+                        Text("\(teamScores[team.id] ?? team.getScore(for: round) ?? 0)")
                             .font(.system(size: 120, weight: .bold))
                             .monospacedDigit()
                             .foregroundStyle(.blue)
@@ -85,12 +85,12 @@ struct ScoreEntryView: View {
                                     .frame(maxWidth: .infinity)
                                     .frame(height: 60)
                                     .background(
-                                        (teamScores[team.id] ?? team.getScore(for: round)) == points
+                                        (teamScores[team.id] ?? team.getScore(for: round) ?? 0) == points
                                             ? Color.accentColor
                                             : Color(nsColor: .controlBackgroundColor)
                                     )
                                     .foregroundStyle(
-                                        (teamScores[team.id] ?? team.getScore(for: round)) == points
+                                        (teamScores[team.id] ?? team.getScore(for: round) ?? 0) == points
                                             ? .white
                                             : .primary
                                     )
@@ -98,7 +98,7 @@ struct ScoreEntryView: View {
                                     .overlay {
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(
-                                                (teamScores[team.id] ?? team.getScore(for: round)) == points
+                                                (teamScores[team.id] ?? team.getScore(for: round) ?? 0) == points
                                                     ? Color.accentColor
                                                     : Color.secondary.opacity(0.2),
                                                 lineWidth: 2
@@ -164,9 +164,9 @@ struct ScoreEntryView: View {
             }
         }
         .onAppear {
-            // Initialize scores with current values
+            // Initialize scores with current values (or 0 if not set)
             for team in quiz.safeTeams {
-                teamScores[team.id] = team.getScore(for: round)
+                teamScores[team.id] = team.getScore(for: round) ?? 0
             }
         }
     }

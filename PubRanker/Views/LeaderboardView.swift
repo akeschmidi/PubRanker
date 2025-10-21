@@ -437,7 +437,11 @@ struct TeamScoreDetailsView: View {
                     
                     Spacer()
                     
-                    Text("\(team.getScore(for: round)) / \(round.maxPoints)")
+                    if let score = team.getScore(for: round) {
+                        Text("\(score) / \(round.maxPoints)")
+                    } else {
+                        Text("– / \(round.maxPoints)")
+                    }
                         .font(.body)
                         .bold()
                 }

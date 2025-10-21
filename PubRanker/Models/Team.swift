@@ -42,8 +42,12 @@ final class Team {
         totalScore = roundScores.reduce(0) { $0 + $1.points }
     }
     
-    func getScore(for round: Round) -> Int {
-        return roundScores.first(where: { $0.roundId == round.id })?.points ?? 0
+    func getScore(for round: Round) -> Int? {
+        return roundScores.first(where: { $0.roundId == round.id })?.points
+    }
+    
+    func hasScore(for round: Round) -> Bool {
+        return roundScores.contains(where: { $0.roundId == round.id })
     }
 }
 

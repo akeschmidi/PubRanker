@@ -349,7 +349,7 @@ struct CurrentRoundBanner: View {
     @Bindable var viewModel: QuizViewModel
     
     var completedTeamsCount: Int {
-        quiz.safeTeams.filter { $0.getScore(for: currentRound) > 0 }.count
+        quiz.safeTeams.filter { $0.hasScore(for: currentRound) }.count
     }
     
     var totalTeams: Int {
@@ -449,7 +449,7 @@ struct RoundCompletionIndicator: View {
     let round: Round
     
     var teamsWithScores: Int {
-        quiz.safeTeams.filter { $0.getScore(for: round) > 0 }.count
+        quiz.safeTeams.filter { $0.hasScore(for: round) }.count
     }
     
     var totalTeams: Int {
@@ -490,8 +490,12 @@ struct ScoreCell: View {
     @FocusState private var isFocused: Bool
     @State private var saveTimer: Timer?
     
-    var currentScore: Int {
+    var currentScore: Int? {
         team.getScore(for: round)
+    }
+    
+    var hasScore: Bool {
+        team.hasScore(for: round)
     }
     
     var body: some View {
@@ -548,16 +552,22 @@ struct ScoreCell: View {
                 // Display Mode
                 Button(action: onTap) {
                     VStack(spacing: 6) {
-                        Text("\(currentScore)")
-                            .font(.system(size: 36, weight: .bold))
-                            .monospacedDigit()
-                            .foregroundStyle(
-                                currentScore == 0 ? .secondary : .primary
-                            )
+                        // Score Display
+                        if let score = currentScore {
+                            Text("\(score)")
+                                .font(.system(size: 36, weight: .bold))
+                                .monospacedDigit()
+                                .foregroundStyle(score == 0 ? .secondary : .primary)
+                        } else {
+                            Text("–")
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundStyle(.secondary)
+                        }
                         
+                        // Info Label
                         HStack(spacing: 2) {
-                            if currentScore > 0 {
-                                Text("\(currentScore)")
+                            if let score = currentScore, score > 0 {
+                                Text("\(score)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 Text("/")
@@ -567,11 +577,9 @@ struct ScoreCell: View {
                             Text("\(round.maxPoints)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            if currentScore == 0 {
-                                Text(" Pkt")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                            Text(" Pkt")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
@@ -582,35 +590,44 @@ struct ScoreCell: View {
                     .padding(.vertical, 16)
                     .background(
                         Group {
-                            if currentScore == 0 {
-                                Color.clear
-                            } else if currentScore == round.maxPoints {
-                                Color.green.opacity(0.15)
+                            if let score = currentScore {
+                                if score == round.maxPoints {
+                                    Color.green.opacity(0.15)
+                                } else if score > 0 {
+                                    Color.accentColor.opacity(0.08)
+                                } else {
+                                    Color.clear
+                                }
                             } else {
-                                Color.accentColor.opacity(0.08)
+                                Color.clear
                             }
                         }
                     )
                     .overlay {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(
-                                currentScore == 0
-                                    ? Color.secondary.opacity(0.2)
-                                    : Color.accentColor.opacity(0.4),
-                                lineWidth: currentScore > 0 ? 2 : 1
+                                (currentScore ?? 0) > 0
+                                    ? Color.accentColor.opacity(0.4)
+                                    : Color.secondary.opacity(0.2),
+                                lineWidth: (currentScore ?? 0) > 0 ? 2 : 1
                             )
                     }
                 }
                 .buttonStyle(.plain)
-                .help("Klicken um \(currentScore) Punkte zu bearbeiten")
+                .help(currentScore != nil ? "Klicken um \(currentScore!) Punkte zu bearbeiten" : "Klicken um Punkte zu vergeben")
             }
         }
         .onChange(of: isEditing) { oldValue, newValue in
             if newValue {
-                inputText = currentScore > 0 ? "\(currentScore)" : ""
+                // Initialisiere Feld: wenn Score vorhanden zeige ihn, sonst leer
+                if let score = currentScore {
+                    inputText = "\(score)"
+                } else {
+                    inputText = ""
+                }
                 isFocused = true
             } else {
-                // Auto-save beim Verlassen (auch bei leerem Feld = 0 Punkte)
+                // Auto-save beim Verlassen
                 saveTimer?.invalidate()
                 saveScore()
             }
@@ -626,7 +643,7 @@ struct ScoreCell: View {
     private func scheduleAutoSave() {
         saveTimer?.invalidate()
         saveTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
-            // Auto-Save auch bei leerem Feld (= 0 Punkte)
+            // Auto-Save bei jeder Änderung (leer = Score entfernen, "0" = 0 Punkte)
             saveScore()
         }
     }
@@ -634,14 +651,14 @@ struct ScoreCell: View {
     private func saveScore() {
         saveTimer?.invalidate()
         
-        // Leeres Feld = 0 Punkte (erlaubt Score-Reset)
+        // Leeres Feld = Score entfernen (nicht bewertet)
         if inputText.isEmpty {
-            viewModel.updateScore(for: team, in: round, points: 0)
+            viewModel.clearScore(for: team, in: round)
             onDismiss()
             return
         }
         
-        // Validiere eingegebene Zahl
+        // Validiere eingegebene Zahl (inkl. 0)
         if let score = Int(inputText), score >= 0, score <= round.maxPoints {
             viewModel.updateScore(for: team, in: round, points: score)
             onDismiss()
