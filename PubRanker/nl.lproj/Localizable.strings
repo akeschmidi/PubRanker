@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - Nederlands
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Terug";
+"navigation.done" = "Klaar";
+"navigation.cancel" = "Annuleren";
+"navigation.save" = "Opslaan";
+"navigation.edit" = "Bewerken";
+"navigation.delete" = "Verwijderen";
+"navigation.add" = "Toevoegen";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "Nieuwe Quiz";
+"quiz.new.create" = "Nieuwe Quiz Maken";
+"quiz.new.description" = "Maak een nieuwe pub quiz en voeg teams en rondes toe";
+"quiz.name" = "Quiz Naam";
+"quiz.name.placeholder" = "bijv. Pub Quiz bij De Leeuw, Kerstquiz...";
+"quiz.location" = "Locatie";
+"quiz.location.label" = "Locatie";
+"quiz.location.placeholder" = "bijv. Café De Leeuw";
+"quiz.date" = "Datum";
+"quiz.date.label" = "Datum en Tijd";
+"quiz.create" = "Quiz Maken";
+"quiz.select.none" = "Geen Quiz Geselecteerd";
+"quiz.select.prompt" = "Selecteer een quiz uit de lijst of maak een nieuwe.";
+"quiz.teams" = "Teams";
+"quiz.teams.count" = "%d Teams";
+"quiz.rounds" = "Rondes";
+"quiz.totalPoints" = "Totale Punten";
+"quiz.delete.confirm" = "Quiz verwijderen?";
+"quiz.delete.message" = "Deze actie kan niet ongedaan worden gemaakt.";
+
+// MARK: - Teams
+"team.title" = "Teams";
+"team.new" = "Nieuw Team";
+"team.new.single" = "Enkel Team";
+"team.new.single.add" = "Enkel Team Toevoegen";
+"team.new.multiple" = "Meerdere Teams";
+"team.new.multiple.create" = "Meerdere Teams Maken...";
+"team.add" = "Team Toevoegen";
+"team.add.multiple" = "Teams Toevoegen";
+"team.name" = "Teamnaam";
+"team.color" = "Kleur";
+"team.points" = "Punten";
+"team.rank" = "Rang";
+"team.wizard" = "Team Assistent";
+"team.wizard.howMany" = "Hoeveel teams?";
+"team.wizard.create" = "Teams Maken";
+"team.delete.confirm" = "Team verwijderen?";
+"team.delete.message" = "%@ wordt verwijderd uit de quiz.";
+"team.count" = "%d Teams";
+"team.management" = "Team Beheer";
+
+// MARK: - Rounds
+"round.title" = "Rondes";
+"round.new" = "Nieuwe Ronde";
+"round.new.single" = "Enkele Ronde";
+"round.new.single.add" = "Enkele Ronde Toevoegen";
+"round.new.multiple" = "Meerdere Rondes";
+"round.new.multiple.create" = "Meerdere Rondes Maken...";
+"round.add" = "Ronde Toevoegen";
+"round.add.multiple" = "Rondes Toevoegen";
+"round.name" = "Ronde Naam";
+"round.name.placeholder" = "bijv. Aardrijkskunde, Muziek, Sport...";
+"round.names.custom" = "Ronde Namen & Punten";
+"round.names.only" = "Ronde Namen";
+"round.number" = "Ronde %d";
+"round.count.label" = "%d Rondes";
+"round.maxPoints" = "Maximale Punten";
+"round.maxPoints.label" = "Maximale Score";
+"round.currentRound" = "Huidige Ronde";
+"round.wizard" = "Ronde Assistent";
+"round.wizard.howMany" = "Hoeveel rondes?";
+"round.wizard.create" = "Rondes Maken";
+"round.delete.confirm" = "Ronde verwijderen?";
+"round.delete.message" = "Alle punten van deze ronde gaan verloren.";
+"round.status.active" = "Actief";
+"round.status.completed" = "Voltooid";
+"round.status.pending" = "In afwachting";
+"round.complete" = "Ronde Voltooien";
+"round.complete.help" = "Huidige ronde voltooien (⌘K)";
+"round.count" = "%d Rondes";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Klassement";
+"leaderboard.rank" = "Rang";
+"leaderboard.rank.position" = "Plaats %d";
+"leaderboard.rank.tied" = "(gelijk)";
+"leaderboard.team" = "Team";
+"leaderboard.points" = "Punten";
+"leaderboard.winner" = "Winnaar";
+"leaderboard.podium" = "Podium";
+"leaderboard.topThree" = "Top 3";
+"leaderboard.noTeams" = "Geen Teams";
+"leaderboard.noPoints" = "Nog geen punten";
+
+// MARK: - Score Entry
+"score.title" = "Score Invoer";
+"score.enter" = "Punten Invoeren";
+"score.save" = "Punten Opslaan";
+"score.saved" = "Opgeslagen";
+"score.autoSave" = "Automatisch Opslaan";
+"score.autoSave.enabled" = "Automatisch Opslaan ingeschakeld";
+"score.total" = "Totaal";
+"score.perRound" = "Per Ronde";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Fout";
+"alert.success" = "Succes";
+"alert.warning" = "Waarschuwing";
+"alert.info" = "Informatie";
+"alert.ok" = "OK";
+"alert.yes" = "Ja";
+"alert.no" = "Nee";
+
+"error.generic" = "Er is een fout opgetreden";
+"error.saveFailed" = "Opslaan mislukt";
+"error.loadFailed" = "Laden mislukt";
+"error.deleteFailed" = "Verwijderen mislukt";
+"error.invalidInput" = "Ongeldige invoer";
+"error.nameRequired" = "Naam vereist";
+"error.pointsRequired" = "Punten vereist";
+
+"success.saved" = "Succesvol opgeslagen";
+"success.deleted" = "Succesvol verwijderd";
+"success.created" = "Succesvol gemaakt";
+
+// MARK: - Common
+"common.name" = "Naam";
+"common.description" = "Beschrijving";
+"common.date" = "Datum";
+"common.time" = "Tijd";
+"common.location" = "Locatie";
+"common.search" = "Zoeken";
+"common.filter" = "Filteren";
+"common.sort" = "Sorteren";
+"common.settings" = "Instellingen";
+"common.about" = "Over";
+"common.help" = "Help";
+"common.close" = "Sluiten";
+"common.points" = "Punten";
+"common.points.count" = "%d Punten";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Punten";
+"common.points.of" = "van %d Punten";
+"common.points.perRound" = "Max. Punten per Ronde";
+"common.points.custom" = "Individuele Punten per Ronde";
+"common.missing" = "%d ontbreken nog";
+"common.delete.confirm" = "Wilt u \"%@\" echt verwijderen? Deze actie kan niet ongedaan worden gemaakt.";
+"common.quickSelect" = "Snelle Selectie";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "bijv. Oktober Pub Quiz";
+"placeholder.teamName" = "bijv. Quiz Masters";
+"placeholder.roundName" = "bijv. Aardrijkskunde";
+"placeholder.location" = "bijv. Murphy's Pub";
+"placeholder.points" = "Punten invoeren";
+
+// MARK: - Statistics
+"stats.average" = "Gemiddelde";
+"stats.highest" = "Hoogste";
+"stats.lowest" = "Laagste";
+"stats.total" = "Totaal";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "Geen Quizzen";
+"empty.noQuizzes.message" = "Maak je eerste quiz";
+"empty.noTeams" = "Geen Teams";
+"empty.noTeams.message" = "Voeg teams toe om te beginnen";
+"empty.noTeams.leaderboard" = "Voeg teams toe om het klassement te zien.";
+"empty.noTeams.leaderboard.action" = "Ga naar het Teams-tabblad om teams toe te voegen.";
+"empty.noTeams.management" = "Voeg teams toe om de quiz te starten.";
+"empty.noTeams.beforeRounds" = "Voeg eerst teams toe voordat u rondes maakt.";
+"empty.noTeams.score" = "Voeg teams toe om punten toe te wijzen.";
+"empty.noRounds" = "Geen Rondes";
+"empty.noRounds.message" = "Maak rondes voor je quiz";
+"empty.noRounds.management" = "Voeg rondes toe om punten toe te wijzen.";
+"empty.noRounds.leaderboard.action" = "Ga naar het Rondes-tabblad om rondes toe te voegen.";
+"empty.noScores" = "Geen Punten";
+"empty.noScores.message" = "Voer punten in voor de rondes";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Quiz Instellen";
+"setup.dialog.message" = "Wilt u nu teams en rondes instellen?\n\n✓ Teams toevoegen\n✓ Rondes definiëren\n\nU kunt dit ook later via de tabbladen doen.";
+"setup.dialog.later" = "Later instellen";
+"setup.dialog.start" = "Nu starten 🚀";
+
+// MARK: - Export
+"export.title" = "Exporteren";
+"export.json" = "Exporteren als JSON";
+"export.csv" = "Exporteren als CSV";
+"export.success.title" = "Quiz Geëxporteerd";
+"export.success.message" = "De quiz is succesvol geëxporteerd:\n%@";
+"export.showInFinder" = "Tonen in Finder";
+"export.share" = "Delen...";
+
+// MARK: - Quiz Status
+"status.live" = "Live";
+"status.completed" = "Voltooid";
+"status.start" = "Quiz Starten";
+"status.complete" = "Quiz Voltooien";
+"status.progress" = "Voortgang";
+"status.roundsCompleted" = "%d van %d Rondes";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d ptn";
+"score.pointsUnit" = "ptn";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Klik om %d punten te bewerken";
+"score.clickToAdd" = "Klik om punten toe te wijzen";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Locatie";
+"csv.date" = "Datum";
+"csv.completed" = "Voltooid";
+"csv.yes" = "Ja";
+"csv.no" = "Nee";
+"csv.finalRanking" = "EINDKLASSEMENT";
+"csv.rank" = "Rang";
+"csv.team" = "Team";
+"csv.totalScore" = "Totale Score";
+"csv.color" = "Kleur";
+"csv.detailedScores" = "GEDETAILLEERDE SCORES";
+"csv.total" = "Totaal";

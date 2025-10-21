@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - 日本語
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "戻る";
+"navigation.done" = "完了";
+"navigation.cancel" = "キャンセル";
+"navigation.save" = "保存";
+"navigation.edit" = "編集";
+"navigation.delete" = "削除";
+"navigation.add" = "追加";
+
+// MARK: - Quiz
+"quiz.title" = "クイズ";
+"quiz.new" = "新規クイズ";
+"quiz.new.create" = "新しいクイズを作成";
+"quiz.new.description" = "新しいパブクイズを作成し、チームとラウンドを追加";
+"quiz.name" = "クイズ名";
+"quiz.name.placeholder" = "例：ライオンパブクイズ、クリスマスクイズ...";
+"quiz.location" = "場所";
+"quiz.location.label" = "会場";
+"quiz.location.placeholder" = "例：ライオンパブ";
+"quiz.date" = "日付";
+"quiz.date.label" = "日時";
+"quiz.create" = "クイズを作成";
+"quiz.select.none" = "クイズが選択されていません";
+"quiz.select.prompt" = "リストからクイズを選択するか、新しく作成してください。";
+"quiz.teams" = "チーム";
+"quiz.teams.count" = "%d チーム";
+"quiz.rounds" = "ラウンド";
+"quiz.totalPoints" = "合計ポイント";
+"quiz.delete.confirm" = "クイズを削除しますか？";
+"quiz.delete.message" = "この操作は元に戻せません。";
+
+// MARK: - Teams
+"team.title" = "チーム";
+"team.new" = "新規チーム";
+"team.new.single" = "単一チーム";
+"team.new.single.add" = "単一チームを追加";
+"team.new.multiple" = "複数チーム";
+"team.new.multiple.create" = "複数チームを作成...";
+"team.add" = "チームを追加";
+"team.add.multiple" = "チームを追加";
+"team.name" = "チーム名";
+"team.color" = "色";
+"team.points" = "ポイント";
+"team.rank" = "順位";
+"team.wizard" = "チームウィザード";
+"team.wizard.howMany" = "チーム数は？";
+"team.wizard.create" = "チームを作成";
+"team.delete.confirm" = "チームを削除しますか？";
+"team.delete.message" = "%@ はクイズから削除されます。";
+"team.count" = "%d チーム";
+"team.management" = "チーム管理";
+
+// MARK: - Rounds
+"round.title" = "ラウンド";
+"round.new" = "新規ラウンド";
+"round.new.single" = "単一ラウンド";
+"round.new.single.add" = "単一ラウンドを追加";
+"round.new.multiple" = "複数ラウンド";
+"round.new.multiple.create" = "複数ラウンドを作成...";
+"round.add" = "ラウンドを追加";
+"round.add.multiple" = "ラウンドを追加";
+"round.name" = "ラウンド名";
+"round.name.placeholder" = "例：地理、音楽、スポーツ...";
+"round.names.custom" = "ラウンド名とポイント";
+"round.names.only" = "ラウンド名";
+"round.number" = "ラウンド %d";
+"round.count.label" = "%d ラウンド";
+"round.maxPoints" = "最大ポイント";
+"round.maxPoints.label" = "最大スコア";
+"round.currentRound" = "現在のラウンド";
+"round.wizard" = "ラウンドウィザード";
+"round.wizard.howMany" = "ラウンド数は？";
+"round.wizard.create" = "ラウンドを作成";
+"round.delete.confirm" = "ラウンドを削除しますか？";
+"round.delete.message" = "このラウンドのすべてのポイントが失われます。";
+"round.status.active" = "アクティブ";
+"round.status.completed" = "完了";
+"round.status.pending" = "保留中";
+"round.complete" = "ラウンドを完了";
+"round.complete.help" = "現在のラウンドを完了 (⌘K)";
+"round.count" = "%d ラウンド";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "リーダーボード";
+"leaderboard.rank" = "順位";
+"leaderboard.rank.position" = "%d 位";
+"leaderboard.rank.tied" = "（同点）";
+"leaderboard.team" = "チーム";
+"leaderboard.points" = "ポイント";
+"leaderboard.winner" = "優勝者";
+"leaderboard.podium" = "表彰台";
+"leaderboard.topThree" = "トップ3";
+"leaderboard.noTeams" = "チームなし";
+"leaderboard.noPoints" = "まだポイントがありません";
+
+// MARK: - Score Entry
+"score.title" = "スコア入力";
+"score.enter" = "ポイントを入力";
+"score.save" = "ポイントを保存";
+"score.saved" = "保存済み";
+"score.autoSave" = "自動保存";
+"score.autoSave.enabled" = "自動保存が有効";
+"score.total" = "合計";
+"score.perRound" = "ラウンドごと";
+
+// MARK: - Alerts & Messages
+"alert.error" = "エラー";
+"alert.success" = "成功";
+"alert.warning" = "警告";
+"alert.info" = "情報";
+"alert.ok" = "OK";
+"alert.yes" = "はい";
+"alert.no" = "いいえ";
+
+"error.generic" = "エラーが発生しました";
+"error.saveFailed" = "保存に失敗しました";
+"error.loadFailed" = "読み込みに失敗しました";
+"error.deleteFailed" = "削除に失敗しました";
+"error.invalidInput" = "無効な入力";
+"error.nameRequired" = "名前が必要です";
+"error.pointsRequired" = "ポイントが必要です";
+
+"success.saved" = "正常に保存されました";
+"success.deleted" = "正常に削除されました";
+"success.created" = "正常に作成されました";
+
+// MARK: - Common
+"common.name" = "名前";
+"common.description" = "説明";
+"common.date" = "日付";
+"common.time" = "時刻";
+"common.location" = "場所";
+"common.search" = "検索";
+"common.filter" = "フィルター";
+"common.sort" = "並び替え";
+"common.settings" = "設定";
+"common.about" = "について";
+"common.help" = "ヘルプ";
+"common.close" = "閉じる";
+"common.points" = "ポイント";
+"common.points.count" = "%d ポイント";
+"common.points.max" = "最大: %d";
+"common.points.maxLabel" = "最大: %d ポイント";
+"common.points.of" = "%d ポイント中";
+"common.points.perRound" = "ラウンドごとの最大ポイント";
+"common.points.custom" = "ラウンドごとの個別ポイント";
+"common.missing" = "残り %d";
+"common.delete.confirm" = "\"%@\" を本当に削除しますか？この操作は元に戻せません。";
+"common.quickSelect" = "クイック選択";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "例：10月パブクイズ";
+"placeholder.teamName" = "例：クイズマスターズ";
+"placeholder.roundName" = "例：地理";
+"placeholder.location" = "例：マーフィーズパブ";
+"placeholder.points" = "ポイントを入力";
+
+// MARK: - Statistics
+"stats.average" = "平均";
+"stats.highest" = "最高";
+"stats.lowest" = "最低";
+"stats.total" = "合計";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "クイズなし";
+"empty.noQuizzes.message" = "最初のクイズを作成";
+"empty.noTeams" = "チームなし";
+"empty.noTeams.message" = "チームを追加して開始";
+"empty.noTeams.leaderboard" = "リーダーボードを表示するにはチームを追加してください。";
+"empty.noTeams.leaderboard.action" = "チームタブに移動してチームを追加してください。";
+"empty.noTeams.management" = "クイズを開始するにはチームを追加してください。";
+"empty.noTeams.beforeRounds" = "ラウンドを作成する前にまずチームを追加してください。";
+"empty.noTeams.score" = "ポイントを割り当てるにはチームを追加してください。";
+"empty.noRounds" = "ラウンドなし";
+"empty.noRounds.message" = "クイズのラウンドを作成";
+"empty.noRounds.management" = "ポイントを割り当てるにはラウンドを追加してください。";
+"empty.noRounds.leaderboard.action" = "ラウンドタブに移動してラウンドを追加してください。";
+"empty.noScores" = "ポイントなし";
+"empty.noScores.message" = "ラウンドのポイントを入力";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "クイズを設定";
+"setup.dialog.message" = "今すぐチームとラウンドを設定しますか？\n\n✓ チームを追加\n✓ ラウンドを定義\n\n後でタブから設定することもできます。";
+"setup.dialog.later" = "後で設定";
+"setup.dialog.start" = "今すぐ開始 🚀";
+
+// MARK: - Export
+"export.title" = "エクスポート";
+"export.json" = "JSONとしてエクスポート";
+"export.csv" = "CSVとしてエクスポート";
+"export.success.title" = "クイズがエクスポートされました";
+"export.success.message" = "クイズが正常にエクスポートされました：\n%@";
+"export.showInFinder" = "Finderで表示";
+"export.share" = "共有...";
+
+// MARK: - Quiz Status
+"status.live" = "ライブ";
+"status.completed" = "完了";
+"status.start" = "クイズを開始";
+"status.complete" = "クイズを完了";
+"status.progress" = "進行状況";
+"status.roundsCompleted" = "%d / %d ラウンド";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d pt";
+"score.pointsUnit" = "pt";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "クリックして %d ポイントを編集";
+"score.clickToAdd" = "クリックしてポイントを割り当て";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "会場";
+"csv.date" = "日付";
+"csv.completed" = "完了";
+"csv.yes" = "はい";
+"csv.no" = "いいえ";
+"csv.finalRanking" = "最終ランキング";
+"csv.rank" = "順位";
+"csv.team" = "チーム";
+"csv.totalScore" = "合計スコア";
+"csv.color" = "色";
+"csv.detailedScores" = "詳細スコア";
+"csv.total" = "合計";

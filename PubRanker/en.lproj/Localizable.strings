@@ -42,6 +42,8 @@
 "team.new.single.add" = "Add Single Team";
 "team.new.multiple" = "Multiple Teams";
 "team.new.multiple.create" = "Create Multiple Teams...";
+"team.add" = "Add Team";
+"team.add.multiple" = "Add Teams";
 "team.name" = "Team Name";
 "team.color" = "Color";
 "team.points" = "Points";
@@ -61,10 +63,16 @@
 "round.new.single.add" = "Add Single Round";
 "round.new.multiple" = "Multiple Rounds";
 "round.new.multiple.create" = "Create Multiple Rounds...";
+"round.add" = "Add Round";
+"round.add.multiple" = "Add Rounds";
 "round.name" = "Round Name";
 "round.name.placeholder" = "e.g. Geography, Music, Sports...";
+"round.names.custom" = "Round Names & Points";
+"round.names.only" = "Round Names";
 "round.number" = "Round %d";
+"round.count.label" = "%d Rounds";
 "round.maxPoints" = "Maximum Points";
+"round.maxPoints.label" = "Maximum Score";
 "round.currentRound" = "Current Round";
 "round.wizard" = "Round Wizard";
 "round.wizard.howMany" = "How many rounds?";
@@ -74,11 +82,15 @@
 "round.status.active" = "Active";
 "round.status.completed" = "Completed";
 "round.status.pending" = "Pending";
+"round.complete" = "Complete Round";
+"round.complete.help" = "Complete current round (⌘K)";
 "round.count" = "%d Rounds";
 
 // MARK: - Leaderboard
 "leaderboard.title" = "Leaderboard";
 "leaderboard.rank" = "Rank";
+"leaderboard.rank.position" = "Rank %d";
+"leaderboard.rank.tied" = "(tied)";
 "leaderboard.team" = "Team";
 "leaderboard.points" = "Points";
 "leaderboard.winner" = "Winner";
@@ -131,6 +143,16 @@
 "common.about" = "About";
 "common.help" = "Help";
 "common.close" = "Close";
+"common.points" = "Points";
+"common.points.count" = "%d Points";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Points";
+"common.points.of" = "of %d Points";
+"common.points.perRound" = "Max. Points per Round";
+"common.points.custom" = "Individual Points per Round";
+"common.missing" = "%d still missing";
+"common.delete.confirm" = "Do you really want to delete \"%@\"? This action cannot be undone.";
+"common.quickSelect" = "Quick Select";
 
 // MARK: - Placeholders
 "placeholder.quizName" = "e.g. October Pub Quiz";

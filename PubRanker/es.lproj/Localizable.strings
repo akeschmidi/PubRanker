@@ -16,18 +16,34 @@
 // MARK: - Quiz
 "quiz.title" = "Quiz";
 "quiz.new" = "Nuevo Quiz";
+"quiz.new.create" = "Crear Nuevo Quiz";
+"quiz.new.description" = "Crea un nuevo pub quiz y añade equipos y rondas";
 "quiz.name" = "Nombre del Quiz";
+"quiz.name.placeholder" = "ej. Pub Quiz en El León, Quiz de Navidad...";
 "quiz.location" = "Ubicación";
+"quiz.location.label" = "Lugar";
+"quiz.location.placeholder" = "ej. Pub El León";
 "quiz.date" = "Fecha";
+"quiz.date.label" = "Fecha y Hora";
+"quiz.create" = "Crear Quiz";
+"quiz.select.none" = "Ningún Quiz Seleccionado";
+"quiz.select.prompt" = "Selecciona un quiz de la lista o crea uno nuevo.";
 "quiz.teams" = "Equipos";
+"quiz.teams.count" = "%d Equipos";
 "quiz.rounds" = "Rondas";
 "quiz.totalPoints" = "Puntos Totales";
-"quiz.delete.confirm" = "¿Eliminar Quiz?";
+"quiz.delete.confirm" = "¿Eliminar quiz?";
 "quiz.delete.message" = "Esta acción no se puede deshacer.";
 
 // MARK: - Teams
 "team.title" = "Equipos";
 "team.new" = "Nuevo Equipo";
+"team.new.single" = "Equipo Individual";
+"team.new.single.add" = "Añadir Equipo Individual";
+"team.new.multiple" = "Múltiples Equipos";
+"team.new.multiple.create" = "Crear Múltiples Equipos...";
+"team.add" = "Añadir Equipo";
+"team.add.multiple" = "Añadir Equipos";
 "team.name" = "Nombre del Equipo";
 "team.color" = "Color";
 "team.points" = "Puntos";
@@ -35,7 +51,7 @@
 "team.wizard" = "Asistente de Equipos";
 "team.wizard.howMany" = "¿Cuántos equipos?";
 "team.wizard.create" = "Crear Equipos";
-"team.delete.confirm" = "¿Eliminar Equipo?";
+"team.delete.confirm" = "¿Eliminar equipo?";
 "team.delete.message" = "%@ será eliminado del quiz.";
 "team.count" = "%d Equipos";
 "team.management" = "Gestión de Equipos";
@@ -43,34 +59,49 @@
 // MARK: - Rounds
 "round.title" = "Rondas";
 "round.new" = "Nueva Ronda";
-"round.name" = "Nombre de la Ronda";
+"round.new.single" = "Ronda Individual";
+"round.new.single.add" = "Añadir Ronda Individual";
+"round.new.multiple" = "Múltiples Rondas";
+"round.new.multiple.create" = "Crear Múltiples Rondas...";
+"round.add" = "Añadir Ronda";
+"round.add.multiple" = "Añadir Rondas";
+"round.name" = "Nombre de Ronda";
+"round.name.placeholder" = "ej. Geografía, Música, Deportes...";
+"round.names.custom" = "Nombres y Puntos de Rondas";
+"round.names.only" = "Nombres de Rondas";
 "round.number" = "Ronda %d";
+"round.count.label" = "%d Rondas";
 "round.maxPoints" = "Puntos Máximos";
+"round.maxPoints.label" = "Puntuación Máxima";
 "round.currentRound" = "Ronda Actual";
 "round.wizard" = "Asistente de Rondas";
 "round.wizard.howMany" = "¿Cuántas rondas?";
 "round.wizard.create" = "Crear Rondas";
-"round.delete.confirm" = "¿Eliminar Ronda?";
+"round.delete.confirm" = "¿Eliminar ronda?";
 "round.delete.message" = "Se perderán todos los puntos de esta ronda.";
 "round.status.active" = "Activa";
 "round.status.completed" = "Completada";
 "round.status.pending" = "Pendiente";
+"round.complete" = "Completar Ronda";
+"round.complete.help" = "Completar ronda actual (⌘K)";
 "round.count" = "%d Rondas";
 
 // MARK: - Leaderboard
 "leaderboard.title" = "Clasificación";
 "leaderboard.rank" = "Rango";
+"leaderboard.rank.position" = "Posición %d";
+"leaderboard.rank.tied" = "(empatado)";
 "leaderboard.team" = "Equipo";
 "leaderboard.points" = "Puntos";
 "leaderboard.winner" = "Ganador";
 "leaderboard.podium" = "Podio";
 "leaderboard.topThree" = "Top 3";
 "leaderboard.noTeams" = "Sin Equipos";
-"leaderboard.noPoints" = "Aún sin puntos";
+"leaderboard.noPoints" = "Sin puntos aún";
 
 // MARK: - Score Entry
-"score.title" = "Entrada de Puntos";
-"score.enter" = "Ingresar Puntos";
+"score.title" = "Entrada de Puntuación";
+"score.enter" = "Introducir Puntos";
 "score.save" = "Guardar Puntos";
 "score.saved" = "Guardado";
 "score.autoSave" = "Auto-Guardar";
@@ -87,7 +118,7 @@
 "alert.yes" = "Sí";
 "alert.no" = "No";
 
-"error.generic" = "Ocurrió un error";
+"error.generic" = "Ha ocurrido un error";
 "error.saveFailed" = "Error al guardar";
 "error.loadFailed" = "Error al cargar";
 "error.deleteFailed" = "Error al eliminar";
@@ -112,12 +143,22 @@
 "common.about" = "Acerca de";
 "common.help" = "Ayuda";
 "common.close" = "Cerrar";
+"common.points" = "Puntos";
+"common.points.count" = "%d Puntos";
+"common.points.max" = "Máx: %d";
+"common.points.maxLabel" = "Máx: %d Puntos";
+"common.points.of" = "de %d Puntos";
+"common.points.perRound" = "Máx. Puntos por Ronda";
+"common.points.custom" = "Puntos Individuales por Ronda";
+"common.missing" = "%d faltan aún";
+"common.delete.confirm" = "¿Realmente desea eliminar \"%@\"? Esta acción no se puede deshacer.";
+"common.quickSelect" = "Selección Rápida";
 
 // MARK: - Placeholders
-"placeholder.quizName" = "ej. Quiz de Octubre";
+"placeholder.quizName" = "ej. Pub Quiz de Octubre";
 "placeholder.teamName" = "ej. Quiz Masters";
 "placeholder.roundName" = "ej. Geografía";
-"placeholder.location" = "ej. Murphy's Pub";
+"placeholder.location" = "ej. Pub Murphy's";
 "placeholder.points" = "Ingresar puntos";
 
 // MARK: - Statistics

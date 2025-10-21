@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - Русский
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Назад";
+"navigation.done" = "Готово";
+"navigation.cancel" = "Отмена";
+"navigation.save" = "Сохранить";
+"navigation.edit" = "Редактировать";
+"navigation.delete" = "Удалить";
+"navigation.add" = "Добавить";
+
+// MARK: - Quiz
+"quiz.title" = "Квиз";
+"quiz.new" = "Новый Квиз";
+"quiz.new.create" = "Создать Новый Квиз";
+"quiz.new.description" = "Создайте новый паб-квиз и добавьте команды и раунды";
+"quiz.name" = "Название Квиза";
+"quiz.name.placeholder" = "напр. Паб Квиз в Пабе, Рождественский Квиз...";
+"quiz.location" = "Место";
+"quiz.location.label" = "Место Проведения";
+"quiz.location.placeholder" = "напр. Паб «Лев»";
+"quiz.date" = "Дата";
+"quiz.date.label" = "Дата и Время";
+"quiz.create" = "Создать Квиз";
+"quiz.select.none" = "Квиз Не Выбран";
+"quiz.select.prompt" = "Выберите квиз из списка или создайте новый.";
+"quiz.teams" = "Команды";
+"quiz.teams.count" = "%d Команд";
+"quiz.rounds" = "Раунды";
+"quiz.totalPoints" = "Всего Очков";
+"quiz.delete.confirm" = "Удалить квиз?";
+"quiz.delete.message" = "Это действие нельзя отменить.";
+
+// MARK: - Teams
+"team.title" = "Команды";
+"team.new" = "Новая Команда";
+"team.new.single" = "Одна Команда";
+"team.new.single.add" = "Добавить Одну Команду";
+"team.new.multiple" = "Несколько Команд";
+"team.new.multiple.create" = "Создать Несколько Команд...";
+"team.add" = "Добавить Команду";
+"team.add.multiple" = "Добавить Команды";
+"team.name" = "Название Команды";
+"team.color" = "Цвет";
+"team.points" = "Очки";
+"team.rank" = "Место";
+"team.wizard" = "Мастер Команд";
+"team.wizard.howMany" = "Сколько команд?";
+"team.wizard.create" = "Создать Команды";
+"team.delete.confirm" = "Удалить команду?";
+"team.delete.message" = "%@ будет удалена из квиза.";
+"team.count" = "%d Команд";
+"team.management" = "Управление Командами";
+
+// MARK: - Rounds
+"round.title" = "Раунды";
+"round.new" = "Новый Раунд";
+"round.new.single" = "Один Раунд";
+"round.new.single.add" = "Добавить Один Раунд";
+"round.new.multiple" = "Несколько Раундов";
+"round.new.multiple.create" = "Создать Несколько Раундов...";
+"round.add" = "Добавить Раунд";
+"round.add.multiple" = "Добавить Раунды";
+"round.name" = "Название Раунда";
+"round.name.placeholder" = "напр. География, Музыка, Спорт...";
+"round.names.custom" = "Названия и Очки Раундов";
+"round.names.only" = "Названия Раундов";
+"round.number" = "Раунд %d";
+"round.count.label" = "%d Раундов";
+"round.maxPoints" = "Максимум Очков";
+"round.maxPoints.label" = "Максимальный Счёт";
+"round.currentRound" = "Текущий Раунд";
+"round.wizard" = "Мастер Раундов";
+"round.wizard.howMany" = "Сколько раундов?";
+"round.wizard.create" = "Создать Раунды";
+"round.delete.confirm" = "Удалить раунд?";
+"round.delete.message" = "Все очки этого раунда будут потеряны.";
+"round.status.active" = "Активный";
+"round.status.completed" = "Завершён";
+"round.status.pending" = "Ожидает";
+"round.complete" = "Завершить Раунд";
+"round.complete.help" = "Завершить текущий раунд (⌘K)";
+"round.count" = "%d Раундов";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Таблица Лидеров";
+"leaderboard.rank" = "Место";
+"leaderboard.rank.position" = "Место %d";
+"leaderboard.rank.tied" = "(ничья)";
+"leaderboard.team" = "Команда";
+"leaderboard.points" = "Очки";
+"leaderboard.winner" = "Победитель";
+"leaderboard.podium" = "Подиум";
+"leaderboard.topThree" = "Топ 3";
+"leaderboard.noTeams" = "Нет Команд";
+"leaderboard.noPoints" = "Пока нет очков";
+
+// MARK: - Score Entry
+"score.title" = "Ввод Счёта";
+"score.enter" = "Ввести Очки";
+"score.save" = "Сохранить Очки";
+"score.saved" = "Сохранено";
+"score.autoSave" = "Автосохранение";
+"score.autoSave.enabled" = "Автосохранение включено";
+"score.total" = "Всего";
+"score.perRound" = "За Раунд";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Ошибка";
+"alert.success" = "Успех";
+"alert.warning" = "Предупреждение";
+"alert.info" = "Информация";
+"alert.ok" = "ОК";
+"alert.yes" = "Да";
+"alert.no" = "Нет";
+
+"error.generic" = "Произошла ошибка";
+"error.saveFailed" = "Не удалось сохранить";
+"error.loadFailed" = "Не удалось загрузить";
+"error.deleteFailed" = "Не удалось удалить";
+"error.invalidInput" = "Неверный ввод";
+"error.nameRequired" = "Требуется название";
+"error.pointsRequired" = "Требуются очки";
+
+"success.saved" = "Успешно сохранено";
+"success.deleted" = "Успешно удалено";
+"success.created" = "Успешно создано";
+
+// MARK: - Common
+"common.name" = "Название";
+"common.description" = "Описание";
+"common.date" = "Дата";
+"common.time" = "Время";
+"common.location" = "Место";
+"common.search" = "Поиск";
+"common.filter" = "Фильтр";
+"common.sort" = "Сортировка";
+"common.settings" = "Настройки";
+"common.about" = "О программе";
+"common.help" = "Помощь";
+"common.close" = "Закрыть";
+"common.points" = "Очки";
+"common.points.count" = "%d Очков";
+"common.points.max" = "Макс: %d";
+"common.points.maxLabel" = "Макс: %d Очков";
+"common.points.of" = "из %d Очков";
+"common.points.perRound" = "Макс. Очки за Раунд";
+"common.points.custom" = "Индивидуальные Очки за Раунд";
+"common.missing" = "%d ещё не хватает";
+"common.delete.confirm" = "Вы действительно хотите удалить \"%@\"? Это действие нельзя отменить.";
+"common.quickSelect" = "Быстрый Выбор";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "напр. Октябрьский Паб Квиз";
+"placeholder.teamName" = "напр. Мастера Квиза";
+"placeholder.roundName" = "напр. География";
+"placeholder.location" = "напр. Паб Murphy's";
+"placeholder.points" = "Введите очки";
+
+// MARK: - Statistics
+"stats.average" = "Среднее";
+"stats.highest" = "Наивысший";
+"stats.lowest" = "Наинизший";
+"stats.total" = "Всего";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "Нет Квизов";
+"empty.noQuizzes.message" = "Создайте свой первый квиз";
+"empty.noTeams" = "Нет Команд";
+"empty.noTeams.message" = "Добавьте команды для начала";
+"empty.noTeams.leaderboard" = "Добавьте команды, чтобы увидеть таблицу лидеров.";
+"empty.noTeams.leaderboard.action" = "Перейдите на вкладку Команды, чтобы добавить команды.";
+"empty.noTeams.management" = "Добавьте команды, чтобы начать квиз.";
+"empty.noTeams.beforeRounds" = "Сначала добавьте команды, прежде чем создавать раунды.";
+"empty.noTeams.score" = "Добавьте команды, чтобы присвоить очки.";
+"empty.noRounds" = "Нет Раундов";
+"empty.noRounds.message" = "Создайте раунды для своего квиза";
+"empty.noRounds.management" = "Добавьте раунды, чтобы присвоить очки.";
+"empty.noRounds.leaderboard.action" = "Перейдите на вкладку Раунды, чтобы добавить раунды.";
+"empty.noScores" = "Нет Очков";
+"empty.noScores.message" = "Введите очки для раундов";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Настроить Квиз";
+"setup.dialog.message" = "Хотите настроить команды и раунды сейчас?\n\n✓ Добавить команды\n✓ Определить раунды\n\nВы также можете сделать это позже через вкладки.";
+"setup.dialog.later" = "Настроить позже";
+"setup.dialog.start" = "Начать сейчас 🚀";
+
+// MARK: - Export
+"export.title" = "Экспорт";
+"export.json" = "Экспортировать как JSON";
+"export.csv" = "Экспортировать как CSV";
+"export.success.title" = "Квиз Экспортирован";
+"export.success.message" = "Квиз успешно экспортирован:\n%@";
+"export.showInFinder" = "Показать в Finder";
+"export.share" = "Поделиться...";
+
+// MARK: - Quiz Status
+"status.live" = "В Эфире";
+"status.completed" = "Завершён";
+"status.start" = "Начать Квиз";
+"status.complete" = "Завершить Квиз";
+"status.progress" = "Прогресс";
+"status.roundsCompleted" = "%d из %d Раундов";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d очк";
+"score.pointsUnit" = "очк";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Нажмите, чтобы изменить %d очков";
+"score.clickToAdd" = "Нажмите, чтобы присвоить очки";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Место";
+"csv.date" = "Дата";
+"csv.completed" = "Завершён";
+"csv.yes" = "Да";
+"csv.no" = "Нет";
+"csv.finalRanking" = "ФИНАЛЬНЫЙ РЕЙТИНГ";
+"csv.rank" = "Место";
+"csv.team" = "Команда";
+"csv.totalScore" = "Общий Счёт";
+"csv.color" = "Цвет";
+"csv.detailedScores" = "ПОДРОБНЫЕ РЕЗУЛЬТАТЫ";
+"csv.total" = "Всего";
