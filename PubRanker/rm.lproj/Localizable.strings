@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - Rumantsch (Svizra)
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Enavos";
+"navigation.done" = "Finì";
+"navigation.cancel" = "Interrumper";
+"navigation.save" = "Memorisar";
+"navigation.edit" = "Modifitgar";
+"navigation.delete" = "Stritgar";
+"navigation.add" = "Agiuntar";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "Nov Quiz";
+"quiz.new.create" = "Crear Nov Quiz";
+"quiz.new.description" = "Crear in nov pub quiz ed agiuntar equipas e rundas";
+"quiz.name" = "Num dal Quiz";
+"quiz.name.placeholder" = "p.ex. Pub Quiz dal Liun, Quiz da Nadal...";
+"quiz.location" = "Lieu";
+"quiz.location.label" = "Lieu da l'occurrenza";
+"quiz.location.placeholder" = "p.ex. Ustaria dal Liun";
+"quiz.date" = "Data";
+"quiz.date.label" = "Data & Ura";
+"quiz.create" = "Crear Quiz";
+"quiz.select.none" = "Nagin Quiz Tschernì";
+"quiz.select.prompt" = "Tscherni in quiz da la glista u creescha in nov.";
+"quiz.teams" = "Equipas";
+"quiz.teams.count" = "%d Equipas";
+"quiz.rounds" = "Rundas";
+"quiz.totalPoints" = "Puncts Totals";
+"quiz.delete.confirm" = "Stritgar il quiz?";
+"quiz.delete.message" = "Questa acziun na po betg vegnir annullada.";
+
+// MARK: - Teams
+"team.title" = "Equipas";
+"team.new" = "Nova Equipa";
+"team.new.single" = "Equipa Singula";
+"team.new.single.add" = "Agiuntar Equipa Singula";
+"team.new.multiple" = "Pliras Equipas";
+"team.new.multiple.create" = "Crear Pliras Equipas...";
+"team.add" = "Agiuntar Equipa";
+"team.add.multiple" = "Agiuntar Equipas";
+"team.name" = "Num da l'Equipa";
+"team.color" = "Colur";
+"team.points" = "Puncts";
+"team.rank" = "Rang";
+"team.wizard" = "Assistent d'Equipas";
+"team.wizard.howMany" = "Quants equipas?";
+"team.wizard.create" = "Crear Equipas";
+"team.delete.confirm" = "Stritgar equipa?";
+"team.delete.message" = "%@ vegn allontanada dal quiz.";
+"team.count" = "%d Equipas";
+"team.management" = "Administraziun d'Equipas";
+
+// MARK: - Rounds
+"round.title" = "Rundas";
+"round.new" = "Nova Runda";
+"round.new.single" = "Runda Singula";
+"round.new.single.add" = "Agiuntar Runda Singula";
+"round.new.multiple" = "Pliras Rundas";
+"round.new.multiple.create" = "Crear Pliras Rundas...";
+"round.add" = "Agiuntar Runda";
+"round.add.multiple" = "Agiuntar Rundas";
+"round.name" = "Num da la Runda";
+"round.name.placeholder" = "p.ex. Geografia, Musica, Sport...";
+"round.names.custom" = "Nums da Rundas & Puncts";
+"round.names.only" = "Nums da Rundas";
+"round.number" = "Runda %d";
+"round.count.label" = "%d Rundas";
+"round.maxPoints" = "Puncts Maximals";
+"round.maxPoints.label" = "Puncts Maximals";
+"round.currentRound" = "Runda Actuala";
+"round.wizard" = "Assistent da Rundas";
+"round.wizard.howMany" = "Quants rundas?";
+"round.wizard.create" = "Crear Rundas";
+"round.delete.confirm" = "Stritgar runda?";
+"round.delete.message" = "Tut ils puncts da questa runda vegnan a perder.";
+"round.status.active" = "Activa";
+"round.status.completed" = "Terminada";
+"round.status.pending" = "Pendenta";
+"round.complete" = "Terminar Runda";
+"round.complete.help" = "Terminar runda actuala (⌘K)";
+"round.count" = "%d Rundas";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Ranglista";
+"leaderboard.rank" = "Rang";
+"leaderboard.rank.position" = "Plazza %d";
+"leaderboard.rank.tied" = "(parità)";
+"leaderboard.team" = "Equipa";
+"leaderboard.points" = "Puncts";
+"leaderboard.winner" = "Vainquader";
+"leaderboard.podium" = "Podium";
+"leaderboard.topThree" = "Top 3";
+"leaderboard.noTeams" = "Naginas Equipas";
+"leaderboard.noPoints" = "Anc nagins puncts";
+
+// MARK: - Score Entry
+"score.title" = "Endataziun da Puncts";
+"score.enter" = "Endrizzar Puncts";
+"score.save" = "Memorisar Puncts";
+"score.saved" = "Memorisà";
+"score.autoSave" = "Auto-Memorisar";
+"score.autoSave.enabled" = "Auto-Memorisar activà";
+"score.total" = "Total";
+"score.perRound" = "Per Runda";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Errur";
+"alert.success" = "Success";
+"alert.warning" = "Avertiment";
+"alert.info" = "Infurmaziun";
+"alert.ok" = "OK";
+"alert.yes" = "Gea";
+"alert.no" = "Na";
+
+"error.generic" = "In errur è capità";
+"error.saveFailed" = "Memorisar fallì";
+"error.loadFailed" = "Chargar fallì";
+"error.deleteFailed" = "Stritgar fallì";
+"error.invalidInput" = "Endataziun nunvalida";
+"error.nameRequired" = "Num necessari";
+"error.pointsRequired" = "Puncts necessaris";
+
+"success.saved" = "Memorisà cun success";
+"success.deleted" = "Stritgà cun success";
+"success.created" = "Creà cun success";
+
+// MARK: - Common
+"common.name" = "Num";
+"common.description" = "Descripziun";
+"common.date" = "Data";
+"common.time" = "Ura";
+"common.location" = "Lieu";
+"common.search" = "Tschertgar";
+"common.filter" = "Filtrar";
+"common.sort" = "Sortar";
+"common.settings" = "Parameters";
+"common.about" = "Davart";
+"common.help" = "Agid";
+"common.close" = "Serrar";
+"common.points" = "Puncts";
+"common.points.count" = "%d Puncts";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Puncts";
+"common.points.of" = "da %d Puncts";
+"common.points.perRound" = "Max. Puncts per Runda";
+"common.points.custom" = "Puncts Individuals per Runda";
+"common.missing" = "%d mancan anc";
+"common.delete.confirm" = "Vulais Vus propi stritgar \"%@\"? Questa acziun na po betg vegnir annullada.";
+"common.quickSelect" = "Selecziun Svelta";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "p.ex. Pub Quiz d'October";
+"placeholder.teamName" = "p.ex. Quiz Masters";
+"placeholder.roundName" = "p.ex. Geografia";
+"placeholder.location" = "p.ex. Ustaria dal Liun";
+"placeholder.points" = "Endrizzar puncts";
+
+// MARK: - Statistics
+"stats.average" = "Meds";
+"stats.highest" = "Pli Aut";
+"stats.lowest" = "Pli Bass";
+"stats.total" = "Total";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "Nagins Quizs";
+"empty.noQuizzes.message" = "Crear Voss emprim quiz";
+"empty.noTeams" = "Naginas Equipas";
+"empty.noTeams.message" = "Agiuntar equipas per cumenzar";
+"empty.noTeams.leaderboard" = "Agiuntar equipas per vesair la ranglista.";
+"empty.noTeams.leaderboard.action" = "Midar al tab Equipas per agiuntar equipas.";
+"empty.noTeams.management" = "Agiuntar equipas per cumenzar il quiz.";
+"empty.noTeams.beforeRounds" = "Agiuntar emprim equipas avant che crear rundas.";
+"empty.noTeams.score" = "Agiuntar equipas per assignar puncts.";
+"empty.noRounds" = "Naginas Rundas";
+"empty.noRounds.message" = "Crear rundas per Voss quiz";
+"empty.noRounds.management" = "Agiuntar rundas per assignar puncts.";
+"empty.noRounds.leaderboard.action" = "Midar al tab Rundas per agiuntar rundas.";
+"empty.noScores" = "Nagins Puncts";
+"empty.noScores.message" = "Endrizzar puncts per las rundas";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Configurar Quiz";
+"setup.dialog.message" = "Vulais Vus configurar ussa equipas e rundas?\n\n✓ Agiuntar equipas\n✓ Definir rundas\n\nVus pudais far quai era pli tard via ils tabs.";
+"setup.dialog.later" = "Configurar pli tard";
+"setup.dialog.start" = "Cumenzar ussa 🚀";
+
+// MARK: - Export
+"export.title" = "Exportar";
+"export.json" = "Exportar sco JSON";
+"export.csv" = "Exportar sco CSV";
+"export.success.title" = "Quiz Exportà";
+"export.success.message" = "Il quiz è vegnì exportà cun success:\n%@";
+"export.showInFinder" = "Mussar en Finder";
+"export.share" = "Cundivider...";
+
+// MARK: - Quiz Status
+"status.live" = "Live";
+"status.completed" = "Terminà";
+"status.start" = "Cumenzar Quiz";
+"status.complete" = "Terminar Quiz";
+"status.progress" = "Progress";
+"status.roundsCompleted" = "%d da %d Rundas";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d pts";
+"score.pointsUnit" = "pts";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Cliccar per modifitgar %d puncts";
+"score.clickToAdd" = "Cliccar per assignar puncts";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Lieu da l'occurrenza";
+"csv.date" = "Data";
+"csv.completed" = "Terminà";
+"csv.yes" = "Gea";
+"csv.no" = "Na";
+"csv.finalRanking" = "RANGLISTA FINALA";
+"csv.rank" = "Rang";
+"csv.team" = "Equipa";
+"csv.totalScore" = "Puncts Totals";
+"csv.color" = "Colur";
+"csv.detailedScores" = "PUNCTS DETAILLADS";
+"csv.total" = "Total";

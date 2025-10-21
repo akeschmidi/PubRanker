@@ -1,0 +1,230 @@
+/* 
+  Localizable.strings - Italiano (Svizzera)
+  PubRanker
+*/
+
+// MARK: - App Navigation
+"app.title" = "PubRanker";
+"navigation.back" = "Indietro";
+"navigation.done" = "Fatto";
+"navigation.cancel" = "Annulla";
+"navigation.save" = "Salva";
+"navigation.edit" = "Modifica";
+"navigation.delete" = "Elimina";
+"navigation.add" = "Aggiungi";
+
+// MARK: - Quiz
+"quiz.title" = "Quiz";
+"quiz.new" = "Nuovo Quiz";
+"quiz.new.create" = "Crea Nuovo Quiz";
+"quiz.new.description" = "Crea un nuovo pub quiz e aggiungi squadre e round";
+"quiz.name" = "Nome del Quiz";
+"quiz.name.placeholder" = "es. Pub Quiz al Leone, Quiz di Natale...";
+"quiz.location" = "Luogo";
+"quiz.location.label" = "Luogo";
+"quiz.location.placeholder" = "es. Pub del Leone";
+"quiz.date" = "Data";
+"quiz.date.label" = "Data e Ora";
+"quiz.create" = "Crea Quiz";
+"quiz.select.none" = "Nessun Quiz Selezionato";
+"quiz.select.prompt" = "Seleziona un quiz dall'elenco o creane uno nuovo.";
+"quiz.teams" = "Squadre";
+"quiz.teams.count" = "%d Squadre";
+"quiz.rounds" = "Round";
+"quiz.totalPoints" = "Punti Totali";
+"quiz.delete.confirm" = "Eliminare il quiz?";
+"quiz.delete.message" = "Questa azione non può essere annullata.";
+
+// MARK: - Teams
+"team.title" = "Squadre";
+"team.new" = "Nuova Squadra";
+"team.new.single" = "Squadra Singola";
+"team.new.single.add" = "Aggiungi Squadra Singola";
+"team.new.multiple" = "Squadre Multiple";
+"team.new.multiple.create" = "Crea Squadre Multiple...";
+"team.add" = "Aggiungi Squadra";
+"team.add.multiple" = "Aggiungi Squadre";
+"team.name" = "Nome della Squadra";
+"team.color" = "Colore";
+"team.points" = "Punti";
+"team.rank" = "Posizione";
+"team.wizard" = "Assistente Squadre";
+"team.wizard.howMany" = "Quante squadre?";
+"team.wizard.create" = "Crea Squadre";
+"team.delete.confirm" = "Eliminare la squadra?";
+"team.delete.message" = "%@ sarà rimosso dal quiz.";
+"team.count" = "%d Squadre";
+"team.management" = "Gestione Squadre";
+
+// MARK: - Rounds
+"round.title" = "Round";
+"round.new" = "Nuovo Round";
+"round.new.single" = "Round Singolo";
+"round.new.single.add" = "Aggiungi Round Singolo";
+"round.new.multiple" = "Round Multipli";
+"round.new.multiple.create" = "Crea Round Multipli...";
+"round.add" = "Aggiungi Round";
+"round.add.multiple" = "Aggiungi Round";
+"round.name" = "Nome del Round";
+"round.name.placeholder" = "es. Geografia, Musica, Sport...";
+"round.names.custom" = "Nomi e Punti dei Round";
+"round.names.only" = "Nomi dei Round";
+"round.number" = "Round %d";
+"round.count.label" = "%d Round";
+"round.maxPoints" = "Punti Massimi";
+"round.maxPoints.label" = "Punteggio Massimo";
+"round.currentRound" = "Round Corrente";
+"round.wizard" = "Assistente Round";
+"round.wizard.howMany" = "Quanti round?";
+"round.wizard.create" = "Crea Round";
+"round.delete.confirm" = "Eliminare il round?";
+"round.delete.message" = "Tutti i punti di questo round andranno persi.";
+"round.status.active" = "Attivo";
+"round.status.completed" = "Completato";
+"round.status.pending" = "In attesa";
+"round.complete" = "Completa Round";
+"round.complete.help" = "Completa round corrente (⌘K)";
+"round.count" = "%d Round";
+
+// MARK: - Leaderboard
+"leaderboard.title" = "Classifica";
+"leaderboard.rank" = "Posizione";
+"leaderboard.rank.position" = "Posto %d";
+"leaderboard.rank.tied" = "(pari merito)";
+"leaderboard.team" = "Squadra";
+"leaderboard.points" = "Punti";
+"leaderboard.winner" = "Vincitore";
+"leaderboard.podium" = "Podio";
+"leaderboard.topThree" = "Top 3";
+"leaderboard.noTeams" = "Nessuna Squadra";
+"leaderboard.noPoints" = "Nessun punto ancora";
+
+// MARK: - Score Entry
+"score.title" = "Inserimento Punteggio";
+"score.enter" = "Inserisci Punti";
+"score.save" = "Salva Punti";
+"score.saved" = "Salvato";
+"score.autoSave" = "Salvataggio Auto";
+"score.autoSave.enabled" = "Salvataggio Auto attivato";
+"score.total" = "Totale";
+"score.perRound" = "Per Round";
+
+// MARK: - Alerts & Messages
+"alert.error" = "Errore";
+"alert.success" = "Successo";
+"alert.warning" = "Avviso";
+"alert.info" = "Informazione";
+"alert.ok" = "OK";
+"alert.yes" = "Sì";
+"alert.no" = "No";
+
+"error.generic" = "Si è verificato un errore";
+"error.saveFailed" = "Salvataggio fallito";
+"error.loadFailed" = "Caricamento fallito";
+"error.deleteFailed" = "Eliminazione fallita";
+"error.invalidInput" = "Input non valido";
+"error.nameRequired" = "Nome richiesto";
+"error.pointsRequired" = "Punti richiesti";
+
+"success.saved" = "Salvato con successo";
+"success.deleted" = "Eliminato con successo";
+"success.created" = "Creato con successo";
+
+// MARK: - Common
+"common.name" = "Nome";
+"common.description" = "Descrizione";
+"common.date" = "Data";
+"common.time" = "Ora";
+"common.location" = "Luogo";
+"common.search" = "Cerca";
+"common.filter" = "Filtra";
+"common.sort" = "Ordina";
+"common.settings" = "Impostazioni";
+"common.about" = "Informazioni";
+"common.help" = "Aiuto";
+"common.close" = "Chiudi";
+"common.points" = "Punti";
+"common.points.count" = "%d Punti";
+"common.points.max" = "Max: %d";
+"common.points.maxLabel" = "Max: %d Punti";
+"common.points.of" = "di %d Punti";
+"common.points.perRound" = "Max. Punti per Round";
+"common.points.custom" = "Punti Individuali per Round";
+"common.missing" = "%d ancora mancanti";
+"common.delete.confirm" = "Vuoi davvero eliminare \"%@\"? Questa azione non può essere annullata.";
+"common.quickSelect" = "Selezione Rapida";
+
+// MARK: - Placeholders
+"placeholder.quizName" = "es. Pub Quiz di Ottobre";
+"placeholder.teamName" = "es. Quiz Masters";
+"placeholder.roundName" = "es. Geografia";
+"placeholder.location" = "es. Pub Murphy's";
+"placeholder.points" = "Inserisci punti";
+
+// MARK: - Statistics
+"stats.average" = "Media";
+"stats.highest" = "Più alto";
+"stats.lowest" = "Più basso";
+"stats.total" = "Totale";
+
+// MARK: - Empty States
+"empty.noQuizzes" = "Nessun Quiz";
+"empty.noQuizzes.message" = "Crea il tuo primo quiz";
+"empty.noTeams" = "Nessuna Squadra";
+"empty.noTeams.message" = "Aggiungi squadre per iniziare";
+"empty.noTeams.leaderboard" = "Aggiungi squadre per vedere la classifica.";
+"empty.noTeams.leaderboard.action" = "Passa alla scheda Squadre per aggiungere squadre.";
+"empty.noTeams.management" = "Aggiungi squadre per iniziare il quiz.";
+"empty.noTeams.beforeRounds" = "Aggiungi prima le squadre prima di creare i round.";
+"empty.noTeams.score" = "Aggiungi squadre per assegnare punti.";
+"empty.noRounds" = "Nessun Round";
+"empty.noRounds.message" = "Crea round per il tuo quiz";
+"empty.noRounds.management" = "Aggiungi round per assegnare punti.";
+"empty.noRounds.leaderboard.action" = "Passa alla scheda Round per aggiungere round.";
+"empty.noScores" = "Nessun Punteggio";
+"empty.noScores.message" = "Inserisci punti per i round";
+
+// MARK: - Quiz Setup
+"setup.dialog.title" = "Configura Quiz";
+"setup.dialog.message" = "Vuoi configurare squadre e round ora?\n\n✓ Aggiungi squadre\n✓ Definisci round\n\nPuoi anche farlo più tardi tramite le schede.";
+"setup.dialog.later" = "Configura dopo";
+"setup.dialog.start" = "Inizia ora 🚀";
+
+// MARK: - Export
+"export.title" = "Esporta";
+"export.json" = "Esporta come JSON";
+"export.csv" = "Esporta come CSV";
+"export.success.title" = "Quiz Esportato";
+"export.success.message" = "Il quiz è stato esportato con successo:\n%@";
+"export.showInFinder" = "Mostra nel Finder";
+"export.share" = "Condividi...";
+
+// MARK: - Quiz Status
+"status.live" = "In diretta";
+"status.completed" = "Completato";
+"status.start" = "Avvia Quiz";
+"status.complete" = "Completa Quiz";
+"status.progress" = "Progresso";
+"status.roundsCompleted" = "%d di %d Round";
+
+// MARK: - Score Display
+"score.notRated" = "–";
+"score.points" = "%d pti";
+"score.pointsUnit" = "pti";
+"score.of" = "%d / %d";
+"score.clickToEdit" = "Clicca per modificare %d punti";
+"score.clickToAdd" = "Clicca per assegnare punti";
+
+// MARK: - CSV Export Headers
+"csv.venue" = "Luogo";
+"csv.date" = "Data";
+"csv.completed" = "Completato";
+"csv.yes" = "Sì";
+"csv.no" = "No";
+"csv.finalRanking" = "CLASSIFICA FINALE";
+"csv.rank" = "Posizione";
+"csv.team" = "Squadra";
+"csv.totalScore" = "Punteggio Totale";
+"csv.color" = "Colore";
+"csv.detailedScores" = "PUNTEGGI DETTAGLIATI";
+"csv.total" = "Totale";
