@@ -21,8 +21,13 @@
 		A10000311 /* ScoreEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000310 /* ScoreEntryView.swift */; };
 		A10000313 /* TeamSetupWizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000312 /* TeamSetupWizard.swift */; };
 		A10000315 /* QuickRoundSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000314 /* QuickRoundSetupView.swift */; };
+		A10000317 /* PlanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000316 /* PlanningView.swift */; };
+		A10000319 /* ExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000318 /* ExecutionView.swift */; };
+		A10000321 /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000320 /* AnalysisView.swift */; };
+		A10000323 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000322 /* ColorExtension.swift */; };
 		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
 		C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */; };
+		C94336AC2EB4EC8D00DD9A53 /* Todo's.txt in Sources */ = {isa = PBXBuildFile; fileRef = C94336AB2EB4EC8100DD9A53 /* Todo's.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +45,10 @@
 		A10000310 /* ScoreEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEntryView.swift; sourceTree = "<group>"; };
 		A10000312 /* TeamSetupWizard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamSetupWizard.swift; sourceTree = "<group>"; };
 		A10000314 /* QuickRoundSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRoundSetupView.swift; sourceTree = "<group>"; };
+		A10000316 /* PlanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningView.swift; sourceTree = "<group>"; };
+		A10000318 /* ExecutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionView.swift; sourceTree = "<group>"; };
+		A10000320 /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
+		A10000322 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		A10000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000500 /* PubRanker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PubRanker.entitlements; sourceTree = "<group>"; };
 		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,6 +71,7 @@
 		C941F20F2EA7FA30004EE1C9 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C941F2102EA7FA30004EE1C9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C941F2112EA7FA30004EE1C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C94336AB2EB4EC8100DD9A53 /* Todo's.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Todo's.txt"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +106,9 @@
 		A1000030 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A10000316 /* PlanningView.swift */,
+				A10000318 /* ExecutionView.swift */,
+				A10000320 /* AnalysisView.swift */,
 				A10000300 /* QuizListView.swift */,
 				A10000302 /* QuizDetailView.swift */,
 				A10000304 /* LeaderboardView.swift */,
@@ -106,6 +119,14 @@
 				A10000314 /* QuickRoundSetupView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A1000050 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A10000322 /* ColorExtension.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		A1FFFFFB = {
@@ -127,11 +148,13 @@
 		A1FFFFFD /* PubRanker */ = {
 			isa = PBXGroup;
 			children = (
+				C94336AB2EB4EC8100DD9A53 /* Todo's.txt */,
 				A10000000 /* PubRankerApp.swift */,
 				A10000002 /* ContentView.swift */,
 				A1000010 /* Models */,
 				A1000020 /* ViewModels */,
 				A1000030 /* Views */,
+				A1000050 /* Helpers */,
 				A10000400 /* Assets.xcassets */,
 				A10000500 /* PubRanker.entitlements */,
 				C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */,
@@ -236,11 +259,16 @@
 				A10000301 /* QuizListView.swift in Sources */,
 				A10000303 /* QuizDetailView.swift in Sources */,
 				A10000305 /* LeaderboardView.swift in Sources */,
+				C94336AC2EB4EC8D00DD9A53 /* Todo's.txt in Sources */,
 				A10000307 /* TeamManagementView.swift in Sources */,
 				A10000309 /* RoundManagementView.swift in Sources */,
 				A10000311 /* ScoreEntryView.swift in Sources */,
 				A10000313 /* TeamSetupWizard.swift in Sources */,
 				A10000315 /* QuickRoundSetupView.swift in Sources */,
+				A10000317 /* PlanningView.swift in Sources */,
+				A10000319 /* ExecutionView.swift in Sources */,
+				A10000321 /* AnalysisView.swift in Sources */,
+				A10000323 /* ColorExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +347,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -358,7 +385,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -426,7 +453,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -459,7 +485,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;

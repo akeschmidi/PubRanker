@@ -8,175 +8,271 @@
 import SwiftUI
 
 struct ScoreEntryView: View {
-    @Environment(\.dismiss) private var dismiss
     @Bindable var round: Round
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    @State private var teamScores: [UUID: Int] = [:]
-    @State private var currentTeamIndex = 0
+    @State private var teamScores: [UUID: String] = [:]
+    @State private var showSuccessMessage = false
     
     var sortedTeams: [Team] {
         quiz.safeTeams.sorted { $0.name < $1.name }
     }
     
-    var currentTeam: Team? {
-        guard currentTeamIndex < sortedTeams.count else { return nil }
-        return sortedTeams[currentTeamIndex]
-    }
-    
     var body: some View {
-        VStack(spacing: 0) {
-            if quiz.safeTeams.isEmpty {
-                ContentUnavailableView(
-                    NSLocalizedString("empty.noTeams", comment: "No teams"),
-                    systemImage: "person.3.slash",
-                    description: Text(NSLocalizedString("empty.noTeams.score", comment: "Add teams to assign points"))
-                )
-            } else if let team = currentTeam {
+        ScrollView {
+            VStack(spacing: 24) {
                 // Header
-                VStack(spacing: 12) {
+                VStack(spacing: 8) {
                     Text(round.name)
-                        .font(.title2)
-                        .foregroundStyle(.secondary)
+                        .font(.title)
+                        .bold()
                     
-                    Text("Team \(currentTeamIndex + 1) von \(sortedTeams.count)")
-                        .font(.caption)
+                    Text("Punkte eingeben (max. \(round.maxPoints) pro Team)")
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    
-                    ProgressView(value: Double(currentTeamIndex), total: Double(sortedTeams.count))
-                        .frame(width: 200)
                 }
-                .padding(.top, 30)
+                .padding(.top, 20)
                 
-                Spacer()
-                
-                // Team Display
-                VStack(spacing: 20) {
-                    HStack {
-                        Circle()
-                            .fill(Color(hex: team.color) ?? .blue)
-                            .frame(width: 20, height: 20)
-                        
-                        Text(team.name)
-                            .font(.system(size: 36, weight: .bold))
+                if quiz.safeTeams.isEmpty {
+                    ContentUnavailableView(
+                        "Keine Teams vorhanden",
+                        systemImage: "person.3.slash",
+                        description: Text("Füge Teams hinzu, um Punkte zu vergeben")
+                    )
+                } else {
+                    // Teams Liste
+                    VStack(spacing: 16) {
+                        ForEach(sortedTeams) { team in
+                            teamScoreRow(for: team)
+                        }
                     }
+                    .padding(.horizontal)
                     
-                    // Score Display
-                    VStack(spacing: 8) {
-                        Text("\(teamScores[team.id] ?? team.getScore(for: round) ?? 0)")
-                            .font(.system(size: 120, weight: .bold))
-                            .monospacedDigit()
-                            .foregroundStyle(.blue)
+                    Divider()
+                        .padding(.vertical)
+                    
+                    // Action Buttons
+                    HStack(spacing: 16) {
+                        Button {
+                            clearAllScores()
+                        } label: {
+                            Label("Zurücksetzen", systemImage: "arrow.counterclockwise")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
                         
-                        Text(String(format: NSLocalizedString("common.points.of", comment: "Points of"), round.maxPoints))
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
+                        Button {
+                            saveAllScores()
+                        } label: {
+                            Label("Speichern", systemImage: "checkmark.circle.fill")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                        .keyboardShortcut(.return, modifiers: .command)
                     }
-                    .padding(.vertical, 20)
+                    .padding(.horizontal)
                     
-                    // Number Pad
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 5), spacing: 12) {
-                        ForEach(0...round.maxPoints, id: \.self) { points in
-                            Button {
-                                teamScores[team.id] = points
-                            } label: {
-                                Text("\(points)")
-                                    .font(.system(size: 24, weight: .semibold))
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 60)
-                                    .background(
-                                        (teamScores[team.id] ?? team.getScore(for: round) ?? 0) == points
-                                            ? Color.accentColor
-                                            : Color(nsColor: .controlBackgroundColor)
-                                    )
-                                    .foregroundStyle(
-                                        (teamScores[team.id] ?? team.getScore(for: round) ?? 0) == points
-                                            ? .white
-                                            : .primary
-                                    )
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                                    .overlay {
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(
-                                                (teamScores[team.id] ?? team.getScore(for: round) ?? 0) == points
-                                                    ? Color.accentColor
-                                                    : Color.secondary.opacity(0.2),
-                                                lineWidth: 2
-                                            )
-                                    }
+                    // Next Round Button
+                    if let nextRound = getNextRound() {
+                        Button {
+                            saveAllScores()
+                            viewModel.completeRound(round)
+                        } label: {
+                            VStack(spacing: 8) {
+                                HStack {
+                                    Image(systemName: "arrow.right.circle.fill")
+                                    Text("Weiter zur nächsten Runde")
+                                        .font(.headline)
+                                }
+                                Text("→ \(nextRound.name)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
                             }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.horizontal, 40)
-                }
-                
-                Spacer()
-                
-                // Navigation Buttons
-                HStack(spacing: 20) {
-                    Button {
-                        if currentTeamIndex > 0 {
-                            currentTeamIndex -= 1
-                        }
-                    } label: {
-                        Label("Zurück", systemImage: "chevron.left")
                             .frame(maxWidth: .infinity)
+                            .padding()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.green)
+                        .controlSize(.large)
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                    } else if !round.isCompleted {
+                        Button {
+                            saveAllScores()
+                            viewModel.completeRound(round)
+                        } label: {
+                            HStack {
+                                Image(systemName: "flag.checkered")
+                                Text("Runde abschließen")
+                                    .font(.headline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.orange)
+                        .controlSize(.large)
+                        .padding(.horizontal)
+                        .padding(.top, 8)
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.large)
-                    .disabled(currentTeamIndex == 0)
                     
-                    if currentTeamIndex < sortedTeams.count - 1 {
-                        Button {
-                            currentTeamIndex += 1
-                        } label: {
-                            Label("Nächstes Team", systemImage: "chevron.right")
-                                .frame(maxWidth: .infinity)
+                    if round.isCompleted {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(.green)
+                            Text("Diese Runde ist abgeschlossen")
+                                .font(.subheadline)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .keyboardShortcut(.return)
-                    } else {
-                        Button {
-                            saveScores()
-                            dismiss()
-                        } label: {
-                            Label("Fertig", systemImage: "checkmark")
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .keyboardShortcut(.return)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal)
+                        .padding(.top, 8)
                     }
                 }
-                .padding(.horizontal, 40)
-                .padding(.bottom, 30)
             }
+            .padding(.bottom, 20)
         }
-        .frame(width: 700, height: 650)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Abbrechen") {
-                    dismiss()
-                }
-                .keyboardShortcut(.escape)
-            }
+        .alert("Punkte gespeichert! ✅", isPresented: $showSuccessMessage) {
+            Button("OK") {}
+        } message: {
+            Text("Die Punkte für \(round.name) wurden erfolgreich gespeichert.")
         }
         .onAppear {
-            // Initialize scores with current values (or 0 if not set)
-            for team in quiz.safeTeams {
-                teamScores[team.id] = team.getScore(for: round) ?? 0
+            loadCurrentScores()
+        }
+        .onChange(of: round.id) { _, _ in
+            // Reset und lade Scores neu wenn Runde wechselt
+            loadCurrentScores()
+        }
+    }
+    
+    private func teamScoreRow(for team: Team) -> some View {
+        HStack(spacing: 16) {
+            // Team Info
+            HStack(spacing: 12) {
+                Circle()
+                    .fill(Color(hex: team.color) ?? .blue)
+                    .frame(width: 16, height: 16)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(team.name)
+                        .font(.headline)
+                    
+                    if let currentScore = team.getScore(for: round) {
+                        Text("Aktuell: \(currentScore) Punkte")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            // Score Input
+            HStack(spacing: 8) {
+                // Minus Button
+                Button {
+                    decrementScore(for: team)
+                } label: {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.red)
+                }
+                .buttonStyle(.plain)
+                .disabled(getScoreValue(for: team) <= 0)
+                
+                // Text Field
+                TextField("0", text: Binding(
+                    get: { teamScores[team.id] ?? "0" },
+                    set: { newValue in
+                        // Only allow numbers
+                        let filtered = newValue.filter { $0.isNumber }
+                        if let value = Int(filtered), value <= round.maxPoints {
+                            teamScores[team.id] = filtered
+                        } else if filtered.isEmpty {
+                            teamScores[team.id] = "0"
+                        }
+                    }
+                ))
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 60)
+                .multilineTextAlignment(.center)
+                .font(.title3.bold())
+                
+                // Plus Button
+                Button {
+                    incrementScore(for: team)
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.green)
+                }
+                .buttonStyle(.plain)
+                .disabled(getScoreValue(for: team) >= round.maxPoints)
+                
+                Text("/ \(round.maxPoints)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+        .background(Color(nsColor: .controlBackgroundColor))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+    
+    private func getScoreValue(for team: Team) -> Int {
+        Int(teamScores[team.id] ?? "0") ?? 0
+    }
+    
+    private func incrementScore(for team: Team) {
+        let current = getScoreValue(for: team)
+        if current < round.maxPoints {
+            teamScores[team.id] = "\(current + 1)"
+        }
+    }
+    
+    private func decrementScore(for team: Team) {
+        let current = getScoreValue(for: team)
+        if current > 0 {
+            teamScores[team.id] = "\(current - 1)"
+        }
+    }
+    
+    private func loadCurrentScores() {
+        for team in quiz.safeTeams {
+            if let score = team.getScore(for: round) {
+                teamScores[team.id] = "\(score)"
+            } else {
+                teamScores[team.id] = "0"
             }
         }
     }
     
-    private func saveScores() {
+    private func clearAllScores() {
         for team in quiz.safeTeams {
-            if let score = teamScores[team.id] {
-                viewModel.updateScore(for: team, in: round, points: score)
-            }
+            teamScores[team.id] = "0"
         }
+    }
+    
+    private func saveAllScores() {
+        for team in quiz.safeTeams {
+            let score = getScoreValue(for: team)
+            viewModel.updateScore(for: team, in: round, points: score)
+        }
+        showSuccessMessage = true
+    }
+    
+    private func getNextRound() -> Round? {
+        let sortedRounds = quiz.sortedRounds
+        guard let currentIndex = sortedRounds.firstIndex(where: { $0.id == round.id }) else {
+            return nil
+        }
+        let nextIndex = currentIndex + 1
+        return nextIndex < sortedRounds.count ? sortedRounds[nextIndex] : nil
     }
 }
 

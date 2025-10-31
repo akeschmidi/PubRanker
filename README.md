@@ -13,12 +13,24 @@ Eine moderne macOS und iPadOS App für QuizMaster, um Punkte bei Pub Quiz-Verans
 
 ## Überblick
 
-PubRanker hilft QuizMastern dabei, Pub Quiz-Veranstaltungen effizient zu organisieren:
-- **Punkteverwaltung**: Erfassen Sie Punkte für jede Runde und jedes Team
-- **Automatische Ranglisten**: Echtzeit-Updates der Teamrankings
-- **Mehrere Runden**: Unterstützung für Quiz mit mehreren Runden
-- **Team-Management**: Einfaches Hinzufügen und Verwalten von Teams
-- **Übersichtliche Darstellung**: Klare Visualisierung der aktuellen Standings
+PubRanker ist dein zentraler Hub als QuizMaster - mit drei klaren Phasen:
+
+### 🎯 Die drei Workflow-Phasen
+
+1. **📅 Planen** - Quiz vorbereiten
+   - Quiz erstellen mit allen Details
+   - Teams und Runden konfigurieren
+   - Übersicht über die Vorbereitung
+   
+2. **▶️ Durchführen** - Live-Quiz Management
+   - Echtzeit-Rangliste
+   - Schnelle Punkteeingabe
+   - Fortschrittsanzeige und Status-Tracking
+   
+3. **📊 Auswerten** - Ergebnisse analysieren
+   - Siegertreppchen für Top 3
+   - Detaillierte Statistiken
+   - Export als JSON/CSV
 
 ## Features
 
@@ -71,20 +83,29 @@ Für die Aktivierung von iCloud Backup und Sync, siehe detaillierte Anleitung:
 
 ## Verwendung
 
-### Als QuizMaster
+### Als QuizMaster - Der komplette Workflow
 
-1. **Neues Quiz starten**: Tippen Sie auf "Neues Quiz"
-2. **Teams hinzufügen**: Fügen Sie alle teilnehmenden Teams hinzu
-3. **Runden erstellen**: Definieren Sie die Quiz-Runden
-4. **Punkte vergeben**: Geben Sie nach jeder Runde die Punktzahlen ein
-5. **Rangliste anzeigen**: Sehen Sie die aktuelle Rangliste in Echtzeit
+#### 1️⃣ Planung (vor dem Quiz)
+1. Wechsle zur Phase **"Planen"**
+2. Erstelle ein neues Quiz mit Name, Ort und Datum
+3. Füge alle teilnehmenden Teams hinzu
+4. Definiere die Runden mit maximalen Punktzahlen
+5. Klicke **"Quiz starten"** wenn alles bereit ist
 
-### Typischer Workflow
+#### 2️⃣ Durchführung (während des Quiz)
+1. Die App wechselt automatisch zur Phase **"Durchführen"**
+2. Gib Punkte für jede Runde ein
+3. Beobachte die Live-Rangliste in Echtzeit
+4. Schließe Runden ab wenn fertig
+5. Klicke **"Quiz beenden"** am Ende
 
-```
-Quiz erstellen → Teams hinzufügen → Runde 1 → Punkte vergeben → 
-Runde 2 → Punkte vergeben → ... → Endergebnis anzeigen → Exportieren
-```
+#### 3️⃣ Auswertung (nach dem Quiz)
+1. Betrachte das Siegertreppchen
+2. Prüfe detaillierte Statistiken
+3. Exportiere Ergebnisse als JSON oder CSV
+4. Teile die Ergebnisse mit den Teilnehmern
+
+Siehe **[QUIZMASTER_HUB.md](QUIZMASTER_HUB.md)** für die vollständige Dokumentation.
 
 ## Projekt-Struktur
 
@@ -92,14 +113,17 @@ Runde 2 → Punkte vergeben → ... → Endergebnis anzeigen → Exportieren
 PubRanker/
 ├── App/
 │   ├── PubRankerApp.swift          # App Entry Point
-│   └── ContentView.swift           # Haupt-View
+│   └── ContentView.swift           # Haupt-Navigation mit 3 Phasen
 ├── Models/
 │   ├── Quiz.swift                  # Quiz-Datenmodell
 │   ├── Team.swift                  # Team-Datenmodell
 │   └── Round.swift                 # Runden-Datenmodell
 ├── Views/
-│   ├── QuizListView.swift          # Quiz-Übersicht
+│   ├── PlanningView.swift          # 📅 Planungsphase
+│   ├── ExecutionView.swift         # ▶️ Durchführungsphase
+│   ├── AnalysisView.swift          # 📊 Auswertungsphase
 │   ├── TeamManagementView.swift    # Team-Verwaltung
+│   ├── RoundManagementView.swift   # Runden-Verwaltung
 │   ├── ScoreEntryView.swift        # Punkteeingabe
 │   └── LeaderboardView.swift       # Rangliste
 ├── ViewModels/
@@ -145,22 +169,27 @@ GitHub: [@akeschmidi](https://github.com/akeschmidi)
 
 ## Roadmap
 
-### Version 1.0 (MVP)
-- [x] Projekt-Setup
-- [ ] Basis-Datenmodelle
-- [ ] Team-Management UI
-- [ ] Punkteeingabe
-- [ ] Ranglisten-Anzeige
+### Version 2.0 ✅ (Aktuell)
+- [x] QuizMaster Hub mit 3 Phasen
+- [x] Planungsphase mit Setup-Workflow
+- [x] Durchführungsphase mit Live-Features
+- [x] Auswertungsphase mit Statistiken
+- [x] Siegertreppchen und Podium
+- [x] Export als JSON/CSV
+- [x] SwiftData Persistenz
+- [x] iCloud Backup & Sync
 
-### Version 1.1
-- [ ] iPadOS-Optimierung
-- [ ] Persistenz mit SwiftData
-- [ ] Export-Funktionalität
+### Version 2.1 (Geplant)
+- [ ] iPadOS-Optimierungen
+- [ ] PDF-Export mit Custom Design
+- [ ] Team-Avatars/Icons
+- [ ] Dark Mode Verbesserungen
 
-### Version 2.0
-- [ ] iCloud-Sync
-- [ ] Erweiterte Statistiken
+### Version 3.0 (Vision)
+- [ ] Apple Watch Companion
+- [ ] Erweiterte Analytics
 - [ ] Custom Themes
+- [ ] Multiplayer-Sync
 
 ## Danksagungen
 

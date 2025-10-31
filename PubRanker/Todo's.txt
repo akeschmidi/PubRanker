@@ -1,0 +1,14 @@
+//
+//  Todo's.md
+//  PubRanker
+//
+//  Created by Stefan Schwinghammer on 31.10.2025.
+//
+
+- LLM von Apple verwenden
+    - Fragen generieren
+- Bessere übersicht
+    -Quiz planen
+    -Durchführen
+    -Auswerten
+
