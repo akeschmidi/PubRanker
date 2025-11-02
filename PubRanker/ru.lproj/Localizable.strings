@@ -228,3 +228,119 @@
 "csv.color" = "Цвет";
 "csv.detailedScores" = "ПОДРОБНЫЕ РЕЗУЛЬТАТЫ";
 "csv.total" = "Всего";
+
+// MARK: - Workflow Phases (v1.5)
+"workflow.planning" = "Планирование";
+"workflow.planning.description" = "Подготовить и спланировать викторину";
+"workflow.execution" = "Выполнение";
+"workflow.execution.description" = "Управлять активными викторинами";
+"workflow.analysis" = "Анализ";
+"workflow.analysis.description" = "Анализировать и экспортировать викторину";
+
+// MARK: - Planning View (v1.5)
+"planning.welcome.title" = "Готовы к первой викторине?";
+"planning.welcome.subtitle" = "Планируйте и организуйте свою викторину легко";
+"planning.createButton.title" = "Создать новую викторину";
+"planning.createButton.subtitle" = "Начать планирование";
+"planning.plannedQuizzes" = "Запланированные викторины (%d)";
+"planning.startQuiz" = "Начать викторину";
+"planning.teams.add" = "Добавить команды";
+"planning.rounds.add" = "Определить раунды";
+
+// MARK: - Execution View (v1.5)
+"execution.title" = "Викторина в прямом эфире";
+"execution.tab.leaderboard" = "Рейтинг";
+"execution.tab.scoring" = "Ввести баллы";
+"execution.tab.overview" = "Обзор";
+"execution.activeQuizzes" = "Активные викторины (%d)";
+"execution.live" = "В ЭФИРЕ";
+"execution.noRound.description" = "Все раунды завершены или еще нет раундов.";
+
+// MARK: - Analysis View (v1.5)
+"analysis.title" = "Анализ викторины";
+"analysis.subtitle" = "Анализ результатов";
+"analysis.activeQuizzes" = "Активные викторины (%d)";
+"analysis.completedQuizzes" = "Завершенные викторины (%d)";
+"analysis.winnerPodium" = "Подиум победителей";
+"analysis.currentLeadership" = "Текущее лидерство";
+"analysis.interim" = "(Временный)";
+"analysis.liveRunning" = "В эфире - в процессе";
+"analysis.interimAfterRounds" = "Временный после %d из %d раундов";
+"analysis.exportResults" = "Экспортировать результаты";
+"analysis.fullResults" = "Полные результаты";
+"analysis.roundBreakdown" = "Обзор раундов";
+"analysis.topScorer" = "Лучший бомбардир";
+
+// MARK: - Score Entry View (v1.5)
+"scoreEntry.title" = "Ввести баллы (макс. %d на команду)";
+"scoreEntry.reset" = "Сбросить";
+"scoreEntry.saved.title" = "Баллы сохранены! ✅";
+"scoreEntry.saved.message" = "Баллы для %@ успешно сохранены.";
+"scoreEntry.nextRound" = "Продолжить к следующему раунду";
+"scoreEntry.completeRound" = "Завершить раунд";
+"scoreEntry.roundCompleted" = "Этот раунд завершен";
+"scoreEntry.currentScore" = "Текущий: %d баллов";
+
+// MARK: - Statistics (v1.5)
+"stats.participants" = "Участники";
+"stats.highestScore" = "Самый высокий результат";
+"stats.averageScore" = "Средний";
+"stats.maxPoints" = "Макс баллов";
+
+// MARK: - Planning View (v2.0)
+"planning.title" = "Plan Quiz";
+"planning.subtitle" = "Prepare your quiz";
+"planning.noQuizzes" = "No planned quizzes";
+"planning.noQuizzes.description" = "Create your first quiz";
+"planning.plannedQuizzes" = "Planned Quizzes (%d)";
+"planning.delete" = "Delete";
+"planning.edit" = "Edit";
+"planning.start" = "Start Quiz";
+"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
+"planning.ready" = "Ready for your first quiz?";
+"planning.ready.description" = "Plan and organize your pub quiz easily";
+"planning.create" = "Create New Quiz";
+"planning.create.subtitle" = "Start planning";
+
+// MARK: - Edit Quiz Sheet (v2.0)
+"edit.title" = "Edit Quiz";
+"edit.details" = "Quiz Details";
+"edit.statistics" = "Statistics";
+"edit.status" = "Status";
+"edit.active" = "Active";
+"edit.planned" = "Planned";
+"edit.completed" = "Completed";
+"edit.preparation" = "Preparation";
+"edit.teams" = "Teams";
+"edit.rounds" = "Rounds";
+"edit.maxPoints" = "Max Points";
+"edit.overview" = "Overview";
+
+// MARK: - Team Management (v2.0)
+"teams.manage" = "Manage Teams";
+"teams.none" = "No Teams";
+"teams.none.description" = "Add teams to start the quiz";
+"teams.add.first" = "Add First Team";
+"teams.colorPicker" = "Choose Color";
+"teams.rank" = "Rank %d";
+"teams.points" = "Points";
+
+// MARK: - Round Management (v2.0)
+"rounds.manage" = "Manage Rounds";
+"rounds.none" = "No Rounds";
+"rounds.none.description" = "Add rounds to award points";
+"rounds.add.first" = "Add First Round";
+"rounds.preparation" = "Preparation";
+"rounds.active" = "Active";
+"rounds.completed" = "Completed";
+"rounds.delete.confirm" = "Do you really want to delete '%@'?";
+"rounds.maxPoints" = "Max %d Points";
+"rounds.points" = "Points";
+"rounds.editName" = "Edit Name";
+"rounds.editPoints" = "Edit Points";
+"rounds.savePoints" = "Save Points";
+
+// MARK: - Analysis View (v2.0)
+"analysis.leaderboard" = "Leaderboard";
+"analysis.overview" = "Overview";
+

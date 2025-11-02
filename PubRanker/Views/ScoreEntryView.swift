@@ -13,6 +13,7 @@ struct ScoreEntryView: View {
     @Bindable var viewModel: QuizViewModel
     @State private var teamScores: [UUID: String] = [:]
     @State private var showSuccessMessage = false
+    @State private var savedRoundName = ""
     
     var sortedTeams: [Team] {
         quiz.safeTeams.sorted { $0.name < $1.name }
@@ -139,7 +140,7 @@ struct ScoreEntryView: View {
         .alert("Punkte gespeichert! ✅", isPresented: $showSuccessMessage) {
             Button("OK") {}
         } message: {
-            Text("Die Punkte für \(round.name) wurden erfolgreich gespeichert.")
+            Text("Die Punkte für \(savedRoundName) wurden erfolgreich gespeichert.")
         }
         .onAppear {
             loadCurrentScores()
@@ -259,6 +260,9 @@ struct ScoreEntryView: View {
     }
     
     private func saveAllScores() {
+        // Speichere den Runden-Namen BEVOR die Runde abgeschlossen wird
+        savedRoundName = round.name
+        
         for team in quiz.safeTeams {
             let score = getScoreValue(for: team)
             viewModel.updateScore(for: team, in: round, points: score)

@@ -228,3 +228,119 @@
 "csv.color" = "色";
 "csv.detailedScores" = "詳細スコア";
 "csv.total" = "合計";
+
+// MARK: - Workflow Phases (v1.5)
+"workflow.planning" = "計画";
+"workflow.planning.description" = "クイズを準備・計画";
+"workflow.execution" = "実行";
+"workflow.execution.description" = "アクティブなクイズを管理";
+"workflow.analysis" = "分析";
+"workflow.analysis.description" = "クイズを分析・エクスポート";
+
+// MARK: - Planning View (v1.5)
+"planning.welcome.title" = "最初のクイズの準備はできましたか？";
+"planning.welcome.subtitle" = "パブクイズを簡単に計画・整理";
+"planning.createButton.title" = "新しいクイズを作成";
+"planning.createButton.subtitle" = "計画を開始";
+"planning.plannedQuizzes" = "計画されたクイズ (%d)";
+"planning.startQuiz" = "クイズを開始";
+"planning.teams.add" = "チームを追加";
+"planning.rounds.add" = "ラウンドを定義";
+
+// MARK: - Execution View (v1.5)
+"execution.title" = "ライブクイズ";
+"execution.tab.leaderboard" = "リーダーボード";
+"execution.tab.scoring" = "スコアを入力";
+"execution.tab.overview" = "概要";
+"execution.activeQuizzes" = "アクティブなクイズ (%d)";
+"execution.live" = "ライブ";
+"execution.noRound.description" = "すべてのラウンドが完了したか、まだラウンドがありません。";
+
+// MARK: - Analysis View (v1.5)
+"analysis.title" = "クイズを分析";
+"analysis.subtitle" = "結果を分析";
+"analysis.activeQuizzes" = "アクティブなクイズ (%d)";
+"analysis.completedQuizzes" = "完了したクイズ (%d)";
+"analysis.winnerPodium" = "優勝者表彰台";
+"analysis.currentLeadership" = "現在のリード";
+"analysis.interim" = "（暫定）";
+"analysis.liveRunning" = "ライブ - 進行中";
+"analysis.interimAfterRounds" = "%d ラウンド中 %d ラウンド後の暫定";
+"analysis.exportResults" = "結果をエクスポート";
+"analysis.fullResults" = "完全な結果";
+"analysis.roundBreakdown" = "ラウンド概要";
+"analysis.topScorer" = "トップスコアラー";
+
+// MARK: - Score Entry View (v1.5)
+"scoreEntry.title" = "スコアを入力（チームあたり最大 %d）";
+"scoreEntry.reset" = "リセット";
+"scoreEntry.saved.title" = "スコアを保存しました！✅";
+"scoreEntry.saved.message" = "%@ のスコアが正常に保存されました。";
+"scoreEntry.nextRound" = "次のラウンドへ続く";
+"scoreEntry.completeRound" = "ラウンドを完了";
+"scoreEntry.roundCompleted" = "このラウンドは完了しました";
+"scoreEntry.currentScore" = "現在：%d ポイント";
+
+// MARK: - Statistics (v1.5)
+"stats.participants" = "参加者";
+"stats.highestScore" = "最高スコア";
+"stats.averageScore" = "平均";
+"stats.maxPoints" = "最大ポイント";
+
+// MARK: - Planning View (v2.0)
+"planning.title" = "Plan Quiz";
+"planning.subtitle" = "Prepare your quiz";
+"planning.noQuizzes" = "No planned quizzes";
+"planning.noQuizzes.description" = "Create your first quiz";
+"planning.plannedQuizzes" = "Planned Quizzes (%d)";
+"planning.delete" = "Delete";
+"planning.edit" = "Edit";
+"planning.start" = "Start Quiz";
+"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
+"planning.ready" = "Ready for your first quiz?";
+"planning.ready.description" = "Plan and organize your pub quiz easily";
+"planning.create" = "Create New Quiz";
+"planning.create.subtitle" = "Start planning";
+
+// MARK: - Edit Quiz Sheet (v2.0)
+"edit.title" = "Edit Quiz";
+"edit.details" = "Quiz Details";
+"edit.statistics" = "Statistics";
+"edit.status" = "Status";
+"edit.active" = "Active";
+"edit.planned" = "Planned";
+"edit.completed" = "Completed";
+"edit.preparation" = "Preparation";
+"edit.teams" = "Teams";
+"edit.rounds" = "Rounds";
+"edit.maxPoints" = "Max Points";
+"edit.overview" = "Overview";
+
+// MARK: - Team Management (v2.0)
+"teams.manage" = "Manage Teams";
+"teams.none" = "No Teams";
+"teams.none.description" = "Add teams to start the quiz";
+"teams.add.first" = "Add First Team";
+"teams.colorPicker" = "Choose Color";
+"teams.rank" = "Rank %d";
+"teams.points" = "Points";
+
+// MARK: - Round Management (v2.0)
+"rounds.manage" = "Manage Rounds";
+"rounds.none" = "No Rounds";
+"rounds.none.description" = "Add rounds to award points";
+"rounds.add.first" = "Add First Round";
+"rounds.preparation" = "Preparation";
+"rounds.active" = "Active";
+"rounds.completed" = "Completed";
+"rounds.delete.confirm" = "Do you really want to delete '%@'?";
+"rounds.maxPoints" = "Max %d Points";
+"rounds.points" = "Points";
+"rounds.editName" = "Edit Name";
+"rounds.editPoints" = "Edit Points";
+"rounds.savePoints" = "Save Points";
+
+// MARK: - Analysis View (v2.0)
+"analysis.leaderboard" = "Leaderboard";
+"analysis.overview" = "Overview";
+

@@ -136,6 +136,16 @@ final class QuizViewModel {
         saveContext()
     }
     
+    func updateRoundName(_ round: Round, newName: String) {
+        round.name = newName
+        saveContext()
+    }
+    
+    func updateRoundMaxPoints(_ round: Round, maxPoints: Int) {
+        round.maxPoints = maxPoints
+        saveContext()
+    }
+    
     // MARK: - Score Management
     
     func updateScore(for team: Team, in round: Round, points: Int) {

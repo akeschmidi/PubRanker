@@ -222,9 +222,125 @@
 "csv.yes" = "Yes";
 "csv.no" = "No";
 "csv.finalRanking" = "FINAL RANKING";
-"csv.rank" = "Rank";
-"csv.team" = "Team";
-"csv.totalScore" = "Total Score";
-"csv.color" = "Color";
-"csv.detailedScores" = "DETAILED SCORES";
-"csv.total" = "Total";
+"csv.rank" = "排名";
+"csv.team" = "队伍";
+"csv.totalScore" = "总分";
+"csv.color" = "颜色";
+"csv.detailedScores" = "详细分数";
+"csv.total" = "总计";
+
+// MARK: - Workflow Phases (v1.5)
+"workflow.planning" = "计划";
+"workflow.planning.description" = "准备和计划测验";
+"workflow.execution" = "执行";
+"workflow.execution.description" = "管理活跃测验";
+"workflow.analysis" = "分析";
+"workflow.analysis.description" = "分析和导出测验";
+
+// MARK: - Planning View (v1.5)
+"planning.welcome.title" = "准备好你的第一个测验了吗？";
+"planning.welcome.subtitle" = "轻松计划和组织你的酒吧测验";
+"planning.createButton.title" = "创建新测验";
+"planning.createButton.subtitle" = "开始计划";
+"planning.plannedQuizzes" = "计划的测验 (%d)";
+"planning.startQuiz" = "开始测验";
+"planning.teams.add" = "添加团队";
+"planning.rounds.add" = "定义回合";
+
+// MARK: - Execution View (v1.5)
+"execution.title" = "实时测验";
+"execution.tab.leaderboard" = "排行榜";
+"execution.tab.scoring" = "输入分数";
+"execution.tab.overview" = "概览";
+"execution.activeQuizzes" = "活跃测验 (%d)";
+"execution.live" = "实时";
+"execution.noRound.description" = "所有回合已完成或尚无回合。";
+
+// MARK: - Analysis View (v1.5)
+"analysis.title" = "分析测验";
+"analysis.subtitle" = "分析结果";
+"analysis.activeQuizzes" = "活跃测验 (%d)";
+"analysis.completedQuizzes" = "已完成测验 (%d)";
+"analysis.winnerPodium" = "获胜者领奖台";
+"analysis.currentLeadership" = "当前领先";
+"analysis.interim" = "（临时）";
+"analysis.liveRunning" = "实时 - 进行中";
+"analysis.interimAfterRounds" = "%d 回合中的 %d 回合后的临时";
+"analysis.exportResults" = "导出结果";
+"analysis.fullResults" = "完整结果";
+"analysis.roundBreakdown" = "回合概览";
+"analysis.topScorer" = "最佳得分手";
+
+// MARK: - Score Entry View (v1.5)
+"scoreEntry.title" = "输入分数（每队最多 %d）";
+"scoreEntry.reset" = "重置";
+"scoreEntry.saved.title" = "分数已保存！✅";
+"scoreEntry.saved.message" = "%@ 的分数已成功保存。";
+"scoreEntry.nextRound" = "继续下一回合";
+"scoreEntry.completeRound" = "完成回合";
+"scoreEntry.roundCompleted" = "这个回合已完成";
+"scoreEntry.currentScore" = "当前：%d 分";
+
+// MARK: - Statistics (v1.5)
+"stats.participants" = "参与者";
+"stats.highestScore" = "最高分";
+"stats.averageScore" = "平均";
+"stats.maxPoints" = "最大分数";
+
+// MARK: - Planning View (v2.0)
+"planning.title" = "Plan Quiz";
+"planning.subtitle" = "Prepare your quiz";
+"planning.noQuizzes" = "No planned quizzes";
+"planning.noQuizzes.description" = "Create your first quiz";
+"planning.plannedQuizzes" = "Planned Quizzes (%d)";
+"planning.delete" = "Delete";
+"planning.edit" = "Edit";
+"planning.start" = "Start Quiz";
+"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
+"planning.ready" = "Ready for your first quiz?";
+"planning.ready.description" = "Plan and organize your pub quiz easily";
+"planning.create" = "Create New Quiz";
+"planning.create.subtitle" = "Start planning";
+
+// MARK: - Edit Quiz Sheet (v2.0)
+"edit.title" = "Edit Quiz";
+"edit.details" = "Quiz Details";
+"edit.statistics" = "Statistics";
+"edit.status" = "Status";
+"edit.active" = "Active";
+"edit.planned" = "Planned";
+"edit.completed" = "Completed";
+"edit.preparation" = "Preparation";
+"edit.teams" = "Teams";
+"edit.rounds" = "Rounds";
+"edit.maxPoints" = "Max Points";
+"edit.overview" = "Overview";
+
+// MARK: - Team Management (v2.0)
+"teams.manage" = "Manage Teams";
+"teams.none" = "No Teams";
+"teams.none.description" = "Add teams to start the quiz";
+"teams.add.first" = "Add First Team";
+"teams.colorPicker" = "Choose Color";
+"teams.rank" = "Rank %d";
+"teams.points" = "Points";
+
+// MARK: - Round Management (v2.0)
+"rounds.manage" = "Manage Rounds";
+"rounds.none" = "No Rounds";
+"rounds.none.description" = "Add rounds to award points";
+"rounds.add.first" = "Add First Round";
+"rounds.preparation" = "Preparation";
+"rounds.active" = "Active";
+"rounds.completed" = "Completed";
+"rounds.delete.confirm" = "Do you really want to delete '%@'?";
+"rounds.maxPoints" = "Max %d Points";
+"rounds.points" = "Points";
+"rounds.editName" = "Edit Name";
+"rounds.editPoints" = "Edit Points";
+"rounds.savePoints" = "Save Points";
+
+// MARK: - Analysis View (v2.0)
+"analysis.leaderboard" = "Leaderboard";
+"analysis.overview" = "Overview";
+

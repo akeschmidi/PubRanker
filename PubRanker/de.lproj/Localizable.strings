@@ -228,3 +228,118 @@
 "csv.color" = "Farbe";
 "csv.detailedScores" = "DETAILLIERTE PUNKTZAHLEN";
 "csv.total" = "Gesamt";
+
+// MARK: - Workflow Phases (v1.5)
+"workflow.planning" = "Planen";
+"workflow.planning.description" = "Quiz vorbereiten und planen";
+"workflow.execution" = "Durchführen";
+"workflow.execution.description" = "Aktive Quiz durchführen";
+"workflow.analysis" = "Auswerten";
+"workflow.analysis.description" = "Quiz auswerten und exportieren";
+
+// MARK: - Planning View (v1.5)
+"planning.welcome.title" = "Bereit für dein erstes Quiz?";
+"planning.welcome.subtitle" = "Plane und organisiere dein Pub Quiz ganz einfach";
+"planning.createButton.title" = "Neues Quiz erstellen";
+"planning.createButton.subtitle" = "Starte mit der Planung";
+"planning.plannedQuizzes" = "Geplante Quiz (%d)";
+"planning.startQuiz" = "Quiz starten";
+"planning.teams.add" = "Teams hinzufügen";
+"planning.rounds.add" = "Runden definieren";
+
+// MARK: - Execution View (v1.5)
+"execution.title" = "Live Quiz";
+"execution.tab.leaderboard" = "Rangliste";
+"execution.tab.scoring" = "Punkte eingeben";
+"execution.tab.overview" = "Übersicht";
+"execution.activeQuizzes" = "Aktive Quiz (%d)";
+"execution.live" = "LIVE";
+"execution.noRound.description" = "Alle Runden sind abgeschlossen oder es gibt noch keine Runden.";
+
+// MARK: - Analysis View (v1.5)
+"analysis.title" = "Quiz Auswerten";
+"analysis.subtitle" = "Ergebnisse analysieren";
+"analysis.activeQuizzes" = "Aktive Quiz (%d)";
+"analysis.completedQuizzes" = "Abgeschlossene Quiz (%d)";
+"analysis.winnerPodium" = "Siegertreppchen";
+"analysis.currentLeadership" = "Aktuelle Führung";
+"analysis.interim" = "(Zwischenstand)";
+"analysis.liveRunning" = "Live - läuft gerade";
+"analysis.interimAfterRounds" = "Zwischenstand nach %d von %d Runden";
+"analysis.exportResults" = "Ergebnisse exportieren";
+"analysis.fullResults" = "Vollständige Ergebnisse";
+"analysis.roundBreakdown" = "Runden-Übersicht";
+"analysis.topScorer" = "Top-Scorer";
+
+// MARK: - Score Entry View (v1.5)
+"scoreEntry.title" = "Punkte eingeben (max. %d pro Team)";
+"scoreEntry.reset" = "Zurücksetzen";
+"scoreEntry.saved.title" = "Punkte gespeichert! ✅";
+"scoreEntry.saved.message" = "Die Punkte für %@ wurden erfolgreich gespeichert.";
+"scoreEntry.nextRound" = "Weiter zur nächsten Runde";
+"scoreEntry.completeRound" = "Runde abschließen";
+"scoreEntry.roundCompleted" = "Diese Runde ist abgeschlossen";
+"scoreEntry.currentScore" = "Aktuell: %d Punkte";
+
+// MARK: - Statistics (v1.5)
+"stats.participants" = "Teilnehmer";
+"stats.highestScore" = "Höchste Punktzahl";
+"stats.averageScore" = "Durchschnitt";
+"stats.maxPoints" = "Max-Punkte";
+
+// MARK: - Planning View (v2.0)
+"planning.title" = "Quiz Planen";
+"planning.subtitle" = "Bereite deine Quiz vor";
+"planning.noQuizzes" = "Keine geplanten Quiz";
+"planning.noQuizzes.description" = "Erstelle dein erstes Quiz";
+"planning.plannedQuizzes" = "Geplante Quiz (%d)";
+"planning.delete" = "Löschen";
+"planning.edit" = "Bearbeiten";
+"planning.start" = "Quiz starten";
+"planning.delete.confirm" = "Möchtest du '%@' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"planning.ready" = "Bereit für dein erstes Quiz?";
+"planning.ready.description" = "Plane und organisiere dein Pub Quiz ganz einfach";
+"planning.create" = "Neues Quiz erstellen";
+"planning.create.subtitle" = "Starte mit der Planung";
+
+// MARK: - Edit Quiz Sheet (v2.0)
+"edit.title" = "Quiz bearbeiten";
+"edit.details" = "Quiz-Details";
+"edit.statistics" = "Statistiken";
+"edit.status" = "Status";
+"edit.active" = "Aktiv";
+"edit.planned" = "Geplant";
+"edit.completed" = "Abgeschlossen";
+"edit.preparation" = "Vorbereitung";
+"edit.teams" = "Teams";
+"edit.rounds" = "Runden";
+"edit.maxPoints" = "Max. Punkte";
+"edit.overview" = "Übersicht";
+
+// MARK: - Team Management (v2.0)
+"teams.manage" = "Teams verwalten";
+"teams.none" = "Keine Teams";
+"teams.none.description" = "Füge Teams hinzu, um mit dem Quiz zu starten";
+"teams.add.first" = "Erstes Team hinzufügen";
+"teams.colorPicker" = "Farbe wählen";
+"teams.rank" = "Rang %d";
+"teams.points" = "Punkte";
+
+// MARK: - Round Management (v2.0)
+"rounds.manage" = "Runden verwalten";
+"rounds.none" = "Keine Runden";
+"rounds.none.description" = "Füge Runden hinzu, um Punkte zu vergeben";
+"rounds.add.first" = "Erste Runde hinzufügen";
+"rounds.preparation" = "Vorbereitung";
+"rounds.active" = "Aktiv";
+"rounds.completed" = "Abgeschlossen";
+"rounds.delete.confirm" = "Möchtest du '%@' wirklich löschen?";
+"rounds.maxPoints" = "Max. %d Punkte";
+"rounds.points" = "Punkte";
+"rounds.editName" = "Namen bearbeiten";
+"rounds.editPoints" = "Punkte bearbeiten";
+"rounds.savePoints" = "Punkte speichern";
+
+// MARK: - Analysis View (v2.0)
+"analysis.leaderboard" = "Rangliste";
+"analysis.overview" = "Übersicht";

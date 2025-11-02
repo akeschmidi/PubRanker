@@ -11,14 +11,14 @@ import AppKit
 struct QuizDetailView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    @State private var selectedTab: DetailTab = .leaderboard
+    @State private var selectedTab: DetailTab = .overview
     @State private var showingTeamWizard = false
     @State private var showingRoundWizard = false
     @State private var showingSetupDialog = false
     @State private var hasCheckedInitialSetup = false
     
     enum DetailTab: String, CaseIterable, Identifiable {
-        case leaderboard = "Rangliste"
+        case overview = "Übersicht"
         case rounds = "Runden"
         case teams = "Teams"
         
@@ -26,7 +26,7 @@ struct QuizDetailView: View {
         
         var icon: String {
             switch self {
-            case .leaderboard: return "trophy.fill"
+            case .overview: return "trophy.fill"
             case .rounds: return "list.number"
             case .teams: return "person.3.fill"
             }
@@ -43,7 +43,7 @@ struct QuizDetailView: View {
             // Content based on selected tab
             Group {
                 switch selectedTab {
-                case .leaderboard:
+                case .overview:
                     LeaderboardView(quiz: quiz, viewModel: viewModel)
                 case .rounds:
                     RoundManagementView(quiz: quiz, viewModel: viewModel)

@@ -17,6 +17,8 @@ struct AnalysisView: View {
     @State private var selectedQuiz: Quiz?
     @State private var showingExportDialog = false
     @State private var exportedFileURL: URL?
+    @State private var quizToDelete: Quiz?
+    @State private var showingDeleteConfirmation = false
     
     var completedQuizzes: [Quiz] {
         analyzableQuizzes.filter { $0.isCompleted }
@@ -44,6 +46,18 @@ struct AnalysisView: View {
                     selectedQuiz = activeQuizzes.first
                 } else if !completedQuizzes.isEmpty {
                     selectedQuiz = completedQuizzes.first
+                }
+            }
+        }
+        .onChange(of: analyzableQuizzes) { oldValue, newValue in
+            // Wenn das aktuell ausgewählte Quiz gelöscht wurde
+            if let selected = selectedQuiz, !newValue.contains(where: { $0.id == selected.id }) {
+                if !activeQuizzes.isEmpty {
+                    selectedQuiz = activeQuizzes.first
+                } else if !completedQuizzes.isEmpty {
+                    selectedQuiz = completedQuizzes.first
+                } else {
+                    selectedQuiz = nil
                 }
             }
         }
@@ -80,6 +94,22 @@ struct AnalysisView: View {
                             ForEach(activeQuizzes) { quiz in
                                 ActiveQuizRowAnalysis(quiz: quiz)
                                     .tag(quiz)
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            quizToDelete = quiz
+                                            showingDeleteConfirmation = true
+                                        } label: {
+                                            Label(NSLocalizedString("navigation.delete", comment: "Delete"), systemImage: "trash")
+                                        }
+                                    }
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button(role: .destructive) {
+                                            quizToDelete = quiz
+                                            showingDeleteConfirmation = true
+                                        } label: {
+                                            Label(NSLocalizedString("navigation.delete", comment: "Delete"), systemImage: "trash")
+                                        }
+                                    }
                             }
                         }
                     }
@@ -89,6 +119,22 @@ struct AnalysisView: View {
                             ForEach(completedQuizzes) { quiz in
                                 CompletedQuizRow(quiz: quiz)
                                     .tag(quiz)
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            quizToDelete = quiz
+                                            showingDeleteConfirmation = true
+                                        } label: {
+                                            Label(NSLocalizedString("navigation.delete", comment: "Delete"), systemImage: "trash")
+                                        }
+                                    }
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button(role: .destructive) {
+                                            quizToDelete = quiz
+                                            showingDeleteConfirmation = true
+                                        } label: {
+                                            Label(NSLocalizedString("navigation.delete", comment: "Delete"), systemImage: "trash")
+                                        }
+                                    }
                             }
                         }
                     }
@@ -114,6 +160,33 @@ struct AnalysisView: View {
                 Text(String(format: NSLocalizedString("export.success.message", comment: "Export success message"), fileURL.lastPathComponent))
             }
         }
+        .alert(
+            NSLocalizedString("quiz.delete.confirm", comment: "Delete quiz confirmation"),
+            isPresented: $showingDeleteConfirmation,
+            presenting: quizToDelete
+        ) { quiz in
+            Button(NSLocalizedString("navigation.cancel", comment: "Cancel"), role: .cancel) {
+                quizToDelete = nil
+            }
+            Button(NSLocalizedString("navigation.delete", comment: "Delete"), role: .destructive) {
+                deleteQuiz(quiz)
+            }
+        } message: { quiz in
+            Text(String(format: NSLocalizedString("quiz.delete.message", comment: "Delete quiz message"), quiz.name))
+        }
+    }
+    
+    private func deleteQuiz(_ quiz: Quiz) {
+        // Wenn das zu löschende Quiz aktuell ausgewählt ist, deselektiere es
+        if selectedQuiz?.id == quiz.id {
+            selectedQuiz = nil
+        }
+        
+        // Lösche das Quiz aus dem ModelContext
+        modelContext.delete(quiz)
+        
+        // Setze den State zurück
+        quizToDelete = nil
     }
     
     private func analysisDetailView(for quiz: Quiz) -> some View {
@@ -350,53 +423,125 @@ struct AnalysisView: View {
     
     private func fullResultsSection(_ quiz: Quiz) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Vollständige Ergebnisse")
-                .font(.title2)
-                .bold()
-                .padding(.horizontal)
+            HStack {
+                Image(systemName: "list.number")
+                    .font(.title2)
+                    .foregroundStyle(.blue)
+                Text("Rangliste")
+                    .font(.title2)
+                    .bold()
+            }
+            .padding(.horizontal)
             
-            LazyVStack(spacing: 8) {
+            LazyVStack(spacing: 12) {
                 ForEach(Array(quiz.sortedTeamsByScore.enumerated()), id: \.element.id) { index, team in
-                    resultRow(team: team, rank: index + 1)
+                    modernResultCard(team: team, rank: index + 1, quiz: quiz)
                 }
             }
             .padding(.horizontal)
         }
     }
     
-    private func resultRow(team: Team, rank: Int) -> some View {
-        HStack {
-            // Rank
-            Text("#\(rank)")
-                .font(.title3)
-                .bold()
-                .frame(width: 50)
-                .foregroundStyle(rank <= 3 ? rankColor(rank) : .secondary)
+    private func modernResultCard(team: Team, rank: Int, quiz: Quiz) -> some View {
+        HStack(spacing: 0) {
+            // Rang Badge
+            ZStack {
+                if rank <= 3 {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [rankColor(rank), rankColor(rank).opacity(0.7)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 60, height: 60)
+                        .shadow(color: rankColor(rank).opacity(0.4), radius: 6)
+                    
+                    VStack(spacing: 2) {
+                        if rank == 1 {
+                            Image(systemName: "crown.fill")
+                                .font(.title3)
+                                .foregroundStyle(.white)
+                        } else {
+                            Text("\(rank)")
+                                .font(.title2)
+                                .bold()
+                                .foregroundStyle(.white)
+                        }
+                    }
+                } else {
+                    Circle()
+                        .fill(Color(nsColor: .controlBackgroundColor))
+                        .frame(width: 50, height: 50)
+                    
+                    Text("\(rank)")
+                        .font(.title3)
+                        .bold()
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.trailing, 16)
             
-            // Team Color
-            Circle()
-                .fill(Color(hex: team.color) ?? .blue)
-                .frame(width: 12, height: 12)
-            
-            // Team Name
-            Text(team.name)
-                .font(.headline)
-            
-            Spacer()
-            
-            // Total Score
-            Text("\(team.totalScore)")
-                .font(.title2)
-                .bold()
-                .foregroundStyle(rank <= 3 ? rankColor(rank) : .primary)
-            
-            Text("Punkte")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            // Team Info
+            HStack(spacing: 12) {
+                // Team Farbe mit Shadow
+                Circle()
+                    .fill(Color(hex: team.color) ?? .blue)
+                    .frame(width: 32, height: 32)
+                    .shadow(color: Color(hex: team.color)?.opacity(0.4) ?? .clear, radius: 4)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(team.name)
+                        .font(.headline)
+                    
+                    // Fortschrittsbalken relativ zur höchsten Punktzahl
+                    if quiz.safeTeams.count > 1, let maxScore = quiz.sortedTeamsByScore.first?.totalScore, maxScore > 0 {
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {   
+                                // Hintergrund
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.gray.opacity(0.2))
+                                    .frame(height: 6)
+                                
+                                // Fortschritt
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color(hex: team.color) ?? .blue)
+                                    .frame(width: geometry.size.width * CGFloat(team.totalScore) / CGFloat(maxScore), height: 6)
+                            }
+                        }
+                        .frame(height: 6)
+                    }
+                }
+                
+                Spacer()
+                
+                // Punkte Display
+                VStack(spacing: 4) {
+                    Text("\(team.totalScore)")
+                        .font(.system(size: 32, weight: .bold))
+                        .monospacedDigit()
+                        .foregroundStyle(rank <= 3 ? rankColor(rank) : .primary)
+                    
+                    Text("Punkte")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase)
+                }
+                .padding(.horizontal, 12)
+            }
+            .padding(.vertical, 12)
+            .padding(.trailing, 16)
         }
-        .padding()
-        .background(rank <= 3 ? rankColor(rank).opacity(0.1) : Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.leading, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(rank <= 3 ? rankColor(rank).opacity(0.08) : Color(nsColor: .controlBackgroundColor).opacity(0.5))
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(rank <= 3 ? rankColor(rank).opacity(0.3) : Color.gray.opacity(0.2), lineWidth: 2)
+        }
     }
     
     private func rankColor(_ rank: Int) -> Color {

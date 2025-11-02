@@ -222,9 +222,125 @@
 "csv.yes" = "Yes";
 "csv.no" = "No";
 "csv.finalRanking" = "FINAL RANKING";
-"csv.rank" = "Rank";
-"csv.team" = "Team";
-"csv.totalScore" = "Total Score";
-"csv.color" = "Color";
-"csv.detailedScores" = "DETAILED SCORES";
-"csv.total" = "Total";
+"csv.rank" = "순위";
+"csv.team" = "팀";
+"csv.totalScore" = "총 점수";
+"csv.color" = "색상";
+"csv.detailedScores" = "상세 점수";
+"csv.total" = "총계";
+
+// MARK: - Workflow Phases (v1.5)
+"workflow.planning" = "계획";
+"workflow.planning.description" = "퀴즈 준비 및 계획";
+"workflow.execution" = "실행";
+"workflow.execution.description" = "활성 퀴즈 관리";
+"workflow.analysis" = "분석";
+"workflow.analysis.description" = "퀴즈 분석 및 내보내기";
+
+// MARK: - Planning View (v1.5)
+"planning.welcome.title" = "첫 퀴즈를 준비하셨나요?";
+"planning.welcome.subtitle" = "퍼브 퀴즈를 쉽게 계획하고 정리하세요";
+"planning.createButton.title" = "새 퀴즈 만들기";
+"planning.createButton.subtitle" = "계획 시작";
+"planning.plannedQuizzes" = "계획된 퀴즈 (%d)";
+"planning.startQuiz" = "퀴즈 시작";
+"planning.teams.add" = "팀 추가";
+"planning.rounds.add" = "라운드 정의";
+
+// MARK: - Execution View (v1.5)
+"execution.title" = "라이브 퀴즈";
+"execution.tab.leaderboard" = "리더보드";
+"execution.tab.scoring" = "점수 입력";
+"execution.tab.overview" = "개요";
+"execution.activeQuizzes" = "활성 퀴즈 (%d)";
+"execution.live" = "라이브";
+"execution.noRound.description" = "모든 라운드가 종료되었거나 아직 라운드가 없습니다.";
+
+// MARK: - Analysis View (v1.5)
+"analysis.title" = "퀴즈 분석";
+"analysis.subtitle" = "결과 분석";
+"analysis.activeQuizzes" = "활성 퀴즈 (%d)";
+"analysis.completedQuizzes" = "완료된 퀴즈 (%d)";
+"analysis.winnerPodium" = "우승자 시상대";
+"analysis.currentLeadership" = "현재 리드";
+"analysis.interim" = "(잠정)";
+"analysis.liveRunning" = "라이브 - 진행 중";
+"analysis.interimAfterRounds" = "%d 라운드 중 %d 라운드 후 잠정";
+"analysis.exportResults" = "결과 내보내기";
+"analysis.fullResults" = "전체 결과";
+"analysis.roundBreakdown" = "라운드 개요";
+"analysis.topScorer" = "최고 득점자";
+
+// MARK: - Score Entry View (v1.5)
+"scoreEntry.title" = "점수 입력 (팀당 최대 %d)";
+"scoreEntry.reset" = "초기화";
+"scoreEntry.saved.title" = "점수가 저장되었습니다! ✅";
+"scoreEntry.saved.message" = "%@의 점수가 성공적으로 저장되었습니다.";
+"scoreEntry.nextRound" = "다음 라운드로 계속";
+"scoreEntry.completeRound" = "라운드 완료";
+"scoreEntry.roundCompleted" = "이 라운드는 완료되었습니다";
+"scoreEntry.currentScore" = "현재: %d 포인트";
+
+// MARK: - Statistics (v1.5)
+"stats.participants" = "참가자";
+"stats.highestScore" = "최고 점수";
+"stats.averageScore" = "평균";
+"stats.maxPoints" = "최대 포인트";
+
+// MARK: - Planning View (v2.0)
+"planning.title" = "Plan Quiz";
+"planning.subtitle" = "Prepare your quiz";
+"planning.noQuizzes" = "No planned quizzes";
+"planning.noQuizzes.description" = "Create your first quiz";
+"planning.plannedQuizzes" = "Planned Quizzes (%d)";
+"planning.delete" = "Delete";
+"planning.edit" = "Edit";
+"planning.start" = "Start Quiz";
+"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
+"planning.ready" = "Ready for your first quiz?";
+"planning.ready.description" = "Plan and organize your pub quiz easily";
+"planning.create" = "Create New Quiz";
+"planning.create.subtitle" = "Start planning";
+
+// MARK: - Edit Quiz Sheet (v2.0)
+"edit.title" = "Edit Quiz";
+"edit.details" = "Quiz Details";
+"edit.statistics" = "Statistics";
+"edit.status" = "Status";
+"edit.active" = "Active";
+"edit.planned" = "Planned";
+"edit.completed" = "Completed";
+"edit.preparation" = "Preparation";
+"edit.teams" = "Teams";
+"edit.rounds" = "Rounds";
+"edit.maxPoints" = "Max Points";
+"edit.overview" = "Overview";
+
+// MARK: - Team Management (v2.0)
+"teams.manage" = "Manage Teams";
+"teams.none" = "No Teams";
+"teams.none.description" = "Add teams to start the quiz";
+"teams.add.first" = "Add First Team";
+"teams.colorPicker" = "Choose Color";
+"teams.rank" = "Rank %d";
+"teams.points" = "Points";
+
+// MARK: - Round Management (v2.0)
+"rounds.manage" = "Manage Rounds";
+"rounds.none" = "No Rounds";
+"rounds.none.description" = "Add rounds to award points";
+"rounds.add.first" = "Add First Round";
+"rounds.preparation" = "Preparation";
+"rounds.active" = "Active";
+"rounds.completed" = "Completed";
+"rounds.delete.confirm" = "Do you really want to delete '%@'?";
+"rounds.maxPoints" = "Max %d Points";
+"rounds.points" = "Points";
+"rounds.editName" = "Edit Name";
+"rounds.editPoints" = "Edit Points";
+"rounds.savePoints" = "Save Points";
+
+// MARK: - Analysis View (v2.0)
+"analysis.leaderboard" = "Leaderboard";
+"analysis.overview" = "Overview";
+

@@ -15,20 +15,18 @@ struct ExecutionView: View {
     @Bindable var viewModel: QuizViewModel
     @Binding var selectedWorkflow: ContentView.WorkflowPhase
     @State private var selectedQuiz: Quiz?
-    @State private var selectedTab: ExecutionTab = .leaderboard
+    @State private var selectedTab: ExecutionTab = .overview
     
     enum ExecutionTab: String, CaseIterable, Identifiable {
-        case leaderboard = "Rangliste"
-        case scoring = "Punkte eingeben"
         case overview = "Übersicht"
+        case scoring = "Punkte eingeben"
         
         var id: String { rawValue }
         
         var icon: String {
             switch self {
-            case .leaderboard: return "trophy.fill"
-            case .scoring: return "pencil.circle.fill"
             case .overview: return "chart.bar.fill"
+            case .scoring: return "pencil.circle.fill"
             }
         }
     }
@@ -59,6 +57,12 @@ struct ExecutionView: View {
                 if !activeQuizzes.isEmpty {
                     selectedQuiz = activeQuizzes.first
                 }
+            }
+        }
+        .onChange(of: activeQuizzes) { oldValue, newValue in
+            // Wenn das aktuell ausgewählte Quiz gelöscht wurde
+            if let selected = selectedQuiz, !newValue.contains(where: { $0.id == selected.id }) {
+                selectedQuiz = newValue.first
             }
         }
     }
@@ -137,8 +141,8 @@ struct ExecutionView: View {
             // Tab Content
             Group {
                 switch selectedTab {
-                case .leaderboard:
-                    LeaderboardView(quiz: quiz, viewModel: viewModel)
+                case .overview:
+                    liveOverview(quiz)
                 case .scoring:
                     if let currentRound = quiz.currentRound {
                         ScoreEntryView(round: currentRound, quiz: quiz, viewModel: viewModel)
@@ -149,8 +153,6 @@ struct ExecutionView: View {
                             description: Text("Alle Runden sind abgeschlossen oder es gibt noch keine Runden.")
                         )
                     }
-                case .overview:
-                    liveOverview(quiz)
                 }
             }
         }

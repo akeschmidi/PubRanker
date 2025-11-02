@@ -44,195 +44,118 @@ struct RoundManagementView: View {
     private var contentArea: some View {
         Group {
             if quiz.safeRounds.isEmpty || quiz.safeTeams.isEmpty {
-                    VStack(spacing: 20) {
-                        if quiz.safeTeams.isEmpty {
-                            emptyTeamsView
-                        } else {
-                            emptyRoundsView
-                        }
+                VStack(spacing: 20) {
+                    if quiz.safeTeams.isEmpty {
+                        emptyTeamsView
+                    } else {
+                        emptyRoundsView
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    ScrollView([.horizontal, .vertical]) {
-                        VStack(alignment: .leading, spacing: 0) {
-                            // Header Row
-                            HStack(spacing: 0) {
-                            // Team Column Header
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Team")
-                                    .font(.title3)
-                                    .bold()
-                                Text("\(quiz.safeTeams.count) Teams")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(width: 220, alignment: .leading)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .controlBackgroundColor).opacity(0.8)],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
-                            
-                            // Round Column Headers
-                            ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
-                                VStack(spacing: 6) {
-                                    HStack(spacing: 6) {
-                                        Text("R\(index + 1)")
-                                            .font(.caption)
-                                            .bold()
-                                            .foregroundStyle(.white)
-                                            .padding(.horizontal, 6)
-                                            .padding(.vertical, 2)
-                                            .background(getRoundStatusColor(for: round))
-                                            .clipShape(Capsule())
-                                        
-                                        if round.isCompleted {
-                                            Image(systemName: "checkmark.circle.fill")
-                                                .font(.caption)
-                                                .foregroundStyle(.green)
-                                        } else if quiz.currentRound?.id == round.id {
-                                            Image(systemName: "circle.fill")
-                                                .font(.caption)
-                                                .foregroundStyle(.orange)
-                                        }
-                                    }
-                                    
-                                    // Score completion indicator
-                                    RoundCompletionIndicator(quiz: quiz, round: round)
-                                    
-                                    Text(round.name)
-                                        .font(.system(size: 16, weight: .bold))
-                                        .lineLimit(2)
-                                        .multilineTextAlignment(.center)
-                                    
-                                    Text(String(format: NSLocalizedString("common.points.max", comment: "Max points"), round.maxPoints))
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 2)
-                                        .background(Color.secondary.opacity(0.1))
-                                        .clipShape(Capsule())
-                                }
-                                .frame(width: 140)
-                                .padding(.vertical, 12)
-                                .background(
-                                    LinearGradient(
-                                        colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .controlBackgroundColor).opacity(0.8)],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .overlay {
-                                    Rectangle()
-                                        .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-                                }
-                            }
-                            
-                            // Total Column Header
-                            VStack(spacing: 4) {
-                                Image(systemName: "trophy.fill")
-                                    .font(.title3)
-                                    .foregroundStyle(.yellow)
-                                Text("Gesamt")
-                                    .font(.title3)
-                                    .bold()
-                            }
-                            .frame(width: 120)
-                            .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.yellow.opacity(0.15), Color.orange.opacity(0.1)],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
-                        }
-                        
-                        Divider()
-                        
-                        // Team Rows
-                        ForEach(Array(quiz.safeTeams.enumerated()), id: \.element.id) { index, team in
-                            HStack(spacing: 0) {
-                                // Team Name
-                                HStack(spacing: 12) {
-                                    Circle()
-                                        .fill(Color(hex: team.color) ?? .blue)
-                                        .frame(width: 16, height: 16)
-                                        .shadow(color: Color(hex: team.color)?.opacity(0.3) ?? .clear, radius: 3)
-                                    
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(team.name)
-                                            .font(.system(size: 17, weight: .semibold))
-                                        Text("Rang: \(viewModel.getTeamRank(for: team, in: quiz))")
-                                            .font(.caption2)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                }
-                                .frame(width: 220, alignment: .leading)
-                                .padding(.vertical, 16)
-                                .padding(.horizontal, 12)
-                                .background(
-                                    index % 2 == 0
-                                        ? Color(nsColor: .controlBackgroundColor).opacity(0.3)
-                                        : Color.clear
-                                )
-                                
-                                // Score Cells
-                                ForEach(quiz.sortedRounds) { round in
-                                    ScoreCell(
-                                        team: team,
-                                        round: round,
-                                        viewModel: viewModel,
-                                        isEditing: editingCell == "\(team.id)-\(round.id)",
-                                        onTap: {
-                                            editingCell = "\(team.id)-\(round.id)"
-                                        },
-                                        onDismiss: {
-                                            editingCell = nil
-                                        }
-                                    )
-                                    .frame(width: 140)
-                                    .background(
-                                        index % 2 == 0
-                                            ? Color(nsColor: .controlBackgroundColor).opacity(0.3)
-                                            : Color.clear
-                                    )
-                                }
-                                
-                                // Total Score
-                                VStack(spacing: 4) {
-                                    Text("\(team.totalScore)")
-                                        .font(.system(size: 32, weight: .bold))
-                                        .monospacedDigit()
-                                        .foregroundStyle(.primary)
-                                    
-                                    Text(NSLocalizedString("common.points", comment: "Points"))
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                        .textCase(.uppercase)
-                                }
-                                .frame(width: 120)
-                                .padding(.vertical, 12)
-                                .background(
-                                    index % 2 == 0
-                                        ? Color.yellow.opacity(0.08)
-                                        : Color.yellow.opacity(0.05)
-                                )
-                            }
-                            .overlay {
-                                Rectangle()
-                                    .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
-                            }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                // Einfache Rundenliste - KEINE Punkteeingabe mehr!
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
+                            roundListCard(round: round, index: index)
                         }
                     }
                     .padding()
                 }
             }
-        } // schließt Group
-    } // schließt contentArea
+        }
+    }
+    
+    // MARK: - Round List Card
+    
+    private func roundListCard(round: Round, index: Int) -> some View {
+        HStack(spacing: 16) {
+            // Runden-Nummer und Status
+            VStack(spacing: 4) {
+                Text("R\(index + 1)")
+                    .font(.caption)
+                    .bold()
+                    .foregroundStyle(.white)
+                    .frame(width: 32, height: 32)
+                    .background(getRoundStatusColor(for: round))
+                    .clipShape(Circle())
+                
+                if round.isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.green)
+                } else if quiz.isActive && quiz.currentRound?.id == round.id {
+                    Image(systemName: "circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .symbolEffect(.pulse)
+                }
+            }
+            
+            // Runden-Info
+            VStack(alignment: .leading, spacing: 6) {
+                Text(round.name)
+                    .font(.headline)
+                    .bold()
+                
+                HStack(spacing: 12) {
+                    Label("\(round.maxPoints) Pkt", systemImage: "star.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    
+                    if round.isCompleted {
+                        Label("Abgeschlossen", systemImage: "checkmark.circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.green)
+                    } else if quiz.isActive && quiz.currentRound?.id == round.id {
+                        Label("Aktiv", systemImage: "circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    } else {
+                        Label("Vorbereitung", systemImage: "hourglass")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            
+            Spacer()
+            
+            // Fortschrittsanzeige
+            if quiz.isActive {
+                let completedTeams = quiz.safeTeams.filter { $0.hasScore(for: round) }.count
+                let totalTeams = quiz.safeTeams.count
+                
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(completedTeams)/\(totalTeams)")
+                        .font(.title3)
+                        .bold()
+                        .monospacedDigit()
+                    
+                    Text("Teams")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            
+            // Bearbeiten-Button
+            Button {
+                selectedRound = round
+            } label: {
+                Image(systemName: "pencil.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.blue)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding()
+        .background(Color(nsColor: .controlBackgroundColor))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+        }
+    }
     
     // MARK: - Toolbar
     
@@ -274,7 +197,7 @@ struct RoundManagementView: View {
     private func getRoundStatusColor(for round: Round) -> Color {
         if round.isCompleted {
             return .green
-        } else if quiz.currentRound?.id == round.id {
+        } else if quiz.isActive && quiz.currentRound?.id == round.id {
             return .orange
         } else {
             return .gray

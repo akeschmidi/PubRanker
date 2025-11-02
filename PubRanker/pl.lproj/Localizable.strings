@@ -227,4 +227,120 @@
 "csv.totalScore" = "Wynik Całkowity";
 "csv.color" = "Kolor";
 "csv.detailedScores" = "SZCZEGÓŁOWE WYNIKI";
-"csv.total" = "Razem";
+"csv.total" = "Całkowity";
+
+// MARK: - Workflow Phases (v1.5)
+"workflow.planning" = "Planowanie";
+"workflow.planning.description" = "Przygotuj i zaplanuj quiz";
+"workflow.execution" = "Wykonanie";
+"workflow.execution.description" = "Zarządzaj aktywnymi quizami";
+"workflow.analysis" = "Analiza";
+"workflow.analysis.description" = "Analizuj i eksportuj quiz";
+
+// MARK: - Planning View (v1.5)
+"planning.welcome.title" = "Gotowy na swój pierwszy quiz?";
+"planning.welcome.subtitle" = "Zaplanuj i zorganizuj swój pubquiz z łatwością";
+"planning.createButton.title" = "Utwórz nowy quiz";
+"planning.createButton.subtitle" = "Zacznij planować";
+"planning.plannedQuizzes" = "Zaplanowane quizy (%d)";
+"planning.startQuiz" = "Rozpocznij quiz";
+"planning.teams.add" = "Dodaj zespoły";
+"planning.rounds.add" = "Zdefiniuj rundy";
+
+// MARK: - Execution View (v1.5)
+"execution.title" = "Quiz na żywo";
+"execution.tab.leaderboard" = "Ranking";
+"execution.tab.scoring" = "Wprowadź punkty";
+"execution.tab.overview" = "Przegląd";
+"execution.activeQuizzes" = "Aktywne quizy (%d)";
+"execution.live" = "NA ŻYWO";
+"execution.noRound.description" = "Wszystkie rundy zakończone lub brak rund.";
+
+// MARK: - Analysis View (v1.5)
+"analysis.title" = "Analizuj quiz";
+"analysis.subtitle" = "Analizuj wyniki";
+"analysis.activeQuizzes" = "Aktywne quizy (%d)";
+"analysis.completedQuizzes" = "Zakończone quizy (%d)";
+"analysis.winnerPodium" = "Podium zwycięzców";
+"analysis.currentLeadership" = "Obecne prowadzenie";
+"analysis.interim" = "(Tymczasowy)";
+"analysis.liveRunning" = "Na żywo - trwa";
+"analysis.interimAfterRounds" = "Tymczasowy po %d z %d rund";
+"analysis.exportResults" = "Eksportuj wyniki";
+"analysis.fullResults" = "Pełne wyniki";
+"analysis.roundBreakdown" = "Przegląd rund";
+"analysis.topScorer" = "Najlepszy strzelec";
+
+// MARK: - Score Entry View (v1.5)
+"scoreEntry.title" = "Wprowadź punkty (maks. %d na zespół)";
+"scoreEntry.reset" = "Resetuj";
+"scoreEntry.saved.title" = "Punkty zapisane! ✅";
+"scoreEntry.saved.message" = "Punkty dla %@ zostały zapisane.";
+"scoreEntry.nextRound" = "Kontynuuj do następnej rundy";
+"scoreEntry.completeRound" = "Zakończ rundę";
+"scoreEntry.roundCompleted" = "Ta runda jest zakończona";
+"scoreEntry.currentScore" = "Bieżący: %d punktów";
+
+// MARK: - Statistics (v1.5)
+"stats.participants" = "Uczestnicy";
+"stats.highestScore" = "Najwyższy wynik";
+"stats.averageScore" = "Średnia";
+"stats.maxPoints" = "Maks punkty";
+
+// MARK: - Planning View (v2.0)
+"planning.title" = "Plan Quiz";
+"planning.subtitle" = "Prepare your quiz";
+"planning.noQuizzes" = "No planned quizzes";
+"planning.noQuizzes.description" = "Create your first quiz";
+"planning.plannedQuizzes" = "Planned Quizzes (%d)";
+"planning.delete" = "Delete";
+"planning.edit" = "Edit";
+"planning.start" = "Start Quiz";
+"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
+"planning.ready" = "Ready for your first quiz?";
+"planning.ready.description" = "Plan and organize your pub quiz easily";
+"planning.create" = "Create New Quiz";
+"planning.create.subtitle" = "Start planning";
+
+// MARK: - Edit Quiz Sheet (v2.0)
+"edit.title" = "Edit Quiz";
+"edit.details" = "Quiz Details";
+"edit.statistics" = "Statistics";
+"edit.status" = "Status";
+"edit.active" = "Active";
+"edit.planned" = "Planned";
+"edit.completed" = "Completed";
+"edit.preparation" = "Preparation";
+"edit.teams" = "Teams";
+"edit.rounds" = "Rounds";
+"edit.maxPoints" = "Max Points";
+"edit.overview" = "Overview";
+
+// MARK: - Team Management (v2.0)
+"teams.manage" = "Manage Teams";
+"teams.none" = "No Teams";
+"teams.none.description" = "Add teams to start the quiz";
+"teams.add.first" = "Add First Team";
+"teams.colorPicker" = "Choose Color";
+"teams.rank" = "Rank %d";
+"teams.points" = "Points";
+
+// MARK: - Round Management (v2.0)
+"rounds.manage" = "Manage Rounds";
+"rounds.none" = "No Rounds";
+"rounds.none.description" = "Add rounds to award points";
+"rounds.add.first" = "Add First Round";
+"rounds.preparation" = "Preparation";
+"rounds.active" = "Active";
+"rounds.completed" = "Completed";
+"rounds.delete.confirm" = "Do you really want to delete '%@'?";
+"rounds.maxPoints" = "Max %d Points";
+"rounds.points" = "Points";
+"rounds.editName" = "Edit Name";
+"rounds.editPoints" = "Edit Points";
+"rounds.savePoints" = "Save Points";
+
+// MARK: - Analysis View (v2.0)
+"analysis.leaderboard" = "Leaderboard";
+"analysis.overview" = "Overview";
+
