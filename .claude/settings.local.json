@@ -4,7 +4,8 @@
       "Bash(xcodebuild:*)",
       "Bash(open:*)",
       "Bash(PubRanker/Views/PresentationModeView.swift.tmp)",
-      "Bash(temp.swift)"
+      "Bash(temp.swift)",
+      "Bash(1)"
     ],
     "deny": [],
     "ask": []
