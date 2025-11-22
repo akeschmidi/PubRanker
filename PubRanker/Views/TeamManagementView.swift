@@ -67,26 +67,6 @@ struct TeamManagementView: View {
                 }
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
-                        showingTeamWizard = true
-                    } label: {
-                        Label(NSLocalizedString("team.new.multiple.create", comment: "Create multiple teams"), systemImage: "person.3.fill")
-                    }
-                    
-                    Button {
-                        showingAddTeamSheet = true
-                    } label: {
-                        Label(NSLocalizedString("team.new.single.add", comment: "Add single team"), systemImage: "plus.circle")
-                    }
-                } label: {
-                    Label(NSLocalizedString("team.add", comment: "Add team"), systemImage: "plus")
-                }
-                .help(NSLocalizedString("team.add.multiple", comment: "Add teams"))
-            }
-        }
         .sheet(isPresented: $showingAddTeamSheet) {
             AddTeamSheet(quiz: quiz, viewModel: viewModel)
         }
@@ -102,9 +82,15 @@ struct TeamRowView: View {
     @Bindable var viewModel: QuizViewModel
     @State private var isEditing = false
     @State private var editedName: String = ""
+    @State private var showingDetails = false
     
     var body: some View {
         HStack {
+            // Status indicator
+            Circle()
+                .fill(team.isConfirmed ? Color.green : Color.orange)
+                .frame(width: 8, height: 8)
+            
             Circle()
                 .fill(Color(hex: team.color) ?? .blue)
                 .frame(width: 12, height: 12)
@@ -115,16 +101,41 @@ struct TeamRowView: View {
                 })
                 .textFieldStyle(.roundedBorder)
             } else {
-                Text(team.name)
-                    .font(.body)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(team.name)
+                        .font(.body)
+                    
+                    if !team.contactPerson.isEmpty {
+                        Text(team.contactPerson)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             
             Spacer()
+            
+            // Confirmed badge
+            if team.isConfirmed {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                    .font(.caption)
+            }
             
             Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), team.totalScore))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             
+            // Details button
+            Button {
+                showingDetails = true
+            } label: {
+                Image(systemName: "info.circle")
+            }
+            .buttonStyle(.plain)
+            .help("Team-Details anzeigen")
+            
+            // Edit name button
             Button {
                 if isEditing {
                     saveChanges()
@@ -138,6 +149,9 @@ struct TeamRowView: View {
             .buttonStyle(.plain)
         }
         .padding(.vertical, 4)
+        .sheet(isPresented: $showingDetails) {
+            TeamDetailsSheet(team: team, viewModel: viewModel)
+        }
     }
     
     private func saveChanges() {
@@ -154,6 +168,9 @@ struct AddTeamSheet: View {
     @Bindable var viewModel: QuizViewModel
     @State private var teamName = ""
     @State private var selectedColor = "#007AFF"
+    @State private var contactPerson = ""
+    @State private var email = ""
+    @State private var isConfirmed = false
     
     let availableColors = [
         "#007AFF", "#FF3B30", "#34C759", "#FF9500",
@@ -190,6 +207,19 @@ struct AddTeamSheet: View {
                         }
                     }
                 }
+                
+                Section("Kontaktinformationen") {
+                    TextField("Kontaktperson", text: $contactPerson)
+                        .textContentType(.name)
+                    
+                    TextField("E-Mail", text: $email)
+                        .textContentType(.emailAddress)
+                }
+                
+                Section("Status") {
+                    Toggle("Bestätigt", isOn: $isConfirmed)
+                        .help("Team hat die Teilnahme bestätigt")
+                }
             }
             .navigationTitle("Team hinzufügen")
             .toolbar {
@@ -201,7 +231,7 @@ struct AddTeamSheet: View {
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Hinzufügen") {
-                        viewModel.addTeam(to: quiz, name: teamName, color: selectedColor)
+                        viewModel.addTeam(to: quiz, name: teamName, color: selectedColor, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed)
                         dismiss()
                     }
                     .disabled(teamName.isEmpty)
@@ -209,6 +239,62 @@ struct AddTeamSheet: View {
             }
         }
         .frame(minWidth: 400, minHeight: 300)
+    }
+}
+
+// MARK: - Team Details Sheet
+struct TeamDetailsSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Bindable var team: Team
+    @Bindable var viewModel: QuizViewModel
+    @State private var contactPerson: String = ""
+    @State private var email: String = ""
+    @State private var isConfirmed: Bool = false
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Team-Informationen") {
+                    Text(team.name)
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Section("Kontaktinformationen") {
+                    TextField("Kontaktperson", text: $contactPerson)
+                        .textContentType(.name)
+                    
+                    TextField("E-Mail", text: $email)
+                        .textContentType(.emailAddress)
+                }
+                
+                Section("Status") {
+                    Toggle("Bestätigt", isOn: $isConfirmed)
+                        .help("Team hat die Teilnahme bestätigt")
+                }
+            }
+            .navigationTitle("Team-Details")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Abbrechen") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Speichern") {
+                        viewModel.updateTeamDetails(team, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed)
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .frame(minWidth: 500, minHeight: 400)
+        .onAppear {
+            contactPerson = team.contactPerson
+            email = team.email
+            isConfirmed = team.isConfirmed
+        }
     }
 }
 

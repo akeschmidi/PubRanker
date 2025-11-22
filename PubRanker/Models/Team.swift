@@ -17,6 +17,11 @@ final class Team {
     var roundScores: [RoundScore] = []
     var createdAt: Date = Date()
     
+    // Team Details
+    var contactPerson: String = ""
+    var email: String = ""
+    var isConfirmed: Bool = false
+    
     @Relationship(deleteRule: .nullify, inverse: \Quiz.teams)
     var quiz: Quiz?
     
@@ -27,6 +32,9 @@ final class Team {
         self.totalScore = 0
         self.roundScores = []
         self.createdAt = Date()
+        self.contactPerson = ""
+        self.email = ""
+        self.isConfirmed = false
     }
     
     func addScore(for round: Round, points: Int) {

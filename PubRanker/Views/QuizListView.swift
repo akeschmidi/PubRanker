@@ -211,19 +211,141 @@ struct QuizRowView: View {
 struct NewQuizSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var viewModel: QuizViewModel
+
+    // Wizard State
+    @State private var currentStep: WizardStep = .details
+    @State private var createdQuiz: Quiz?
+
+    // Step 1: Quiz Details
     @State private var quizName = ""
     @State private var venue = ""
     @State private var date = Date()
     @FocusState private var focusedField: Field?
-    
+
+    // Step 2: Teams - use existing sheets
+    @State private var showingTeamWizard = false
+    @State private var showingAddTeam = false
+
+    // Step 3: Rounds - use existing sheets
+    @State private var showingRoundWizard = false
+    @State private var showingAddRound = false
+
+    enum WizardStep: Int, CaseIterable {
+        case details = 1
+        case teams = 2
+        case rounds = 3
+
+        var title: String {
+            switch self {
+            case .details: return "Quiz-Details"
+            case .teams: return "Teams hinzufügen"
+            case .rounds: return "Runden definieren"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .details: return "sparkles"
+            case .teams: return "person.3.fill"
+            case .rounds: return "list.number"
+            }
+        }
+    }
+
     enum Field {
         case name, venue
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
-            // Header
-            VStack(spacing: 16) {
+            // Progress Header
+            progressHeader
+
+            // Content for current step
+            switch currentStep {
+            case .details:
+                detailsStepView
+            case .teams:
+                teamsStepView
+            case .rounds:
+                roundsStepView
+            }
+
+            Divider()
+
+            // Navigation Buttons
+            navigationButtons
+        }
+        .frame(width: 900, height: 800)
+        .background(Color(nsColor: .windowBackgroundColor))
+        .onAppear {
+            focusedField = .name
+        }
+    }
+
+    // MARK: - Progress Header
+
+    private var progressHeader: some View {
+        VStack(spacing: 16) {
+            // Step Indicators
+            HStack(spacing: 12) {
+                ForEach(WizardStep.allCases, id: \.self) { step in
+                    HStack(spacing: 8) {
+                        // Step Circle
+                        ZStack {
+                            Circle()
+                                .fill(stepColor(for: step))
+                                .frame(width: 40, height: 40)
+
+                            if step.rawValue < currentStep.rawValue {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundStyle(.white)
+                            } else {
+                                Text("\(step.rawValue)")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundStyle(.white)
+                            }
+                        }
+
+                        // Step Title
+                        Text(step.title)
+                            .font(.system(size: 14, weight: currentStep == step ? .bold : .regular))
+                            .foregroundStyle(currentStep == step ? .primary : .secondary)
+
+                        // Connector Line
+                        if step != .rounds {
+                            Rectangle()
+                                .fill(step.rawValue < currentStep.rawValue ? Color.blue : Color.secondary.opacity(0.3))
+                                .frame(height: 2)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 40)
+            .padding(.top, 32)
+            .padding(.bottom, 16)
+        }
+        .background(Color(nsColor: .controlBackgroundColor))
+    }
+
+    private func stepColor(for step: WizardStep) -> Color {
+        if step.rawValue < currentStep.rawValue {
+            return .green
+        } else if step == currentStep {
+            return .blue
+        } else {
+            return .secondary.opacity(0.3)
+        }
+    }
+
+    // MARK: - Step 1: Details
+
+    private var detailsStepView: some View {
+        ScrollView {
+            VStack(spacing: 32) {
+                // Icon
                 ZStack {
                     Circle()
                         .fill(
@@ -235,110 +357,523 @@ struct NewQuizSheet: View {
                         )
                         .frame(width: 80, height: 80)
                         .shadow(color: .blue.opacity(0.3), radius: 10)
-                    
+
                     Image(systemName: "sparkles")
                         .font(.system(size: 36))
                         .foregroundStyle(.white)
                 }
-                
+                .padding(.top, 20)
+
                 VStack(spacing: 8) {
-                    Text(NSLocalizedString("quiz.new.create", comment: "Create new quiz"))
+                    Text("Neues Quiz erstellen")
                         .font(.title)
                         .bold()
-                    
-                    Text(NSLocalizedString("quiz.new.description", comment: "Create quiz description"))
+
+                    Text("Starte mit den Grundinformationen")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
                 }
-            }
-            .padding(.top, 40)
-            .padding(.bottom, 32)
-            
-            // Form Content
-            VStack(spacing: 24) {
-                // Quiz Name
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: "text.quote")
-                            .foregroundStyle(.blue)
-                        Text(NSLocalizedString("quiz.name", comment: "Quiz name"))
-                            .font(.headline)
+
+                // Form
+                VStack(spacing: 24) {
+                    // Quiz Name
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Image(systemName: "text.quote")
+                                .foregroundStyle(.blue)
+                            Text("Quiz-Name")
+                                .font(.headline)
+                        }
+
+                        TextField("z.B. Pub Quiz April 2024", text: $quizName)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.title3)
+                            .focused($focusedField, equals: .name)
                     }
-                    
-                    TextField(NSLocalizedString("quiz.name.placeholder", comment: "Quiz name placeholder"), text: $quizName)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.title3)
-                        .focused($focusedField, equals: .name)
-                }
-                
-                // Venue
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: "mappin.circle.fill")
-                            .foregroundStyle(.red)
-                        Text(NSLocalizedString("quiz.location.label", comment: "Venue label"))
-                            .font(.headline)
+
+                    // Venue
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Image(systemName: "mappin.circle.fill")
+                                .foregroundStyle(.red)
+                            Text("Ort")
+                                .font(.headline)
+                        }
+
+                        TextField("z.B. Murphy's Pub", text: $venue)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.body)
+                            .focused($focusedField, equals: .venue)
                     }
-                    
-                    TextField(NSLocalizedString("quiz.location.placeholder", comment: "Location placeholder"), text: $venue)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.body)
-                        .focused($focusedField, equals: .venue)
-                }
-                
-                // Date & Time
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: "calendar.circle.fill")
-                            .foregroundStyle(.green)
-                        Text(NSLocalizedString("quiz.date.label", comment: "Date time label"))
-                            .font(.headline)
-                    }
-                    
-                    DatePicker("", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                        .datePickerStyle(.graphical)
-                        .labelsHidden()
-                }
-            }
-            .padding(.horizontal, 40)
-            
-            Spacer()
-            
-            // Action Buttons
-            HStack(spacing: 16) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Abbrechen")
+
+                    // Date & Time - Modern Cards
+                    HStack(spacing: 20) {
+                        // Datum Card
+                        VStack(alignment: .leading, spacing: 16) {
+                            HStack(spacing: 12) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [.green, .green.opacity(0.7)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 44, height: 44)
+                                        .shadow(color: .green.opacity(0.3), radius: 8)
+
+                                    Image(systemName: "calendar")
+                                        .font(.system(size: 20))
+                                        .foregroundStyle(.white)
+                                }
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Datum")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+
+                                    Text(date.formatted(date: .abbreviated, time: .omitted))
+                                        .font(.system(size: 17, weight: .semibold))
+                                        .foregroundStyle(.primary)
+                                }
+                            }
+
+                            DatePicker("", selection: $date, displayedComponents: [.date])
+                                .datePickerStyle(.compact)
+                                .labelsHidden()
+                        }
+                        .padding(20)
                         .frame(maxWidth: .infinity)
-                }
-                .keyboardShortcut(.escape)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                
-                Button {
-                    viewModel.createQuiz(name: quizName, venue: venue)
-                    dismiss()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text(NSLocalizedString("quiz.create", comment: "Create quiz button"))
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(nsColor: .controlBackgroundColor))
+                                .shadow(color: .black.opacity(0.05), radius: 10, y: 4)
+                        )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(.green.opacity(0.2), lineWidth: 1)
+                        }
+
+                        // Uhrzeit Card
+                        VStack(alignment: .leading, spacing: 16) {
+                            HStack(spacing: 12) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [.orange, .orange.opacity(0.7)],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 44, height: 44)
+                                        .shadow(color: .orange.opacity(0.3), radius: 8)
+
+                                    Image(systemName: "clock")
+                                        .font(.system(size: 20))
+                                        .foregroundStyle(.white)
+                                }
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Uhrzeit")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+
+                                    Text(date.formatted(date: .omitted, time: .shortened))
+                                        .font(.system(size: 17, weight: .semibold))
+                                        .foregroundStyle(.primary)
+                                }
+                            }
+
+                            DatePicker("", selection: $date, displayedComponents: [.hourAndMinute])
+                                .datePickerStyle(.compact)
+                                .labelsHidden()
+                        }
+                        .padding(20)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(nsColor: .controlBackgroundColor))
+                                .shadow(color: .black.opacity(0.05), radius: 10, y: 4)
+                        )
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(.orange.opacity(0.2), lineWidth: 1)
+                        }
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .disabled(quizName.isEmpty)
+                .padding(.horizontal, 40)
             }
-            .padding(.horizontal, 40)
-            .padding(.bottom, 32)
+            .padding(.bottom, 20)
         }
-        .frame(width: 600, height: 750)
-        .background(Color(nsColor: .windowBackgroundColor))
-        .onAppear {
-            focusedField = .name
+    }
+
+    // MARK: - Step 2: Teams
+
+    private var teamsStepView: some View {
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.blue, Color.cyan],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 80, height: 80)
+                        .shadow(color: .blue.opacity(0.3), radius: 10)
+
+                    Image(systemName: "person.3.fill")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.white)
+                }
+
+                VStack(spacing: 8) {
+                    Text("Teams hinzufügen")
+                        .font(.title)
+                        .bold()
+
+                    Text("Füge die teilnehmenden Teams hinzu")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.top, 32)
+            .padding(.bottom, 24)
+
+            // Content
+            if let quiz = createdQuiz {
+                if quiz.safeTeams.isEmpty {
+                    // Empty state with action buttons
+                    VStack(spacing: 24) {
+                        Image(systemName: "person.3.fill")
+                            .font(.system(size: 60))
+                            .foregroundStyle(.secondary)
+
+                        VStack(spacing: 8) {
+                            Text("Noch keine Teams hinzugefügt")
+                                .font(.title2)
+                                .bold()
+
+                            Text("Füge Teams einzeln hinzu oder erstelle mehrere auf einmal")
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+
+                        HStack(spacing: 12) {
+                            Button {
+                                showingTeamWizard = true
+                            } label: {
+                                Label("Mehrere Teams", systemImage: "person.3.fill")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.large)
+
+                            Button {
+                                showingAddTeam = true
+                            } label: {
+                                Label("Einzelnes Team", systemImage: "plus.circle")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.large)
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .padding()
+                } else {
+                    // Teams list
+                    VStack(spacing: 16) {
+                        ScrollView {
+                            VStack(spacing: 8) {
+                                ForEach(quiz.safeTeams) { team in
+                                    HStack {
+                                        Circle()
+                                            .fill(Color(hex: team.color) ?? .blue)
+                                            .frame(width: 12, height: 12)
+
+                                        Text(team.name)
+                                            .font(.body)
+
+                                        Spacer()
+
+                                        Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), team.totalScore))
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .padding()
+                                    .background(Color(nsColor: .controlBackgroundColor))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                            .padding(.horizontal, 40)
+                        }
+
+                        // Add more buttons
+                        HStack(spacing: 12) {
+                            Button {
+                                showingTeamWizard = true
+                            } label: {
+                                Label("Mehrere Teams", systemImage: "person.3.fill")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.regular)
+
+                            Button {
+                                showingAddTeam = true
+                            } label: {
+                                Label("Einzelnes Team", systemImage: "plus.circle")
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.regular)
+                        }
+                        .padding(.horizontal, 40)
+                        .padding(.bottom, 16)
+                    }
+                }
+            }
+
+            Spacer()
+        }
+        .sheet(isPresented: $showingTeamWizard) {
+            if let quiz = createdQuiz {
+                TeamWizardSheet(quiz: quiz, viewModel: viewModel)
+            }
+        }
+        .sheet(isPresented: $showingAddTeam) {
+            if let quiz = createdQuiz {
+                AddTeamSheet(quiz: quiz, viewModel: viewModel)
+            }
+        }
+    }
+
+    // MARK: - Step 3: Rounds
+
+    private var roundsStepView: some View {
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.green, Color.green.opacity(0.7)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 80, height: 80)
+                        .shadow(color: .green.opacity(0.3), radius: 10)
+
+                    Image(systemName: "list.number")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.white)
+                }
+
+                VStack(spacing: 8) {
+                    Text("Runden definieren")
+                        .font(.title)
+                        .bold()
+
+                    Text("Erstelle die Runden für dein Quiz")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.top, 32)
+            .padding(.bottom, 24)
+
+            // Content
+            if let quiz = createdQuiz {
+                if quiz.safeRounds.isEmpty {
+                    // Empty state with action buttons
+                    VStack(spacing: 24) {
+                        Image(systemName: "list.number.circle.fill")
+                            .font(.system(size: 60))
+                            .foregroundStyle(.green)
+
+                        VStack(spacing: 8) {
+                            Text("Noch keine Runden hinzugefügt")
+                                .font(.title2)
+                                .bold()
+
+                            Text("Füge Runden einzeln hinzu oder erstelle mehrere auf einmal")
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+
+                        HStack(spacing: 12) {
+                            Button {
+                                showingRoundWizard = true
+                            } label: {
+                                Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.large)
+
+                            Button {
+                                showingAddRound = true
+                            } label: {
+                                Label("Einzelne Runde", systemImage: "plus.circle")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.large)
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
+                    .padding()
+                } else {
+                    // Rounds list
+                    VStack(spacing: 16) {
+                        ScrollView {
+                            VStack(spacing: 8) {
+                                ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
+                                    HStack {
+                                        Text("R\(index + 1)")
+                                            .font(.headline)
+                                            .foregroundStyle(.white)
+                                            .frame(width: 40, height: 40)
+                                            .background(Color.green)
+                                            .clipShape(Circle())
+
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(round.name)
+                                                .font(.body)
+                                                .bold()
+
+                                            Text("\(round.maxPoints) Punkte")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .background(Color(nsColor: .controlBackgroundColor))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                            .padding(.horizontal, 40)
+                        }
+
+                        // Add more buttons
+                        HStack(spacing: 12) {
+                            Button {
+                                showingRoundWizard = true
+                            } label: {
+                                Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.regular)
+
+                            Button {
+                                showingAddRound = true
+                            } label: {
+                                Label("Einzelne Runde", systemImage: "plus.circle")
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.regular)
+                        }
+                        .padding(.horizontal, 40)
+                        .padding(.bottom, 16)
+                    }
+                }
+            }
+
+            Spacer()
+        }
+        .sheet(isPresented: $showingRoundWizard) {
+            if let quiz = createdQuiz {
+                RoundWizardSheet(quiz: quiz, viewModel: viewModel)
+            }
+        }
+        .sheet(isPresented: $showingAddRound) {
+            if let quiz = createdQuiz {
+                QuickRoundSheet(quiz: quiz, viewModel: viewModel)
+            }
+        }
+    }
+
+    // MARK: - Navigation Buttons
+
+    private var navigationButtons: some View {
+        HStack(spacing: 16) {
+            // Back/Cancel Button
+            Button {
+                if currentStep == .details {
+                    dismiss()
+                } else {
+                    withAnimation {
+                        currentStep = WizardStep(rawValue: currentStep.rawValue - 1) ?? .details
+                    }
+                }
+            } label: {
+                HStack {
+                    Image(systemName: currentStep == .details ? "xmark" : "chevron.left")
+                    Text(currentStep == .details ? "Abbrechen" : "Zurück")
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .keyboardShortcut(.escape)
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+
+            // Next/Create Button
+            Button {
+                if currentStep == .rounds {
+                    // Quiz already created, just dismiss
+                    dismiss()
+                } else if currentStep == .details {
+                    // Create quiz before moving to teams step
+                    viewModel.createQuiz(name: quizName, venue: venue)
+                    if let quiz = viewModel.selectedQuiz {
+                        quiz.date = date
+                        createdQuiz = quiz
+                    }
+                    withAnimation {
+                        currentStep = .teams
+                    }
+                } else {
+                    // Move to next step
+                    withAnimation {
+                        currentStep = WizardStep(rawValue: currentStep.rawValue + 1) ?? .teams
+                    }
+                }
+            } label: {
+                HStack {
+                    Text(currentStep == .rounds ? "Fertig" : "Weiter")
+                    Image(systemName: currentStep == .rounds ? "checkmark.circle.fill" : "chevron.right")
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .keyboardShortcut(.return, modifiers: .command)
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .disabled(!canProceed)
+        }
+        .padding(.horizontal, 40)
+        .padding(.vertical, 24)
+    }
+
+    // MARK: - Helper Methods
+
+    private var canProceed: Bool {
+        switch currentStep {
+        case .details:
+            return !quizName.isEmpty
+        case .teams:
+            return true // Teams sind optional
+        case .rounds:
+            return true // Runden sind optional
         }
     }
 }

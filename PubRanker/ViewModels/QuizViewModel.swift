@@ -68,10 +68,13 @@ final class QuizViewModel {
     
     // MARK: - Team Management
     
-    func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF") {
+    func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false) {
         guard let context = modelContext else { return }
         
         let team = Team(name: name, color: color)
+        team.contactPerson = contactPerson
+        team.email = email
+        team.isConfirmed = isConfirmed
         team.quiz = quiz
         if quiz.teams == nil {
             quiz.teams = []
@@ -95,6 +98,13 @@ final class QuizViewModel {
     
     func updateTeamName(_ team: Team, newName: String) {
         team.name = newName
+        saveContext()
+    }
+    
+    func updateTeamDetails(_ team: Team, contactPerson: String, email: String, isConfirmed: Bool) {
+        team.contactPerson = contactPerson
+        team.email = email
+        team.isConfirmed = isConfirmed
         saveContext()
     }
     

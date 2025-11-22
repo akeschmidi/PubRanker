@@ -130,10 +130,8 @@ struct PlanningView: View {
                 // Quick Stats
                 quickStatsRow(quiz)
                 
-                Divider()
-                
                 // Setup Sections
-                VStack(spacing: 16) {
+                VStack(spacing: 20) {
                     setupSection(
                         title: "Teams hinzufügen",
                         icon: "person.3.fill",
@@ -157,10 +155,10 @@ struct PlanningView: View {
                     // Team-Übersicht
                     if !quiz.safeTeams.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Label("Team-Übersicht", systemImage: "person.3.fill")
+                            HStack(spacing: 8) {
+                                Text("Team-Übersicht")
                                     .font(.headline)
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(.primary)
                                 
                                 Spacer()
                                 
@@ -168,8 +166,8 @@ struct PlanningView: View {
                                     .font(.caption)
                                     .bold()
                                     .foregroundStyle(.white)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 4)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
                                     .background(.blue)
                                     .clipShape(Capsule())
                             }
@@ -183,8 +181,8 @@ struct PlanningView: View {
                                 .padding(.vertical, 4)
                             }
                         }
-                        .padding()
-                        .background(Color(nsColor: .controlBackgroundColor).opacity(0.3))
+                        .padding(16)
+                        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
@@ -394,30 +392,33 @@ struct PlanningView: View {
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Label(title, systemImage: icon)
+            HStack(spacing: 8) {
+                Text(title)
                     .font(.headline)
-                    .foregroundStyle(color)
+                    .foregroundStyle(.primary)
                 
                 Spacer()
                 
                 if isComplete {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
+                        .font(.caption)
                 }
                 
                 Text("\(count)")
                     .font(.caption)
+                    .bold()
+                    .foregroundStyle(.white)
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(color.opacity(0.2))
+                    .padding(.vertical, 3)
+                    .background(color)
                     .clipShape(Capsule())
             }
             
             content()
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
+        .padding(16)
+        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
     
@@ -961,6 +962,9 @@ struct EditableTeamRow: View {
     @Bindable var viewModel: QuizViewModel
     @State private var isEditing = false
     @State private var editedName: String = ""
+    @State private var contactPerson: String = ""
+    @State private var email: String = ""
+    @State private var isConfirmed: Bool = false
     @State private var showingColorPicker = false
     @State private var showingDeleteConfirmation = false
     
@@ -971,21 +975,21 @@ struct EditableTeamRow: View {
     ]
     
     var body: some View {
-        HStack(spacing: 0) {
+        VStack(spacing: 0) {
             // Hauptinhalt
-            HStack(spacing: 12) {
+            HStack(spacing: 16) {
                 // Farb-Button
                 Button {
                     showingColorPicker.toggle()
                 } label: {
                     Circle()
                         .fill(Color(hex: team.color) ?? .blue)
-                        .frame(width: 32, height: 32)
+                        .frame(width: 40, height: 40)
                         .overlay {
                             Circle()
-                                .stroke(Color.white.opacity(0.5), lineWidth: 2)
+                                .stroke(Color.white.opacity(0.6), lineWidth: 2.5)
                         }
-                        .shadow(color: Color(hex: team.color)?.opacity(0.3) ?? .clear, radius: 4)
+                        .shadow(color: Color(hex: team.color)?.opacity(0.4) ?? .clear, radius: 6, x: 0, y: 2)
                 }
                 .buttonStyle(.plain)
                 .help("Farbe ändern")
@@ -1020,39 +1024,122 @@ struct EditableTeamRow: View {
                     .padding(20)
                 }
                 
-                // Team-Name bearbeiten
-                VStack(alignment: .leading, spacing: 4) {
+                // Team-Informationen
+                VStack(alignment: .leading, spacing: 8) {
                     if isEditing {
-                        TextField("Team Name", text: $editedName)
-                            .textFieldStyle(.roundedBorder)
-                            .onSubmit {
-                                saveChanges()
+                        VStack(alignment: .leading, spacing: 12) {
+                            // Team Name
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Team-Name")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .bold()
+                                TextField("Team Name", text: $editedName)
+                                    .textFieldStyle(.roundedBorder)
                             }
+                            
+                            Divider()
+                            
+                            // Team Details
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Kontaktinformationen")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .bold()
+                                
+                                TextField("Kontaktperson", text: $contactPerson)
+                                    .textFieldStyle(.roundedBorder)
+                                
+                                TextField("E-Mail", text: $email)
+                                    .textFieldStyle(.roundedBorder)
+                                
+                                Toggle("Bestätigt", isOn: $isConfirmed)
+                                    .toggleStyle(.checkbox)
+                            }
+                        }
                     } else {
-                        Text(team.name)
-                            .font(.headline)
+                        VStack(alignment: .leading, spacing: 8) {
+                            // Team Name
+                            Text(team.name)
+                                .font(.title3)
+                                .bold()
+                                .foregroundStyle(.primary)
+                            
+                            // Details
+                            if !team.contactPerson.isEmpty || !team.email.isEmpty || team.isConfirmed {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    if !team.contactPerson.isEmpty {
+                                        HStack(spacing: 6) {
+                                            Image(systemName: "person.fill")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(width: 16)
+                                            Text(team.contactPerson)
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                    
+                                    if !team.email.isEmpty {
+                                        HStack(spacing: 6) {
+                                            Image(systemName: "envelope.fill")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(width: 16)
+                                            Text(team.email)
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                    
+                                    if team.isConfirmed {
+                                        HStack(spacing: 6) {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundStyle(.green)
+                                                .font(.caption)
+                                            Text("Bestätigt")
+                                                .font(.subheadline)
+                                                .foregroundStyle(.green)
+                                                .bold()
+                                        }
+                                        .padding(.top, 2)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 
                 Spacer()
                 
-                // Action Buttons
-                HStack(spacing: 8) {
-                    // Bearbeiten/Speichern Button
+                // Action Buttons - Größer und besser sichtbar
+                HStack(spacing: 12) {
+                    // Bearbeiten/Speichern Button - Größer und prominenter
                     Button {
                         if isEditing {
                             saveChanges()
                         } else {
                             editedName = team.name
+                            contactPerson = team.contactPerson
+                            email = team.email
+                            isConfirmed = team.isConfirmed
                             isEditing = true
                         }
                     } label: {
-                        Image(systemName: isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(isEditing ? .green : .blue)
+                        HStack(spacing: 6) {
+                            Image(systemName: isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
+                            Text(isEditing ? "Speichern" : "Bearbeiten")
+                        }
+                        .font(.subheadline)
+                        .bold()
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(isEditing ? Color.green : Color.blue)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
                     .buttonStyle(.plain)
-                    .help(isEditing ? "Speichern" : "Namen bearbeiten")
+                    .help(isEditing ? "Speichern" : "Bearbeiten")
                     
                     // Löschen Button
                     Button {
@@ -1066,14 +1153,27 @@ struct EditableTeamRow: View {
                     .help("Team löschen")
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, 20)
+            .padding(.vertical, isEditing ? 20 : 16)
         }
-        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(nsColor: .controlBackgroundColor))
+                .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        )
         .overlay {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(hex: team.color)?.opacity(0.3) ?? .clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: team.color)?.opacity(0.4) ?? .blue.opacity(0.4),
+                            Color(hex: team.color)?.opacity(0.2) ?? .blue.opacity(0.2)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 2.5
+                )
         }
         .alert("Team löschen?", isPresented: $showingDeleteConfirmation) {
             Button("Abbrechen", role: .cancel) {}
@@ -1090,6 +1190,7 @@ struct EditableTeamRow: View {
         if !trimmedName.isEmpty {
             viewModel.updateTeamName(team, newName: trimmedName)
         }
+        viewModel.updateTeamDetails(team, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed)
         isEditing = false
     }
 }
@@ -1099,10 +1200,6 @@ struct EditableRoundRow: View {
     @Bindable var round: Round
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    @State private var isEditingName = false
-    @State private var isEditingPoints = false
-    @State private var editedName: String = ""
-    @State private var editedPoints: String = ""
     @State private var showingDeleteConfirmation = false
     
     var statusColor: Color {
@@ -1136,162 +1233,89 @@ struct EditableRoundRow: View {
     }
     
     var body: some View {
-        HStack(spacing: 0) {
-            // Hauptinhalt
-            HStack(spacing: 12) {
-                // Runden-Nummer Badge
-                VStack(spacing: 4) {
-                    Text("R\(getRoundNumber())")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundStyle(.white)
-                        .frame(width: 36, height: 36)
-                        .background(statusColor)
-                        .clipShape(Circle())
-                        .shadow(color: statusColor.opacity(0.4), radius: 4)
-                    
-                    if round.isCompleted || quiz.currentRound?.id == round.id {
+        HStack(spacing: 16) {
+            // Runden-Nummer Badge
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [statusColor, statusColor.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 48, height: 48)
+                    .shadow(color: statusColor.opacity(0.4), radius: 6, x: 0, y: 2)
+                
+                Text("R\(getRoundNumber())")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+            
+            // Runden-Info
+            VStack(alignment: .leading, spacing: 6) {
+                Text(round.name)
+                    .font(.title3)
+                    .bold()
+                    .foregroundStyle(.primary)
+                
+                HStack(spacing: 12) {
+                    // Status
+                    HStack(spacing: 4) {
                         Image(systemName: statusIcon)
-                            .font(.caption2)
-                            .foregroundStyle(statusColor)
-                            .symbolEffect(.pulse)
-                    }
-                }
-                
-                // Runden-Info
-                VStack(alignment: .leading, spacing: 4) {
-                    if isEditingName {
-                        TextField("Runden Name", text: $editedName)
-                            .textFieldStyle(.roundedBorder)
-                            .onSubmit {
-                                saveNameChanges()
-                            }
-                    } else {
-                        Text(round.name)
-                            .font(.headline)
-                    }
-                    
-                    // Status und Punkte Info
-                    HStack(spacing: 8) {
-                        Label(statusText, systemImage: statusIcon)
                             .font(.caption)
                             .foregroundStyle(statusColor)
-                        
-                        Text("•")
-                            .foregroundStyle(.secondary)
-                        
-                        Label("Max. \(round.maxPoints) Punkte", systemImage: "star.fill")
+                        Text(statusText)
+                            .font(.subheadline)
+                            .foregroundStyle(statusColor)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(statusColor.opacity(0.15))
+                    .clipShape(Capsule())
+                    
+                    // Punkte
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
                             .font(.caption)
+                            .foregroundStyle(.orange)
+                        Text("\(round.maxPoints) Pkt")
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
-                }
-                
-                Spacer()
-                
-                // Punkte-Bearbeitung Card (direkt anklickbar)
-                Button {
-                    if !isEditingPoints {
-                        editedPoints = "\(round.maxPoints)"
-                        isEditingPoints = true
-                    }
-                } label: {
-                    VStack(spacing: 4) {
-                        if isEditingPoints {
-                            TextField("Punkte", text: $editedPoints)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(width: 60)
-                                .multilineTextAlignment(.center)
-                                .onSubmit {
-                                    savePointsChanges()
-                                }
-                        } else {
-                            HStack(spacing: 4) {
-                                Text("\(round.maxPoints)")
-                                    .font(.system(size: 28, weight: .bold))
-                                    .monospacedDigit()
-                                Image(systemName: "pencil.circle.fill")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        
-                        Text("Punkte")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                            .textCase(.uppercase)
-                    }
-                    .frame(width: 100)
-                    .padding(.vertical, 8)
-                    .background(isEditingPoints ? Color.orange.opacity(0.2) : Color.orange.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay {
-                        if !isEditingPoints {
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.orange.opacity(0.3), lineWidth: 1)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-                .help("Punkte bearbeiten")
-                
-                // Action Buttons
-                HStack(spacing: 8) {
-                    // Speichern Button (nur sichtbar wenn Punkte bearbeitet werden)
-                    if isEditingPoints {
-                        Button {
-                            savePointsChanges()
-                        } label: {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.title2)
-                                .foregroundStyle(.green)
-                        }
-                        .buttonStyle(.plain)
-                        .help("Punkte speichern")
-                    }
-                    
-                    // Name bearbeiten Button
-                    Button {
-                        if isEditingName {
-                            saveNameChanges()
-                        } else {
-                            editedName = round.name
-                            isEditingName = true
-                        }
-                    } label: {
-                        Image(systemName: isEditingName ? "checkmark.circle.fill" : "pencil.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(isEditingName ? .green : .blue)
-                    }
-                    .buttonStyle(.plain)
-                    .help(isEditingName ? "Speichern" : "Namen bearbeiten")
-                    
-                    // Löschen Button
-                    Button {
-                        showingDeleteConfirmation = true
-                    } label: {
-                        Image(systemName: "trash.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.red)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Runde löschen")
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            
+            Spacer()
+            
+            // Status Badge (nur wenn aktiv oder abgeschlossen)
+            if round.isCompleted || (quiz.isActive && quiz.currentRound?.id == round.id) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(statusColor)
+                    .symbolEffect(.pulse, options: .repeating)
+            }
         }
-        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(nsColor: .controlBackgroundColor))
+                .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        )
         .overlay {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(statusColor.opacity(0.3), lineWidth: 2)
-        }
-        .alert("Runde löschen?", isPresented: $showingDeleteConfirmation) {
-            Button("Abbrechen", role: .cancel) {}
-            Button("Löschen", role: .destructive) {
-                viewModel.deleteRound(round, from: quiz)
-            }
-        } message: {
-            Text("Möchtest du '\(round.name)' wirklich löschen?")
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            statusColor.opacity(0.4),
+                            statusColor.opacity(0.2)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 2.5
+                )
         }
     }
     
@@ -1300,20 +1324,5 @@ struct EditableRoundRow: View {
             return 0
         }
         return index + 1
-    }
-    
-    private func saveNameChanges() {
-        let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !trimmedName.isEmpty {
-            viewModel.updateRoundName(round, newName: trimmedName)
-        }
-        isEditingName = false
-    }
-    
-    private func savePointsChanges() {
-        if let points = Int(editedPoints), points > 0 {
-            viewModel.updateRoundMaxPoints(round, maxPoints: points)
-        }
-        isEditingPoints = false
     }
 }

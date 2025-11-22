@@ -17,9 +17,6 @@ struct RoundManagementView: View {
     
     var body: some View {
         mainContent
-            .toolbar {
-                toolbarContent
-            }
             .sheet(isPresented: $showingAddRoundSheet) {
                 QuickRoundSheet(quiz: quiz, viewModel: viewModel)
             }
@@ -156,43 +153,9 @@ struct RoundManagementView: View {
                 .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
         }
     }
-    
-    // MARK: - Toolbar
-    
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .automatic) {
-            Menu {
-                Button {
-                    showingRoundWizard = true
-                } label: {
-                    Label(NSLocalizedString("round.new.multiple.create", comment: "Create multiple rounds"), systemImage: "rectangle.stack.fill")
-                }
-                
-                Button {
-                    showingAddRoundSheet = true
-                } label: {
-                    Label(NSLocalizedString("round.new.single.add", comment: "Add single round"), systemImage: "plus.circle")
-                }
-            } label: {
-                Label(NSLocalizedString("round.add", comment: "Add round"), systemImage: "plus.circle.fill")
-            }
-            .help(NSLocalizedString("round.add.multiple", comment: "Add rounds"))
-        }
-        
-        if let currentRound = quiz.currentRound {
-            ToolbarItem(placement: .automatic) {
-                Button {
-                    viewModel.completeRound(currentRound)
-                } label: {
-                    Label(NSLocalizedString("round.complete", comment: "Complete round"), systemImage: "checkmark.circle")
-                }
-                .keyboardShortcut("k", modifiers: .command)
-                .help(NSLocalizedString("round.complete.help", comment: "Complete current round"))
-            }
-        }
-    }
-    
+
+    // MARK: - Helper Methods
+
     // Helper to get round status color
     private func getRoundStatusColor(for round: Round) -> Color {
         if round.isCompleted {
