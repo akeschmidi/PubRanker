@@ -26,6 +26,7 @@
 		A10000319 /* ExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000318 /* ExecutionView.swift */; };
 		A10000321 /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000320 /* AnalysisView.swift */; };
 		A10000323 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000322 /* ColorExtension.swift */; };
+		A10000325 /* GlobalTeamsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000324 /* GlobalTeamsManagerView.swift */; };
 		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
 		C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */; };
 		C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */; };
@@ -53,6 +54,7 @@
 		A10000318 /* ExecutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionView.swift; sourceTree = "<group>"; };
 		A10000320 /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
 		A10000322 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		A10000324 /* GlobalTeamsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTeamsManagerView.swift; sourceTree = "<group>"; };
 		A10000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000500 /* PubRanker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PubRanker.entitlements; sourceTree = "<group>"; };
 		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +119,7 @@
 				A10000302 /* QuizDetailView.swift */,
 				A10000304 /* LeaderboardView.swift */,
 				A10000306 /* TeamManagementView.swift */,
+				A10000324 /* GlobalTeamsManagerView.swift */,
 				A10000308 /* RoundManagementView.swift */,
 				A10000310 /* ScoreEntryView.swift */,
 				A10000312 /* TeamSetupWizard.swift */,
@@ -267,6 +270,7 @@
 				A10000303 /* QuizDetailView.swift in Sources */,
 				A10000305 /* LeaderboardView.swift in Sources */,
 				A10000307 /* TeamManagementView.swift in Sources */,
+				A10000325 /* GlobalTeamsManagerView.swift in Sources */,
 				A10000309 /* RoundManagementView.swift in Sources */,
 				A10000311 /* ScoreEntryView.swift in Sources */,
 				A10000313 /* TeamSetupWizard.swift in Sources */,

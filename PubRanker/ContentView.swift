@@ -12,22 +12,25 @@ struct ContentView: View {
     @State private var selectedWorkflow: WorkflowPhase = .planning
     
     enum WorkflowPhase: String, CaseIterable, Identifiable {
+        case teamsmanager = "Teams"
         case planning = "Planen"
         case execution = "Durchführen"
         case analysis = "Auswerten"
-        
+
         var id: String { rawValue }
-        
+
         var icon: String {
             switch self {
+            case .teamsmanager: return "person.3.fill"
             case .planning: return "calendar.badge.plus"
             case .execution: return "play.circle.fill"
             case .analysis: return "chart.bar.fill"
             }
         }
-        
+
         var description: String {
             switch self {
+            case .teamsmanager: return "Teams erstellen und verwalten"
             case .planning: return "Quiz vorbereiten und planen"
             case .execution: return "Aktive Quiz durchführen"
             case .analysis: return "Quiz auswerten und exportieren"
@@ -45,6 +48,8 @@ struct ContentView: View {
             // Content based on selected workflow phase
             Group {
                 switch selectedWorkflow {
+                case .teamsmanager:
+                    GlobalTeamsManagerView(viewModel: viewModel)
                 case .planning:
                     PlanningView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
                 case .execution:

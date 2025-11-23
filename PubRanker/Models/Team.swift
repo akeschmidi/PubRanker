@@ -23,7 +23,7 @@ final class Team {
     var isConfirmed: Bool = false
     
     @Relationship(deleteRule: .nullify, inverse: \Quiz.teams)
-    var quiz: Quiz?
+    var quizzes: [Quiz]?
     
     init(name: String, color: String = "#007AFF") {
         self.id = UUID()

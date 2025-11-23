@@ -68,15 +68,45 @@ struct PlanningView: View {
     private var sidebar: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(alignment: .leading, spacing: 8) {
-                Label("Quiz Planen", systemImage: "calendar.badge.plus")
-                    .font(.title2)
-                    .bold()
-                Text("Bereite deine Quiz vor")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            HStack(alignment: .top, spacing: 16) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Quiz Planen", systemImage: "calendar.badge.plus")
+                        .font(.title2)
+                        .bold()
+                    Text("Bereite deine Quiz vor")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                // Moderner + Button
+                Button {
+                    showingNewQuizSheet = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title3)
+                        Text("Neues Quiz")
+                            .font(.headline)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(
+                        LinearGradient(
+                            colors: [.blue, .cyan],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .shadow(color: .blue.opacity(0.3), radius: 6, y: 3)
+                }
+                .buttonStyle(.plain)
+                .keyboardShortcut("n", modifiers: .command)
+                .help("Neues Quiz erstellen (⌘N)")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(Color(nsColor: .controlBackgroundColor))
             
@@ -100,16 +130,6 @@ struct PlanningView: View {
                 }
             }
             .listStyle(.sidebar)
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingNewQuizSheet = true
-                } label: {
-                    Label("Neues Quiz", systemImage: "plus.circle.fill")
-                }
-                .keyboardShortcut("n", modifiers: .command)
-            }
         }
         .sheet(isPresented: $showingNewQuizSheet, onDismiss: {
             // Wähle das neu erstellte Quiz aus

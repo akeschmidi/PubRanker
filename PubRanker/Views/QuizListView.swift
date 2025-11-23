@@ -280,6 +280,15 @@ struct NewQuizSheet: View {
         .background(Color(nsColor: .windowBackgroundColor))
         .onAppear {
             focusedField = .name
+            // Wizard-Modus aktivieren
+            viewModel.isWizardMode = true
+        }
+        .onDisappear {
+            // Wenn der Wizard abgebrochen wird, Wizard-Modus beenden
+            if currentStep != .rounds || createdQuiz == nil {
+                viewModel.isWizardMode = false
+                viewModel.temporaryQuiz = nil
+            }
         }
     }
 
@@ -810,6 +819,9 @@ struct NewQuizSheet: View {
             // Back/Cancel Button
             Button {
                 if currentStep == .details {
+                    // Wizard-Modus beenden beim Abbrechen
+                    viewModel.isWizardMode = false
+                    viewModel.temporaryQuiz = nil
                     dismiss()
                 } else {
                     withAnimation {
@@ -830,15 +842,19 @@ struct NewQuizSheet: View {
             // Next/Create Button
             Button {
                 if currentStep == .rounds {
-                    // Quiz already created, just dismiss
+                    // Final speichern und Wizard-Modus beenden
+                    if let quiz = createdQuiz {
+                        viewModel.saveQuizFinal(quiz)
+                        viewModel.isWizardMode = false
+                        viewModel.temporaryQuiz = nil
+                    }
                     dismiss()
                 } else if currentStep == .details {
-                    // Create quiz before moving to teams step
-                    viewModel.createQuiz(name: quizName, venue: venue)
-                    if let quiz = viewModel.selectedQuiz {
-                        quiz.date = date
-                        createdQuiz = quiz
-                    }
+                    // Temporäres Quiz erstellen (ohne Speichern)
+                    viewModel.isWizardMode = true
+                    let tempQuiz = viewModel.createTemporaryQuiz(name: quizName, venue: venue, date: date)
+                    viewModel.temporaryQuiz = tempQuiz
+                    createdQuiz = tempQuiz
                     withAnimation {
                         currentStep = .teams
                     }

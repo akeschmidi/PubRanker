@@ -17,6 +17,8 @@ final class QuizViewModel {
     var showingNewQuizSheet: Bool = false
     var showingTeamSheet: Bool = false
     var showingRoundSheet: Bool = false
+    var isWizardMode: Bool = false
+    var temporaryQuiz: Quiz?
     
     init() {}
     
@@ -37,6 +39,65 @@ final class QuizViewModel {
             selectedQuiz = quiz
         } catch {
             print("Error creating quiz: \(error)")
+        }
+    }
+    
+    /// Erstellt ein Quiz-Objekt ohne es in den Context einzufügen (für temporäre Verwendung im Wizard)
+    func createTemporaryQuiz(name: String, venue: String, date: Date) -> Quiz {
+        let quiz = Quiz(name: name, venue: venue, date: date)
+        return quiz
+    }
+    
+    /// Fügt ein Team temporär zu einem Quiz hinzu (ohne Speichern)
+    func addTemporaryTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false) {
+        let team = Team(name: name, color: color)
+        team.contactPerson = contactPerson
+        team.email = email
+        team.isConfirmed = isConfirmed
+        team.quizzes = [quiz]
+        if quiz.teams == nil {
+            quiz.teams = []
+        }
+        quiz.teams?.append(team)
+    }
+    
+    /// Fügt eine Runde temporär zu einem Quiz hinzu (ohne Speichern)
+    func addTemporaryRound(to quiz: Quiz, name: String, maxPoints: Int = 10) {
+        if quiz.rounds == nil {
+            quiz.rounds = []
+        }
+        let orderIndex = quiz.rounds?.count ?? 0
+        let round = Round(name: name, maxPoints: maxPoints, orderIndex: orderIndex)
+        round.quiz = quiz
+        quiz.rounds?.append(round)
+    }
+    
+    /// Speichert ein Quiz final mit allen Teams und Runden in den Context
+    func saveQuizFinal(_ quiz: Quiz) {
+        guard let context = modelContext else { return }
+        
+        // Quiz in Context einfügen
+        context.insert(quiz)
+        
+        // Alle Teams in Context einfügen
+        if let teams = quiz.teams {
+            for team in teams {
+                context.insert(team)
+            }
+        }
+        
+        // Alle Runden in Context einfügen
+        if let rounds = quiz.rounds {
+            for round in rounds {
+                context.insert(round)
+            }
+        }
+        
+        do {
+            try context.save()
+            selectedQuiz = quiz
+        } catch {
+            print("Error saving quiz final: \(error)")
         }
     }
     
@@ -69,19 +130,25 @@ final class QuizViewModel {
     // MARK: - Team Management
     
     func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false) {
-        guard let context = modelContext else { return }
+        // Wenn wir im Wizard-Modus sind und das Quiz noch nicht gespeichert ist, verwende temporäre Methode
+        if isWizardMode && temporaryQuiz?.id == quiz.id {
+            addTemporaryTeam(to: quiz, name: name, color: color, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed)
+            return
+        }
         
+        guard let context = modelContext else { return }
+
         let team = Team(name: name, color: color)
         team.contactPerson = contactPerson
         team.email = email
         team.isConfirmed = isConfirmed
-        team.quiz = quiz
+        team.quizzes = [quiz]
         if quiz.teams == nil {
             quiz.teams = []
         }
         quiz.teams?.append(team)
         context.insert(team)
-        
+
         saveContext()
     }
     
@@ -111,6 +178,12 @@ final class QuizViewModel {
     // MARK: - Round Management
     
     func addRound(to quiz: Quiz, name: String, maxPoints: Int = 10) {
+        // Wenn wir im Wizard-Modus sind und das Quiz noch nicht gespeichert ist, verwende temporäre Methode
+        if isWizardMode && temporaryQuiz?.id == quiz.id {
+            addTemporaryRound(to: quiz, name: name, maxPoints: maxPoints)
+            return
+        }
+        
         guard let context = modelContext else { return }
         
         if quiz.rounds == nil {

@@ -5,7 +5,9 @@
       "Bash(open:*)",
       "Bash(PubRanker/Views/PresentationModeView.swift.tmp)",
       "Bash(temp.swift)",
-      "Bash(1)"
+      "Bash(1)",
+      "Bash(python3:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

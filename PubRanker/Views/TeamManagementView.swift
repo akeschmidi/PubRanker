@@ -6,13 +6,24 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TeamManagementView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
+
     @State private var showingAddTeamSheet = false
     @State private var showingTeamWizard = false
-    
+    @State private var showingGlobalTeamPicker = false
+
+    var availableGlobalTeams: [Team] {
+        allTeams.filter { team in
+            team.quizzes?.isEmpty ?? true
+        }
+    }
+
     var body: some View {
         VStack {
             if quiz.safeTeams.isEmpty {
@@ -20,48 +31,116 @@ struct TeamManagementView: View {
                     Image(systemName: "person.3.fill")
                         .font(.system(size: 60))
                         .foregroundStyle(.secondary)
-                    
+
                     VStack(spacing: 8) {
                         Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
                             .font(.title2)
                             .bold()
-                        
+
                         Text(NSLocalizedString("empty.noTeams.management", comment: "Add teams to start quiz"))
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                     }
-                    
-                    HStack(spacing: 12) {
-                        Button {
-                            showingTeamWizard = true
-                        } label: {
-                            Label(NSLocalizedString("team.new.multiple", comment: "Multiple teams"), systemImage: "person.3.fill")
-                                .font(.headline)
+
+                    VStack(spacing: 12) {
+                        HStack(spacing: 12) {
+                            Button {
+                                showingTeamWizard = true
+                            } label: {
+                                Label(NSLocalizedString("team.new.multiple", comment: "Multiple teams"), systemImage: "person.3.fill")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.large)
+
+                            Button {
+                                showingAddTeamSheet = true
+                            } label: {
+                                Label(NSLocalizedString("team.new.single", comment: "Single team"), systemImage: "plus.circle")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.large)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        
-                        Button {
-                            showingAddTeamSheet = true
-                        } label: {
-                            Label(NSLocalizedString("team.new.single", comment: "Single team"), systemImage: "plus.circle")
-                                .font(.headline)
+
+                        if !availableGlobalTeams.isEmpty {
+                            Divider()
+                                .padding(.horizontal, 40)
+
+                            Button {
+                                showingGlobalTeamPicker = true
+                            } label: {
+                                VStack(spacing: 8) {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "square.stack.3d.up.fill")
+                                        Text("Aus Team-Manager hinzufügen")
+                                            .font(.headline)
+                                    }
+                                    Text("\(availableGlobalTeams.count) verfügbare Teams")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.large)
                         }
-                        .buttonStyle(.bordered)
-                        .controlSize(.large)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
             } else {
-                List {
-                    ForEach(quiz.safeTeams) { team in
-                        TeamRowView(team: team, quiz: quiz, viewModel: viewModel)
+                VStack(spacing: 0) {
+                    // Action Bar
+                    HStack {
+                        Text("\(quiz.safeTeams.count) Teams")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+
+                        Spacer()
+
+                        Menu {
+                            Button {
+                                showingAddTeamSheet = true
+                            } label: {
+                                Label("Neues Team erstellen", systemImage: "plus.circle")
+                            }
+
+                            Button {
+                                showingTeamWizard = true
+                            } label: {
+                                Label("Mehrere Teams erstellen", systemImage: "person.3.fill")
+                            }
+
+                            if !availableGlobalTeams.isEmpty {
+                                Divider()
+
+                                Button {
+                                    showingGlobalTeamPicker = true
+                                } label: {
+                                    Label("Aus Team-Manager (\(availableGlobalTeams.count))", systemImage: "square.stack.3d.up.fill")
+                                }
+                            }
+                        } label: {
+                            Label("Team hinzufügen", systemImage: "plus.circle.fill")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .menuStyle(.button)
                     }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            viewModel.deleteTeam(quiz.safeTeams[index], from: quiz)
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
+                    .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+
+                    Divider()
+
+                    List {
+                        ForEach(quiz.safeTeams) { team in
+                            TeamRowView(team: team, quiz: quiz, viewModel: viewModel)
+                        }
+                        .onDelete { indexSet in
+                            for index in indexSet {
+                                viewModel.deleteTeam(quiz.safeTeams[index], from: quiz)
+                            }
                         }
                     }
                 }
@@ -72,6 +151,9 @@ struct TeamManagementView: View {
         }
         .sheet(isPresented: $showingTeamWizard) {
             TeamWizardSheet(quiz: quiz, viewModel: viewModel)
+        }
+        .sheet(isPresented: $showingGlobalTeamPicker) {
+            GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams, modelContext: modelContext)
         }
     }
 }
@@ -554,5 +636,133 @@ struct TeamWizardSheet: View {
             let color = getTeamColorHex(for: index)
             viewModel.addTeam(to: quiz, name: name, color: color)
         }
+    }
+}
+
+// MARK: - Global Team Picker Sheet
+struct GlobalTeamPickerSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let quiz: Quiz
+    let availableTeams: [Team]
+    let modelContext: ModelContext
+
+    @State private var searchText = ""
+    @State private var selectedTeams: Set<UUID> = []
+
+    var filteredTeams: [Team] {
+        if searchText.isEmpty {
+            return availableTeams
+        }
+        return availableTeams.filter { team in
+            team.name.localizedCaseInsensitiveContains(searchText) ||
+            team.contactPerson.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                if availableTeams.isEmpty {
+                    ContentUnavailableView(
+                        "Keine verfügbaren Teams",
+                        systemImage: "person.3.slash",
+                        description: Text("Alle Teams sind bereits anderen Quizzes zugeordnet")
+                    )
+                } else {
+                    List(filteredTeams, selection: $selectedTeams) { team in
+                        HStack(spacing: 12) {
+                            Circle()
+                                .fill(Color(hex: team.color) ?? .blue)
+                                .frame(width: 24, height: 24)
+                                .shadow(color: (Color(hex: team.color) ?? .blue).opacity(0.3), radius: 3)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(team.name)
+                                    .font(.headline)
+
+                                if !team.contactPerson.isEmpty {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "person.fill")
+                                            .font(.caption2)
+                                        Text(team.contactPerson)
+                                            .font(.caption)
+                                    }
+                                    .foregroundStyle(.secondary)
+                                }
+
+                                if team.isConfirmed {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(.green)
+                                            .font(.caption2)
+                                        Text("Bestätigt")
+                                            .font(.caption2)
+                                            .foregroundStyle(.green)
+                                    }
+                                }
+                            }
+
+                            Spacer()
+
+                            if selectedTeams.contains(team.id) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(.blue)
+                                    .font(.title3)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if selectedTeams.contains(team.id) {
+                                selectedTeams.remove(team.id)
+                            } else {
+                                selectedTeams.insert(team.id)
+                            }
+                        }
+                    }
+                    .searchable(text: $searchText, prompt: "Teams durchsuchen...")
+                }
+            }
+            .navigationTitle("Teams hinzufügen")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Abbrechen") {
+                        dismiss()
+                    }
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Hinzufügen (\(selectedTeams.count))") {
+                        addSelectedTeams()
+                        dismiss()
+                    }
+                    .disabled(selectedTeams.isEmpty)
+                }
+            }
+        }
+        .frame(minWidth: 500, minHeight: 500)
+    }
+
+    private func addSelectedTeams() {
+        for teamId in selectedTeams {
+            if let team = availableTeams.first(where: { $0.id == teamId }) {
+                // Add quiz to team's quizzes
+                if team.quizzes == nil {
+                    team.quizzes = []
+                }
+                if !team.quizzes!.contains(where: { $0.id == quiz.id }) {
+                    team.quizzes!.append(quiz)
+                }
+
+                // Add team to quiz's teams
+                if quiz.teams == nil {
+                    quiz.teams = []
+                }
+                if !quiz.teams!.contains(where: { $0.id == team.id }) {
+                    quiz.teams!.append(team)
+                }
+            }
+        }
+        try? modelContext.save()
     }
 }
