@@ -9,29 +9,39 @@ on:
 jobs:
   build:
     name: Build and Test
-    runs-on: macos-14
-    
+    runs-on: macos-15
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-      
+
     - name: Setup Xcode
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '15.4'
-        
+        xcode-version: '16.1'
+
+    - name: Cache DerivedData
+      uses: actions/cache@v4
+      with:
+        path: ~/Library/Developer/Xcode/DerivedData
+        key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.swift', '**/*.pbxproj') }}
+        restore-keys: |
+          ${{ runner.os }}-deriveddata-
+
+    - name: Cache SPM
+      uses: actions/cache@v4
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+
     - name: Show Xcode Version
       run: xcodebuild -version
-      
+
     - name: Show Available SDKs
       run: xcodebuild -showsdks
-      
-    - name: Clean Build Folder
-      run: |
-        xcodebuild clean \
-          -project PubRanker.xcodeproj \
-          -scheme PubRanker
-      
+
     - name: Build macOS App
       run: |
         xcodebuild build \
@@ -39,6 +49,7 @@ jobs:
           -scheme PubRanker \
           -destination 'platform=macOS' \
           -configuration Debug \
+          -derivedDataPath $(pwd)/.derivedData \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO

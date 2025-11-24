@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import AppKit
 
 struct ContentView: View {
     @Environment(QuizViewModel.self) private var viewModel
     @State private var selectedWorkflow: WorkflowPhase = .planning
+    @State private var showingAboutSheet = false
+    @StateObject private var easterEggManager = EasterEggManager()
     
     enum WorkflowPhase: String, CaseIterable, Identifiable {
         case teamsmanager = "Teams"
@@ -39,51 +42,44 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Main Navigation Header
-            mainNavigationHeader
-            
-            Divider()
-            
-            // Content based on selected workflow phase
-            Group {
-                switch selectedWorkflow {
-                case .teamsmanager:
-                    GlobalTeamsManagerView(viewModel: viewModel)
-                case .planning:
-                    PlanningView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
-                case .execution:
-                    ExecutionView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
-                case .analysis:
-                    AnalysisView(viewModel: viewModel)
+        ZStack {
+            VStack(spacing: 0) {
+                // Main Navigation Header
+                mainNavigationHeader
+                
+                Divider()
+                
+                // Content based on selected workflow phase
+                Group {
+                    switch selectedWorkflow {
+                    case .teamsmanager:
+                        GlobalTeamsManagerView(viewModel: viewModel)
+                    case .planning:
+                        PlanningView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
+                    case .execution:
+                        ExecutionView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
+                    case .analysis:
+                        AnalysisView(viewModel: viewModel)
+                    }
                 }
             }
+            .frame(minWidth: 1000, minHeight: 700)
+            
+            // Easter Egg Overlays
+            EasterEggOverlayContainer(easterEggManager: easterEggManager)
         }
-        .frame(minWidth: 1000, minHeight: 700)
+        .onDisappear {
+            easterEggManager.cleanup()
+        }
     }
     
     private var mainNavigationHeader: some View {
         HStack(spacing: 0) {
             // App Title
             HStack(spacing: 12) {
-                Image(systemName: "trophy.fill")
-                    .font(.title2)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.blue, .cyan],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                EasterEggIconView(easterEggManager: easterEggManager)
                 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("PubRanker")
-                        .font(.title2)
-                        .bold()
-                    Text("QuizMaster Hub")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                EasterEggTitleView(easterEggManager: easterEggManager)
             }
             .padding(.leading, 24)
             
@@ -101,14 +97,18 @@ struct ContentView: View {
             
             Spacer()
             
+            // Click Counter (oben rechts)
+            EasterEggClickCounter(easterEggManager: easterEggManager)
+            
             // Help Button
             Button {
-                // Show help
+                showingAboutSheet = true
             } label: {
                 Image(systemName: "questionmark.circle")
                     .font(.title3)
             }
             .buttonStyle(.plain)
+            .help("App-Informationen")
             .padding(.trailing, 24)
         }
         .padding(.vertical, 16)
@@ -119,8 +119,12 @@ struct ContentView: View {
                 endPoint: .bottom
             )
         )
+        .sheet(isPresented: $showingAboutSheet) {
+            AboutSheet()
+        }
     }
 }
+
 
 #Preview {
     ContentView()

@@ -9,24 +9,36 @@ on:
 jobs:
   swiftlint:
     name: SwiftLint Code Quality
-    runs-on: macos-14
-    
+    runs-on: macos-15
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-      
+
+    - name: Cache Homebrew
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/Library/Caches/Homebrew
+          /usr/local/Cellar/swiftlint
+        key: ${{ runner.os }}-brew-swiftlint-${{ hashFiles('.github/workflows/swiftlint.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-brew-swiftlint-
+
     - name: Install SwiftLint
       run: |
-        brew install swiftlint
-        
+        if ! command -v swiftlint &> /dev/null; then
+          brew install swiftlint
+        fi
+
     - name: SwiftLint Version
       run: swiftlint version
-      
+
     - name: Run SwiftLint
       run: |
         swiftlint lint --reporter github-actions-logging
       continue-on-error: true
-      
+
     - name: SwiftLint Summary
       run: |
         echo "📝 SwiftLint Analyse abgeschlossen"
