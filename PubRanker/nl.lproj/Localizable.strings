@@ -288,59 +288,122 @@
 "stats.maxPoints" = "Max punten";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "Quiz Plannen";
+"planning.subtitle" = "Bereid je quiz voor";
+"planning.noQuizzes" = "Geen geplande quizzen";
+"planning.noQuizzes.description" = "Maak je eerste quiz";
+"planning.plannedQuizzes" = "Geplande Quizzen (%d)";
+"planning.delete" = "Verwijderen";
+"planning.edit" = "Bewerken";
+"planning.start" = "Quiz Starten";
+"planning.delete.confirm" = "Weet je zeker dat je '%@' wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.";
+"planning.ready" = "Klaar voor je eerste quiz?";
+"planning.ready.description" = "Plan en organiseer je pubquiz eenvoudig";
+"planning.create" = "Nieuwe Quiz Maken";
+"planning.create.subtitle" = "Begin met plannen";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
+"edit.title" = "Quiz Bewerken";
 "edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
+"edit.statistics" = "Statistieken";
 "edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
+"edit.active" = "Actief";
+"edit.planned" = "Gepland";
+"edit.completed" = "Voltooid";
+"edit.preparation" = "Voorbereiding";
 "edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.rounds" = "Rondes";
+"edit.maxPoints" = "Max Punten";
+"edit.overview" = "Overzicht";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "Teams Beheren";
+"teams.none" = "Geen Teams";
+"teams.none.description" = "Voeg teams toe om de quiz te starten";
+"teams.add.first" = "Eerste Team Toevoegen";
+"teams.colorPicker" = "Kies Kleur";
+"teams.rank" = "Rang %d";
+"teams.points" = "Punten";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "Rondes Beheren";
+"rounds.none" = "Geen Rondes";
+"rounds.none.description" = "Voeg rondes toe om punten toe te kennen";
+"rounds.add.first" = "Eerste Ronde Toevoegen";
+"rounds.preparation" = "Voorbereiding";
+"rounds.active" = "Actief";
+"rounds.completed" = "Voltooid";
+"rounds.delete.confirm" = "Weet je zeker dat je '%@' wilt verwijderen?";
+"rounds.maxPoints" = "Max %d Punten";
+"rounds.points" = "Punten";
+"rounds.editName" = "Naam Bewerken";
+"rounds.editPoints" = "Punten Bewerken";
+"rounds.savePoints" = "Punten Opslaan";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "Klassement";
+"analysis.overview" = "Overzicht";
+
+// MARK: - Email
+"email.send" = "E-mail Verzenden";
+"email.send.all" = "E-mail naar Alle Teams";
+"email.send.quiz" = "E-mail naar Quiz Teams";
+"email.noAddresses.title" = "Geen E-mailadressen";
+"email.noAddresses.message" = "Geen van de geselecteerde teams heeft een e-mailadres.";
+"email.quiz.subject" = "Quiz Informatie: %@";
+"email.quiz.body.intro" = "Hallo,\n\nhier is de informatie over de quiz \"%@\":";
+"email.quiz.body.venue" = "Locatie: %@";
+"email.quiz.body.date" = "Datum: %@";
+"email.quiz.body.teams" = "Aantal Teams: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "E-mail opstellen";
+"email.composer.quiz.title" = "E-mail aan teams van: %@";
+"email.composer.all.title" = "E-mail aan alle teams";
+"email.composer.all.subtitle" = "%d teams beschikbaar";
+"email.composer.search" = "Teams zoeken...";
+"email.composer.selectAll" = "Alles selecteren";
+"email.composer.selected" = "%d van %d geselecteerd";
+"email.composer.noEmails" = "Geen e-mailadressen";
+"email.composer.noEmails.description" = "Geen van de teams heeft een e-mailadres.";
+"email.composer.recipients" = "Ontvangers";
+"email.composer.noRecipients" = "Selecteer ten minste één team";
+"email.composer.subject" = "Onderwerp";
+"email.composer.subject.placeholder" = "Voer onderwerp in...";
+"email.composer.body" = "Bericht";
+"email.composer.send" = "Mail-app openen";
+"email.composer.defaultSubject" = "Informatie over Pub Quiz";
+"email.composer.defaultBody" = "Hallo,\n\nhier is de informatie over de pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filteren op quiz";
+"email.composer.filter.all" = "Alle";
+"email.composer.filter.byQuiz" = "Op Quiz";
+"email.composer.selectQuizzes" = "Selecteer quizzen...";
+"email.composer.quizzesSelected" = "%d Quiz%@ geselecteerd";
+"email.composer.noTeams" = "Geen teams";
+"email.composer.noTeams.description" = "Geen teams met e-mailadressen gevonden";
+"email.composer.to" = "Aan:";
+"email.composer.recipientCount" = "%d ontvanger%@";
+"email.composer.insertTemplate" = "Sjabloon invoegen";
+"email.composer.templates.title" = "E-mailsjablonen";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Quiz Uitnodiging";
+"email.template.invitation.subject" = "Je bent uitgenodigd voor onze Pub Quiz!";
+"email.template.invitation.body" = "Hallo Team,\n\nWe zijn blij je uit te nodigen voor onze aankomende pub quiz!\n\n📅 Datum: [DATE]\n📍 Locatie: [VENUE]\n⏰ Tijd: [TIME]\n\nBevestig je deelname door te antwoorden op deze e-mail.\n\nWe kijken ernaar uit je daar te zien!\n\nMet vriendelijke groet";
+
+"email.template.reminder.name" = "Quiz Herinnering";
+"email.template.reminder.subject" = "Herinnering: Pub Quiz morgen!";
+"email.template.reminder.body" = "Hallo Team,\n\nDit is een vriendelijke herinnering over de quiz van morgen:\n\n📅 Morgen om [TIME]\n📍 [VENUE]\n\nVergeet niet je beste beentje voor te zetten!\n\nTot dan!";
+
+"email.template.results.name" = "Resultaatmelding";
+"email.template.results.subject" = "Quiz Resultaten - Gefeliciteerd!";
+"email.template.results.body" = "Hallo iedereen,\n\nBedankt voor het deelnemen aan onze pub quiz!\n\nHier zijn de eindresultaten:\n[RESULTS]\n\nGefeliciteerd aan alle winnaars! 🎉\n\nTot de volgende keer!";
+
+"email.template.thankyou.name" = "Bedankt";
+"email.template.thankyou.subject" = "Bedankt voor het deelnemen!";
+"email.template.thankyou.body" = "Beste Team,\n\nBedankt voor het maken van onze pub quiz tot een groot succes!\n\nHet was geweldig om iedereen betrokken en plezier te zien hebben.\n\nWe hopen je bij ons volgende evenement te zien!\n\nVriendelijke groet";
+
+"email.template.scheduleChange.name" = "Schema Wijziging";
+"email.template.scheduleChange.subject" = "Belangrijk: Quiz Schema Update";
+"email.template.scheduleChange.body" = "Hallo,\n\nWe moeten je informeren over een schema wijziging:\n\n🔄 Nieuwe datum: [NEW_DATE]\n🔄 Nieuwe tijd: [NEW_TIME]\n📍 Locatie: [VENUE] (ongewijzigd)\n\nOnze excuses voor het ongemak.\n\nBevestig of je nog steeds kunt komen.\n\nBedankt voor je begrip!";
 

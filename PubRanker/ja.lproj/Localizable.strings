@@ -288,59 +288,122 @@
 "stats.maxPoints" = "最大ポイント";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "クイズを計画";
+"planning.subtitle" = "クイズを準備";
+"planning.noQuizzes" = "計画されたクイズなし";
+"planning.noQuizzes.description" = "最初のクイズを作成";
+"planning.plannedQuizzes" = "計画されたクイズ (%d)";
+"planning.delete" = "削除";
+"planning.edit" = "編集";
+"planning.start" = "クイズを開始";
+"planning.delete.confirm" = "本当に '%@' を削除しますか？この操作は元に戻せません。";
+"planning.ready" = "最初のクイズの準備はできましたか？";
+"planning.ready.description" = "パブクイズを簡単に計画・整理";
+"planning.create" = "新しいクイズを作成";
+"planning.create.subtitle" = "計画を開始";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
-"edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.title" = "クイズを編集";
+"edit.details" = "クイズ詳細";
+"edit.statistics" = "統計";
+"edit.status" = "ステータス";
+"edit.active" = "アクティブ";
+"edit.planned" = "計画済み";
+"edit.completed" = "完了";
+"edit.preparation" = "準備";
+"edit.teams" = "チーム";
+"edit.rounds" = "ラウンド";
+"edit.maxPoints" = "最大ポイント";
+"edit.overview" = "概要";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "チームを管理";
+"teams.none" = "チームなし";
+"teams.none.description" = "クイズを開始するにはチームを追加";
+"teams.add.first" = "最初のチームを追加";
+"teams.colorPicker" = "色を選択";
+"teams.rank" = "順位 %d";
+"teams.points" = "ポイント";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "ラウンドを管理";
+"rounds.none" = "ラウンドなし";
+"rounds.none.description" = "ポイントを割り当てるにはラウンドを追加";
+"rounds.add.first" = "最初のラウンドを追加";
+"rounds.preparation" = "準備";
+"rounds.active" = "アクティブ";
+"rounds.completed" = "完了";
+"rounds.delete.confirm" = "本当に '%@' を削除しますか？";
+"rounds.maxPoints" = "最大 %d ポイント";
+"rounds.points" = "ポイント";
+"rounds.editName" = "名前を編集";
+"rounds.editPoints" = "ポイントを編集";
+"rounds.savePoints" = "ポイントを保存";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "リーダーボード";
+"analysis.overview" = "概要";
+
+// MARK: - Email
+"email.send" = "メールを送信";
+"email.send.all" = "全チームにメール";
+"email.send.quiz" = "クイズチームにメール";
+"email.noAddresses.title" = "メールアドレスなし";
+"email.noAddresses.message" = "選択したチームにメールアドレスが登録されていません。";
+"email.quiz.subject" = "クイズ情報: %@";
+"email.quiz.body.intro" = "こんにちは、\n\nクイズ「%@」の情報は以下の通りです：";
+"email.quiz.body.venue" = "会場: %@";
+"email.quiz.body.date" = "日付: %@";
+"email.quiz.body.teams" = "チーム数: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "メールを作成";
+"email.composer.quiz.title" = "チームへのメール: %@";
+"email.composer.all.title" = "すべてのチームにメール";
+"email.composer.all.subtitle" = "%dチーム利用可能";
+"email.composer.search" = "チームを検索...";
+"email.composer.selectAll" = "すべて選択";
+"email.composer.selected" = "%d / %d 選択中";
+"email.composer.noEmails" = "メールアドレスなし";
+"email.composer.noEmails.description" = "チームにメールアドレスが登録されていません。";
+"email.composer.recipients" = "受信者";
+"email.composer.noRecipients" = "少なくとも1つのチームを選択してください";
+"email.composer.subject" = "件名";
+"email.composer.subject.placeholder" = "件名を入力...";
+"email.composer.body" = "メッセージ";
+"email.composer.send" = "メールアプリを開く";
+"email.composer.defaultSubject" = "パブクイズの情報";
+"email.composer.defaultBody" = "こんにちは、\n\nパブクイズの情報は以下の通りです：\n\n";
+"email.composer.filterByQuiz" = "クイズでフィルター";
+"email.composer.filter.all" = "すべて";
+"email.composer.filter.byQuiz" = "クイズ別";
+"email.composer.selectQuizzes" = "クイズを選択...";
+"email.composer.quizzesSelected" = "%d個のクイズを選択";
+"email.composer.noTeams" = "チームなし";
+"email.composer.noTeams.description" = "メールアドレスを持つチームが見つかりませんでした";
+"email.composer.to" = "宛先:";
+"email.composer.recipientCount" = "%d人の受信者";
+"email.composer.insertTemplate" = "テンプレートを挿入";
+"email.composer.templates.title" = "メールテンプレート";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "クイズ招待";
+"email.template.invitation.subject" = "パブクイズへのご招待";
+"email.template.invitation.body" = "チームの皆様へ、\n\n今度のパブクイズにご招待いたします！\n\n📅 日付: [DATE]\n📍 場所: [VENUE]\n⏰ 時間: [TIME]\n\nこのメールに返信してご参加をご確認ください。\n\nお会いできるのを楽しみにしています！\n\n敬具";
+
+"email.template.reminder.name" = "クイズリマインダー";
+"email.template.reminder.subject" = "リマインダー: 明日のパブクイズ！";
+"email.template.reminder.body" = "チームの皆様へ、\n\n明日のクイズについてのリマインダーです：\n\n📅 明日 [TIME]\n📍 [VENUE]\n\nベストを尽くすのをお忘れなく！\n\nお会いしましょう！";
+
+"email.template.results.name" = "結果通知";
+"email.template.results.subject" = "クイズ結果 - おめでとうございます！";
+"email.template.results.body" = "皆様へ、\n\nパブクイズへのご参加ありがとうございました！\n\n最終結果は以下の通りです：\n[RESULTS]\n\nすべての優勝者におめでとうございます！ 🎉\n\nまた次回！";
+
+"email.template.thankyou.name" = "ありがとう";
+"email.template.thankyou.subject" = "ご参加ありがとうございました！";
+"email.template.thankyou.body" = "チームの皆様へ、\n\nパブクイズを大成功に導いていただきありがとうございました！\n\n皆様が楽しんで参加されている様子を見ることができて素晴らしかったです。\n\n次のイベントでもお会いできることを楽しみにしています！\n\n敬具";
+
+"email.template.scheduleChange.name" = "スケジュール変更";
+"email.template.scheduleChange.subject" = "重要: クイズスケジュールの更新";
+"email.template.scheduleChange.body" = "皆様へ、\n\nスケジュール変更についてお知らせします：\n\n🔄 新しい日付: [NEW_DATE]\n🔄 新しい時間: [NEW_TIME]\n📍 場所: [VENUE] (変更なし)\n\nご不便をおかけして申し訳ございません。\n\nご参加可能かどうかご確認ください。\n\nご理解いただきありがとうございます！";
 

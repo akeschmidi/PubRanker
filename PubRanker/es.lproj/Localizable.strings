@@ -343,3 +343,66 @@
 // MARK: - Analysis View (v2.0)
 "analysis.leaderboard" = "Clasificación";
 "analysis.overview" = "Resumen";
+
+// MARK: - Email
+"email.send" = "Enviar Correo";
+"email.send.all" = "Correo a Todos los Equipos";
+"email.send.quiz" = "Correo a Equipos del Quiz";
+"email.noAddresses.title" = "Sin Direcciones de Correo";
+"email.noAddresses.message" = "Ninguno de los equipos seleccionados tiene una dirección de correo electrónico.";
+"email.quiz.subject" = "Información del Quiz: %@";
+"email.quiz.body.intro" = "Hola,\n\naquí está la información sobre el quiz \"%@\":";
+"email.quiz.body.venue" = "Lugar: %@";
+"email.quiz.body.date" = "Fecha: %@";
+"email.quiz.body.teams" = "Número de Equipos: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "Redactar correo electrónico";
+"email.composer.quiz.title" = "Correo electrónico a equipos de: %@";
+"email.composer.all.title" = "Correo electrónico a todos los equipos";
+"email.composer.all.subtitle" = "%d equipos disponibles";
+"email.composer.search" = "Buscar equipos...";
+"email.composer.selectAll" = "Seleccionar todo";
+"email.composer.selected" = "%d de %d seleccionados";
+"email.composer.noEmails" = "Sin direcciones de correo electrónico";
+"email.composer.noEmails.description" = "Ninguno de los equipos tiene una dirección de correo electrónico.";
+"email.composer.recipients" = "Destinatarios";
+"email.composer.noRecipients" = "Por favor seleccione al menos un equipo";
+"email.composer.subject" = "Asunto";
+"email.composer.subject.placeholder" = "Ingrese el asunto...";
+"email.composer.body" = "Mensaje";
+"email.composer.send" = "Abrir App Mail";
+"email.composer.defaultSubject" = "Información del Pub Quiz";
+"email.composer.defaultBody" = "Hola,\n\naquí está la información sobre el pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filtrar por quiz";
+"email.composer.filter.all" = "Todos";
+"email.composer.filter.byQuiz" = "Por Quiz";
+"email.composer.selectQuizzes" = "Seleccionar quizzes...";
+"email.composer.quizzesSelected" = "%d Quiz%@ seleccionado%@";
+"email.composer.noTeams" = "Sin equipos";
+"email.composer.noTeams.description" = "No se encontraron equipos con direcciones de correo electrónico";
+"email.composer.to" = "Para:";
+"email.composer.recipientCount" = "%d destinatario%@";
+"email.composer.insertTemplate" = "Insertar plantilla";
+"email.composer.templates.title" = "Plantillas de correo electrónico";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Invitación al Quiz";
+"email.template.invitation.subject" = "¡Estás invitado a nuestro Pub Quiz!";
+"email.template.invitation.body" = "Hola Equipo,\n\n¡Estamos emocionados de invitarte a nuestro próximo pub quiz!\n\n📅 Fecha: [DATE]\n📍 Ubicación: [VENUE]\n⏰ Hora: [TIME]\n\nPor favor confirma tu participación respondiendo a este correo electrónico.\n\n¡Esperamos verte allí!\n\nSaludos";
+
+"email.template.reminder.name" = "Recordatorio del Quiz";
+"email.template.reminder.subject" = "Recordatorio: ¡Pub Quiz mañana!";
+"email.template.reminder.body" = "Hola Equipo,\n\nEste es un recordatorio amistoso sobre el quiz de mañana:\n\n📅 Mañana a las [TIME]\n📍 [VENUE]\n\n¡No olvides traer tu mejor juego!\n\n¡Nos vemos allí!";
+
+"email.template.results.name" = "Notificación de resultados";
+"email.template.results.subject" = "Resultados del Quiz - ¡Felicitaciones!";
+"email.template.results.body" = "Hola a todos,\n\n¡Gracias por participar en nuestro pub quiz!\n\nAquí están los resultados finales:\n[RESULTS]\n\n¡Felicitaciones a todos los ganadores! 🎉\n\n¡Hasta la próxima!";
+
+"email.template.thankyou.name" = "Gracias";
+"email.template.thankyou.subject" = "¡Gracias por participar!";
+"email.template.thankyou.body" = "Querido Equipo,\n\n¡Gracias por hacer de nuestro pub quiz un gran éxito!\n\nFue maravilloso ver a todos comprometidos y divirtiéndose.\n\n¡Esperamos verte en nuestro próximo evento!\n\nSaludos cordiales";
+
+"email.template.scheduleChange.name" = "Cambio de horario";
+"email.template.scheduleChange.subject" = "Importante: Actualización del horario del Quiz";
+"email.template.scheduleChange.body" = "Hola,\n\nNecesitamos informarte sobre un cambio de horario:\n\n🔄 Nueva fecha: [NEW_DATE]\n🔄 Nueva hora: [NEW_TIME]\n📍 Ubicación: [VENUE] (sin cambios)\n\nNos disculpamos por las molestias.\n\nPor favor confirma si aún puedes asistir.\n\n¡Gracias por tu comprensión!";

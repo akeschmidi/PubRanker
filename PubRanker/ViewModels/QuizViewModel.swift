@@ -49,11 +49,12 @@ final class QuizViewModel {
     }
     
     /// Fügt ein Team temporär zu einem Quiz hinzu (ohne Speichern)
-    func addTemporaryTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false) {
+    func addTemporaryTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
         let team = Team(name: name, color: color)
         team.contactPerson = contactPerson
         team.email = email
         team.isConfirmed = isConfirmed
+        team.imageData = imageData
         team.quizzes = [quiz]
         if quiz.teams == nil {
             quiz.teams = []
@@ -129,10 +130,10 @@ final class QuizViewModel {
     
     // MARK: - Team Management
     
-    func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false) {
+    func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
         // Wenn wir im Wizard-Modus sind und das Quiz noch nicht gespeichert ist, verwende temporäre Methode
         if isWizardMode && temporaryQuiz?.id == quiz.id {
-            addTemporaryTeam(to: quiz, name: name, color: color, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed)
+            addTemporaryTeam(to: quiz, name: name, color: color, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed, imageData: imageData)
             return
         }
         
@@ -142,6 +143,7 @@ final class QuizViewModel {
         team.contactPerson = contactPerson
         team.email = email
         team.isConfirmed = isConfirmed
+        team.imageData = imageData
         team.quizzes = [quiz]
         if quiz.teams == nil {
             quiz.teams = []

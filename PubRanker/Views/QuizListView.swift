@@ -603,9 +603,7 @@ struct NewQuizSheet: View {
                             VStack(spacing: 8) {
                                 ForEach(quiz.safeTeams) { team in
                                     HStack {
-                                        Circle()
-                                            .fill(Color(hex: team.color) ?? .blue)
-                                            .frame(width: 12, height: 12)
+                                        TeamIconView(team: team, size: 12)
 
                                         Text(team.name)
                                             .font(.body)
@@ -703,7 +701,7 @@ struct NewQuizSheet: View {
                 if quiz.safeRounds.isEmpty {
                     // Empty state with action buttons
                     VStack(spacing: 24) {
-                        Image(systemName: "list.number.circle.fill")
+                        Image(systemName: "number.circle.fill")
                             .font(.system(size: 60))
                             .foregroundStyle(.green)
 

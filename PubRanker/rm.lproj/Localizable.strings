@@ -288,59 +288,122 @@
 "stats.maxPoints" = "Max puncts";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "Planisar Quiz";
+"planning.subtitle" = "Preparar tes quiz";
+"planning.noQuizzes" = "Nagins quizs planisads";
+"planning.noQuizzes.description" = "Crear tes emprim quiz";
+"planning.plannedQuizzes" = "Quizs Planisads (%d)";
+"planning.delete" = "Stritgar";
+"planning.edit" = "Modifitgar";
+"planning.start" = "Cumenzar Quiz";
+"planning.delete.confirm" = "Vuls ti propi stritgar '%@'? Questa acziun na po betg vegnir annullada.";
+"planning.ready" = "Pront per tes emprim quiz?";
+"planning.ready.description" = "Planisescha ed organisescha tes pub quiz senza problem";
+"planning.create" = "Crear Nov Quiz";
+"planning.create.subtitle" = "Cumenzar cun planisar";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
+"edit.title" = "Modifitgar Quiz";
+"edit.details" = "Detagls dal Quiz";
+"edit.statistics" = "Statisticas";
 "edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.active" = "Activ";
+"edit.planned" = "Planisà";
+"edit.completed" = "Terminà";
+"edit.preparation" = "Preparaziun";
+"edit.teams" = "Equipas";
+"edit.rounds" = "Rundas";
+"edit.maxPoints" = "Puncts Maxims";
+"edit.overview" = "Survista";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "Administrar Equipas";
+"teams.none" = "Naginas Equipas";
+"teams.none.description" = "Agiuntar equipas per cumenzar il quiz";
+"teams.add.first" = "Agiuntar Emprima Equipa";
+"teams.colorPicker" = "Tscherner Colur";
+"teams.rank" = "Plazza %d";
+"teams.points" = "Puncts";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "Administrar Rundas";
+"rounds.none" = "Naginas Rundas";
+"rounds.none.description" = "Agiuntar rundas per assignar puncts";
+"rounds.add.first" = "Agiuntar Emprima Runda";
+"rounds.preparation" = "Preparaziun";
+"rounds.active" = "Activa";
+"rounds.completed" = "Terminada";
+"rounds.delete.confirm" = "Vuls ti propi stritgar '%@'?";
+"rounds.maxPoints" = "Max %d Puncts";
+"rounds.points" = "Puncts";
+"rounds.editName" = "Modifitgar Num";
+"rounds.editPoints" = "Modifitgar Puncts";
+"rounds.savePoints" = "Memorisar Puncts";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "Ranglista";
+"analysis.overview" = "Survista";
+
+// MARK: - Email
+"email.send" = "Trametter E-mail";
+"email.send.all" = "E-mail a Tut las Equipas";
+"email.send.quiz" = "E-mail a las Equipas dal Quiz";
+"email.noAddresses.title" = "Naginas Adressas E-mail";
+"email.noAddresses.message" = "Nagina da las equipas tschernidas ha in'adressa d'e-mail.";
+"email.quiz.subject" = "Infurmaziuns davart il Quiz: %@";
+"email.quiz.body.intro" = "Tgei,\n\nquai èn las infurmaziuns davart il quiz \"%@\":";
+"email.quiz.body.venue" = "Lieu: %@";
+"email.quiz.body.date" = "Data: %@";
+"email.quiz.body.teams" = "Dumber d'Equipas: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "Scriver e-mail";
+"email.composer.quiz.title" = "E-mail a las squadras da: %@";
+"email.composer.all.title" = "E-mail a tuttas las squadras";
+"email.composer.all.subtitle" = "%d squadras disponiblas";
+"email.composer.search" = "Tschertgar squadras...";
+"email.composer.selectAll" = "Tut selecziunar";
+"email.composer.selected" = "%d da %d selecziunadas";
+"email.composer.noEmails" = "Naginas adressas d'e-mail";
+"email.composer.noEmails.description" = "Nagina da las squadras ha ina adressa d'e-mail.";
+"email.composer.recipients" = "Destinatars";
+"email.composer.noRecipients" = "Per plaschair selecziunai almain ina squadra";
+"email.composer.subject" = "Titel";
+"email.composer.subject.placeholder" = "Endatar il titel...";
+"email.composer.body" = "Messadi";
+"email.composer.send" = "Avrir app da mail";
+"email.composer.defaultSubject" = "Infurmaziuns davart il Pub Quiz";
+"email.composer.defaultBody" = "Tgei,\n\nquai èn las infurmaziuns davart il pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filtrar per quiz";
+"email.composer.filter.all" = "Tut";
+"email.composer.filter.byQuiz" = "Per Quiz";
+"email.composer.selectQuizzes" = "Tscherner quiz...";
+"email.composer.quizzesSelected" = "%d Quiz%@ tschernà";
+"email.composer.noTeams" = "Nagins teams";
+"email.composer.noTeams.description" = "Nagins teams cun adressas d'e-mail chattadas";
+"email.composer.to" = "A:";
+"email.composer.recipientCount" = "%d destinatari%@";
+"email.composer.insertTemplate" = "Inserir model";
+"email.composer.templates.title" = "Models d'e-mail";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Invita al Quiz";
+"email.template.invitation.subject" = "Ti es invità a noss Pub Quiz!";
+"email.template.invitation.body" = "Tgei Team,\n\nNus ans allegran da t'invitar a noss proxim pub quiz!\n\n📅 Data: [DATE]\n📍 Lieu: [VENUE]\n⏰ Ura: [TIME]\n\nPer plaschair conferma tia participaziun cun respunder a quest e-mail.\n\nNus ans allegran da ta vesair là!\n\nCordialas salids";
+
+"email.template.reminder.name" = "Promemoria Quiz";
+"email.template.reminder.subject" = "Promemoria: Pub Quiz damaun!";
+"email.template.reminder.body" = "Tgei Team,\n\nQuai è ina promemoria amiaivla davart il quiz da damaun:\n\n📅 Damaun a las [TIME]\n📍 [VENUE]\n\nBetg emblidar da portar il meglier!\n\nA revair là!";
+
+"email.template.results.name" = "Notificaziun resultats";
+"email.template.results.subject" = "Resultats Quiz - Felicitaziuns!";
+"email.template.results.body" = "Tgei tuts,\n\nGrazia per la participaziun a noss pub quiz!\n\nQua èn ils resultats finals:\n[RESULTS]\n\nFelicitaziuns a tut ils gudents! 🎉\n\nA la proxima!";
+
+"email.template.thankyou.name" = "Grazia";
+"email.template.thankyou.subject" = "Grazia per la participaziun!";
+"email.template.thankyou.body" = "Cara Team,\n\nGrazia per far da noss pub quiz in grond success!\n\nEra magnific da vesair tuts engaschads e s'divertir.\n\nNus sperain da ta vesair a noss proxim eveniment!\n\nCordialas salids";
+
+"email.template.scheduleChange.name" = "Midada da program";
+"email.template.scheduleChange.subject" = "Impurtant: Actualisaziun da program Quiz";
+"email.template.scheduleChange.body" = "Tgei,\n\nNus stuain t'informar davart ina midada da program:\n\n🔄 Nova data: [NEW_DATE]\n🔄 Nova ura: [NEW_TIME]\n📍 Lieu: [VENUE] (betg midà)\n\nNus ans scusain per l'inconvenienza.\n\nPer plaschair conferma sche ti pos anc participar.\n\nGrazia per tia chapientscha!";
 

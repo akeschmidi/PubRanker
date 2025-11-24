@@ -21,6 +21,7 @@ final class Team {
     var contactPerson: String = ""
     var email: String = ""
     var isConfirmed: Bool = false
+    var imageData: Data? = nil
     
     @Relationship(deleteRule: .nullify, inverse: \Quiz.teams)
     var quizzes: [Quiz]?

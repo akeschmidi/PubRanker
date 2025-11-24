@@ -23,6 +23,9 @@ struct RoundManagementView: View {
             .sheet(isPresented: $showingRoundWizard) {
                 RoundWizardSheet(quiz: quiz, viewModel: viewModel)
             }
+            .sheet(item: $selectedRound) { round in
+                EditRoundSheet(round: round, quiz: quiz, viewModel: viewModel)
+            }
     }
     
     // MARK: - Computed Properties
@@ -189,7 +192,7 @@ struct RoundManagementView: View {
     
     private var emptyRoundsView: some View {
         VStack(spacing: 24) {
-            Image(systemName: "list.number.circle.fill")
+            Image(systemName: "number.circle.fill")
                 .font(.system(size: 60))
                 .foregroundStyle(.blue)
             
@@ -550,6 +553,163 @@ struct ScoreCell: View {
     }
 }
 
+// MARK: - Edit Round Sheet
+struct EditRoundSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Bindable var round: Round
+    let quiz: Quiz
+    @Bindable var viewModel: QuizViewModel
+    @State private var roundName = ""
+    @State private var maxPoints = 10
+    @State private var showingDeleteConfirmation = false
+    @FocusState private var focusedField: Bool
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            // Header
+            VStack(spacing: 8) {
+                Image(systemName: "pencil.circle.fill")
+                    .font(.system(size: 50))
+                    .foregroundStyle(.blue)
+                
+                Text("Runde bearbeiten")
+                    .font(.title2)
+                    .bold()
+                
+                Text("R\(getRoundNumber())")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 20)
+            
+            // Form
+            VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(NSLocalizedString("round.name", comment: "Round name"))
+                        .font(.headline)
+                    
+                    TextField(NSLocalizedString("round.name.placeholder", comment: "Round name placeholder"), text: $roundName)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.title3)
+                        .focused($focusedField)
+                }
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
+                        .font(.headline)
+                    
+                    HStack {
+                        Button {
+                            if maxPoints > 1 {
+                                maxPoints -= 1
+                            }
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .font(.title)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Text("\(maxPoints)")
+                            .font(.system(size: 48, weight: .bold))
+                            .monospacedDigit()
+                            .frame(minWidth: 100)
+                        
+                        Button {
+                            if maxPoints < 100 {
+                                maxPoints += 1
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                
+                // Quick Presets
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    
+                    HStack(spacing: 12) {
+                        ForEach([5, 10, 15, 20], id: \.self) { points in
+                            Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
+                                maxPoints = points
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 30)
+            
+            Spacer()
+            
+            // Action Buttons
+            HStack(spacing: 12) {
+                Button(role: .destructive) {
+                    showingDeleteConfirmation = true
+                } label: {
+                    Label("Löschen", systemImage: "trash")
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                
+                Spacer()
+                
+                Button("Abbrechen") {
+                    dismiss()
+                }
+                .keyboardShortcut(.escape)
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                
+                Button("Speichern") {
+                    saveChanges()
+                    dismiss()
+                }
+                .keyboardShortcut(.return, modifiers: .command)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .disabled(roundName.isEmpty)
+            }
+            .padding(.bottom, 20)
+        }
+        .frame(width: 500, height: 550)
+        .onAppear {
+            roundName = round.name
+            maxPoints = round.maxPoints
+            focusedField = true
+        }
+        .alert("Runde löschen?", isPresented: $showingDeleteConfirmation) {
+            Button("Abbrechen", role: .cancel) {}
+            Button("Löschen", role: .destructive) {
+                viewModel.deleteRound(round, from: quiz)
+                dismiss()
+            }
+        } message: {
+            Text("Möchtest du '\(round.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+        }
+    }
+    
+    private func getRoundNumber() -> Int {
+        guard let index = quiz.sortedRounds.firstIndex(where: { $0.id == round.id }) else {
+            return 0
+        }
+        return index + 1
+    }
+    
+    private func saveChanges() {
+        let trimmedName = roundName.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedName.isEmpty {
+            viewModel.updateRoundName(round, newName: trimmedName)
+        }
+        viewModel.updateRoundMaxPoints(round, maxPoints: maxPoints)
+    }
+}
+
 // MARK: - Quick Round Sheet
 struct QuickRoundSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -563,7 +723,7 @@ struct QuickRoundSheet: View {
         VStack(spacing: 24) {
             // Header
             VStack(spacing: 8) {
-                Image(systemName: "list.number.circle.fill")
+                Image(systemName: "number.circle.fill")
                     .font(.system(size: 50))
                     .foregroundStyle(.blue)
                 

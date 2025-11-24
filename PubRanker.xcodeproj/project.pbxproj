@@ -13,6 +13,7 @@
 		A10000101 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000100 /* Quiz.swift */; };
 		A10000103 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000102 /* Team.swift */; };
 		A10000105 /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000104 /* Round.swift */; };
+		A10000107 /* EmailTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000106 /* EmailTemplate.swift */; };
 		A10000201 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000200 /* QuizViewModel.swift */; };
 		A10000301 /* QuizListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000300 /* QuizListView.swift */; };
 		A10000303 /* QuizDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000302 /* QuizDetailView.swift */; };
@@ -26,8 +27,12 @@
 		A10000319 /* ExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000318 /* ExecutionView.swift */; };
 		A10000321 /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000320 /* AnalysisView.swift */; };
 		A10000323 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000322 /* ColorExtension.swift */; };
-		A10000325 /* GlobalTeamsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000324 /* GlobalTeamsManagerView.swift */; };
+		A10000326 /* TeamIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000325 /* TeamIconView.swift */; };
+		A10000327 /* GlobalTeamsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000324 /* GlobalTeamsManagerView.swift */; };
 		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
+		A10000601 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000600 /* EmailService.swift */; };
+		A10000611 /* EmailComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000610 /* EmailComposerView.swift */; };
+		C9137CE42ED450AB007B469E /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = C9137CE32ED450AB007B469E /* CLAUDE.md */; };
 		C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */; };
 		C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */; };
 		DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C523D853111435688C12D13 /* PresentationModeView.swift */; };
@@ -41,6 +46,7 @@
 		A10000100 /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
 		A10000102 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		A10000104 /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
+		A10000106 /* EmailTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailTemplate.swift; sourceTree = "<group>"; };
 		A10000200 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
 		A10000300 /* QuizListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizListView.swift; sourceTree = "<group>"; };
 		A10000302 /* QuizDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizDetailView.swift; sourceTree = "<group>"; };
@@ -55,9 +61,13 @@
 		A10000320 /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
 		A10000322 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		A10000324 /* GlobalTeamsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTeamsManagerView.swift; sourceTree = "<group>"; };
+		A10000325 /* TeamIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamIconView.swift; sourceTree = "<group>"; };
 		A10000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000500 /* PubRanker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PubRanker.entitlements; sourceTree = "<group>"; };
+		A10000600 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
+		A10000610 /* EmailComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposerView.swift; sourceTree = "<group>"; };
 		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9137CE32ED450AB007B469E /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = CLAUDE.md; sourceTree = "<group>"; };
 		C941F1F92EA7FA30004EE1C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C941F2002EA7FA30004EE1C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C941F2012EA7FA30004EE1C9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -97,6 +107,7 @@
 				A10000100 /* Quiz.swift */,
 				A10000102 /* Team.swift */,
 				A10000104 /* Round.swift */,
+				A10000106 /* EmailTemplate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -112,6 +123,7 @@
 		A1000030 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A10000325 /* TeamIconView.swift */,
 				A10000316 /* PlanningView.swift */,
 				A10000318 /* ExecutionView.swift */,
 				A10000320 /* AnalysisView.swift */,
@@ -125,6 +137,7 @@
 				A10000312 /* TeamSetupWizard.swift */,
 				A10000314 /* QuickRoundSetupView.swift */,
 				4C523D853111435688C12D13 /* PresentationModeView.swift */,
+				A10000610 /* EmailComposerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -138,9 +151,18 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		A1000060 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10000600 /* EmailService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		A1FFFFFB = {
 			isa = PBXGroup;
 			children = (
+				C9137CE32ED450AB007B469E /* CLAUDE.md */,
 				A1FFFFFD /* PubRanker */,
 				A1FFFFFC /* Products */,
 				C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */,
@@ -164,6 +186,7 @@
 				A1000020 /* ViewModels */,
 				A1000030 /* Views */,
 				A1000050 /* Helpers */,
+				A1000060 /* Services */,
 				A10000400 /* Assets.xcassets */,
 				A10000500 /* PubRanker.entitlements */,
 				C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */,
@@ -249,6 +272,7 @@
 			files = (
 				C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */,
 				C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */,
+				C9137CE42ED450AB007B469E /* CLAUDE.md in Resources */,
 				A10000401 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,12 +289,13 @@
 				A10000101 /* Quiz.swift in Sources */,
 				A10000103 /* Team.swift in Sources */,
 				A10000105 /* Round.swift in Sources */,
+				A10000107 /* EmailTemplate.swift in Sources */,
 				A10000201 /* QuizViewModel.swift in Sources */,
 				A10000301 /* QuizListView.swift in Sources */,
 				A10000303 /* QuizDetailView.swift in Sources */,
 				A10000305 /* LeaderboardView.swift in Sources */,
 				A10000307 /* TeamManagementView.swift in Sources */,
-				A10000325 /* GlobalTeamsManagerView.swift in Sources */,
+				A10000327 /* GlobalTeamsManagerView.swift in Sources */,
 				A10000309 /* RoundManagementView.swift in Sources */,
 				A10000311 /* ScoreEntryView.swift in Sources */,
 				A10000313 /* TeamSetupWizard.swift in Sources */,
@@ -279,8 +304,11 @@
 				A10000319 /* ExecutionView.swift in Sources */,
 				A10000321 /* AnalysisView.swift in Sources */,
 				A10000323 /* ColorExtension.swift in Sources */,
+				A10000326 /* TeamIconView.swift in Sources */,
 				DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */,
 				8F59D7F291C24541BE40AA86 /* PresentationWindowController.swift in Sources */,
+				A10000601 /* EmailService.swift in Sources */,
+				A10000611 /* EmailComposerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,7 +387,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -399,7 +426,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -467,7 +494,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -501,7 +527,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;

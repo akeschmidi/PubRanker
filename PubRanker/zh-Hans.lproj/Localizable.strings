@@ -288,59 +288,122 @@
 "stats.maxPoints" = "最大分数";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "规划测验";
+"planning.subtitle" = "准备你的测验";
+"planning.noQuizzes" = "没有计划的测验";
+"planning.noQuizzes.description" = "创建你的第一个测验";
+"planning.plannedQuizzes" = "计划的测验 (%d)";
+"planning.delete" = "删除";
+"planning.edit" = "编辑";
+"planning.start" = "开始测验";
+"planning.delete.confirm" = "您真的要删除'%@'吗？此操作无法撤销。";
+"planning.ready" = "准备好你的第一个测验了吗？";
+"planning.ready.description" = "轻松计划和组织你的酒吧测验";
+"planning.create" = "创建新测验";
+"planning.create.subtitle" = "开始规划";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
-"edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.title" = "编辑测验";
+"edit.details" = "测验详情";
+"edit.statistics" = "统计";
+"edit.status" = "状态";
+"edit.active" = "活跃";
+"edit.planned" = "已规划";
+"edit.completed" = "已完成";
+"edit.preparation" = "准备";
+"edit.teams" = "队伍";
+"edit.rounds" = "回合";
+"edit.maxPoints" = "最大分数";
+"edit.overview" = "概览";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "管理队伍";
+"teams.none" = "没有队伍";
+"teams.none.description" = "添加队伍以开始测验";
+"teams.add.first" = "添加第一支队伍";
+"teams.colorPicker" = "选择颜色";
+"teams.rank" = "排名 %d";
+"teams.points" = "分数";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "管理回合";
+"rounds.none" = "没有回合";
+"rounds.none.description" = "添加回合以分配分数";
+"rounds.add.first" = "添加第一个回合";
+"rounds.preparation" = "准备";
+"rounds.active" = "活跃";
+"rounds.completed" = "已完成";
+"rounds.delete.confirm" = "您真的要删除'%@'吗？";
+"rounds.maxPoints" = "最大 %d 分";
+"rounds.points" = "分数";
+"rounds.editName" = "编辑名称";
+"rounds.editPoints" = "编辑分数";
+"rounds.savePoints" = "保存分数";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "排行榜";
+"analysis.overview" = "概览";
+
+// MARK: - Email
+"email.send" = "发送邮件";
+"email.send.all" = "发送邮件给所有队伍";
+"email.send.quiz" = "发送邮件给测验队伍";
+"email.noAddresses.title" = "没有邮件地址";
+"email.noAddresses.message" = "所选队伍中没有任何一个有邮件地址。";
+"email.quiz.subject" = "测验信息：%@";
+"email.quiz.body.intro" = "您好，\n\n以下是关于测验\"%@\"的信息：";
+"email.quiz.body.venue" = "地点：%@";
+"email.quiz.body.date" = "日期：%@";
+"email.quiz.body.teams" = "队伍数量：%d";
+
+// MARK: - Email Composer
+"email.composer.title" = "撰写邮件";
+"email.composer.quiz.title" = "发送邮件给团队: %@";
+"email.composer.all.title" = "发送邮件给所有团队";
+"email.composer.all.subtitle" = "%d个团队可用";
+"email.composer.search" = "搜索团队...";
+"email.composer.selectAll" = "全选";
+"email.composer.selected" = "已选择 %d / %d";
+"email.composer.noEmails" = "无电子邮件地址";
+"email.composer.noEmails.description" = "没有团队注册了电子邮件地址。";
+"email.composer.recipients" = "收件人";
+"email.composer.noRecipients" = "请至少选择一个团队";
+"email.composer.subject" = "主题";
+"email.composer.subject.placeholder" = "输入主题...";
+"email.composer.body" = "消息";
+"email.composer.send" = "打开邮件应用";
+"email.composer.defaultSubject" = "酒吧问答信息";
+"email.composer.defaultBody" = "您好，\n\n以下是酒吧问答的信息：\n\n";
+"email.composer.filterByQuiz" = "按问答筛选";
+"email.composer.filter.all" = "全部";
+"email.composer.filter.byQuiz" = "按问答";
+"email.composer.selectQuizzes" = "选择问答...";
+"email.composer.quizzesSelected" = "已选择 %d 个问答";
+"email.composer.noTeams" = "无团队";
+"email.composer.noTeams.description" = "未找到带电子邮件地址的团队";
+"email.composer.to" = "收件人:";
+"email.composer.recipientCount" = "%d 位收件人";
+"email.composer.insertTemplate" = "插入模板";
+"email.composer.templates.title" = "电子邮件模板";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "问答邀请";
+"email.template.invitation.subject" = "您被邀请参加我们的酒吧问答！";
+"email.template.invitation.body" = "您好团队，\n\n我们很高兴邀请您参加我们即将举行的酒吧问答！\n\n📅 日期: [DATE]\n📍 地点: [VENUE]\n⏰ 时间: [TIME]\n\n请通过回复此电子邮件确认您的参与。\n\n期待在那里见到您！\n\n此致";
+
+"email.template.reminder.name" = "问答提醒";
+"email.template.reminder.subject" = "提醒：明天酒吧问答！";
+"email.template.reminder.body" = "您好团队，\n\n这是关于明天问答的友好提醒：\n\n📅 明天 [TIME]\n📍 [VENUE]\n\n别忘了全力以赴！\n\n到时候见！";
+
+"email.template.results.name" = "结果通知";
+"email.template.results.subject" = "问答结果 - 恭喜！";
+"email.template.results.body" = "大家好，\n\n感谢您参加我们的酒吧问答！\n\n以下是最终结果：\n[RESULTS]\n\n恭喜所有获胜者！ 🎉\n\n下次见！";
+
+"email.template.thankyou.name" = "感谢";
+"email.template.thankyou.subject" = "感谢您的参与！";
+"email.template.thankyou.body" = "亲爱的团队，\n\n感谢您让我们的酒吧问答取得巨大成功！\n\n看到每个人都参与并享受乐趣真是太好了。\n\n我们希望在下一次活动中见到您！\n\n此致";
+
+"email.template.scheduleChange.name" = "时间表更改";
+"email.template.scheduleChange.subject" = "重要：问答时间表更新";
+"email.template.scheduleChange.body" = "您好，\n\n我们需要通知您时间表的更改：\n\n🔄 新日期: [NEW_DATE]\n🔄 新时间: [NEW_TIME]\n📍 地点: [VENUE] (未更改)\n\n我们对造成的不便表示歉意。\n\n请确认您是否仍能参加。\n\n感谢您的理解！";
 

@@ -288,59 +288,122 @@
 "stats.maxPoints" = "최대 포인트";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "퀴즈 계획";
+"planning.subtitle" = "퀴즈 준비";
+"planning.noQuizzes" = "계획된 퀴즈 없음";
+"planning.noQuizzes.description" = "첫 퀴즈 만들기";
+"planning.plannedQuizzes" = "계획된 퀴즈 (%d)";
+"planning.delete" = "삭제";
+"planning.edit" = "편집";
+"planning.start" = "퀴즈 시작";
+"planning.delete.confirm" = "정말로 '%@'를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.";
+"planning.ready" = "첫 퀴즈를 준비하셨나요?";
+"planning.ready.description" = "펍 퀴즈를 쉽게 계획하고 정리하세요";
+"planning.create" = "새 퀴즈 만들기";
+"planning.create.subtitle" = "계획 시작";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
-"edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.title" = "퀴즈 편집";
+"edit.details" = "퀴즈 세부정보";
+"edit.statistics" = "통계";
+"edit.status" = "상태";
+"edit.active" = "활성";
+"edit.planned" = "계획됨";
+"edit.completed" = "완료됨";
+"edit.preparation" = "준비";
+"edit.teams" = "팀";
+"edit.rounds" = "라운드";
+"edit.maxPoints" = "최대 포인트";
+"edit.overview" = "개요";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "팀 관리";
+"teams.none" = "팀 없음";
+"teams.none.description" = "퀴즈를 시작하려면 팀을 추가하세요";
+"teams.add.first" = "첫 번째 팀 추가";
+"teams.colorPicker" = "색상 선택";
+"teams.rank" = "순위 %d";
+"teams.points" = "포인트";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "라운드 관리";
+"rounds.none" = "라운드 없음";
+"rounds.none.description" = "포인트를 부여하려면 라운드를 추가하세요";
+"rounds.add.first" = "첫 번째 라운드 추가";
+"rounds.preparation" = "준비";
+"rounds.active" = "활성";
+"rounds.completed" = "완료됨";
+"rounds.delete.confirm" = "정말로 '%@'를 삭제하시겠습니까?";
+"rounds.maxPoints" = "최대 %d 포인트";
+"rounds.points" = "포인트";
+"rounds.editName" = "이름 편집";
+"rounds.editPoints" = "포인트 편집";
+"rounds.savePoints" = "포인트 저장";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "리더보드";
+"analysis.overview" = "개요";
+
+// MARK: - Email
+"email.send" = "이메일 보내기";
+"email.send.all" = "모든 팀에 이메일";
+"email.send.quiz" = "퀴즈 팀에 이메일";
+"email.noAddresses.title" = "이메일 주소 없음";
+"email.noAddresses.message" = "선택한 팀 중 이메일 주소가 있는 팀이 없습니다.";
+"email.quiz.subject" = "퀴즈 정보: %@";
+"email.quiz.body.intro" = "안녕하세요,\n\n다음은 퀴즈 \"%@\"에 대한 정보입니다:";
+"email.quiz.body.venue" = "장소: %@";
+"email.quiz.body.date" = "날짜: %@";
+"email.quiz.body.teams" = "팀 수: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "이메일 작성";
+"email.composer.quiz.title" = "팀에 이메일: %@";
+"email.composer.all.title" = "모든 팀에 이메일";
+"email.composer.all.subtitle" = "%d개 팀 사용 가능";
+"email.composer.search" = "팀 검색...";
+"email.composer.selectAll" = "모두 선택";
+"email.composer.selected" = "%d / %d 선택됨";
+"email.composer.noEmails" = "이메일 주소 없음";
+"email.composer.noEmails.description" = "팀에 이메일 주소가 등록되어 있지 않습니다.";
+"email.composer.recipients" = "수신자";
+"email.composer.noRecipients" = "최소한 하나의 팀을 선택하세요";
+"email.composer.subject" = "제목";
+"email.composer.subject.placeholder" = "제목 입력...";
+"email.composer.body" = "메시지";
+"email.composer.send" = "메일 앱 열기";
+"email.composer.defaultSubject" = "펍 퀴즈 정보";
+"email.composer.defaultBody" = "안녕하세요,\n\n펍 퀴즈에 대한 정보는 다음과 같습니다:\n\n";
+"email.composer.filterByQuiz" = "퀴즈로 필터링";
+"email.composer.filter.all" = "모두";
+"email.composer.filter.byQuiz" = "퀴즈별";
+"email.composer.selectQuizzes" = "퀴즈 선택...";
+"email.composer.quizzesSelected" = "%d개 퀴즈 선택됨";
+"email.composer.noTeams" = "팀 없음";
+"email.composer.noTeams.description" = "이메일 주소가 있는 팀을 찾을 수 없습니다";
+"email.composer.to" = "받는 사람:";
+"email.composer.recipientCount" = "%d명의 수신자";
+"email.composer.insertTemplate" = "템플릿 삽입";
+"email.composer.templates.title" = "이메일 템플릿";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "퀴즈 초대";
+"email.template.invitation.subject" = "펍 퀴즈에 초대합니다!";
+"email.template.invitation.body" = "안녕하세요 팀 여러분,\n\n곧 있을 펍 퀴즈에 여러분을 초대합니다!\n\n📅 날짜: [DATE]\n📍 장소: [VENUE]\n⏰ 시간: [TIME]\n\n이 이메일에 답장하여 참여를 확인해 주세요.\n\n곧 만나 뵐 수 있기를 기대합니다!\n\n감사합니다";
+
+"email.template.reminder.name" = "퀴즈 알림";
+"email.template.reminder.subject" = "알림: 내일 펍 퀴즈!";
+"email.template.reminder.body" = "안녕하세요 팀 여러분,\n\n내일 퀴즈에 대한 친절한 알림입니다:\n\n📅 내일 [TIME]\n📍 [VENUE]\n\n최선을 다하는 것을 잊지 마세요!\n\n곧 만나요!";
+
+"email.template.results.name" = "결과 알림";
+"email.template.results.subject" = "퀴즈 결과 - 축하합니다!";
+"email.template.results.body" = "안녕하세요 여러분,\n\n펍 퀴즈에 참여해 주셔서 감사합니다!\n\n최종 결과는 다음과 같습니다:\n[RESULTS]\n\n모든 우승자에게 축하합니다! 🎉\n\n다음에 또 만나요!";
+
+"email.template.thankyou.name" = "감사합니다";
+"email.template.thankyou.subject" = "참여해 주셔서 감사합니다!";
+"email.template.thankyou.body" = "안녕하세요 팀 여러분,\n\n펍 퀴즈를 성공적으로 만드는 데 도움을 주셔서 감사합니다!\n\n모두가 참여하고 즐거워하는 모습을 보는 것이 좋았습니다.\n\n다음 이벤트에서도 만나 뵐 수 있기를 기대합니다!\n\n감사합니다";
+
+"email.template.scheduleChange.name" = "일정 변경";
+"email.template.scheduleChange.subject" = "중요: 퀴즈 일정 업데이트";
+"email.template.scheduleChange.body" = "안녕하세요,\n\n일정 변경에 대해 알려드립니다:\n\n🔄 새 날짜: [NEW_DATE]\n🔄 새 시간: [NEW_TIME]\n📍 장소: [VENUE] (변경 없음)\n\n불편을 드려 죄송합니다.\n\n여전히 참여 가능한지 확인해 주세요.\n\n이해해 주셔서 감사합니다!";
 

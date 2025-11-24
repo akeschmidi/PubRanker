@@ -144,18 +144,6 @@ struct QuickRoundSetupView: View {
                             .buttonStyle(.plain)
                         }
                         .frame(maxWidth: .infinity)
-                        
-                        // Quick buttons
-                        HStack(spacing: 8) {
-                            ForEach([4, 5, 6, 8, 10], id: \.self) { count in
-                                Button("\(count)") {
-                                    numberOfRounds = count
-                                    updateRoundNames()
-                                }
-                                .buttonStyle(.bordered)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
                     }
                     
                     // Max Points

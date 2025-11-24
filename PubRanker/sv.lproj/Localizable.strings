@@ -288,59 +288,122 @@
 "stats.maxPoints" = "Max poäng";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "Planera Quiz";
+"planning.subtitle" = "Förbered ditt quiz";
+"planning.noQuizzes" = "Inga planerade quiz";
+"planning.noQuizzes.description" = "Skapa ditt första quiz";
+"planning.plannedQuizzes" = "Planerade Quiz (%d)";
+"planning.delete" = "Radera";
+"planning.edit" = "Redigera";
+"planning.start" = "Starta Quiz";
+"planning.delete.confirm" = "Vill du verkligen radera '%@'? Denna åtgärd kan inte ångras.";
+"planning.ready" = "Redo för ditt första quiz?";
+"planning.ready.description" = "Planera och organisera ditt pubquiz enkelt";
+"planning.create" = "Skapa Nytt Quiz";
+"planning.create.subtitle" = "Börja planera";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
+"edit.title" = "Redigera Quiz";
+"edit.details" = "Quiz-detaljer";
+"edit.statistics" = "Statistik";
 "edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.active" = "Aktiv";
+"edit.planned" = "Planerad";
+"edit.completed" = "Slutförd";
+"edit.preparation" = "Förberedelse";
+"edit.teams" = "Lag";
+"edit.rounds" = "Omgångar";
+"edit.maxPoints" = "Max Poäng";
+"edit.overview" = "Översikt";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "Hantera Lag";
+"teams.none" = "Inga Lag";
+"teams.none.description" = "Lägg till lag för att starta quizet";
+"teams.add.first" = "Lägg till Första Laget";
+"teams.colorPicker" = "Välj Färg";
+"teams.rank" = "Plats %d";
+"teams.points" = "Poäng";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "Hantera Omgångar";
+"rounds.none" = "Inga Omgångar";
+"rounds.none.description" = "Lägg till omgångar för att tilldela poäng";
+"rounds.add.first" = "Lägg till Första Omgången";
+"rounds.preparation" = "Förberedelse";
+"rounds.active" = "Aktiv";
+"rounds.completed" = "Slutförd";
+"rounds.delete.confirm" = "Vill du verkligen radera '%@'?";
+"rounds.maxPoints" = "Max %d Poäng";
+"rounds.points" = "Poäng";
+"rounds.editName" = "Redigera Namn";
+"rounds.editPoints" = "Redigera Poäng";
+"rounds.savePoints" = "Spara Poäng";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "Resultattavla";
+"analysis.overview" = "Översikt";
+
+// MARK: - Email
+"email.send" = "Skicka E-post";
+"email.send.all" = "E-post till Alla Lag";
+"email.send.quiz" = "E-post till Quiz-lag";
+"email.noAddresses.title" = "Inga E-postadresser";
+"email.noAddresses.message" = "Inget av de valda lagen har en e-postadress.";
+"email.quiz.subject" = "Quiz-information: %@";
+"email.quiz.body.intro" = "Hej,\n\nhär är informationen om quizet \"%@\":";
+"email.quiz.body.venue" = "Plats: %@";
+"email.quiz.body.date" = "Datum: %@";
+"email.quiz.body.teams" = "Antal Lag: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "Skriv e-post";
+"email.composer.quiz.title" = "E-post till lag från: %@";
+"email.composer.all.title" = "E-post till alla lag";
+"email.composer.all.subtitle" = "%d lag tillgängliga";
+"email.composer.search" = "Sök lag...";
+"email.composer.selectAll" = "Välj alla";
+"email.composer.selected" = "%d av %d valda";
+"email.composer.noEmails" = "Inga e-postadresser";
+"email.composer.noEmails.description" = "Inga av lagen har en e-postadress.";
+"email.composer.recipients" = "Mottagare";
+"email.composer.noRecipients" = "Välj minst ett lag";
+"email.composer.subject" = "Ämne";
+"email.composer.subject.placeholder" = "Ange ämne...";
+"email.composer.body" = "Meddelande";
+"email.composer.send" = "Öppna Mail";
+"email.composer.defaultSubject" = "Information om Pub Quiz";
+"email.composer.defaultBody" = "Hej,\n\nhär är informationen om pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filtrera efter quiz";
+"email.composer.filter.all" = "Alla";
+"email.composer.filter.byQuiz" = "Efter Quiz";
+"email.composer.selectQuizzes" = "Välj quizzer...";
+"email.composer.quizzesSelected" = "%d Quiz%@ valda";
+"email.composer.noTeams" = "Inga lag";
+"email.composer.noTeams.description" = "Inga lag med e-postadresser hittades";
+"email.composer.to" = "Till:";
+"email.composer.recipientCount" = "%d mottagare%@";
+"email.composer.insertTemplate" = "Infoga mall";
+"email.composer.templates.title" = "E-postmallar";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Quiz Inbjudan";
+"email.template.invitation.subject" = "Du är inbjuden till vår Pub Quiz!";
+"email.template.invitation.body" = "Hej Lag,\n\nVi är glada att bjuda in er till vår kommande pub quiz!\n\n📅 Datum: [DATE]\n📍 Plats: [VENUE]\n⏰ Tid: [TIME]\n\nVänligen bekräfta er deltagande genom att svara på detta e-postmeddelande.\n\nVi ser fram emot att träffa er där!\n\nMed vänliga hälsningar";
+
+"email.template.reminder.name" = "Quiz Påminnelse";
+"email.template.reminder.subject" = "Påminnelse: Pub Quiz imorgon!";
+"email.template.reminder.body" = "Hej Lag,\n\nDetta är en vänlig påminnelse om quizzen imorgon:\n\n📅 Imorgon kl. [TIME]\n📍 [VENUE]\n\nGlöm inte att ge er bästa!\n\nVi ses där!";
+
+"email.template.results.name" = "Resultat Meddelande";
+"email.template.results.subject" = "Quiz Resultat - Grattis!";
+"email.template.results.body" = "Hej alla,\n\nTack för att ni deltog i vår pub quiz!\n\nHär är de slutliga resultaten:\n[RESULTS]\n\nGrattis till alla vinnare! 🎉\n\nTill nästa gång!";
+
+"email.template.thankyou.name" = "Tack";
+"email.template.thankyou.subject" = "Tack för er deltagande!";
+"email.template.thankyou.body" = "Kära Lag,\n\nTack för att ni gjorde vår pub quiz till en stor framgång!\n\nDet var underbart att se alla engagerade och ha kul.\n\nVi hoppas att träffa er vid vårt nästa evenemang!\n\nMed vänliga hälsningar";
+
+"email.template.scheduleChange.name" = "Schema Ändring";
+"email.template.scheduleChange.subject" = "Viktigt: Quiz Schema Uppdatering";
+"email.template.scheduleChange.body" = "Hej,\n\nVi måste informera er om en schemaändring:\n\n🔄 Nytt datum: [NEW_DATE]\n🔄 Ny tid: [NEW_TIME]\n📍 Plats: [VENUE] (oförändrat)\n\nVi ber om ursäkt för besväret.\n\nVänligen bekräfta om ni fortfarande kan delta.\n\nTack för er förståelse!";
 

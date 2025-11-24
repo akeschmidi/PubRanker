@@ -59,7 +59,7 @@ struct LeaderboardView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if quiz.safeRounds.isEmpty {
                 VStack(spacing: 24) {
-                    Image(systemName: "list.number.circle.fill")
+                    Image(systemName: "number.circle.fill")
                         .font(.system(size: 60))
                         .foregroundStyle(.blue)
                     
@@ -344,9 +344,7 @@ struct LeaderboardRowView: View {
             // Team Info
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Circle()
-                        .fill(Color(hex: team.color) ?? .blue)
-                        .frame(width: 12, height: 12)
+                    TeamIconView(team: team, size: 12)
                     
                     Text(team.name)
                         .font(.title3)

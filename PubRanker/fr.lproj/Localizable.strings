@@ -343,3 +343,66 @@
 // MARK: - Analysis View (v2.0)
 "analysis.leaderboard" = "Classement";
 "analysis.overview" = "Aperçu";
+
+// MARK: - Email
+"email.send" = "Envoyer un e-mail";
+"email.send.all" = "E-mail à toutes les équipes";
+"email.send.quiz" = "E-mail aux équipes du quiz";
+"email.noAddresses.title" = "Aucune adresse e-mail";
+"email.noAddresses.message" = "Aucune des équipes sélectionnées n'a d'adresse e-mail.";
+"email.quiz.subject" = "Informations sur le quiz: %@";
+"email.quiz.body.intro" = "Bonjour,\n\nvoici les informations sur le quiz \"%@\":";
+"email.quiz.body.venue" = "Lieu: %@";
+"email.quiz.body.date" = "Date: %@";
+"email.quiz.body.teams" = "Nombre d'équipes: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "Rédiger un e-mail";
+"email.composer.quiz.title" = "E-mail aux équipes de : %@";
+"email.composer.all.title" = "E-mail à toutes les équipes";
+"email.composer.all.subtitle" = "%d équipes disponibles";
+"email.composer.search" = "Rechercher des équipes...";
+"email.composer.selectAll" = "Tout sélectionner";
+"email.composer.selected" = "%d sur %d sélectionnés";
+"email.composer.noEmails" = "Aucune adresse e-mail";
+"email.composer.noEmails.description" = "Aucune des équipes n'a d'adresse e-mail.";
+"email.composer.recipients" = "Destinataires";
+"email.composer.noRecipients" = "Veuillez sélectionner au moins une équipe";
+"email.composer.subject" = "Objet";
+"email.composer.subject.placeholder" = "Entrez l'objet...";
+"email.composer.body" = "Message";
+"email.composer.send" = "Ouvrir Mail";
+"email.composer.defaultSubject" = "Informations sur le Pub Quiz";
+"email.composer.defaultBody" = "Bonjour,\n\nvoici les informations sur le pub quiz :\n\n";
+"email.composer.filterByQuiz" = "Filtrer par quiz";
+"email.composer.filter.all" = "Tous";
+"email.composer.filter.byQuiz" = "Par Quiz";
+"email.composer.selectQuizzes" = "Sélectionner les quizzes...";
+"email.composer.quizzesSelected" = "%d Quiz%@ sélectionné%@";
+"email.composer.noTeams" = "Aucune équipe";
+"email.composer.noTeams.description" = "Aucune équipe avec adresses e-mail trouvée";
+"email.composer.to" = "À :";
+"email.composer.recipientCount" = "%d destinataire%@";
+"email.composer.insertTemplate" = "Insérer un modèle";
+"email.composer.templates.title" = "Modèles d'e-mail";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Invitation au Quiz";
+"email.template.invitation.subject" = "Vous êtes invité à notre Pub Quiz !";
+"email.template.invitation.body" = "Bonjour l'équipe,\n\nNous sommes ravis de vous inviter à notre prochain pub quiz !\n\n📅 Date : [DATE]\n📍 Lieu : [VENUE]\n⏰ Heure : [TIME]\n\nVeuillez confirmer votre participation en répondant à cet e-mail.\n\nNous avons hâte de vous voir là-bas !\n\nCordialement";
+
+"email.template.reminder.name" = "Rappel du Quiz";
+"email.template.reminder.subject" = "Rappel : Pub Quiz demain !";
+"email.template.reminder.body" = "Salut l'équipe,\n\nCeci est un rappel amical concernant le quiz de demain :\n\n📅 Demain à [TIME]\n📍 [VENUE]\n\nN'oubliez pas d'apporter votre meilleur jeu !\n\nÀ bientôt !";
+
+"email.template.results.name" = "Notification des résultats";
+"email.template.results.subject" = "Résultats du Quiz - Félicitations !";
+"email.template.results.body" = "Bonjour à tous,\n\nMerci d'avoir participé à notre pub quiz !\n\nVoici les résultats finaux :\n[RESULTS]\n\nFélicitations à tous les gagnants ! 🎉\n\nÀ la prochaine !";
+
+"email.template.thankyou.name" = "Merci";
+"email.template.thankyou.subject" = "Merci d'avoir participé !";
+"email.template.thankyou.body" = "Chère équipe,\n\nMerci d'avoir fait de notre pub quiz un grand succès !\n\nC'était merveilleux de voir tout le monde engagé et s'amusant.\n\nNous espérons vous voir à notre prochain événement !\n\nCordialement";
+
+"email.template.scheduleChange.name" = "Changement d'horaire";
+"email.template.scheduleChange.subject" = "Important : Mise à jour de l'horaire du Quiz";
+"email.template.scheduleChange.body" = "Bonjour,\n\nNous devons vous informer d'un changement d'horaire :\n\n🔄 Nouvelle date : [NEW_DATE]\n🔄 Nouvelle heure : [NEW_TIME]\n📍 Lieu : [VENUE] (inchangé)\n\nNous nous excusons pour le désagrément.\n\nVeuillez confirmer si vous pouvez toujours y assister.\n\nMerci de votre compréhension !";

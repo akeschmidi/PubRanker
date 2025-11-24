@@ -344,6 +344,57 @@
 "analysis.leaderboard" = "Leaderboard";
 "analysis.overview" = "Overview";
 
+// MARK: - Email Composer
+"email.composer.title" = "Compose Email";
+"email.composer.quiz.title" = "Email to Teams from: %@";
+"email.composer.all.title" = "Email to All Teams";
+"email.composer.all.subtitle" = "%d teams available";
+"email.composer.search" = "Search teams...";
+"email.composer.selectAll" = "Select All";
+"email.composer.selected" = "%d of %d selected";
+"email.composer.noEmails" = "No Email Addresses";
+"email.composer.noEmails.description" = "None of the teams have an email address.";
+"email.composer.recipients" = "Recipients";
+"email.composer.noRecipients" = "Please select at least one team";
+"email.composer.subject" = "Subject";
+"email.composer.subject.placeholder" = "Enter subject...";
+"email.composer.body" = "Message";
+"email.composer.send" = "Open Mail App";
+"email.composer.defaultSubject" = "Pub Quiz Information";
+"email.composer.defaultBody" = "Hello,\n\nhere is the information about the pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filter by Quiz";
+"email.composer.filter.all" = "All";
+"email.composer.filter.byQuiz" = "By Quiz";
+"email.composer.selectQuizzes" = "Select Quizzes...";
+"email.composer.quizzesSelected" = "%d Quiz%@ selected";
+"email.composer.noTeams" = "No Teams";
+"email.composer.noTeams.description" = "No teams with email addresses found";
+"email.composer.to" = "To:";
+"email.composer.recipientCount" = "%d recipient%@";
+"email.composer.insertTemplate" = "Insert Template";
+"email.composer.templates.title" = "Email Templates";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Quiz Invitation";
+"email.template.invitation.subject" = "You're Invited to Our Pub Quiz!";
+"email.template.invitation.body" = "Hello Team,\n\nWe're excited to invite you to our upcoming pub quiz!\n\n📅 Date: [DATE]\n📍 Location: [VENUE]\n⏰ Time: [TIME]\n\nPlease confirm your participation by replying to this email.\n\nLooking forward to seeing you there!\n\nBest regards";
+
+"email.template.reminder.name" = "Quiz Reminder";
+"email.template.reminder.subject" = "Reminder: Pub Quiz Tomorrow!";
+"email.template.reminder.body" = "Hi Team,\n\nThis is a friendly reminder about tomorrow's quiz:\n\n📅 Tomorrow at [TIME]\n📍 [VENUE]\n\nDon't forget to bring your A-game!\n\nSee you there!";
+
+"email.template.results.name" = "Results Notification";
+"email.template.results.subject" = "Quiz Results - Congratulations!";
+"email.template.results.body" = "Hello Everyone,\n\nThank you for participating in our pub quiz!\n\nHere are the final results:\n[RESULTS]\n\nCongratulations to all winners! 🎉\n\nUntil next time!";
+
+"email.template.thankyou.name" = "Thank You";
+"email.template.thankyou.subject" = "Thank You for Participating!";
+"email.template.thankyou.body" = "Dear Team,\n\nThank you for making our pub quiz a great success!\n\nIt was wonderful to see everyone engaged and having fun.\n\nWe hope to see you at our next event!\n\nWarm regards";
+
+"email.template.scheduleChange.name" = "Schedule Change";
+"email.template.scheduleChange.subject" = "Important: Quiz Schedule Update";
+"email.template.scheduleChange.body" = "Hello,\n\nWe need to inform you about a schedule change:\n\n🔄 New Date: [NEW_DATE]\n🔄 New Time: [NEW_TIME]\n📍 Location: [VENUE] (unchanged)\n\nWe apologize for any inconvenience.\n\nPlease confirm if you can still make it.\n\nThanks for your understanding!";
+
 // MARK: - Planning View (v2.0)
 "planning.title" = "Plan Quiz";
 "planning.subtitle" = "Prepare your quiz";
@@ -400,3 +451,23 @@
 // MARK: - Analysis View (v2.0)
 "analysis.leaderboard" = "Leaderboard";
 "analysis.overview" = "Overview";
+
+// MARK: - Email Composer
+"email.composer.title" = "Compose Email";
+"email.composer.quiz.title" = "Email to Teams from: %@";
+"email.composer.all.title" = "Email to All Teams";
+"email.composer.all.subtitle" = "%d teams available";
+"email.composer.search" = "Search teams...";
+"email.composer.selectAll" = "Select All";
+"email.composer.selected" = "%d of %d selected";
+"email.composer.noEmails" = "No Email Addresses";
+"email.composer.noEmails.description" = "None of the teams have an email address.";
+"email.composer.recipients" = "Recipients";
+"email.composer.noRecipients" = "Please select at least one team";
+"email.composer.subject" = "Subject";
+"email.composer.subject.placeholder" = "Enter subject...";
+"email.composer.body" = "Message";
+"email.composer.send" = "Open Mail App";
+"email.composer.defaultSubject" = "Pub Quiz Information";
+"email.composer.defaultBody" = "Hello,\n\nhere is the information about the pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filter by Quiz";

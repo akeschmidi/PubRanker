@@ -288,59 +288,122 @@
 "stats.maxPoints" = "Maks punkty";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "Zaplanuj Quiz";
+"planning.subtitle" = "Przygotuj swój quiz";
+"planning.noQuizzes" = "Brak zaplanowanych quizów";
+"planning.noQuizzes.description" = "Utwórz swój pierwszy quiz";
+"planning.plannedQuizzes" = "Zaplanowane Quizy (%d)";
+"planning.delete" = "Usuń";
+"planning.edit" = "Edytuj";
+"planning.start" = "Rozpocznij Quiz";
+"planning.delete.confirm" = "Czy na pewno chcesz usunąć '%@'? Tej akcji nie można cofnąć.";
+"planning.ready" = "Gotowy na swój pierwszy quiz?";
+"planning.ready.description" = "Zaplanuj i zorganizuj swój pubquiz z łatwością";
+"planning.create" = "Utwórz Nowy Quiz";
+"planning.create.subtitle" = "Rozpocznij planowanie";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
+"edit.title" = "Edytuj Quiz";
+"edit.details" = "Szczegóły Quizu";
+"edit.statistics" = "Statystyki";
 "edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.active" = "Aktywny";
+"edit.planned" = "Zaplanowany";
+"edit.completed" = "Zakończony";
+"edit.preparation" = "Przygotowanie";
+"edit.teams" = "Zespoły";
+"edit.rounds" = "Rundy";
+"edit.maxPoints" = "Maks Punkty";
+"edit.overview" = "Przegląd";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "Zarządzaj Zespołami";
+"teams.none" = "Brak Zespołów";
+"teams.none.description" = "Dodaj zespoły, aby rozpocząć quiz";
+"teams.add.first" = "Dodaj Pierwszy Zespół";
+"teams.colorPicker" = "Wybierz Kolor";
+"teams.rank" = "Miejsce %d";
+"teams.points" = "Punkty";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "Zarządzaj Rundami";
+"rounds.none" = "Brak Rund";
+"rounds.none.description" = "Dodaj rundy, aby przyznać punkty";
+"rounds.add.first" = "Dodaj Pierwszą Rundę";
+"rounds.preparation" = "Przygotowanie";
+"rounds.active" = "Aktywna";
+"rounds.completed" = "Zakończona";
+"rounds.delete.confirm" = "Czy na pewno chcesz usunąć '%@'?";
+"rounds.maxPoints" = "Maks %d Punktów";
+"rounds.points" = "Punkty";
+"rounds.editName" = "Edytuj Nazwę";
+"rounds.editPoints" = "Edytuj Punkty";
+"rounds.savePoints" = "Zapisz Punkty";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "Ranking";
+"analysis.overview" = "Przegląd";
+
+// MARK: - Email
+"email.send" = "Wyślij E-mail";
+"email.send.all" = "E-mail do Wszystkich Zespołów";
+"email.send.quiz" = "E-mail do Zespołów Quizu";
+"email.noAddresses.title" = "Brak Adresów E-mail";
+"email.noAddresses.message" = "Żaden z wybranych zespołów nie ma adresu e-mail.";
+"email.quiz.subject" = "Informacje o Quizie: %@";
+"email.quiz.body.intro" = "Witaj,\n\noto informacje o quizie \"%@\":";
+"email.quiz.body.venue" = "Miejsce: %@";
+"email.quiz.body.date" = "Data: %@";
+"email.quiz.body.teams" = "Liczba Zespołów: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "Utwórz e-mail";
+"email.composer.quiz.title" = "E-mail do drużyn z: %@";
+"email.composer.all.title" = "E-mail do wszystkich drużyn";
+"email.composer.all.subtitle" = "%d drużyn dostępnych";
+"email.composer.search" = "Szukaj drużyn...";
+"email.composer.selectAll" = "Zaznacz wszystkie";
+"email.composer.selected" = "%d z %d zaznaczonych";
+"email.composer.noEmails" = "Brak adresów e-mail";
+"email.composer.noEmails.description" = "Żadna z drużyn nie ma adresu e-mail.";
+"email.composer.recipients" = "Odbiorcy";
+"email.composer.noRecipients" = "Proszę wybrać co najmniej jedną drużynę";
+"email.composer.subject" = "Temat";
+"email.composer.subject.placeholder" = "Wprowadź temat...";
+"email.composer.body" = "Wiadomość";
+"email.composer.send" = "Otwórz aplikację Mail";
+"email.composer.defaultSubject" = "Informacje o Pub Quiz";
+"email.composer.defaultBody" = "Witaj,\n\noto informacje o pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filtruj według quizu";
+"email.composer.filter.all" = "Wszystkie";
+"email.composer.filter.byQuiz" = "Według Quizu";
+"email.composer.selectQuizzes" = "Wybierz quizy...";
+"email.composer.quizzesSelected" = "%d Quiz%@ wybran%@";
+"email.composer.noTeams" = "Brak drużyn";
+"email.composer.noTeams.description" = "Nie znaleziono drużyn z adresami e-mail";
+"email.composer.to" = "Do:";
+"email.composer.recipientCount" = "%d odbiorc%@";
+"email.composer.insertTemplate" = "Wstaw szablon";
+"email.composer.templates.title" = "Szablony e-mail";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Zaproszenie na Quiz";
+"email.template.invitation.subject" = "Zostałeś zaproszony na nasz Pub Quiz!";
+"email.template.invitation.body" = "Witaj Drużyno,\n\nCieszymy się, że możemy zaprosić Cię na nasz nadchodzący pub quiz!\n\n📅 Data: [DATE]\n📍 Miejsce: [VENUE]\n⏰ Godzina: [TIME]\n\nProsimy o potwierdzenie udziału poprzez odpowiedź na ten e-mail.\n\nNie możemy się doczekać spotkania!\n\nPozdrawiamy";
+
+"email.template.reminder.name" = "Przypomnienie o Quizie";
+"email.template.reminder.subject" = "Przypomnienie: Pub Quiz jutro!";
+"email.template.reminder.body" = "Witaj Drużyno,\n\nTo przyjazne przypomnienie o jutrzejszym quizie:\n\n📅 Jutro o [TIME]\n📍 [VENUE]\n\nNie zapomnij przynieść swojego najlepszego poziomu!\n\nDo zobaczenia!";
+
+"email.template.results.name" = "Powiadomienie o wynikach";
+"email.template.results.subject" = "Wyniki Quizu - Gratulacje!";
+"email.template.results.body" = "Witajcie wszyscy,\n\nDziękujemy za udział w naszym pub quizie!\n\nOto końcowe wyniki:\n[RESULTS]\n\nGratulacje dla wszystkich zwycięzców! 🎉\n\nDo następnego razu!";
+
+"email.template.thankyou.name" = "Dziękujemy";
+"email.template.thankyou.subject" = "Dziękujemy za udział!";
+"email.template.thankyou.body" = "Droga Drużyno,\n\nDziękujemy za uczynienie naszego pub quizu wielkim sukcesem!\n\nCudownie było widzieć wszystkich zaangażowanych i dobrze się bawiących.\n\nMamy nadzieję zobaczyć was na naszym następnym wydarzeniu!\n\nSerdeczne pozdrowienia";
+
+"email.template.scheduleChange.name" = "Zmiana harmonogramu";
+"email.template.scheduleChange.subject" = "Ważne: Aktualizacja harmonogramu Quizu";
+"email.template.scheduleChange.body" = "Witaj,\n\nMusimy poinformować Cię o zmianie harmonogramu:\n\n🔄 Nowa data: [NEW_DATE]\n🔄 Nowa godzina: [NEW_TIME]\n📍 Miejsce: [VENUE] (bez zmian)\n\nPrzepraszamy za niedogodności.\n\nProsimy o potwierdzenie, czy nadal możesz przyjść.\n\nDziękujemy za zrozumienie!";
 

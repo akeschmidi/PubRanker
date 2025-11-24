@@ -18,7 +18,7 @@ final class Quiz {
     var isCompleted: Bool = false
     var createdAt: Date = Date()
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var teams: [Team]? = []
     
     @Relationship(deleteRule: .cascade)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 
 struct PlanningView: View {
     @Environment(\.modelContext) private var modelContext
@@ -19,6 +20,25 @@ struct PlanningView: View {
     @State private var selectedQuiz: Quiz?
     @State private var quizToDelete: Quiz?
     @State private var showingDeleteConfirmation = false
+    @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
+    @State private var showingGlobalTeamPicker = false
+    @State private var selectedDetailTab: PlanningDetailTab = .overview
+    
+    enum PlanningDetailTab: String, CaseIterable, Identifiable {
+        case overview = "Übersicht"
+        case teams = "Teams"
+        case rounds = "Runden"
+        
+        var id: String { rawValue }
+        
+        var icon: String {
+            switch self {
+            case .overview: return "chart.bar.fill"
+            case .teams: return "person.3.fill"
+            case .rounds: return "list.number"
+            }
+        }
+    }
     
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
@@ -46,6 +66,11 @@ struct PlanningView: View {
         .sheet(isPresented: $showingEditQuizSheet) {
             if let quiz = selectedQuiz {
                 EditQuizSheet(quiz: quiz, viewModel: viewModel)
+            }
+        }
+        .sheet(isPresented: $showingGlobalTeamPicker) {
+            if let quiz = selectedQuiz {
+                GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams(for: quiz), modelContext: modelContext)
             }
         }
         .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
@@ -142,179 +167,288 @@ struct PlanningView: View {
     }
     
     private func planningDetailView(for quiz: Quiz) -> some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                // Quiz Info Header
-                quizInfoCard(quiz)
-                
-                // Quick Stats
-                quickStatsRow(quiz)
-                
-                // Setup Sections
-                VStack(spacing: 20) {
-                    setupSection(
-                        title: "Teams hinzufügen",
-                        icon: "person.3.fill",
-                        color: .blue,
-                        count: quiz.safeTeams.count,
-                        isComplete: !quiz.safeTeams.isEmpty
-                    ) {
-                        TeamManagementView(quiz: quiz, viewModel: viewModel)
-                    }
-                    
-                    setupSection(
-                        title: "Runden definieren",
-                        icon: "list.number",
-                        color: .green,
-                        count: quiz.safeRounds.count,
-                        isComplete: !quiz.safeRounds.isEmpty
-                    ) {
-                        RoundManagementView(quiz: quiz, viewModel: viewModel)
-                    }
-                    
-                    // Team-Übersicht
-                    if !quiz.safeTeams.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack(spacing: 8) {
-                                Text("Team-Übersicht")
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                
-                                Spacer()
-                                
-                                Text("\(quiz.safeTeams.count)")
-                                    .font(.caption)
-                                    .bold()
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 3)
-                                    .background(.blue)
-                                    .clipShape(Capsule())
-                            }
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 12) {
-                                    ForEach(quiz.safeTeams) { team in
-                                        teamOverviewCard(team: team, quiz: quiz)
-                                    }
-                                }
-                                .padding(.vertical, 4)
-                            }
-                        }
-                        .padding(16)
-                        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
+        VStack(spacing: 0) {
+            // Kompakter Header
+            compactQuizHeader(quiz)
+            
+            Divider()
+            
+            // Tab Picker
+            Picker("Ansicht", selection: $selectedDetailTab) {
+                ForEach(PlanningDetailTab.allCases) { tab in
+                    Label(tab.rawValue, systemImage: tab.icon)
+                        .tag(tab)
                 }
-                .padding(.horizontal)
             }
-            .padding(.vertical)
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+            .background(Color(nsColor: .controlBackgroundColor))
+            
+            Divider()
+            
+            // Tab Content
+            Group {
+                switch selectedDetailTab {
+                case .overview:
+                    overviewTabContent(quiz: quiz)
+                case .teams:
+                    teamsTabContent(quiz: quiz)
+                case .rounds:
+                    roundsTabContent(quiz: quiz)
+                }
+            }
         }
     }
     
-    private func quizInfoCard(_ quiz: Quiz) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
+    // MARK: - Tab Content Views
+    
+    private func overviewTabContent(quiz: Quiz) -> some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                // Quick Stats
+                quickStatsGrid(quiz)
+                
+                // Status Cards
+                statusCardsSection(quiz)
+                
+                // Team-Übersicht (kompakt)
+                if !quiz.safeTeams.isEmpty {
+                    compactTeamOverview(quiz: quiz)
+                }
+                
+                // Runden-Übersicht (kompakt)
+                if !quiz.safeRounds.isEmpty {
+                    compactRoundsOverview(quiz: quiz)
+                }
+            }
+            .padding()
+        }
+    }
+    
+    private func teamsTabContent(quiz: Quiz) -> some View {
+        TeamManagementView(quiz: quiz, viewModel: viewModel)
+    }
+    
+    private func roundsTabContent(quiz: Quiz) -> some View {
+        RoundManagementView(quiz: quiz, viewModel: viewModel)
+    }
+    
+    // MARK: - Header & Overview Components
+    
+    private func compactQuizHeader(_ quiz: Quiz) -> some View {
+        HStack(spacing: 16) {
+            // Quiz Info
+            HStack(spacing: 12) {
                 Image(systemName: "calendar.circle.fill")
-                    .font(.largeTitle)
+                    .font(.title2)
                     .foregroundStyle(.blue)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(quiz.name)
-                        .font(.title)
+                        .font(.title2)
                         .bold()
                     
                     HStack(spacing: 12) {
                         if !quiz.venue.isEmpty {
                             Label(quiz.venue, systemImage: "mappin.circle")
-                                .font(.subheadline)
+                                .font(.body)
                         }
                         Label(quiz.date.formatted(date: .abbreviated, time: .shortened), systemImage: "clock")
-                            .font(.subheadline)
+                            .font(.body)
                     }
                     .foregroundStyle(.secondary)
                 }
+            }
+            
+            Spacer()
+            
+            // Action Buttons (kompakter)
+            HStack(spacing: 8) {
+                Button {
+                    showingEditQuizSheet = true
+                } label: {
+                    Image(systemName: "pencil.circle.fill")
+                        .font(.title3)
+                }
+                .buttonStyle(.plain)
+                .help("Quiz bearbeiten")
+                
+                Button {
+                    quizToDelete = quiz
+                    showingDeleteConfirmation = true
+                } label: {
+                    Image(systemName: "trash.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(.red)
+                }
+                .buttonStyle(.plain)
+                .help("Quiz löschen")
+                
+                if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
+                    Button {
+                        viewModel.startQuiz(quiz)
+                        selectedWorkflow = .execution
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "play.circle.fill")
+                                .font(.body)
+                            Text("Starten")
+                                .font(.body)
+                                .bold()
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(
+                            LinearGradient(
+                                colors: [.green, .green.opacity(0.8)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .shadow(color: .green.opacity(0.3), radius: 4)
+                    }
+                    .buttonStyle(.plain)
+                    .keyboardShortcut("s", modifiers: .command)
+                    .help("Quiz starten (⌘S)")
+                }
+            }
+        }
+        .padding()
+        .background(Color(nsColor: .controlBackgroundColor))
+    }
+    
+    private func quickStatsGrid(_ quiz: Quiz) -> some View {
+        HStack(spacing: 12) {
+            compactStatCard(
+                title: "Teams",
+                value: "\(quiz.safeTeams.count)",
+                icon: "person.3.fill",
+                color: .blue,
+                isComplete: !quiz.safeTeams.isEmpty
+            )
+            
+            compactStatCard(
+                title: "Runden",
+                value: "\(quiz.safeRounds.count)",
+                icon: "list.number",
+                color: .green,
+                isComplete: !quiz.safeRounds.isEmpty
+            )
+            
+            compactStatCard(
+                title: "Max. Punkte",
+                value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })",
+                icon: "star.fill",
+                color: .orange,
+                isComplete: !quiz.safeRounds.isEmpty
+            )
+        }
+    }
+    
+    private func compactStatCard(title: String, value: String, icon: String, color: Color, isComplete: Bool) -> some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(color.opacity(0.15))
+                    .frame(width: 48, height: 48)
+                
+                Image(systemName: icon)
+                    .font(.title3)
+                    .foregroundStyle(color)
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(value)
+                    .font(.title)
+                    .bold()
+                    .monospacedDigit()
+                
+                Text(title)
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+            
+            if isComplete {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                    .font(.title3)
+            }
+        }
+        .padding()
+        .background(Color(nsColor: .controlBackgroundColor))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+    
+    private func statusCardsSection(_ quiz: Quiz) -> some View {
+        HStack(spacing: 12) {
+            statusCard(
+                title: quiz.safeTeams.isEmpty ? "Teams fehlen" : "Teams bereit",
+                icon: quiz.safeTeams.isEmpty ? "person.3.slash.fill" : "person.3.fill",
+                color: quiz.safeTeams.isEmpty ? .orange : .green
+            )
+            
+            statusCard(
+                title: quiz.safeRounds.isEmpty ? "Runden fehlen" : "Runden bereit",
+                icon: quiz.safeRounds.isEmpty ? "list.number" : "checkmark.circle.fill",
+                color: quiz.safeRounds.isEmpty ? .orange : .green
+            )
+            
+            statusCard(
+                title: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? "Bereit zum Start" : "Nicht bereit",
+                icon: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? "checkmark.circle.fill" : "exclamationmark.circle.fill",
+                color: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? .green : .gray
+            )
+        }
+    }
+    
+    private func statusCard(title: String, icon: String, color: Color) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+                .font(.title3)
+            
+            Text(title)
+                .font(.body)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(color.opacity(0.1))
+        .foregroundStyle(color)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay {
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(color.opacity(0.3), lineWidth: 1)
+        }
+    }
+    
+    private func compactTeamOverview(quiz: Quiz) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label("Teams (\(quiz.safeTeams.count))", systemImage: "person.3.fill")
+                    .font(.title3)
+                    .bold()
                 
                 Spacer()
                 
-                // Action Buttons rechts
-                HStack(spacing: 12) {
-                    // Delete Button
-                    Button {
-                        quizToDelete = quiz
-                        showingDeleteConfirmation = true
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "trash.circle.fill")
-                                .font(.title2)
-                            Text("Löschen")
-                                .font(.headline)
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
-                        .background(Color.red.opacity(0.1))
-                        .foregroundStyle(.red)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.red, lineWidth: 2)
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .help("Quiz löschen")
-                    
-                    // Edit Button
-                    Button {
-                        showingEditQuizSheet = true
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "pencil.circle.fill")
-                                .font(.title2)
-                            Text("Bearbeiten")
-                                .font(.headline)
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
-                        .background(Color.blue.opacity(0.1))
-                        .foregroundStyle(.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.blue, lineWidth: 2)
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .help("Quiz bearbeiten")
-                    
-                    // Start Quiz Button
-                    if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
-                        Button {
-                            viewModel.startQuiz(quiz)
-                            // Wechsle zur Durchführungsphase
-                            selectedWorkflow = .execution
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "play.circle.fill")
-                                    .font(.title2)
-                                Text("Quiz starten")
-                                    .font(.headline)
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 12)
-                            .background(
-                                LinearGradient(
-                                    colors: [.green, .green.opacity(0.8)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .shadow(color: .green.opacity(0.3), radius: 6)
-                        }
-                        .buttonStyle(.plain)
-                        .keyboardShortcut("s", modifiers: .command)
-                        .help("Quiz starten (⌘S)")
+                Button {
+                    selectedDetailTab = .teams
+                } label: {
+                    Text("Verwalten")
+                        .font(.body)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.regular)
+            }
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(quiz.safeTeams) { team in
+                        compactTeamCard(team: team)
                     }
                 }
             }
@@ -322,124 +456,87 @@ struct PlanningView: View {
         .padding()
         .background(Color(nsColor: .controlBackgroundColor))
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal)
     }
     
-    private func quickStatsRow(_ quiz: Quiz) -> some View {
-        HStack(spacing: 16) {
-            statCard(title: "Teams", value: "\(quiz.safeTeams.count)", icon: "person.3.fill", color: .blue)
-            statCard(title: "Runden", value: "\(quiz.safeRounds.count)", icon: "list.number", color: .green)
-            statCard(title: "Max. Punkte", value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })", icon: "star.fill", color: .orange)
+    private func compactTeamCard(team: Team) -> some View {
+        HStack(spacing: 10) {
+            TeamIconView(team: team, size: 40)
+            
+            Text(team.name)
+                .font(.body)
+                .lineLimit(1)
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color(hex: team.color)?.opacity(0.3) ?? .clear, lineWidth: 1)
+        }
     }
     
-    private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(color)
-            Text(value)
-                .font(.title)
+    private func compactRoundsOverview(quiz: Quiz) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label("Runden (\(quiz.safeRounds.count))", systemImage: "list.number")
+                    .font(.title3)
+                    .bold()
+                
+                Spacer()
+                
+                Button {
+                    selectedDetailTab = .rounds
+                } label: {
+                    Text("Verwalten")
+                        .font(.body)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.regular)
+            }
+            
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 10)], spacing: 10) {
+                ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
+                    compactRoundCard(round: round, index: index)
+                }
+            }
+        }
+        .padding()
+        .background(Color(nsColor: .controlBackgroundColor))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+    
+    private func compactRoundCard(round: Round, index: Int) -> some View {
+        VStack(spacing: 6) {
+            Text("R\(index + 1)")
+                .font(.body)
                 .bold()
-            Text(title)
-                .font(.caption)
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(.blue)
+                .clipShape(Circle())
+            
+            Text(round.name)
+                .font(.body)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+            
+            Text("\(round.maxPoints) Pkt")
+                .font(.body)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(.vertical, 10)
         .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     
-    private func teamOverviewCard(team: Team, quiz: Quiz) -> some View {
-        VStack(spacing: 8) {
-            // Farb-Badge mit Rang
-            ZStack {
-                Circle()
-                    .fill(Color(hex: team.color) ?? .blue)
-                    .frame(width: 50, height: 50)
-                    .shadow(color: Color(hex: team.color)?.opacity(0.4) ?? .clear, radius: 4)
-                
-                VStack(spacing: 2) {
-                    Text("#\(viewModel.getTeamRank(for: team, in: quiz))")
-                        .font(.caption2)
-                        .bold()
-                        .foregroundStyle(.white)
-                    
-                    Image(systemName: "trophy.fill")
-                        .font(.caption2)
-                        .foregroundStyle(.white)
-                }
-            }
-            
-            // Team-Name
-            Text(team.name)
-                .font(.subheadline)
-                .bold()
-                .lineLimit(1)
-            
-            // Punkte
-            VStack(spacing: 2) {
-                Text("\(team.totalScore)")
-                    .font(.title2)
-                    .bold()
-                    .monospacedDigit()
-                
-                Text("Punkte")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase)
-            }
-        }
-        .frame(width: 120)
-        .padding(.vertical, 12)
-        .padding(.horizontal, 8)
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(hex: team.color)?.opacity(0.4) ?? .clear, lineWidth: 2)
-        }
-    }
     
-    private func setupSection<Content: View>(
-        title: String,
-        icon: String,
-        color: Color,
-        count: Int,
-        isComplete: Bool,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                Text(title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                
-                Spacer()
-                
-                if isComplete {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                        .font(.caption)
-                }
-                
-                Text("\(count)")
-                    .font(.caption)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(color)
-                    .clipShape(Capsule())
-            }
-            
-            content()
+    private func availableGlobalTeams(for quiz: Quiz) -> [Team] {
+        return allTeams.filter { team in
+            // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
+            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
         }
-        .padding(16)
-        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
     
     private var emptyState: some View {
@@ -472,11 +569,11 @@ struct PlanningView: View {
                 
                 VStack(spacing: 8) {
                     Text("Bereit für dein erstes Quiz?")
-                        .font(.title)
+                        .font(.title2)
                         .bold()
                     
                     Text("Plane und organisiere dein Pub Quiz ganz einfach")
-                        .font(.subheadline)
+                        .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
@@ -487,13 +584,14 @@ struct PlanningView: View {
                 } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "plus.circle.fill")
-                            .font(.title2)
+                            .font(.title3)
                         
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Neues Quiz erstellen")
-                                .font(.headline)
+                                .font(.body)
+                                .bold()
                             Text("Starte mit der Planung")
-                                .font(.caption)
+                                .font(.subheadline)
                         }
                     }
                     .frame(maxWidth: 300)
@@ -553,14 +651,17 @@ struct PlannedQuizRow: View {
 // MARK: - Edit Quiz Sheet
 struct EditQuizSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
+    @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
     
     @State private var quizName: String = ""
     @State private var venueName: String = ""
     @State private var quizDate: Date = Date()
     @State private var showingDeleteConfirmation = false
     @State private var selectedTab: EditTab = .details
+    @State private var showingGlobalTeamPicker = false
     
     enum EditTab: String, CaseIterable, Identifiable {
         case details = "Details"
@@ -627,6 +728,9 @@ struct EditQuizSheet: View {
                 }
             } message: {
                 Text("Möchtest du '\(quiz.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+            }
+            .sheet(isPresented: $showingGlobalTeamPicker) {
+                GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams(for: quiz), modelContext: modelContext)
             }
         }
         .frame(minWidth: 800, minHeight: 600)
@@ -828,7 +932,9 @@ struct EditQuizSheet: View {
     }
     
     private var teamsEditView: some View {
-        VStack(spacing: 0) {
+        let availableTeams = availableGlobalTeams(for: quiz)
+        
+        return VStack(spacing: 0) {
             // Header mit Add Button
             HStack {
                 Text("Teams verwalten")
@@ -836,12 +942,27 @@ struct EditQuizSheet: View {
                 
                 Spacer()
                 
-                Button {
-                    addNewTeam()
+                Menu {
+                    Button {
+                        addNewTeam()
+                    } label: {
+                        Label("Neues Team erstellen", systemImage: "plus.circle")
+                    }
+                    
+                    if !availableTeams.isEmpty {
+                        Divider()
+                        
+                        Button {
+                            showingGlobalTeamPicker = true
+                        } label: {
+                            Label("Aus vorhandenen wählen (\(availableTeams.count))", systemImage: "square.stack.3d.up.fill")
+                        }
+                    }
                 } label: {
                     Label("Team hinzufügen", systemImage: "plus.circle.fill")
                 }
                 .buttonStyle(.borderedProminent)
+                .menuStyle(.button)
             }
             .padding()
             .background(Color(nsColor: .controlBackgroundColor))
@@ -866,12 +987,16 @@ struct EditQuizSheet: View {
                     Button {
                         addNewTeam()
                     } label: {
-                        Label("Erstes Team hinzufügen", systemImage: "plus.circle.fill")
-                            .font(.headline)
+                        Label("Neues Team hinzufügen", systemImage: "plus.circle.fill")
                     }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                }
+                    if !availableTeams.isEmpty {
+                        Button {
+                            showingGlobalTeamPicker = true
+                        } label: {
+                            Label("Aus vorhandenen wählen (\(availableTeams.count))", systemImage: "square.stack.3d.up.fill")
+                                .font(.headline)
+                        }
+                    }                }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
@@ -885,6 +1010,13 @@ struct EditQuizSheet: View {
                     }
                 }
             }
+        }
+    }
+    
+    private func availableGlobalTeams(for quiz: Quiz) -> [Team] {
+        return allTeams.filter { team in
+            // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
+            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
         }
     }
     
@@ -987,6 +1119,7 @@ struct EditableTeamRow: View {
     @State private var isConfirmed: Bool = false
     @State private var showingColorPicker = false
     @State private var showingDeleteConfirmation = false
+    @State private var showingImagePicker = false
     
     let availableColors = [
         "#007AFF", "#FF3B30", "#34C759", "#FF9500",
@@ -998,25 +1131,49 @@ struct EditableTeamRow: View {
         VStack(spacing: 0) {
             // Hauptinhalt
             HStack(spacing: 16) {
-                // Farb-Button
-                Button {
-                    showingColorPicker.toggle()
-                } label: {
-                    Circle()
-                        .fill(Color(hex: team.color) ?? .blue)
-                        .frame(width: 40, height: 40)
-                        .overlay {
-                            Circle()
-                                .stroke(Color.white.opacity(0.6), lineWidth: 2.5)
-                        }
-                        .shadow(color: Color(hex: team.color)?.opacity(0.4) ?? .clear, radius: 6, x: 0, y: 2)
+                // Team-Icon (Bild oder Farbe)
+                TeamIconView(team: team, size: 40)
+                .help(isEditing ? "Bild oder Farbe ändern" : "Team-Icon")
+                .onTapGesture {
+                    if isEditing {
+                        showingColorPicker.toggle()
+                    }
                 }
-                .buttonStyle(.plain)
-                .help("Farbe ändern")
                 .popover(isPresented: $showingColorPicker) {
-                    VStack(spacing: 16) {
-                        Text("Farbe wählen")
+                    VStack(spacing: 20) {
+                        Text("Team-Icon wählen")
                             .font(.headline)
+                        
+                        // Bildauswahl
+                        Button {
+                            showingImagePicker = true
+                            showingColorPicker = false
+                        } label: {
+                            Label("Bild auswählen", systemImage: "photo")
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                        }
+                        .buttonStyle(.bordered)
+                        
+                        // Bild entfernen, wenn vorhanden
+                        if team.imageData != nil {
+                            Button {
+                                team.imageData = nil
+                                showingColorPicker = false
+                            } label: {
+                                Label("Bild entfernen", systemImage: "trash")
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        
+                        Divider()
+                        
+                        // Farbauswahl
+                        Text("Farbe wählen")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                         
                         LazyVGrid(columns: Array(repeating: GridItem(.fixed(44), spacing: 12), count: 6), spacing: 12) {
                             ForEach(availableColors, id: \.self) { colorHex in
@@ -1036,6 +1193,7 @@ struct EditableTeamRow: View {
                                     .shadow(color: Color(hex: colorHex)?.opacity(0.4) ?? .clear, radius: 2)
                                     .onTapGesture {
                                         team.color = colorHex
+                                        team.imageData = nil // Bild entfernen wenn Farbe gewählt wird
                                         showingColorPicker = false
                                     }
                             }
@@ -1203,6 +1361,20 @@ struct EditableTeamRow: View {
         } message: {
             Text("Möchtest du '\(team.name)' wirklich löschen?")
         }
+        .fileImporter(
+            isPresented: $showingImagePicker,
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    loadImage(from: url)
+                }
+            case .failure(let error):
+                print("Fehler beim Auswählen des Bildes: \(error.localizedDescription)")
+            }
+        }
     }
     
     private func saveChanges() {
@@ -1213,6 +1385,40 @@ struct EditableTeamRow: View {
         viewModel.updateTeamDetails(team, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed)
         isEditing = false
     }
+    
+    private func loadImage(from url: URL) {
+        // Security-Scoped Resource Zugriff anfordern
+        // fileImporter gibt bereits Security-Scoped URLs zurück, aber wir müssen
+        // explizit den Zugriff anfordern, um die Datei lesen zu können
+        guard url.startAccessingSecurityScopedResource() else {
+            print("⚠️ Fehler: Kein Zugriff auf die Datei - Security-Scoped Resource konnte nicht gestartet werden")
+            return
+        }
+        defer { url.stopAccessingSecurityScopedResource() }
+        
+        // Prüfen ob die Datei existiert und lesbar ist
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            print("⚠️ Fehler: Datei existiert nicht: \(url.path)")
+            return
+        }
+        
+        // Bild laden und validieren
+        do {
+            let imageData = try Data(contentsOf: url)
+            
+            // Prüfen ob es tatsächlich ein Bild ist
+            guard NSImage(data: imageData) != nil else {
+                print("⚠️ Fehler: Datei ist kein gültiges Bild")
+                return
+            }
+            
+            // Bild speichern
+            team.imageData = imageData
+            print("✅ Bild erfolgreich geladen: \(url.lastPathComponent)")
+        } catch {
+            print("❌ Fehler beim Laden des Bildes: \(error.localizedDescription)")
+        }
+    }
 }
 
 // MARK: - Editable Round Row
@@ -1220,6 +1426,7 @@ struct EditableRoundRow: View {
     @Bindable var round: Round
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
+    @State private var showingEditSheet = false
     @State private var showingDeleteConfirmation = false
     
     var statusColor: Color {
@@ -1315,6 +1522,17 @@ struct EditableRoundRow: View {
                     .foregroundStyle(statusColor)
                     .symbolEffect(.pulse, options: .repeating)
             }
+            
+            // Bearbeiten-Button
+            Button {
+                showingEditSheet = true
+            } label: {
+                Image(systemName: "pencil.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.blue)
+            }
+            .buttonStyle(.plain)
+            .help("Runde bearbeiten")
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
@@ -1336,6 +1554,9 @@ struct EditableRoundRow: View {
                     ),
                     lineWidth: 2.5
                 )
+        }
+        .sheet(isPresented: $showingEditSheet) {
+            EditRoundSheet(round: round, quiz: quiz, viewModel: viewModel)
         }
     }
     

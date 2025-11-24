@@ -155,9 +155,7 @@ struct ScoreEntryView: View {
         HStack(spacing: 16) {
             // Team Info
             HStack(spacing: 12) {
-                Circle()
-                    .fill(Color(hex: team.color) ?? .blue)
-                    .frame(width: 16, height: 16)
+                TeamIconView(team: team, size: 16)
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(team.name)

@@ -7,7 +7,8 @@
       "Bash(temp.swift)",
       "Bash(1)",
       "Bash(python3:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

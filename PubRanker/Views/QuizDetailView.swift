@@ -15,6 +15,7 @@ struct QuizDetailView: View {
     @State private var showingTeamWizard = false
     @State private var showingRoundWizard = false
     @State private var showingSetupDialog = false
+    @State private var showingEmailComposer = false
     @State private var hasCheckedInitialSetup = false
     
     enum DetailTab: String, CaseIterable, Identifiable {
@@ -36,7 +37,7 @@ struct QuizDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            QuizHeaderView(quiz: quiz, viewModel: viewModel)
+            QuizHeaderView(quiz: quiz, viewModel: viewModel, showingEmailComposer: $showingEmailComposer)
             
             Divider()
             
@@ -80,6 +81,9 @@ struct QuizDetailView: View {
         .sheet(isPresented: $showingRoundWizard) {
             RoundWizardSheet(quiz: quiz, viewModel: viewModel)
         }
+        .sheet(isPresented: $showingEmailComposer) {
+            EmailComposerView(teams: quiz.safeTeams, quiz: quiz)
+        }
         .alert(NSLocalizedString("setup.dialog.title", comment: "Setup dialog title"), isPresented: $showingSetupDialog) {
             Button(NSLocalizedString("setup.dialog.later", comment: "Setup later button"), role: .cancel) {
                 showingSetupDialog = false
@@ -119,6 +123,7 @@ struct QuizDetailView: View {
 struct QuizHeaderView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
+    @Binding var showingEmailComposer: Bool
     @State private var showingExportDialog = false
     @State private var exportedFileURL: URL?
     
@@ -172,6 +177,16 @@ struct QuizHeaderView: View {
                 
                 // Action Buttons
                 HStack(spacing: 12) {
+                    // E-Mail Button
+                    if !quiz.safeTeams.isEmpty {
+                        Button {
+                            showingEmailComposer = true
+                        } label: {
+                            Label(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"), systemImage: "envelope.fill")
+                        }
+                        .help(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"))
+                    }
+                    
                     // Export Button (immer verfügbar, aber prominent bei abgeschlossenen Quizzen)
                     Menu {
                         Button {

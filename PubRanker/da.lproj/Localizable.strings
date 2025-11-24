@@ -288,59 +288,122 @@
 "stats.maxPoints" = "Maks point";
 
 // MARK: - Planning View (v2.0)
-"planning.title" = "Plan Quiz";
-"planning.subtitle" = "Prepare your quiz";
-"planning.noQuizzes" = "No planned quizzes";
-"planning.noQuizzes.description" = "Create your first quiz";
-"planning.plannedQuizzes" = "Planned Quizzes (%d)";
-"planning.delete" = "Delete";
-"planning.edit" = "Edit";
-"planning.start" = "Start Quiz";
-"planning.delete.confirm" = "Do you really want to delete '%@'? This action cannot be undone.";
-"planning.ready" = "Ready for your first quiz?";
-"planning.ready.description" = "Plan and organize your pub quiz easily";
-"planning.create" = "Create New Quiz";
-"planning.create.subtitle" = "Start planning";
+"planning.title" = "Planlæg Quiz";
+"planning.subtitle" = "Forbered din quiz";
+"planning.noQuizzes" = "Ingen planlagte quizzer";
+"planning.noQuizzes.description" = "Opret din første quiz";
+"planning.plannedQuizzes" = "Planlagte quizzer (%d)";
+"planning.delete" = "Slet";
+"planning.edit" = "Rediger";
+"planning.start" = "Start quiz";
+"planning.delete.confirm" = "Vil du virkelig slette '%@'? Denne handling kan ikke fortrydes.";
+"planning.ready" = "Klar til din første quiz?";
+"planning.ready.description" = "Planlæg og organiser din pubquiz nemt";
+"planning.create" = "Opret ny quiz";
+"planning.create.subtitle" = "Begynd at planlægge";
 
 // MARK: - Edit Quiz Sheet (v2.0)
-"edit.title" = "Edit Quiz";
-"edit.details" = "Quiz Details";
-"edit.statistics" = "Statistics";
+"edit.title" = "Rediger quiz";
+"edit.details" = "Quiz-detaljer";
+"edit.statistics" = "Statistik";
 "edit.status" = "Status";
-"edit.active" = "Active";
-"edit.planned" = "Planned";
-"edit.completed" = "Completed";
-"edit.preparation" = "Preparation";
-"edit.teams" = "Teams";
-"edit.rounds" = "Rounds";
-"edit.maxPoints" = "Max Points";
-"edit.overview" = "Overview";
+"edit.active" = "Aktiv";
+"edit.planned" = "Planlagt";
+"edit.completed" = "Afsluttet";
+"edit.preparation" = "Forberedelse";
+"edit.teams" = "Hold";
+"edit.rounds" = "Runder";
+"edit.maxPoints" = "Maks point";
+"edit.overview" = "Oversigt";
 
 // MARK: - Team Management (v2.0)
-"teams.manage" = "Manage Teams";
-"teams.none" = "No Teams";
-"teams.none.description" = "Add teams to start the quiz";
-"teams.add.first" = "Add First Team";
-"teams.colorPicker" = "Choose Color";
-"teams.rank" = "Rank %d";
-"teams.points" = "Points";
+"teams.manage" = "Administrer hold";
+"teams.none" = "Ingen hold";
+"teams.none.description" = "Tilføj hold for at starte quizzen";
+"teams.add.first" = "Tilføj første hold";
+"teams.colorPicker" = "Vælg farve";
+"teams.rank" = "Rang %d";
+"teams.points" = "Point";
 
 // MARK: - Round Management (v2.0)
-"rounds.manage" = "Manage Rounds";
-"rounds.none" = "No Rounds";
-"rounds.none.description" = "Add rounds to award points";
-"rounds.add.first" = "Add First Round";
-"rounds.preparation" = "Preparation";
-"rounds.active" = "Active";
-"rounds.completed" = "Completed";
-"rounds.delete.confirm" = "Do you really want to delete '%@'?";
-"rounds.maxPoints" = "Max %d Points";
-"rounds.points" = "Points";
-"rounds.editName" = "Edit Name";
-"rounds.editPoints" = "Edit Points";
-"rounds.savePoints" = "Save Points";
+"rounds.manage" = "Administrer runder";
+"rounds.none" = "Ingen runder";
+"rounds.none.description" = "Tilføj runder for at tildele point";
+"rounds.add.first" = "Tilføj første runde";
+"rounds.preparation" = "Forberedelse";
+"rounds.active" = "Aktiv";
+"rounds.completed" = "Afsluttet";
+"rounds.delete.confirm" = "Vil du virkelig slette '%@'?";
+"rounds.maxPoints" = "Maks %d point";
+"rounds.points" = "Point";
+"rounds.editName" = "Rediger navn";
+"rounds.editPoints" = "Rediger point";
+"rounds.savePoints" = "Gem point";
 
 // MARK: - Analysis View (v2.0)
-"analysis.leaderboard" = "Leaderboard";
-"analysis.overview" = "Overview";
+"analysis.leaderboard" = "Rangliste";
+"analysis.overview" = "Oversigt";
+
+// MARK: - Email
+"email.send" = "Send e-mail";
+"email.send.all" = "E-mail til alle hold";
+"email.send.quiz" = "E-mail til quiz-hold";
+"email.noAddresses.title" = "Ingen e-mailadresser";
+"email.noAddresses.message" = "Ingen af de valgte hold har en e-mailadresse.";
+"email.quiz.subject" = "Quiz-information: %@";
+"email.quiz.body.intro" = "Hej,\n\nher er informationen om quizzen \"%@\":";
+"email.quiz.body.venue" = "Sted: %@";
+"email.quiz.body.date" = "Dato: %@";
+"email.quiz.body.teams" = "Antal hold: %d";
+
+// MARK: - Email Composer
+"email.composer.title" = "Skriv e-mail";
+"email.composer.quiz.title" = "E-mail til hold fra: %@";
+"email.composer.all.title" = "E-mail til alle hold";
+"email.composer.all.subtitle" = "%d hold tilgængelige";
+"email.composer.search" = "Søg efter hold...";
+"email.composer.selectAll" = "Vælg alle";
+"email.composer.selected" = "%d af %d valgt";
+"email.composer.noEmails" = "Ingen e-mailadresser";
+"email.composer.noEmails.description" = "Ingen af holdene har en e-mailadresse.";
+"email.composer.recipients" = "Modtagere";
+"email.composer.noRecipients" = "Vælg mindst ét hold";
+"email.composer.subject" = "Emne";
+"email.composer.subject.placeholder" = "Indtast emne...";
+"email.composer.body" = "Besked";
+"email.composer.send" = "Åbn Mail-app";
+"email.composer.defaultSubject" = "Information om Pub Quiz";
+"email.composer.defaultBody" = "Hej,\n\nher er informationen om pub quiz:\n\n";
+"email.composer.filterByQuiz" = "Filtrer efter quiz";
+"email.composer.filter.all" = "Alle";
+"email.composer.filter.byQuiz" = "Efter Quiz";
+"email.composer.selectQuizzes" = "Vælg quizzer...";
+"email.composer.quizzesSelected" = "%d Quiz%@ valgt";
+"email.composer.noTeams" = "Ingen hold";
+"email.composer.noTeams.description" = "Ingen hold med e-mailadresser fundet";
+"email.composer.to" = "Til:";
+"email.composer.recipientCount" = "%d modtager%@";
+"email.composer.insertTemplate" = "Indsæt skabelon";
+"email.composer.templates.title" = "E-mail skabeloner";
+
+// MARK: - Email Templates
+"email.template.invitation.name" = "Quiz Invitation";
+"email.template.invitation.subject" = "Du er inviteret til vores Pub Quiz!";
+"email.template.invitation.body" = "Hej Hold,\n\nVi er glade for at invitere jer til vores kommende pub quiz!\n\n📅 Dato: [DATE]\n📍 Sted: [VENUE]\n⏰ Tid: [TIME]\n\nBekræft venligst jeres deltagelse ved at svare på denne e-mail.\n\nVi glæder os til at se jer der!\n\nVenlig hilsen";
+
+"email.template.reminder.name" = "Quiz Påmindelse";
+"email.template.reminder.subject" = "Påmindelse: Pub Quiz i morgen!";
+"email.template.reminder.body" = "Hej Hold,\n\nDette er en venlig påmindelse om quizzen i morgen:\n\n📅 I morgen kl. [TIME]\n📍 [VENUE]\n\nGlem ikke at give jeres bedste!\n\nVi ses der!";
+
+"email.template.results.name" = "Resultat Meddelelse";
+"email.template.results.subject" = "Quiz Resultater - Tillykke!";
+"email.template.results.body" = "Hej alle sammen,\n\nTak for jeres deltagelse i vores pub quiz!\n\nHer er de endelige resultater:\n[RESULTS]\n\nTillykke til alle vindere! 🎉\n\nTil næste gang!";
+
+"email.template.thankyou.name" = "Tak";
+"email.template.thankyou.subject" = "Tak for jeres deltagelse!";
+"email.template.thankyou.body" = "Kære Hold,\n\nTak for at gøre vores pub quiz til en stor succes!\n\nDet var vidunderligt at se alle engagerede og have det sjovt.\n\nVi håber at se jer ved vores næste begivenhed!\n\nVenlig hilsen";
+
+"email.template.scheduleChange.name" = "Tidsplan Ændring";
+"email.template.scheduleChange.subject" = "Vigtigt: Quiz Tidsplan Opdatering";
+"email.template.scheduleChange.body" = "Hej,\n\nVi skal informere jer om en tidsplanændring:\n\n🔄 Ny dato: [NEW_DATE]\n🔄 Ny tid: [NEW_TIME]\n📍 Sted: [VENUE] (uændret)\n\nVi undskylder for ulejligheden.\n\nBekræft venligst om I stadig kan deltage.\n\nTak for jeres forståelse!";
 

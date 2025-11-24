@@ -485,11 +485,8 @@ struct AnalysisView: View {
             
             // Team Info
             HStack(spacing: 12) {
-                // Team Farbe mit Shadow
-                Circle()
-                    .fill(Color(hex: team.color) ?? .blue)
-                    .frame(width: 32, height: 32)
-                    .shadow(color: Color(hex: team.color)?.opacity(0.4) ?? .clear, radius: 4)
+                // Team Icon (Bild oder Farbe)
+                TeamIconView(team: team, size: 32)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(team.name)
