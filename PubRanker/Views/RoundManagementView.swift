@@ -53,14 +53,32 @@ struct RoundManagementView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                // Einfache Rundenliste - KEINE Punkteeingabe mehr!
-                ScrollView {
-                    VStack(spacing: 12) {
-                        ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
-                            roundListCard(round: round, index: index)
+                VStack(spacing: 0) {
+                    // Einfache Rundenliste - KEINE Punkteeingabe mehr!
+                    ScrollView {
+                        VStack(spacing: 12) {
+                            ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
+                                roundListCard(round: round, index: index)
+                            }
                         }
+                        .padding()
+                    }
+
+                    // Action Buttons am unteren Rand
+                    Divider()
+
+                    HStack(spacing: 12) {
+                        Button {
+                            showingAddRoundSheet = true
+                        } label: {
+                            Label("Runde hinzufügen", systemImage: "plus.circle.fill")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
                     }
                     .padding()
+                    .background(Color(nsColor: .controlBackgroundColor))
                 }
             }
         }
@@ -716,9 +734,9 @@ struct QuickRoundSheet: View {
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     @State private var roundName = ""
-    @State private var maxPoints = 10
+    @State private var maxPoints = 0
     @FocusState private var focusedField: Bool
-    
+
     var body: some View {
         VStack(spacing: 24) {
             // Header
@@ -726,36 +744,36 @@ struct QuickRoundSheet: View {
                 Image(systemName: "number.circle.fill")
                     .font(.system(size: 50))
                     .foregroundStyle(.blue)
-                
+
                 Text("Neue Runde erstellen")
                     .font(.title2)
                     .bold()
-                
+
                 Text("Runde \(quiz.safeRounds.count + 1)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
             .padding(.top, 20)
-            
+
             // Form
             VStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(NSLocalizedString("round.name", comment: "Round name"))
                         .font(.headline)
-                    
+
                     TextField(NSLocalizedString("round.name.placeholder", comment: "Round name placeholder"), text: $roundName)
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                         .focused($focusedField)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
                         .font(.headline)
-                    
+
                     HStack {
                         Button {
-                            if maxPoints > 1 {
+                            if maxPoints > 0 {
                                 maxPoints -= 1
                             }
                         } label: {
@@ -763,12 +781,12 @@ struct QuickRoundSheet: View {
                                 .font(.title)
                         }
                         .buttonStyle(.plain)
-                        
+
                         Text("\(maxPoints)")
                             .font(.system(size: 48, weight: .bold))
                             .monospacedDigit()
                             .frame(minWidth: 100)
-                        
+
                         Button {
                             if maxPoints < 100 {
                                 maxPoints += 1
@@ -781,27 +799,11 @@ struct QuickRoundSheet: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                
-                // Quick Presets
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    
-                    HStack(spacing: 12) {
-                        ForEach([5, 10, 15, 20], id: \.self) { points in
-                            Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
-                                maxPoints = points
-                            }
-                            .buttonStyle(.bordered)
-                        }
-                    }
-                }
             }
             .padding(.horizontal, 30)
-            
+
             Spacer()
-            
+
             // Action Buttons
             HStack(spacing: 12) {
                 Button("Abbrechen") {
@@ -810,7 +812,7 @@ struct QuickRoundSheet: View {
                 .keyboardShortcut(.escape)
                 .buttonStyle(.bordered)
                 .controlSize(.large)
-                
+
                 Button("Runde erstellen") {
                     viewModel.addRound(to: quiz, name: roundName, maxPoints: maxPoints)
                     dismiss()
@@ -822,7 +824,7 @@ struct QuickRoundSheet: View {
             }
             .padding(.bottom, 20)
         }
-        .frame(width: 500, height: 550)
+        .frame(width: 500, height: 450)
         .onAppear {
             focusedField = true
         }

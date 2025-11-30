@@ -65,6 +65,16 @@ struct TeamCard: View {
                     }
                 }
 
+                // Bestätigungsstatus
+                HStack(spacing: 8) {
+                    Image(systemName: team.isConfirmed ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(team.isConfirmed ? .green : .secondary)
+                        .frame(width: 20)
+                    Text(team.isConfirmed ? "Bestätigt" : "Nicht bestätigt")
+                        .font(.subheadline)
+                        .foregroundStyle(team.isConfirmed ? .green : .secondary)
+                }
+
                 if let quizzes = team.quizzes, !quizzes.isEmpty {
                     HStack(spacing: 8) {
                         Image(systemName: "link.circle.fill")
@@ -141,4 +151,5 @@ struct TeamCard: View {
         }
     }
 }
+
 

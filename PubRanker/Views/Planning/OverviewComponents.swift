@@ -48,41 +48,60 @@ struct CompactStatCard: View {
     let icon: String
     let color: Color
     let isComplete: Bool
-    
+
     var body: some View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(color.opacity(0.15))
-                    .frame(width: 48, height: 48)
-                
+                    .fill(
+                        LinearGradient(
+                            colors: [color.opacity(0.2), color.opacity(0.1)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 56, height: 56)
+
                 Image(systemName: icon)
-                    .font(.title3)
+                    .font(.title2)
                     .foregroundStyle(color)
             }
-            
-            VStack(alignment: .leading, spacing: 2) {
+
+            VStack(alignment: .leading, spacing: 4) {
                 Text(value)
-                    .font(.title)
-                    .bold()
+                    .font(.system(size: 28, weight: .bold))
                     .monospacedDigit()
-                
+                    .foregroundStyle(color)
+
                 Text(title)
-                    .font(.body)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            
+
             Spacer()
-            
+
             if isComplete {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.green)
-                    .font(.title3)
+                    .font(.title2)
             }
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [
+                    color.opacity(0.05),
+                    color.opacity(0.02)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(color.opacity(0.2), lineWidth: 1)
+        }
     }
 }
 
@@ -144,16 +163,20 @@ struct StatusCard: View {
 struct CompactTeamOverview: View {
     let quiz: Quiz
     let onManage: () -> Void
-    
+
+    private var sortedTeams: [Team] {
+        quiz.safeTeams.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Label("Teams (\(quiz.safeTeams.count))", systemImage: "person.3.fill")
                     .font(.title3)
                     .bold()
-                
+
                 Spacer()
-                
+
                 Button {
                     onManage()
                 } label: {
@@ -163,9 +186,9 @@ struct CompactTeamOverview: View {
                 .buttonStyle(.bordered)
                 .controlSize(.regular)
             }
-            
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 10)], spacing: 10) {
-                ForEach(quiz.safeTeams) { team in
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 12)], spacing: 12) {
+                ForEach(sortedTeams) { team in
                     CompactTeamCard(team: team)
                 }
             }
@@ -179,22 +202,63 @@ struct CompactTeamOverview: View {
 // MARK: - Compact Team Card
 struct CompactTeamCard: View {
     let team: Team
-    
+
     var body: some View {
-        HStack(spacing: 10) {
-            TeamIconView(team: team, size: 40)
-            
-            Text(team.name)
-                .font(.body)
-                .lineLimit(1)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 10) {
+                TeamIconView(team: team, size: 44)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(team.name)
+                        .font(.body)
+                        .bold()
+                        .lineLimit(1)
+
+                    if !team.contactPerson.isEmpty {
+                        HStack(spacing: 4) {
+                            Image(systemName: "person.fill")
+                                .font(.caption2)
+                            Text(team.contactPerson)
+                                .font(.caption)
+                        }
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                    }
+                }
+
+                Spacer()
+
+                // Status Indicator
+                VStack(spacing: 4) {
+                    if team.isConfirmed {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                            .font(.title3)
+                    }
+
+                    if !team.email.isEmpty {
+                        Image(systemName: "envelope.fill")
+                            .foregroundStyle(.blue)
+                            .font(.caption)
+                    }
+                }
+            }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(12)
+        .background(
+            LinearGradient(
+                colors: [
+                    (Color(hex: team.color) ?? .blue).opacity(0.08),
+                    (Color(hex: team.color) ?? .blue).opacity(0.03)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay {
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(hex: team.color)?.opacity(0.3) ?? .clear, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(hex: team.color)?.opacity(0.4) ?? .clear, lineWidth: 1.5)
         }
     }
 }

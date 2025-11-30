@@ -76,11 +76,14 @@ struct PresentationModeView: View {
                             ],
                             spacing: 8
                         ) {
-                            ForEach(Array(sortedTeams.dropFirst(3).enumerated()), id: \.element.id) { index, team in
+                            let rankings = quiz.getTeamRankings()
+                            let remainingRankings = rankings.dropFirst(3)
+                            ForEach(remainingRankings, id: \.team.id) { ranking in
                                 CompactTeamRow(
-                                    team: team,
-                                    rank: index + 4,
-                                    previousRank: previousRankings[team.id.uuidString] ?? index + 4
+                                    team: ranking.team,
+                                    rank: ranking.rank,
+                                    previousRank: previousRankings[ranking.team.id.uuidString] ?? ranking.rank,
+                                    quiz: quiz
                                 )
                             }
                         }
@@ -101,7 +104,7 @@ struct PresentationModeView: View {
         .onReceive(timer) { _ in
             currentTime = Date()
         }
-        .onChange(of: sortedTeams.map { $0.totalScore }) { oldScores, newScores in
+        .onChange(of: sortedTeams.map { $0.getTotalScore(for: quiz) }) { oldScores, newScores in
             withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
                 updateRankings()
             }
@@ -230,48 +233,67 @@ struct PresentationModeView: View {
     }
 
     private var podiumView: some View {
-        HStack(alignment: .bottom, spacing: 30) {
+        let rankings = quiz.getTeamRankings()
+        let topRankings = Array(rankings.prefix(3))
+        
+        return HStack(alignment: .bottom, spacing: 30) {
             // 2. Platz (links, niedriger)
-            if sortedTeams.count >= 2 {
+            if topRankings.count >= 2 {
+                let secondPlace = topRankings[1]
                 PresentationPodiumPlace(
-                    team: sortedTeams[1],
-                    rank: 2,
-                    previousRank: previousRankings[sortedTeams[1].id.uuidString] ?? 2,
-                    height: 180
+                    team: secondPlace.team,
+                    rank: secondPlace.rank,
+                    previousRank: previousRankings[secondPlace.team.id.uuidString] ?? secondPlace.rank,
+                    height: 180,
+                    quiz: quiz
                 )
+            } else {
+                Spacer()
             }
 
             // 1. Platz (mitte, am höchsten)
-            if !sortedTeams.isEmpty {
+            if !topRankings.isEmpty {
+                let firstPlace = topRankings[0]
                 PresentationPodiumPlace(
-                    team: sortedTeams[0],
-                    rank: 1,
-                    previousRank: previousRankings[sortedTeams[0].id.uuidString] ?? 1,
-                    height: 220
+                    team: firstPlace.team,
+                    rank: firstPlace.rank,
+                    previousRank: previousRankings[firstPlace.team.id.uuidString] ?? firstPlace.rank,
+                    height: 220,
+                    quiz: quiz
                 )
+            } else {
+                Spacer()
             }
 
             // 3. Platz (rechts, am niedrigsten)
-            if sortedTeams.count >= 3 {
+            if topRankings.count >= 3 {
+                let thirdPlace = topRankings[2]
                 PresentationPodiumPlace(
-                    team: sortedTeams[2],
-                    rank: 3,
-                    previousRank: previousRankings[sortedTeams[2].id.uuidString] ?? 3,
-                    height: 150
+                    team: thirdPlace.team,
+                    rank: thirdPlace.rank,
+                    previousRank: previousRankings[thirdPlace.team.id.uuidString] ?? thirdPlace.rank,
+                    height: 150,
+                    quiz: quiz
                 )
+            } else {
+                Spacer()
             }
         }
         .frame(maxWidth: .infinity)
     }
 
     private var simplePodiumView: some View {
-        HStack(spacing: 40) {
-            ForEach(Array(sortedTeams.prefix(3).enumerated()), id: \.element.id) { index, team in
+        let rankings = quiz.getTeamRankings()
+        let topRankings = Array(rankings.prefix(3))
+        
+        return HStack(spacing: 40) {
+            ForEach(topRankings, id: \.team.id) { ranking in
                 PresentationPodiumPlace(
-                    team: team,
-                    rank: index + 1,
-                    previousRank: previousRankings[team.id.uuidString] ?? index + 1,
-                    height: 320
+                    team: ranking.team,
+                    rank: ranking.rank,
+                    previousRank: previousRankings[ranking.team.id.uuidString] ?? ranking.rank,
+                    height: 320,
+                    quiz: quiz
                 )
             }
         }
@@ -292,6 +314,7 @@ struct PresentationPodiumPlace: View {
     let rank: Int
     let previousRank: Int
     let height: CGFloat
+    let quiz: Quiz
 
     var teamColor: Color {
         Color(hex: team.color) ?? .blue
@@ -373,7 +396,7 @@ struct PresentationPodiumPlace: View {
                         .frame(width: 12, height: 12)
                         .shadow(color: teamColor.opacity(0.6), radius: 4)
 
-                    Text("\(team.totalScore)")
+                    Text("\(team.getTotalScore(for: quiz))")
                         .font(.system(size: rank == 1 ? 36 : 32, weight: .bold, design: .rounded))
                         .foregroundStyle(rankColor)
                         .contentTransition(.numericText())
@@ -432,6 +455,7 @@ struct CompactTeamRow: View {
     let team: Team
     let rank: Int
     let previousRank: Int
+    let quiz: Quiz
 
     var teamColor: Color {
         Color(hex: team.color) ?? .blue
@@ -493,7 +517,7 @@ struct CompactTeamRow: View {
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.5))
 
-                Text("\(team.totalScore)")
+                Text("\(team.getTotalScore(for: quiz))")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()

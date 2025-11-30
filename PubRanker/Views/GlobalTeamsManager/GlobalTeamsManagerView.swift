@@ -172,175 +172,253 @@ struct GlobalTeamsManagerView: View {
     
     #if DEBUG
     private func createTestData() {
-        // Sehr kreative Team-Namen mit verschiedenen Themen
+        // MARK: - Deutsche Team-Namen (klar strukturiert für Testing)
         let teamNames = [
-            // Klassiker
-            "Die Quizmeister", "Brainstorm Champions", "Trivia Titans", "Genie-Gang",
-            "Schlaue Füchse", "Quiz-Könige", "Wissens-Wölfe", "Brainiacs",
-            // Tier-Themen
-            "Clever Clowns", "Smart Squad", "Quiz Ninjas", "Wissens-Warrior",
-            "Brain Boosters", "Wissensdurstige", "Trivia Tigers", "Genius Giraffen",
-            // Action-Themen
-            "Quiz Commandos", "Brain Warriors", "Trivia Troopers", "Mind Masters",
-            "Knowledge Knights", "Quiz Crusaders", "Brain Busters", "Trivia Terminators",
-            // Spaß-Themen
-            "Die Schlauberger", "Quiz Quacksalber", "Brain Bubbles", "Trivia Troublemakers",
-            "Wissens-Witzbolde", "Genius Geeks", "Smart Alecs", "Quiz Quirks",
-            // Premium-Teams
-            "Elite Einsteins", "Master Minds", "Quiz Legends", "Brain Dynasty",
-            "Trivia Titans Elite", "Genius Guild", "Quiz Champions", "Brain Brotherhood"
+            "Die Wissensjäger", "Schlaue Füchse", "Quiz-Könige", "Denksportler",
+            "Besserwisser", "Rateteam Alpha", "Die Alleswisser", "Knobelfreunde",
+            "Gehirnakrobaten", "Quizmaster", "Schlaumeier", "Denkfabrik"
         ]
-        
-        // Kreative Quiz-Namen mit verschiedenen Themen
-        let quizThemes: [(name: String, venue: String)] = [
-            // Pub-Quiz Themen
-            ("Pub Night Extravaganza", "The Golden Barrel"),
-            ("Wissens-Battle Royal", "Bar Central"),
-            ("Trivia Thunder", "The Quiz Corner"),
-            ("Brain Blast Championship", "The Scholar's Pub"),
-            ("Quiz Quest Adventure", "The Brain Bar"),
-            ("Genius Games", "Trivia Tavern"),
-            ("Smart Showdown", "The Knowledge Inn"),
-            ("Trivia Tournament", "The Wise Owl"),
-            // Spezielle Themen
-            ("Science Slam", "The Lab Bar"),
-            ("History Heroes", "The Museum Pub"),
-            ("Pop Culture Clash", "The Retro Lounge"),
-            ("Movie Mania", "Cinema Bar"),
-            ("Music Masters", "The Sound Stage"),
-            ("Sports Spectacle", "The Arena Pub"),
-            ("Geography Genius", "The Globe Tavern"),
-            ("Literature Legends", "The Bookworm Bar"),
-            ("Food Fight Quiz", "The Gourmet Pub"),
-            ("Tech Trivia", "The Digital Den"),
-            ("Art Attack", "The Gallery Bar")
+
+        // MARK: - Deutsche Kontaktpersonen
+        let contacts = [
+            "Max Mustermann", "Anna Schmidt", "Thomas Weber", "Lisa Müller",
+            "Peter Fischer", "Julia Wagner", "Michael Becker", "Sarah Klein",
+            "Daniel Wolf", "Laura Hoffmann", "Sebastian Braun", "Nina Schröder"
         ]
-        
-        // Kreative Runden-Namen nach Kategorien
-        let roundCategories: [[String]] = [
-            // Action-Runden
-            ["Warm-Up Runde", "Speed Round", "Lightning Round", "Turbo Trivia", "Power Play", "Rapid Fire"],
-            // Spannende Runden
-            ["Brain Teaser", "Final Countdown", "Sudden Death", "Champion Challenge", "Epic Finale", "Mega Round"],
-            // Thematische Runden
-            ["Wissens-Runde", "Genius Round", "Master Challenge", "Elite Battle", "Profi-Runde", "Expert Level"],
-            // Spezielle Runden
-            ["Bonus Battle", "Double Points", "Joker Round", "Wildcard", "Lucky Strike", "Golden Round"],
-            // Finale-Runden
-            ["Grand Finale", "Ultimate Challenge", "Final Showdown", "Championship Round", "Victory Round", "Crown Round"]
-        ]
-        
-        // Kreative Kontaktpersonen-Namen
-        let contactPersons = [
-            "Max Mustermann", "Anna Schmidt", "Tom Weber", "Lisa Müller", "Peter Fischer",
-            "Sarah Johnson", "Michael Chen", "Emma Williams", "David Brown", "Sophie Davis",
-            "Alex Martinez", "Julia Anderson", "Chris Taylor", "Maria Garcia", "Daniel Lee",
-            "Laura Wilson", "James Moore", "Nicole Jackson", "Robert White", "Amanda Harris",
-            "Kevin Thompson", "Jennifer Martin", "Ryan Clark", "Michelle Lewis", "Brian Walker",
-            nil, nil, nil // Einige Teams ohne Kontaktperson
-        ]
-        
-        // Kreative E-Mail-Adressen
-        let emailDomains = [
-            "quizmasters.de", "brainiacs.com", "triviatitans.org", "geniusgang.net",
-            "quizchampions.io", "smartteam.de", "wissenshelden.com", "quizkings.net",
-            "brainbusters.de", "triviamasters.com", "quizlegends.org", "geniusclub.de"
-        ]
-        let emailPrefixes = [
-            "team", "info", "contact", "hello", "quiz", "champions", "masters", "heroes",
-            "contact", "info", "team", "hello", "quiz", "contact", "info"
-        ]
-        
+
         // Farben für Teams
         let colors = [
             "#007AFF", "#FF3B30", "#34C759", "#FF9500",
             "#5856D6", "#FF2D55", "#5AC8FA", "#FFCC00",
             "#AF52DE", "#00C7BE", "#32ADE6", "#FF6482"
         ]
-        
-        // Erstelle 3-5 Quizzes mit verschiedenen Themen
-        let numberOfQuizzes = Int.random(in: 3...5)
-        var createdQuizzes: [Quiz] = []
-        
-        for i in 0..<numberOfQuizzes {
-            let theme = quizThemes.randomElement() ?? (name: "Test Quiz \(i + 1)", venue: "Test Venue")
-            let date = Date().addingTimeInterval(Double.random(in: -86400 * 60...86400 * 30)) // -60 bis +30 Tage
-            
-            let quiz = Quiz(name: theme.name, venue: theme.venue, date: date)
-            quiz.teams = []
-            quiz.rounds = []
-            
-            // Erstelle 4-7 Runden pro Quiz mit verschiedenen Kategorien
-            let numberOfRounds = Int.random(in: 4...7)
-            let selectedCategory = roundCategories.randomElement() ?? roundCategories[0]
-            
-            for j in 0..<numberOfRounds {
-                let roundName: String
-                if j < selectedCategory.count {
-                    roundName = selectedCategory[j]
-                } else {
-                    // Falls mehr Runden als Namen, verwende generische Namen
-                    roundName = ["Runde \(j + 1)", "Challenge \(j + 1)", "Round \(j + 1)"].randomElement() ?? "Runde \(j + 1)"
-                }
-                
-                // Variiere die Punkte kreativer
-                let maxPoints = [5, 10, 15, 20, 25, 30, 40, 50].randomElement() ?? 10
-                let round = Round(name: roundName, maxPoints: maxPoints, orderIndex: j)
-                round.quiz = quiz
-                if quiz.rounds == nil {
-                    quiz.rounds = []
-                }
-                quiz.rounds?.append(round)
-            }
-            
-            modelContext.insert(quiz)
-            createdQuizzes.append(quiz)
+
+        // MARK: - Quizzes mit verschiedenen Status erstellen
+
+        // Quiz 1: Abgeschlossen (zum Testen von fertigen Quizzes mit vollständigen Scores)
+        let quiz1 = Quiz(
+            name: "Pub-Quiz Oktoberfest",
+            venue: "Biergarten München",
+            date: Date().addingTimeInterval(-7 * 86400) // Vor 7 Tagen
+        )
+        quiz1.isActive = false
+        quiz1.isCompleted = true
+        quiz1.teams = []
+        quiz1.rounds = []
+
+        // Runden für Quiz 1
+        let round1_1 = Round(name: "Allgemeinwissen", maxPoints: 10, orderIndex: 0)
+        let round1_2 = Round(name: "Musik & Film", maxPoints: 10, orderIndex: 1)
+        let round1_3 = Round(name: "Sport", maxPoints: 15, orderIndex: 2)
+        let round1_4 = Round(name: "Geographie", maxPoints: 10, orderIndex: 3)
+        let round1_5 = Round(name: "Finale", maxPoints: 20, orderIndex: 4)
+
+        [round1_1, round1_2, round1_3, round1_4, round1_5].forEach { round in
+            round.quiz = quiz1
+            round.isCompleted = true
+            quiz1.rounds?.append(round)
         }
-        
-        // Erstelle 10-15 Teams
-        let numberOfTeams = Int.random(in: 10...15)
-        let selectedTeamNames = Array(teamNames.shuffled().prefix(numberOfTeams))
-        
-        for (index, teamName) in selectedTeamNames.enumerated() {
-            let team = Team(name: teamName, color: colors[index % colors.count])
-            
-            // Kreative Kontaktinformationen
-            if let contact = contactPersons.randomElement(), contact != nil {
-                team.contactPerson = contact!
-            }
-            
-            // Kreative E-Mail-Adressen
-            if Bool.random() { // 50% Chance auf E-Mail
-                let prefix = emailPrefixes.randomElement() ?? "team"
-                let domain = emailDomains.randomElement() ?? "example.com"
-                team.email = "\(prefix)@\(domain)"
-            }
-            
-            // Zufällig 0-3 Quizzes zuordnen (mehr Variation)
-            let maxAssignments = min(3, createdQuizzes.count)
-            let assignedQuizzes = createdQuizzes.shuffled().prefix(Int.random(in: 0...maxAssignments))
-            team.quizzes = Array(assignedQuizzes)
-            
-            // Teams zu Quizzes hinzufügen
-            for quiz in assignedQuizzes {
-                if quiz.teams == nil {
-                    quiz.teams = []
-                }
-                quiz.teams?.append(team)
-            }
-            
+
+        modelContext.insert(quiz1)
+
+        // Quiz 2: Aktiv (zum Testen während eines laufenden Quiz)
+        let quiz2 = Quiz(
+            name: "Winter-Quiz 2024",
+            venue: "Gasthaus zum Hirsch",
+            date: Date() // Heute
+        )
+        quiz2.isActive = true
+        quiz2.isCompleted = false
+        quiz2.teams = []
+        quiz2.rounds = []
+
+        // Runden für Quiz 2 (teilweise abgeschlossen)
+        let round2_1 = Round(name: "Geschichte", maxPoints: 10, orderIndex: 0)
+        round2_1.isCompleted = true
+        let round2_2 = Round(name: "Wissenschaft", maxPoints: 10, orderIndex: 1)
+        round2_2.isCompleted = true
+        let round2_3 = Round(name: "Aktuell", maxPoints: 10, orderIndex: 2)
+        round2_3.isCompleted = false
+        let round2_4 = Round(name: "Schätzfragen", maxPoints: 15, orderIndex: 3)
+        round2_4.isCompleted = false
+
+        [round2_1, round2_2, round2_3, round2_4].forEach { round in
+            round.quiz = quiz2
+            quiz2.rounds?.append(round)
+        }
+
+        modelContext.insert(quiz2)
+
+        // Quiz 3: Geplant (zum Testen zukünftiger Quizzes)
+        let quiz3 = Quiz(
+            name: "Frühlings-Quiz",
+            venue: "Brauhaus am See",
+            date: Date().addingTimeInterval(14 * 86400) // In 14 Tagen
+        )
+        quiz3.isActive = false
+        quiz3.isCompleted = false
+        quiz3.teams = []
+        quiz3.rounds = []
+
+        // Runden für Quiz 3
+        let round3_1 = Round(name: "Literatur", maxPoints: 10, orderIndex: 0)
+        let round3_2 = Round(name: "Natur", maxPoints: 10, orderIndex: 1)
+        let round3_3 = Round(name: "Bonusrunde", maxPoints: 25, orderIndex: 2)
+
+        [round3_1, round3_2, round3_3].forEach { round in
+            round.quiz = quiz3
+            quiz3.rounds?.append(round)
+        }
+
+        modelContext.insert(quiz3)
+
+        // Quiz 4: Ohne Teams (zum Testen leerer Quizzes)
+        let quiz4 = Quiz(
+            name: "Sommer-Quiz",
+            venue: "Biergarten am Park",
+            date: Date().addingTimeInterval(30 * 86400) // In 30 Tagen
+        )
+        quiz4.teams = []
+        quiz4.rounds = []
+
+        let round4_1 = Round(name: "Runde 1", maxPoints: 10, orderIndex: 0)
+        round4_1.quiz = quiz4
+        quiz4.rounds?.append(round4_1)
+
+        modelContext.insert(quiz4)
+
+        // MARK: - Teams mit verschiedenen Eigenschaften erstellen
+        var allTeams: [Team] = []
+
+        // Team 1-4: Vollständige Teams (alle in Quiz 1, komplett mit Scores)
+        for i in 0..<4 {
+            let team = Team(name: teamNames[i], color: colors[i])
+            team.contactPerson = contacts[i]
+            team.email = "\(contacts[i].replacingOccurrences(of: " ", with: ".").lowercased())@quiz-team.de"
+            team.isConfirmed = true
+            team.quizzes = [quiz1]
+
+            // Scores für alle Runden in Quiz 1
+            team.addScore(for: round1_1, points: Int.random(in: 5...10))
+            team.addScore(for: round1_2, points: Int.random(in: 6...10))
+            team.addScore(for: round1_3, points: Int.random(in: 8...15))
+            team.addScore(for: round1_4, points: Int.random(in: 4...10))
+            team.addScore(for: round1_5, points: Int.random(in: 10...20))
+
+            quiz1.teams?.append(team)
             modelContext.insert(team)
+            allTeams.append(team)
         }
-        
+
+        // Team 5-7: Teams in aktivem Quiz 2 (teilweise Scores)
+        for i in 4..<7 {
+            let team = Team(name: teamNames[i], color: colors[i])
+            team.contactPerson = contacts[i]
+            team.email = "\(contacts[i].replacingOccurrences(of: " ", with: ".").lowercased())@quiz-team.de"
+            team.isConfirmed = i % 2 == 0 // Manche bestätigt, manche nicht
+            team.quizzes = [quiz2]
+
+            // Nur Scores für abgeschlossene Runden
+            team.addScore(for: round2_1, points: Int.random(in: 5...10))
+            team.addScore(for: round2_2, points: Int.random(in: 4...10))
+
+            quiz2.teams?.append(team)
+            modelContext.insert(team)
+            allTeams.append(team)
+        }
+
+        // Team 8-9: Teams für zukünftiges Quiz 3 (ohne Scores)
+        for i in 7..<9 {
+            let team = Team(name: teamNames[i], color: colors[i])
+            team.contactPerson = contacts[i]
+            team.email = "\(contacts[i].replacingOccurrences(of: " ", with: ".").lowercased())@quiz-team.de"
+            team.isConfirmed = false
+            team.quizzes = [quiz3]
+
+            quiz3.teams?.append(team)
+            modelContext.insert(team)
+            allTeams.append(team)
+        }
+
+        // Team 10: Team in mehreren Quizzes (Quiz 1 und Quiz 2)
+        let team10 = Team(name: teamNames[9], color: colors[9])
+        team10.contactPerson = contacts[9]
+        team10.email = "\(contacts[9].replacingOccurrences(of: " ", with: ".").lowercased())@quiz-team.de"
+        team10.isConfirmed = true
+        team10.quizzes = [quiz1, quiz2]
+
+        // Scores für Quiz 1
+        team10.addScore(for: round1_1, points: 9)
+        team10.addScore(for: round1_2, points: 8)
+        team10.addScore(for: round1_3, points: 12)
+        team10.addScore(for: round1_4, points: 7)
+        team10.addScore(for: round1_5, points: 18)
+
+        // Scores für Quiz 2
+        team10.addScore(for: round2_1, points: 8)
+        team10.addScore(for: round2_2, points: 9)
+
+        quiz1.teams?.append(team10)
+        quiz2.teams?.append(team10)
+        modelContext.insert(team10)
+        allTeams.append(team10)
+
+        // Team 11: Team ohne Quiz-Zuordnung (nur in globaler Liste)
+        let team11 = Team(name: teamNames[10], color: colors[10])
+        team11.contactPerson = contacts[10]
+        team11.email = "\(contacts[10].replacingOccurrences(of: " ", with: ".").lowercased())@quiz-team.de"
+        team11.isConfirmed = false
+        team11.quizzes = []
+        modelContext.insert(team11)
+        allTeams.append(team11)
+
+        // Team 12: Team ohne Kontaktdaten
+        let team12 = Team(name: teamNames[11], color: colors[11])
+        team12.contactPerson = ""
+        team12.email = ""
+        team12.isConfirmed = false
+        team12.quizzes = []
+        modelContext.insert(team12)
+        allTeams.append(team12)
+
+        // MARK: - Test-Teams für alphabetische Sortierung
+        // Diese Teams sind speziell zum Testen der alphabetischen Sortierung
+        // Sie sind NICHT einem Quiz zugeordnet und sollten in der Auswahl erscheinen
+
+        let sortTestTeams = [
+            ("Zebras", "#FF3B30"),           // Z - sollte ganz unten sein
+            ("Adler", "#007AFF"),            // A - sollte ganz oben sein
+            ("Bären", "#34C759"),            // B mit Umlaut
+            ("Öchsner", "#FF9500"),          // Ö - nach O sortiert
+            ("Meister", "#5856D6"),          // M - in der Mitte
+            ("Ärzte", "#FF2D55"),            // Ä - nach A sortiert
+            ("Überraschung", "#5AC8FA")      // Ü - nach U sortiert
+        ]
+
+        for (index, (name, color)) in sortTestTeams.enumerated() {
+            let team = Team(name: name, color: color)
+            team.contactPerson = "Test Person \(index + 1)"
+            team.email = "test\(index + 1)@sortierung.de"
+            team.isConfirmed = false
+            team.quizzes = [] // WICHTIG: Nicht zugeordnet, damit sie in der Auswahl erscheinen
+            modelContext.insert(team)
+            allTeams.append(team)
+        }
+
         // Speichern
         do {
             try modelContext.save()
+            print("✅ Testdaten erfolgreich erstellt:")
+            print("   - 4 Quizzes (abgeschlossen, aktiv, geplant, leer)")
+            print("   - 12 Teams (verschiedene Zustände)")
+            print("   - Alle Scores gesetzt")
+
             // Erstes Team auswählen
-            if let firstTeam = allTeams.first {
-                selectedTeam = firstTeam
+            if !allTeams.isEmpty {
+                selectedTeam = allTeams.first
             }
         } catch {
-            print("Fehler beim Erstellen der Testdaten: \(error)")
+            print("❌ Fehler beim Erstellen der Testdaten: \(error)")
         }
     }
     #endif

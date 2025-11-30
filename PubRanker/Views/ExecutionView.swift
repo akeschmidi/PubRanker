@@ -20,8 +20,40 @@ struct ExecutionView: View {
     @State private var teamScores: [UUID: String] = [:]
     @State private var saveTask: Task<Void, Never>?
     @FocusState private var focusedTeamId: UUID?
+    @State private var showingEditRoundsSheet = false
+    @State private var showingCancelConfirmation = false
     
     var body: some View {
+        mainView
+            .onAppear {
+                setupInitialState()
+            }
+            .onChange(of: selectedWorkflow) { oldValue, newValue in
+                handleWorkflowChange(oldValue: oldValue, newValue: newValue)
+            }
+            .onChange(of: activeQuizzes) { oldValue, newValue in
+                handleActiveQuizzesChange(oldValue: oldValue, newValue: newValue)
+            }
+            .onChange(of: selectedQuiz?.id) { _, _ in
+                handleSelectedQuizChange()
+            }
+            .sheet(isPresented: $showingEditRoundsSheet, onDismiss: {
+                // UI aktualisieren wenn Sheet geschlossen wird
+                refreshUI()
+            }) {
+                editRoundsSheet
+                    .frame(minWidth: 900, minHeight: 700)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+            }
+            .confirmationDialog("Quiz abbrechen", isPresented: $showingCancelConfirmation) {
+                cancelConfirmationButtons
+            } message: {
+                cancelConfirmationMessage
+            }
+    }
+    
+    private var mainView: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
             sidebar
         } detail: {
@@ -32,9 +64,46 @@ struct ExecutionView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
-        .onAppear {
-            viewModel.setContext(modelContext)
-            if selectedQuiz == nil && !activeQuizzes.isEmpty {
+    }
+    
+    @ViewBuilder
+    private var editRoundsSheet: some View {
+        if let quiz = selectedQuiz {
+            NavigationView {
+                EditRoundsSheetContent(quiz: quiz, viewModel: viewModel)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var cancelConfirmationButtons: some View {
+        Button("Zur Planung zurückkehren", role: .destructive) {
+            if let quiz = selectedQuiz {
+                viewModel.cancelQuiz(quiz)
+                selectedWorkflow = .planning
+            }
+        }
+        Button("Abbrechen", role: .cancel) { }
+    }
+    
+    private var cancelConfirmationMessage: some View {
+        Text("Das Quiz wird gestoppt und alle Runden werden als nicht abgeschlossen markiert. Die eingegebenen Punkte bleiben erhalten.")
+    }
+    
+    private func setupInitialState() {
+        viewModel.setContext(modelContext)
+        if selectedQuiz == nil && !activeQuizzes.isEmpty {
+            selectedQuiz = activeQuizzes.first
+            if let quiz = selectedQuiz {
+                selectedRound = quiz.currentRound
+            }
+            loadCurrentScores()
+        }
+    }
+    
+    private func handleWorkflowChange(oldValue: ContentView.WorkflowPhase, newValue: ContentView.WorkflowPhase) {
+        if oldValue == .planning && newValue == .execution {
+            if !activeQuizzes.isEmpty {
                 selectedQuiz = activeQuizzes.first
                 if let quiz = selectedQuiz {
                     selectedRound = quiz.currentRound
@@ -42,30 +111,40 @@ struct ExecutionView: View {
                 loadCurrentScores()
             }
         }
-        .onChange(of: selectedWorkflow) { oldValue, newValue in
-            if oldValue == .planning && newValue == .execution {
-                if !activeQuizzes.isEmpty {
-                    selectedQuiz = activeQuizzes.first
-                    if let quiz = selectedQuiz {
-                        selectedRound = quiz.currentRound
-                    }
-                    loadCurrentScores()
-                }
-            }
-        }
-        .onChange(of: activeQuizzes) { oldValue, newValue in
-            if let selected = selectedQuiz, !newValue.contains(where: { $0.id == selected.id }) {
-                selectedQuiz = newValue.first
-                if let quiz = selectedQuiz {
-                    selectedRound = quiz.currentRound
-                }
-                loadCurrentScores()
-            }
-        }
-        .onChange(of: selectedQuiz?.id) { _, _ in
+    }
+    
+    private func handleActiveQuizzesChange(oldValue: [Quiz], newValue: [Quiz]) {
+        if let selected = selectedQuiz, !newValue.contains(where: { $0.id == selected.id }) {
+            selectedQuiz = newValue.first
             if let quiz = selectedQuiz {
                 selectedRound = quiz.currentRound
             }
+            loadCurrentScores()
+        }
+    }
+    
+    private func handleSelectedQuizChange() {
+        if let quiz = selectedQuiz {
+            selectedRound = quiz.currentRound
+        }
+        loadCurrentScores()
+    }
+    
+    private func refreshUI() {
+        // Lade aktuelle Scores neu
+        loadCurrentScores()
+        
+        // Aktualisiere Presentation Window falls aktiv
+        if presentationManager.isPresenting, let quiz = selectedQuiz {
+            presentationManager.updateQuiz(quiz)
+        }
+        
+        // Trigger UI refresh durch temporäre State-Änderung
+        Task { @MainActor in
+            // Kurze Verzögerung um sicherzustellen dass alle Änderungen verarbeitet wurden
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 Sekunden
+            
+            // Lade Scores erneut um sicherzustellen dass alles aktuell ist
             loadCurrentScores()
         }
     }
@@ -207,6 +286,15 @@ struct ExecutionView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 
+                // Edit Rounds Button
+                Button {
+                    showingEditRoundsSheet = true
+                } label: {
+                    Label("Runden bearbeiten", systemImage: "pencil.circle")
+                }
+                .buttonStyle(.bordered)
+                .help("Punkte bereits abgeschlossener Runden bearbeiten")
+                
                 // Presentation Mode Button
                 Button {
                     presentationManager.togglePresentation(for: quiz)
@@ -219,6 +307,16 @@ struct ExecutionView: View {
                 .buttonStyle(.bordered)
                 .keyboardShortcut("p", modifiers: .command)
                 .help("Presentation Mode (⌘P)")
+                
+                // Cancel Quiz Button
+                Button {
+                    showingCancelConfirmation = true
+                } label: {
+                    Label("Abbrechen", systemImage: "xmark.circle")
+                }
+                .buttonStyle(.bordered)
+                .tint(.orange)
+                .help("Quiz abbrechen und zurück zur Planung")
                 
                 // Complete Button
                 Button {
@@ -465,7 +563,7 @@ struct ExecutionView: View {
                 
                 // Total Score
                 VStack(alignment: .trailing, spacing: 2) {
-                    Text("\(team.totalScore)")
+                    Text("\(team.getTotalScore(for: quiz))")
                         .font(.title3)
                         .bold()
                     Text("Gesamt")
@@ -698,9 +796,9 @@ struct ExecutionView: View {
             // Teams List
             ScrollView {
                 LazyVStack(spacing: 8) {
-                    ForEach(Array(quiz.sortedTeamsByScore.enumerated()), id: \.element.id) { index, team in
-                        leaderboardRow(team: team, rank: index + 1, quiz: quiz)
-                            .id("\(team.id)-\(team.totalScore)") // Force update when score changes
+                    ForEach(quiz.getTeamRankings(), id: \.team.id) { ranking in
+                        leaderboardRow(team: ranking.team, rank: ranking.rank, quiz: quiz)
+                            .id("\(ranking.team.id)-\(ranking.team.getTotalScore(for: quiz))") // Force update when score changes
                     }
                 }
                 .padding()
@@ -740,7 +838,7 @@ struct ExecutionView: View {
             Spacer()
             
             // Score - Simple text without transition for better performance
-            Text("\(team.totalScore)")
+            Text("\(team.getTotalScore(for: quiz))")
                 .font(.headline)
                 .bold()
                 .monospacedDigit()
@@ -903,6 +1001,492 @@ struct ExecutionView: View {
             "Kein aktives Quiz",
             systemImage: "play.circle",
             description: Text("Starte ein Quiz in der Planungsphase")
+        )
+    }
+}
+
+// MARK: - Edit Rounds Sheet Content
+
+struct EditRoundsSheetContent: View {
+    @Bindable var quiz: Quiz
+    @Bindable var viewModel: QuizViewModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var selectedRound: Round?
+    
+    var body: some View {
+        NavigationSplitView(columnVisibility: .constant(.all)) {
+            // Sidebar - Runden Liste
+            List(selection: $selectedRound) {
+                Section("Runden bearbeiten") {
+                    ForEach(quiz.sortedRounds) { round in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(round.name)
+                                    .font(.headline)
+                                
+                                Spacer()
+                                
+                                if round.isCompleted {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.green)
+                                        .font(.caption)
+                                } else {
+                                    Image(systemName: "circle")
+                                        .foregroundStyle(.secondary)
+                                        .font(.caption)
+                                }
+                            }
+                            
+                            Text("Max. \(round.maxPoints) Punkte")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 2)
+                        .tag(round)
+                    }
+                }
+            }
+            .listStyle(.sidebar)
+            .navigationTitle("Runden")
+        } detail: {
+            if let round = selectedRound {
+                RoundEditDetailContent(round: round, quiz: quiz, viewModel: viewModel)
+            } else {
+                ContentUnavailableView(
+                    "Runde auswählen",
+                    systemImage: "list.number",
+                    description: Text("Wähle eine Runde aus, um die Punkte zu bearbeiten")
+                )
+            }
+        }
+        .navigationTitle("Punkte bearbeiten")
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Fertig") {
+                    // Speichere alle ungespeicherten Änderungen vor dem Schließen
+                    saveAllPendingChanges()
+                    dismiss()
+                }
+            }
+        }
+        .onAppear {
+            if selectedRound == nil && !quiz.safeRounds.isEmpty {
+                selectedRound = quiz.sortedRounds.first
+            }
+        }
+    }
+    
+    private func saveAllPendingChanges() {
+        // Speichere alle ungespeicherten Änderungen in allen Runden
+        // Dies ist ein Sicherheitsnetz falls der Benutzer vergessen hat zu speichern
+        viewModel.saveContext()
+    }
+}
+
+struct RoundEditDetailContent: View {
+    @Bindable var round: Round
+    let quiz: Quiz
+    @Bindable var viewModel: QuizViewModel
+    @State private var teamScores: [UUID: String] = [:]
+    @State private var hasChanges = false
+    @State private var editingRoundSettings = false
+    @State private var tempRoundName = ""
+    @State private var tempMaxPoints = ""
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            VStack(spacing: 12) {
+                HStack {
+                    if editingRoundSettings {
+                        // Editing Mode
+                        VStack(alignment: .leading, spacing: 8) {
+                            TextField("Rundenname", text: $tempRoundName)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.title2)
+                            
+                            HStack(spacing: 8) {
+                                Text("Max. Punkte:")
+                                    .font(.subheadline)
+                                TextField("10", text: $tempMaxPoints)
+                                    .textFieldStyle(.roundedBorder)
+                                    .frame(width: 80)
+                                    .onChange(of: tempMaxPoints) { _, newValue in
+                                        // Nur Zahlen erlauben
+                                        let filtered = newValue.filter { $0.isNumber }
+                                        if filtered != newValue {
+                                            tempMaxPoints = filtered
+                                        }
+                                    }
+                                Text("pro Team")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    } else {
+                        // Display Mode
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(round.name)
+                                .font(.title2)
+                                .bold()
+                            
+                            Text("Max. \(round.maxPoints) Punkte pro Team")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    // Edit/Save Buttons
+                    if editingRoundSettings {
+                        HStack(spacing: 8) {
+                            Button("Abbrechen") {
+                                cancelRoundEditing()
+                            }
+                            .buttonStyle(.bordered)
+                            
+                            Button("Speichern") {
+                                saveRoundSettings()
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                    } else {
+                        HStack(spacing: 12) {
+                            Button {
+                                startRoundEditing()
+                            } label: {
+                                Label("Punkte bearbeiten", systemImage: "slider.horizontal.3")
+                            }
+                            .buttonStyle(.bordered)
+                            .help("Maximale Punkte und Rundenname bearbeiten")
+                            
+                            if round.isCompleted {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.green)
+                                    Text("Abgeschlossen")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.green)
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Color.green.opacity(0.1))
+                                .clipShape(Capsule())
+                            }
+                        }
+                    }
+                }
+                
+                if hasChanges {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                        Text("Du hast ungespeicherte Änderungen")
+                            .font(.subheadline)
+                            .foregroundStyle(.orange)
+                        Spacer()
+                        Button("Speichern") {
+                            saveAllScores()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                    }
+                    .padding()
+                    .background(Color.orange.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                
+                // Warnung bei Max-Punkte Änderung
+                if editingRoundSettings, let newMaxPoints = Int(tempMaxPoints), newMaxPoints > 0 {
+                    let teamsWithTooManyPoints = quiz.safeTeams.compactMap { team -> String? in
+                        if let score = team.getScore(for: round), score > newMaxPoints {
+                            return team.name
+                        }
+                        return nil
+                    }
+                    
+                    if !teamsWithTooManyPoints.isEmpty {
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.red)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Achtung: Einige Teams haben mehr Punkte als das neue Maximum")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.red)
+                                Text("Betroffene Teams: \(teamsWithTooManyPoints.joined(separator: ", "))")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text("Diese werden automatisch auf \(newMaxPoints) Punkte begrenzt.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.red.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                }
+            }
+            .padding()
+            .background(Color(nsColor: .controlBackgroundColor))
+            
+            Divider()
+            
+            // Teams Grid
+            ScrollView {
+                if quiz.safeTeams.isEmpty {
+                    ContentUnavailableView(
+                        "Keine Teams vorhanden",
+                        systemImage: "person.3.slash",
+                        description: Text("Füge Teams hinzu, um Punkte zu vergeben")
+                    )
+                    .frame(maxHeight: 400)
+                } else {
+                    LazyVGrid(columns: [
+                        GridItem(.flexible(), spacing: 24),
+                        GridItem(.flexible(), spacing: 24)
+                    ], spacing: 24) {
+                        ForEach(quiz.safeTeams.sorted(by: { $0.name < $1.name })) { team in
+                            TeamEditCardContent(
+                                team: team,
+                                round: round,
+                                currentScore: Binding(
+                                    get: { teamScores[team.id] ?? "0" },
+                                    set: { newValue in
+                                        teamScores[team.id] = newValue
+                                        hasChanges = true
+                                    }
+                                ),
+                                maxPoints: round.maxPoints
+                            )
+                        }
+                    }
+                    .padding(24)
+                }
+            }
+            
+            // Action Buttons
+            VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    Button("Zurücksetzen") {
+                        loadCurrentScores()
+                        hasChanges = false
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(!hasChanges)
+                    
+                    Button("Alle speichern") {
+                        saveAllScores()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!hasChanges)
+                }
+                
+                if !round.isCompleted {
+                    Button("Runde als abgeschlossen markieren") {
+                        saveAllScores()
+                        viewModel.completeRound(round)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                } else {
+                    Button("Runde wieder öffnen") {
+                        round.isCompleted = false
+                        viewModel.saveContext()
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.orange)
+                }
+            }
+            .padding()
+            .background(Color(nsColor: .controlBackgroundColor))
+        }
+        .onAppear {
+            loadCurrentScores()
+        }
+        .onChange(of: round.id) { _, _ in
+            loadCurrentScores()
+            hasChanges = false
+            editingRoundSettings = false
+        }
+    }
+    
+    private func loadCurrentScores() {
+        teamScores.removeAll()
+        for team in quiz.safeTeams {
+            if let score = team.getScore(for: round) {
+                teamScores[team.id] = "\(score)"
+            } else {
+                teamScores[team.id] = "0"
+            }
+        }
+    }
+    
+    private func saveAllScores() {
+        for team in quiz.safeTeams {
+            let scoreText = teamScores[team.id] ?? "0"
+            let score = Int(scoreText) ?? 0
+            viewModel.updateScore(for: team, in: round, points: score)
+        }
+        hasChanges = false
+    }
+    
+    private func startRoundEditing() {
+        tempRoundName = round.name
+        tempMaxPoints = "\(round.maxPoints)"
+        editingRoundSettings = true
+    }
+    
+    private func cancelRoundEditing() {
+        editingRoundSettings = false
+        tempRoundName = ""
+        tempMaxPoints = ""
+    }
+    
+    private func saveRoundSettings() {
+        var needsReload = false
+        
+        // Update round name
+        if !tempRoundName.isEmpty && tempRoundName != round.name {
+            round.name = tempRoundName
+        }
+        
+        // Update max points
+        if let newMaxPoints = Int(tempMaxPoints), newMaxPoints > 0 && newMaxPoints != round.maxPoints {
+            round.maxPoints = newMaxPoints
+            needsReload = true
+            
+            // Warnung wenn Teams mehr Punkte haben als das neue Maximum
+            let teamsWithTooManyPoints = quiz.safeTeams.compactMap { team -> (Team, Int)? in
+                if let score = team.getScore(for: round), score > newMaxPoints {
+                    return (team, score)
+                }
+                return nil
+            }
+            
+            if !teamsWithTooManyPoints.isEmpty {
+                // Automatisch auf neue Maximalpunktzahl begrenzen
+                for (team, _) in teamsWithTooManyPoints {
+                    viewModel.updateScore(for: team, in: round, points: newMaxPoints)
+                }
+            }
+        }
+        
+        viewModel.saveContext()
+        editingRoundSettings = false
+        
+        if needsReload {
+            loadCurrentScores()
+        }
+    }
+}
+
+struct TeamEditCardContent: View {
+    let team: Team
+    let round: Round
+    @Binding var currentScore: String
+    let maxPoints: Int
+    
+    private var teamColor: Color {
+        Color(hex: team.color) ?? .blue
+    }
+    
+    private var scoreValue: Int {
+        Int(currentScore) ?? 0
+    }
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            // Team Header
+            HStack {
+                Circle()
+                    .fill(teamColor)
+                    .frame(width: 16, height: 16)
+                
+                Text(team.name)
+                    .font(.title2)
+                    .bold()
+                    .lineLimit(1)
+                
+                Spacer()
+            }
+            
+            // Score Input
+            VStack(spacing: 12) {
+                HStack(spacing: 16) {
+                    // Decrement
+                    Button {
+                        if scoreValue > 0 {
+                            currentScore = "\(scoreValue - 1)"
+                        }
+                    } label: {
+                        Image(systemName: "minus.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(scoreValue > 0 ? .red : .gray)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(scoreValue <= 0)
+                    .frame(width: 44, height: 44)
+                    
+                    // Text Field
+                    TextField("0", text: $currentScore)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: 42, weight: .bold, design: .rounded))
+                        .multilineTextAlignment(.center)
+                        .frame(width: 120, height: 60)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color(nsColor: .controlBackgroundColor))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(teamColor, lineWidth: 3)
+                                )
+                        )
+                        .onChange(of: currentScore) { _, newValue in
+                            // Filter nur Zahlen
+                            let filtered = newValue.filter { $0.isNumber }
+                            if filtered != newValue {
+                                currentScore = filtered
+                            }
+                            // Begrenze auf maxPoints
+                            if let value = Int(filtered), value > maxPoints {
+                                currentScore = "\(maxPoints)"
+                            }
+                        }
+                    
+                    // Increment
+                    Button {
+                        if scoreValue < maxPoints {
+                            currentScore = "\(scoreValue + 1)"
+                        }
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(scoreValue < maxPoints ? .green : .gray)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(scoreValue >= maxPoints)
+                    .frame(width: 44, height: 44)
+                }
+                
+                // Max Points Indicator
+                Text("/ \(maxPoints)")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .bold()
+            }
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(nsColor: .windowBackgroundColor))
+                .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(teamColor.opacity(0.3), lineWidth: 2)
         )
     }
 }

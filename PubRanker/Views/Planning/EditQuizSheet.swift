@@ -334,28 +334,39 @@ struct EditQuizSheet: View {
                     Image(systemName: "person.3.fill")
                         .font(.system(size: 60))
                         .foregroundStyle(.secondary)
-                    
+
                     Text("Keine Teams")
                         .font(.title2)
                         .bold()
-                    
+
                     Text("Füge Teams hinzu, um mit dem Quiz zu starten")
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                    
-                    Button {
-                        addNewTeam()
-                    } label: {
-                        Label("Neues Team hinzufügen", systemImage: "plus.circle.fill")
-                    }
-                    if !availableTeams.isEmpty {
+
+                    VStack(spacing: 12) {
                         Button {
-                            showingGlobalTeamPicker = true
+                            addNewTeam()
                         } label: {
-                            Label("Aus vorhandenen wählen (\(availableTeams.count))", systemImage: "square.stack.3d.up.fill")
+                            Label("Neues Team hinzufügen", systemImage: "plus.circle.fill")
                                 .font(.headline)
+                                .frame(maxWidth: 400)
                         }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+
+                        Button {
+                            if !availableTeams.isEmpty {
+                                showingGlobalTeamPicker = true
+                            }
+                        } label: {
+                            Label(availableTeams.isEmpty ? "Keine vorhandenen Teams verfügbar" : "Aus vorhandenen wählen (\(availableTeams.count))", systemImage: "square.stack.3d.up.fill")
+                                .font(.headline)
+                                .frame(maxWidth: 400)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
+                        .disabled(availableTeams.isEmpty)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -391,40 +402,21 @@ struct EditQuizSheet: View {
     
     private var roundsEditView: some View {
         VStack(spacing: 0) {
-            // Header mit Add Button
-            HStack {
-                Text("Runden verwalten")
-                    .font(.headline)
-                
-                Spacer()
-                
-                Button {
-                    addNewRound()
-                } label: {
-                    Label("Runde hinzufügen", systemImage: "plus.circle.fill")
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
-            
-            Divider()
-            
             if quiz.safeRounds.isEmpty {
                 VStack(spacing: 20) {
                     Image(systemName: "list.number")
                         .font(.system(size: 60))
                         .foregroundStyle(.secondary)
-                    
+
                     Text("Keine Runden")
                         .font(.title2)
                         .bold()
-                    
+
                     Text("Füge Runden hinzu, um Punkte zu vergeben")
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                    
+
                     Button {
                         addNewRound()
                     } label: {
@@ -447,6 +439,22 @@ struct EditQuizSheet: View {
                         }
                     }
                 }
+
+                // Action Button am unteren Rand
+                Divider()
+
+                HStack {
+                    Button {
+                        addNewRound()
+                    } label: {
+                        Label("Runde hinzufügen", systemImage: "plus.circle.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                }
+                .padding()
+                .background(Color(nsColor: .controlBackgroundColor))
             }
         }
     }
@@ -479,13 +487,16 @@ struct GlobalTeamPickerSheet: View {
     @State private var selectedTeams: Set<UUID> = []
 
     var filteredTeams: [Team] {
+        let teams: [Team]
         if searchText.isEmpty {
-            return availableTeams
+            teams = availableTeams
+        } else {
+            teams = availableTeams.filter { team in
+                team.name.localizedCaseInsensitiveContains(searchText) ||
+                team.contactPerson.localizedCaseInsensitiveContains(searchText)
+            }
         }
-        return availableTeams.filter { team in
-            team.name.localizedCaseInsensitiveContains(searchText) ||
-            team.contactPerson.localizedCaseInsensitiveContains(searchText)
-        }
+        return teams.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
     }
 
     var body: some View {
@@ -500,10 +511,7 @@ struct GlobalTeamPickerSheet: View {
                 } else {
                     List(filteredTeams, selection: $selectedTeams) { team in
                         HStack(spacing: 12) {
-                            Circle()
-                                .fill(Color(hex: team.color) ?? .blue)
-                                .frame(width: 24, height: 24)
-                                .shadow(color: (Color(hex: team.color) ?? .blue).opacity(0.3), radius: 3)
+                            TeamIconView(team: team, size: 32)
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(team.name)

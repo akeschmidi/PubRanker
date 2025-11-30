@@ -14,21 +14,7 @@ struct LeaderboardView: View {
     // Calculate ranks with tied teams getting the same rank (Dense Ranking)
     // Example: Team A=100pts (Rank 1), Team B=100pts (Rank 1), Team C=95pts (Rank 2)
     private func calculateRanks() -> [(team: Team, rank: Int)] {
-        let sortedTeams = quiz.sortedTeamsByScore
-        var result: [(team: Team, rank: Int)] = []
-        var currentRank = 1
-        var previousScore: Int?
-        
-        for team in sortedTeams {
-            if let prevScore = previousScore, team.totalScore != prevScore {
-                // Different score - increment rank by 1 (Dense Ranking)
-                currentRank += 1
-            }
-            result.append((team: team, rank: currentRank))
-            previousScore = team.totalScore
-        }
-        
-        return result
+        return quiz.getTeamRankings()
     }
     
     var body: some View {
@@ -88,7 +74,7 @@ struct LeaderboardView: View {
                         let rankedTeams = calculateRanks()
                         let topRanks = rankedTeams.filter { $0.rank <= 3 }
                         if topRanks.count >= 3 {
-                            PodiumView(rankedTeams: topRanks)
+                            PodiumView(rankedTeams: topRanks, quiz: quiz)
                                 .padding(.bottom, 20)
                         }
                         
@@ -113,7 +99,8 @@ struct LeaderboardView: View {
 
 struct PodiumView: View {
     let rankedTeams: [(team: Team, rank: Int)]
-    
+    let quiz: Quiz
+
     var body: some View {
         // Group teams by rank
         let rank1Teams = rankedTeams.filter { $0.rank == 1 }
@@ -132,13 +119,13 @@ struct PodiumView: View {
                 
                 VStack(spacing: 12) {
                     if !rank1Teams.isEmpty {
-                        CompactRankRow(teams: rank1Teams, rank: 1)
+                        CompactRankRow(teams: rank1Teams, rank: 1, quiz: quiz)
                     }
                     if !rank2Teams.isEmpty {
-                        CompactRankRow(teams: rank2Teams, rank: 2)
+                        CompactRankRow(teams: rank2Teams, rank: 2, quiz: quiz)
                     }
                     if !rank3Teams.isEmpty {
-                        CompactRankRow(teams: rank3Teams, rank: 3)
+                        CompactRankRow(teams: rank3Teams, rank: 3, quiz: quiz)
                     }
                 }
             }
@@ -150,7 +137,7 @@ struct PodiumView: View {
                 if !rank2Teams.isEmpty {
                     VStack(spacing: 8) {
                         ForEach(rank2Teams, id: \.team.id) { item in
-                            PodiumPlace(team: item.team, rank: 2, height: 120, isShared: rank2Teams.count > 1)
+                            PodiumPlace(team: item.team, rank: 2, height: 120, isShared: rank2Teams.count > 1, quiz: quiz)
                         }
                     }
                 }
@@ -159,7 +146,7 @@ struct PodiumView: View {
                 if !rank1Teams.isEmpty {
                     VStack(spacing: 8) {
                         ForEach(rank1Teams, id: \.team.id) { item in
-                            PodiumPlace(team: item.team, rank: 1, height: 150, isShared: rank1Teams.count > 1)
+                            PodiumPlace(team: item.team, rank: 1, height: 150, isShared: rank1Teams.count > 1, quiz: quiz)
                         }
                     }
                 }
@@ -168,7 +155,7 @@ struct PodiumView: View {
                 if !rank3Teams.isEmpty {
                     VStack(spacing: 8) {
                         ForEach(rank3Teams, id: \.team.id) { item in
-                            PodiumPlace(team: item.team, rank: 3, height: 100, isShared: rank3Teams.count > 1)
+                            PodiumPlace(team: item.team, rank: 3, height: 100, isShared: rank3Teams.count > 1, quiz: quiz)
                         }
                     }
                 }
@@ -182,6 +169,7 @@ struct PodiumView: View {
 struct CompactRankRow: View {
     let teams: [(team: Team, rank: Int)]
     let rank: Int
+    let quiz: Quiz
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -197,9 +185,6 @@ struct CompactRankRow: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), teams.first?.team.totalScore ?? 0))
-                    .font(.headline)
-                    .foregroundStyle(rankColor)
             }
             
             // Teams
@@ -253,13 +238,14 @@ struct PodiumPlace: View {
     let rank: Int
     let height: CGFloat
     let isShared: Bool
-    
+    let quiz: Quiz
+
     var body: some View {
         VStack(spacing: 8) {
             Text(rankEmoji)
                 .font(.system(size: isShared ? 32 : 40))
-            
-            Text("\(team.totalScore)")
+
+            Text("\(team.getTotalScore(for: quiz))")
                 .font(.system(size: isShared ? 22 : 28, weight: .bold))
                 .foregroundStyle(rankColor)
             
@@ -307,8 +293,9 @@ struct LeaderboardRowView: View {
     
     // Check if this team shares the rank with others
     private var isSharedRank: Bool {
-        let rankedTeams = quiz.sortedTeamsByScore.filter { $0.totalScore == team.totalScore }
-        return rankedTeams.count > 1
+        let rankings = quiz.getTeamRankings()
+        let teamsWithSameRank = rankings.filter { $0.rank == rank }
+        return teamsWithSameRank.count > 1
     }
     
     var body: some View {
@@ -380,11 +367,11 @@ struct LeaderboardRowView: View {
             
             // Total Score
             VStack(alignment: .trailing, spacing: 4) {
-                Text("\(team.totalScore)")
+                Text("\(team.getTotalScore(for: quiz))")
                     .font(.system(size: 42, weight: .bold))
                     .foregroundStyle(isTopThree ? rankColor : .primary)
                     .monospacedDigit()
-                
+
                 Text(NSLocalizedString("common.points", comment: "Points"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -456,7 +443,7 @@ struct TeamScoreDetailsView: View {
                 
                 Spacer()
                 
-                Text("\(team.totalScore)")
+                Text("\(team.getTotalScore(for: quiz))")
                     .font(.title)
                     .bold()
                     .foregroundStyle(.blue)

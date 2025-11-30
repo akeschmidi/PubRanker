@@ -46,10 +46,13 @@ struct AnalysisView: View {
             Divider()
 
             // Content based on selected tab
-            if selectedTab == .quizAnalysis {
+            switch selectedTab {
+            case .quizAnalysis:
                 quizAnalysisView
-            } else {
+            case .teamStatistics:
                 TeamStatisticsView()
+            case .overallStatistics:
+                OverallStatisticsView()
             }
         }
         .onAppear {
@@ -386,27 +389,30 @@ struct AnalysisView: View {
                         team: quiz.sortedTeamsByScore[1],
                         place: 2,
                         height: 120,
-                        color: .gray
+                        color: .gray,
+                        quiz: quiz
                     )
                 }
-                
+
                 // 1st Place (Winner)
                 if !quiz.sortedTeamsByScore.isEmpty {
                     podiumPlace(
                         team: quiz.sortedTeamsByScore[0],
                         place: 1,
                         height: 160,
-                        color: .yellow
+                        color: .yellow,
+                        quiz: quiz
                     )
                 }
-                
+
                 // 3rd Place
                 if quiz.sortedTeamsByScore.count > 2 {
                     podiumPlace(
                         team: quiz.sortedTeamsByScore[2],
                         place: 3,
                         height: 100,
-                        color: Color(red: 0.8, green: 0.5, blue: 0.2)
+                        color: Color(red: 0.8, green: 0.5, blue: 0.2),
+                        quiz: quiz
                     )
                 }
             }
@@ -414,7 +420,7 @@ struct AnalysisView: View {
         .padding()
     }
     
-    private func podiumPlace(team: Team, place: Int, height: CGFloat, color: Color) -> some View {
+    private func podiumPlace(team: Team, place: Int, height: CGFloat, color: Color, quiz: Quiz) -> some View {
         VStack(spacing: 12) {
             // Medal
             ZStack {
@@ -422,20 +428,20 @@ struct AnalysisView: View {
                     .fill(color)
                     .frame(width: 60, height: 60)
                     .shadow(color: color.opacity(0.5), radius: 8)
-                
+
                 Text("\(place)")
                     .font(.title)
                     .bold()
                     .foregroundStyle(.white)
             }
-            
+
             // Team Info
             VStack(spacing: 4) {
                 Text(team.name)
                     .font(.headline)
                     .multilineTextAlignment(.center)
-                
-                Text("\(team.totalScore) Punkte")
+
+                Text("\(team.getTotalScore(for: quiz)) Punkte")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -524,18 +530,18 @@ struct AnalysisView: View {
                         .font(.headline)
                     
                     // Fortschrittsbalken relativ zur höchsten Punktzahl
-                    if quiz.safeTeams.count > 1, let maxScore = quiz.sortedTeamsByScore.first?.totalScore, maxScore > 0 {
+                    if quiz.safeTeams.count > 1, let maxScore = quiz.sortedTeamsByScore.first?.getTotalScore(for: quiz), maxScore > 0 {
                         GeometryReader { geometry in
-                            ZStack(alignment: .leading) {   
+                            ZStack(alignment: .leading) {
                                 // Hintergrund
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(Color.gray.opacity(0.2))
                                     .frame(height: 6)
-                                
+
                                 // Fortschritt
                                 RoundedRectangle(cornerRadius: 4)
                                     .fill(Color(hex: team.color) ?? .blue)
-                                    .frame(width: geometry.size.width * CGFloat(team.totalScore) / CGFloat(maxScore), height: 6)
+                                    .frame(width: geometry.size.width * CGFloat(team.getTotalScore(for: quiz)) / CGFloat(maxScore), height: 6)
                             }
                         }
                         .frame(height: 6)
@@ -546,11 +552,11 @@ struct AnalysisView: View {
                 
                 // Punkte Display
                 VStack(spacing: 4) {
-                    Text("\(team.totalScore)")
+                    Text("\(team.getTotalScore(for: quiz))")
                         .font(.system(size: 32, weight: .bold))
                         .monospacedDigit()
                         .foregroundStyle(rank <= 3 ? rankColor(rank) : .primary)
-                    
+
                     Text("Punkte")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
@@ -605,7 +611,7 @@ struct AnalysisView: View {
                 
                 statCard(
                     title: "Höchste Punktzahl",
-                    value: "\(quiz.sortedTeamsByScore.first?.totalScore ?? 0)",
+                    value: "\(quiz.sortedTeamsByScore.first?.getTotalScore(for: quiz) ?? 0)",
                     icon: "star.fill",
                     color: .yellow
                 )
@@ -737,12 +743,12 @@ struct AnalysisView: View {
     // Helper Functions
     private func averageScore(_ quiz: Quiz) -> Double {
         guard !quiz.safeTeams.isEmpty else { return 0 }
-        let total = quiz.safeTeams.reduce(0) { $0 + $1.totalScore }
+        let total = quiz.safeTeams.reduce(0) { $0 + $1.getTotalScore(for: quiz) }
         return Double(total) / Double(quiz.safeTeams.count)
     }
-    
+
     private func totalPoints(_ quiz: Quiz) -> Int {
-        quiz.safeTeams.reduce(0) { $0 + $1.totalScore }
+        quiz.safeTeams.reduce(0) { $0 + $1.getTotalScore(for: quiz) }
     }
     
     private func maxPossiblePoints(_ quiz: Quiz) -> Int {
@@ -1368,7 +1374,7 @@ struct TeamStatisticsView: View {
                     quizName: quiz.name,
                     quizDate: quiz.date,
                     rank: rank,
-                    points: team.totalScore,
+                    points: team.getTotalScore(for: quiz),
                     totalTeams: rankedTeams.count
                 )
             }
@@ -1541,6 +1547,283 @@ enum StatsSortOption: String, CaseIterable {
         case .bestAverage: return "star.fill"
         case .mostPoints: return "sum"
         case .nameAZ: return "textformat.abc"
+        }
+    }
+}
+
+// MARK: - Overall Statistics View
+struct OverallStatisticsView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query(filter: #Predicate<Quiz> { $0.isCompleted }, sort: \Quiz.date, order: .reverse)
+    private var completedQuizzes: [Quiz]
+    @Query private var allTeams: [Team]
+
+    private var totalUniqueTeams: Int {
+        Set(completedQuizzes.flatMap { $0.safeTeams.map { $0.id } }).count
+    }
+
+    private var totalMaxPossiblePoints: Int {
+        completedQuizzes.reduce(0) { sum, quiz in
+            sum + quiz.safeRounds.reduce(0) { $0 + $1.maxPoints }
+        }
+    }
+
+    private var totalMaxAchievedPoints: Int {
+        completedQuizzes.reduce(0) { sum, quiz in
+            sum + (quiz.sortedTeamsByScore.first?.getTotalScore(for: quiz) ?? 0)
+        }
+    }
+
+    private var averageTeamsPerQuiz: Double {
+        guard !completedQuizzes.isEmpty else { return 0 }
+        let total = completedQuizzes.reduce(0) { $0 + $1.safeTeams.count }
+        return Double(total) / Double(completedQuizzes.count)
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 16) {
+                    Image(systemName: "chart.pie.fill")
+                        .font(.system(size: 60))
+                        .foregroundStyle(.blue)
+
+                    Text("Gesamt-Übersicht")
+                        .font(.title)
+                        .bold()
+
+                    Text("Statistiken über alle abgeschlossenen Quiz")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
+
+                Divider()
+
+                // Key Statistics Grid
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                    statCard(
+                        title: "Abgeschlossene Quiz",
+                        value: "\(completedQuizzes.count)",
+                        icon: "checkmark.circle.fill",
+                        color: .green
+                    )
+
+                    statCard(
+                        title: "Unique Teams",
+                        value: "\(totalUniqueTeams)",
+                        icon: "person.3.fill",
+                        color: .blue
+                    )
+
+                    statCard(
+                        title: "Ø Teams pro Quiz",
+                        value: String(format: "%.1f", averageTeamsPerQuiz),
+                        icon: "chart.bar.fill",
+                        color: .orange
+                    )
+                }
+                .padding(.horizontal)
+
+                Divider()
+
+                // Team Performance Level
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Image(systemName: "target")
+                            .foregroundStyle(.purple)
+                        Text("Niveau der Teams")
+                            .font(.title2)
+                            .bold()
+                    }
+                    .padding(.horizontal)
+
+                    VStack(spacing: 16) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Maximale Punktzahl")
+                                    .font(.headline)
+                                Text("\(totalMaxPossiblePoints) Punkte")
+                                    .font(.system(size: 32, weight: .bold))
+                                    .foregroundStyle(.blue)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.blue.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                        HStack {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Erreichte Punktzahl")
+                                    .font(.headline)
+                                Text("\(totalMaxAchievedPoints) Punkte")
+                                    .font(.system(size: 32, weight: .bold))
+                                    .foregroundStyle(.green)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.green.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                        // Performance Percentage
+                        if totalMaxPossiblePoints > 0 {
+                            let percentage = Double(totalMaxAchievedPoints) / Double(totalMaxPossiblePoints) * 100
+
+                            VStack(spacing: 8) {
+                                HStack {
+                                    Text("Gesamt-Niveau")
+                                        .font(.headline)
+                                    Spacer()
+                                    Text(String(format: "%.1f%%", percentage))
+                                        .font(.title)
+                                        .bold()
+                                        .foregroundStyle(.purple)
+                                }
+
+                                GeometryReader { geometry in
+                                    ZStack(alignment: .leading) {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.gray.opacity(0.2))
+                                            .frame(height: 16)
+
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [.blue, .purple, .pink],
+                                                    startPoint: .leading,
+                                                    endPoint: .trailing
+                                                )
+                                            )
+                                            .frame(width: geometry.size.width * (percentage / 100), height: 16)
+                                    }
+                                }
+                                .frame(height: 16)
+                            }
+                            .padding()
+                            .background(Color.purple.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+
+                Divider()
+
+                // Quiz List
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Image(systemName: "list.bullet")
+                            .foregroundStyle(.cyan)
+                        Text("Quiz-Auflistung")
+                            .font(.title2)
+                            .bold()
+                        Text("(\(completedQuizzes.count))")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal)
+
+                    LazyVStack(spacing: 12) {
+                        ForEach(completedQuizzes) { quiz in
+                            quizCard(quiz: quiz)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+            .padding(.vertical)
+        }
+    }
+
+    private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
+        VStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title)
+                .foregroundStyle(color)
+            Text(value)
+                .font(.title)
+                .bold()
+                .monospacedDigit()
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+        .background(Color(nsColor: .controlBackgroundColor))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+
+    private func quizCard(quiz: Quiz) -> some View {
+        HStack(spacing: 16) {
+            // Quiz Icon
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [.cyan, .blue],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 50, height: 50)
+
+                Image(systemName: "trophy.fill")
+                    .foregroundStyle(.white)
+                    .font(.title3)
+            }
+
+            // Quiz Info
+            VStack(alignment: .leading, spacing: 6) {
+                Text(quiz.name)
+                    .font(.headline)
+
+                HStack(spacing: 12) {
+                    if !quiz.venue.isEmpty {
+                        Label(quiz.venue, systemImage: "mappin.circle")
+                            .font(.caption)
+                    }
+                    Label(quiz.date.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
+                        .font(.caption)
+                }
+                .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            // Stats
+            VStack(spacing: 8) {
+                HStack(spacing: 4) {
+                    Image(systemName: "person.3.fill")
+                        .font(.caption)
+                    Text("\(quiz.safeTeams.count)")
+                        .font(.caption)
+                        .bold()
+                }
+                .foregroundStyle(.blue)
+
+                HStack(spacing: 4) {
+                    Image(systemName: "list.number")
+                        .font(.caption)
+                    Text("\(quiz.safeRounds.count)")
+                        .font(.caption)
+                        .bold()
+                }
+                .foregroundStyle(.green)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(nsColor: .controlBackgroundColor))
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.cyan.opacity(0.3), lineWidth: 2)
         }
     }
 }

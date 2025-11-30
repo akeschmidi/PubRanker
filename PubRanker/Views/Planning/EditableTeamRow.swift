@@ -205,31 +205,41 @@ struct EditableTeamRow: View {
                             isEditing = true
                         }
                     } label: {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 8) {
                             Image(systemName: isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
+                                .font(.body)
                             Text(isEditing ? "Speichern" : "Bearbeiten")
+                                .font(.body)
                         }
-                        .font(.subheadline)
                         .bold()
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
                         .background(isEditing ? Color.green : Color.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                     .buttonStyle(.plain)
                     .help(isEditing ? "Speichern" : "Bearbeiten")
-                    
-                    // Löschen Button
+
+                    // Löschen Button - Größer und prominenter
                     Button {
                         showingDeleteConfirmation = true
                     } label: {
-                        Image(systemName: "trash.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.red)
+                        HStack(spacing: 8) {
+                            Image(systemName: "trash.circle.fill")
+                                .font(.body)
+                            Text("Entfernen")
+                                .font(.body)
+                        }
+                        .bold()
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .background(Color.red)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                     .buttonStyle(.plain)
-                    .help("Team löschen")
+                    .help("Team aus Quiz entfernen")
                 }
             }
             .padding(.horizontal, 20)
@@ -254,13 +264,13 @@ struct EditableTeamRow: View {
                     lineWidth: 2.5
                 )
         }
-        .alert("Team löschen?", isPresented: $showingDeleteConfirmation) {
+        .alert("Team aus Quiz entfernen?", isPresented: $showingDeleteConfirmation) {
             Button("Abbrechen", role: .cancel) {}
-            Button("Löschen", role: .destructive) {
+            Button("Entfernen", role: .destructive) {
                 viewModel.deleteTeam(team, from: quiz)
             }
         } message: {
-            Text("Möchtest du '\(team.name)' wirklich löschen?")
+            Text("Möchtest du '\(team.name)' wirklich aus diesem Quiz entfernen? Das Team bleibt in der globalen Team-Liste erhalten.")
         }
         .fileImporter(
             isPresented: $showingImagePicker,
@@ -321,4 +331,8 @@ struct EditableTeamRow: View {
         }
     }
 }
+
+
+
+
 

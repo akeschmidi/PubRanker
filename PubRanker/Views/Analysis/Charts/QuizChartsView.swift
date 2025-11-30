@@ -91,6 +91,19 @@ struct TeamPointsChart: View {
 struct RoundPerformanceChart: View {
     let quiz: Quiz
 
+    // Vordefinierte, gut unterscheidbare Farben
+    private let chartColors: [Color] = [
+        .blue,
+        .orange,
+        .green,
+        .red,
+        .purple
+    ]
+
+    private func getChartColor(for index: Int) -> Color {
+        chartColors[index % chartColors.count]
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -108,46 +121,79 @@ struct RoundPerformanceChart: View {
                     description: quiz.safeTeams.isEmpty ? "Füge Teams zum Quiz hinzu" : "Füge Runden zum Quiz hinzu"
                 )
             } else {
-                Chart {
-                    ForEach(quiz.sortedTeamsByScore.prefix(5)) { team in
-                        ForEach(quiz.sortedRounds) { round in
-                            if let score = team.getScore(for: round) {
-                                LineMark(
-                                    x: .value("Runde", round.name),
-                                    y: .value("Punkte", score)
-                                )
-                                .foregroundStyle(Color(hex: team.color) ?? .blue)
-                                .symbol {
-                                    Circle()
-                                        .fill(Color(hex: team.color) ?? .blue)
-                                        .frame(width: 8, height: 8)
+                VStack(spacing: 16) {
+                    Chart {
+                        ForEach(Array(quiz.sortedTeamsByScore.prefix(5).enumerated()), id: \.element.id) { index, team in
+                            ForEach(quiz.sortedRounds) { round in
+                                if let score = team.getScore(for: round) {
+                                    LineMark(
+                                        x: .value("Runde", round.name),
+                                        y: .value("Punkte", score),
+                                        series: .value("Team", team.name)
+                                    )
+                                    .foregroundStyle(getChartColor(for: index))
+                                    .lineStyle(StrokeStyle(lineWidth: 3))
+                                    .symbol {
+                                        Circle()
+                                            .fill(getChartColor(for: index))
+                                            .frame(width: 10, height: 10)
+                                            .overlay {
+                                                Circle()
+                                                    .stroke(.white, lineWidth: 2)
+                                            }
+                                    }
+                                    .interpolationMethod(.catmullRom)
                                 }
                             }
                         }
                     }
-                }
-                .frame(height: 300)
-                .chartYAxis {
-                    AxisMarks(position: .leading)
-                }
-                .chartXAxis {
-                    AxisMarks { value in
-                        AxisValueLabel()
+                    .frame(height: 350)
+                    .chartYAxis {
+                        AxisMarks(position: .leading) { value in
+                            AxisGridLine()
+                            AxisValueLabel()
+                        }
+                    }
+                    .chartXAxis {
+                        AxisMarks { value in
+                            AxisGridLine()
+                            AxisValueLabel()
+                                .font(.caption)
+                        }
+                    }
+                    .padding()
+                    .background(Color(nsColor: .controlBackgroundColor))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                    // Custom Legend
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Legende")
                             .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .leading, spacing: 8) {
+                            ForEach(Array(quiz.sortedTeamsByScore.prefix(5).enumerated()), id: \.element.id) { index, team in
+                                HStack(spacing: 8) {
+                                    Circle()
+                                        .fill(getChartColor(for: index))
+                                        .frame(width: 12, height: 12)
+                                    Text(team.name)
+                                        .font(.caption)
+                                        .lineLimit(1)
+                                    Spacer(minLength: 0)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+
+                    if quiz.safeTeams.count > 5 {
+                        Text("Zeigt die Top 5 Teams")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .chartLegend(position: .bottom, spacing: 8)
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
                 .padding(.horizontal)
-
-                if quiz.safeTeams.count > 5 {
-                    Text("Zeigt die Top 5 Teams")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal)
-                }
             }
         }
     }
@@ -191,16 +237,26 @@ struct RoundDistributionChart: View {
                             x: .value("Runde", round.name),
                             y: .value("Durchschnitt", avgScore)
                         )
-                        .foregroundStyle(.blue.opacity(0.5))
+                        .foregroundStyle(.orange)
+                        .annotation(position: .top, alignment: .center) {
+                            Text("Ø \(String(format: "%.1f", avgScore))")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
 
                         BarMark(
                             x: .value("Runde", round.name),
                             y: .value("Maximum", maxScore)
                         )
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(.green)
+                        .annotation(position: .top, alignment: .center) {
+                            Text("Max \(maxScore)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
-                .frame(height: 250)
+                .frame(height: 300)
                 .chartXAxis {
                     AxisMarks { value in
                         AxisValueLabel()
@@ -211,9 +267,27 @@ struct RoundDistributionChart: View {
                     AxisMarks(position: .leading)
                 }
                 .chartForegroundStyleScale([
-                    "Durchschnitt": .blue.opacity(0.5),
-                    "Maximum": .blue
+                    "Durchschnitt": .orange,
+                    "Maximum": .green
                 ])
+                .chartLegend(position: .bottom, spacing: 8) {
+                    HStack(spacing: 20) {
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(.orange)
+                                .frame(width: 12, height: 12)
+                            Text("Durchschnitt")
+                                .font(.caption)
+                        }
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(.green)
+                                .frame(width: 12, height: 12)
+                            Text("Maximum")
+                                .font(.caption)
+                        }
+                    }
+                }
                 .padding()
                 .background(Color(nsColor: .controlBackgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: 12))

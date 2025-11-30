@@ -128,6 +128,16 @@ final class QuizViewModel {
         saveContext()
     }
     
+    func cancelQuiz(_ quiz: Quiz) {
+        quiz.isActive = false
+        quiz.isCompleted = false
+        // Setze alle Runden auf nicht abgeschlossen zurück
+        for round in quiz.safeRounds {
+            round.isCompleted = false
+        }
+        saveContext()
+    }
+    
     // MARK: - Team Management
     
     func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
@@ -155,13 +165,19 @@ final class QuizViewModel {
     }
     
     func deleteTeam(_ team: Team, from quiz: Quiz) {
-        guard let context = modelContext else { return }
-        
+        guard modelContext != nil else { return }
+
+        // Team aus dem Quiz entfernen
         if let index = quiz.teams?.firstIndex(where: { $0.id == team.id }) {
             quiz.teams?.remove(at: index)
         }
-        context.delete(team)
-        
+
+        // Quiz aus der Team's quizzes Liste entfernen
+        team.quizzes?.removeAll(where: { $0.id == quiz.id })
+
+        // Team NICHT aus dem Context löschen - es bleibt in der globalen Team-Liste
+        // Das Team wird nur aus diesem Quiz entfernt
+
         saveContext()
     }
     
@@ -246,7 +262,7 @@ final class QuizViewModel {
     
     // MARK: - Helper Methods
     
-    private func saveContext() {
+    func saveContext() {
         guard let context = modelContext else { return }
         
         do {
@@ -257,8 +273,7 @@ final class QuizViewModel {
     }
     
     func getTeamRank(for team: Team, in quiz: Quiz) -> Int {
-        let sortedTeams = quiz.sortedTeamsByScore
-        return (sortedTeams.firstIndex(where: { $0.id == team.id }) ?? 0) + 1
+        return quiz.getTeamRank(for: team)
     }
     
     // MARK: - Export Functions
@@ -301,7 +316,7 @@ final class QuizViewModel {
                     row += ",-"
                 }
             }
-            row += ",\(team.totalScore)\n"
+            row += ",\(team.getTotalScore(for: quiz))\n"
             csv += row
         }
         
@@ -422,3 +437,4 @@ struct RoundScoreExportData: Codable {
         self.points = roundScore.points
     }
 }
+

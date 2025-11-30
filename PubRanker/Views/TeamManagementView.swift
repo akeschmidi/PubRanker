@@ -13,16 +13,21 @@ struct TeamManagementView: View {
     @Bindable var viewModel: QuizViewModel
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
-    
+
     @State private var showingAddTeamSheet = false
     @State private var showingTeamWizard = false
     @State private var showingGlobalTeamPicker = false
-    
+
+    var sortedTeams: [Team] {
+        quiz.safeTeams.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+    }
+
     var availableGlobalTeams: [Team] {
         allTeams.filter { team in
             // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
             (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
         }
+        .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
     }
     
     var body: some View {
@@ -68,12 +73,12 @@ struct TeamManagementView: View {
                 .padding()
             } else {
                 List {
-                    ForEach(quiz.safeTeams) { team in
+                    ForEach(sortedTeams) { team in
                         TeamRowView(team: team, quiz: quiz, viewModel: viewModel)
                     }
                     .onDelete { indexSet in
                         for index in indexSet {
-                            viewModel.deleteTeam(quiz.safeTeams[index], from: quiz)
+                            viewModel.deleteTeam(sortedTeams[index], from: quiz)
                         }
                     }
                 }
@@ -124,92 +129,57 @@ struct TeamRowView: View {
     @Bindable var team: Team
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    @State private var isEditing = false
-    @State private var editedName: String = ""
-    @FocusState private var isTextFieldFocused: Bool
-    
+    @State private var showingDeleteConfirmation = false
+
     var body: some View {
         HStack(spacing: 12) {
             // Team Icon
             TeamIconView(team: team, size: 44)
-            
+
             // Team Info
             VStack(alignment: .leading, spacing: 4) {
-                if isEditing {
-                    TextField("Team Name", text: $editedName)
-                        .textFieldStyle(.plain)
-                        .font(.body)
-                        .bold()
-                        .focused($isTextFieldFocused)
-                        .onSubmit {
-                            saveChanges()
-                        }
-                        .onAppear {
-                            isTextFieldFocused = true
-                        }
-                } else {
-                    Text(team.name)
-                        .font(.body)
-                        .bold()
-                        .foregroundStyle(.primary)
-                    
-                    if !team.contactPerson.isEmpty {
-                        Text(team.contactPerson)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+                Text(team.name)
+                    .font(.body)
+                    .bold()
+                    .foregroundStyle(.primary)
+
+                if !team.contactPerson.isEmpty {
+                    Text(team.contactPerson)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
-            
+
             Spacer()
-            
-            // Status & Points
-            if !isEditing {
-                HStack(spacing: 12) {
-                    if team.isConfirmed {
-                        Label("Bestätigt", systemImage: "checkmark.circle.fill")
-                            .font(.caption)
-                            .foregroundStyle(.green)
-                    }
+
+            // Status
+            HStack(spacing: 12) {
+                if team.isConfirmed {
+                    Label("Bestätigt", systemImage: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.green)
                 }
             }
-            
-            // Action Buttons
-            HStack(spacing: 4) {
-                if isEditing {
-                    Button {
-                        saveChanges()
-                    } label: {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                            .font(.title3)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Speichern")
-                    
-                    Button {
-                        isEditing = false
-                        editedName = team.name
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.red)
-                            .font(.title3)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Abbrechen")
-                } else {
-                    Button {
-                        editedName = team.name
-                        isEditing = true
-                    } label: {
-                        Image(systemName: "pencil")
-                            .foregroundStyle(.blue)
-                            .font(.body)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Team-Name bearbeiten")
+
+            // Delete Button
+            Button {
+                showingDeleteConfirmation = true
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "trash.circle.fill")
+                        .font(.body)
+                    Text("Entfernen")
+                        .font(.body)
                 }
+                .bold()
+                .foregroundStyle(.white)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(Color.red)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+            .buttonStyle(.plain)
+            .help("Team aus Quiz entfernen")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
@@ -221,14 +191,14 @@ struct TeamRowView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.primary.opacity(0.1), lineWidth: 1)
         }
-    }
-    
-    private func saveChanges() {
-        if !editedName.isEmpty && editedName.trimmingCharacters(in: .whitespacesAndNewlines) != team.name {
-            viewModel.updateTeamName(team, newName: editedName.trimmingCharacters(in: .whitespacesAndNewlines))
+        .alert("Team aus Quiz entfernen?", isPresented: $showingDeleteConfirmation) {
+            Button("Abbrechen", role: .cancel) {}
+            Button("Entfernen", role: .destructive) {
+                viewModel.deleteTeam(team, from: quiz)
+            }
+        } message: {
+            Text("Möchtest du '\(team.name)' wirklich aus diesem Quiz entfernen? Das Team bleibt in der globalen Team-Liste erhalten.")
         }
-        isEditing = false
-        isTextFieldFocused = false
     }
 }
 

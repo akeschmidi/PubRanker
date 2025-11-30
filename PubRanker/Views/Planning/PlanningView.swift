@@ -10,7 +10,8 @@ import SwiftData
 
 struct PlanningView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(filter: #Predicate<Quiz> { !$0.isActive && !$0.isCompleted }, sort: \Quiz.date, order: .reverse) 
+    // Sortiert: Nächste Quiz zuerst (aufsteigend nach Datum)
+    @Query(filter: #Predicate<Quiz> { !$0.isActive && !$0.isCompleted }, sort: \Quiz.date, order: .forward)
     private var plannedQuizzes: [Quiz]
     @Bindable var viewModel: QuizViewModel
     @Binding var selectedWorkflow: ContentView.WorkflowPhase

@@ -43,11 +43,13 @@ struct ChartEmptyStateView: View {
 enum AnalysisTab: String, CaseIterable {
     case quizAnalysis = "Quiz-Auswertung"
     case teamStatistics = "Team-Statistiken"
+    case overallStatistics = "Gesamt-Übersicht"
 
     var icon: String {
         switch self {
         case .quizAnalysis: return "chart.bar.fill"
         case .teamStatistics: return "person.3.fill"
+        case .overallStatistics: return "chart.pie.fill"
         }
     }
 }

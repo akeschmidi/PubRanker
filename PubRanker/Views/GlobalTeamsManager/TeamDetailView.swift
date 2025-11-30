@@ -1,6 +1,6 @@
 //
 //  TeamDetailView.swift
-//  PubRanker
+    //  PubRanker
 //
 //  Created on 23.11.2025
 //
@@ -133,7 +133,7 @@ struct TeamDetailView: View {
                     if let quizzes = team.quizzes, !quizzes.isEmpty {
                         VStack(spacing: 12) {
                             ForEach(quizzes) { quiz in
-                                QuizAssignmentRow(quiz: quiz)
+                                QuizAssignmentRow(quiz: quiz, team: team)
                             }
                         }
                     } else {
@@ -228,7 +228,8 @@ struct TeamDetailView: View {
 // MARK: - Quiz Assignment Row
 struct QuizAssignmentRow: View {
     let quiz: Quiz
-    
+    let team: Team
+
     var body: some View {
         HStack(spacing: 16) {
             // Quiz Icon/Color Indicator
@@ -246,13 +247,13 @@ struct QuizAssignmentRow: View {
                         .font(.title3)
                         .foregroundStyle(.white)
                 }
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 Text(quiz.name)
                     .font(.body)
                     .bold()
                     .foregroundStyle(.primary)
-                
+
                 HStack(spacing: 16) {
                     if !quiz.venue.isEmpty {
                         HStack(spacing: 6) {
@@ -263,7 +264,7 @@ struct QuizAssignmentRow: View {
                         }
                         .foregroundStyle(.secondary)
                     }
-                    
+
                     HStack(spacing: 6) {
                         Image(systemName: "clock.fill")
                             .font(.caption)
@@ -271,11 +272,22 @@ struct QuizAssignmentRow: View {
                             .font(.subheadline)
                     }
                     .foregroundStyle(.secondary)
+
+                    // Bestätigungsstatus
+                    if team.isConfirmed {
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.caption)
+                            Text("Bestätigt")
+                                .font(.subheadline)
+                        }
+                        .foregroundStyle(.green)
+                    }
                 }
             }
-            
+
             Spacer()
-            
+
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -291,4 +303,8 @@ struct QuizAssignmentRow: View {
         )
     }
 }
+
+
+
+
 
