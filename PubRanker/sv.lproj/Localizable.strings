@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "Resultattavla";
 "analysis.overview" = "Översikt";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "Inga quiz tillgängliga";
+"analysis.noQuizzes.description" = "Starta eller slutför ett quiz för att se det här";
+"analysis.activeQuizzes.section" = "Aktiva Quiz (%d)";
+"analysis.completedQuizzes.section" = "Avslutade Quiz (%d)";
+"analysis.points" = "Poäng";
+"analysis.statistics" = "Statistik";
+"analysis.maxPoints" = "Max: %d";
+"analysis.allQuizzes" = "Översikt över alla quiz";
+"analysis.sorting" = "Sortering:";
+"analysis.noTeamStats.description" = "Slutför quiz för att se lagstatistik";
+"analysis.teams.section" = "Lag (%d)";
+"analysis.coreStats" = "Kärnstatistik";
+"analysis.performance" = "Prestationsöversikt";
+"analysis.podiumRate" = "Pallandel";
+"analysis.bestRank" = "Bästa Placering";
+"analysis.worstRank" = "Sämsta Placering";
+"analysis.quizHistory" = "Quiz-Historik";
+"analysis.overview.description" = "Statistik för alla avslutade quiz";
+"analysis.teamLevel" = "Lagnivå";
+"analysis.maxScore" = "Maximal Poäng";
+"analysis.achievedScore" = "Uppnådd Poäng";
+"analysis.totalLevel" = "Total Nivå";
+"analysis.quizListing" = "Quiz-Lista";
+"analysis.average" = "Genomsnitt";
+"analysis.noCompletedQuizzes" = "Inga avslutade quiz";
+"analysis.noStatistics" = "Ingen statistik";
+"analysis.participation" = "Deltaganden";
+"analysis.wins" = "Vinster";
+"analysis.winRate" = "Vinstprocent";
+"analysis.averageRank" = "Gns. Placering";
+"analysis.averagePoints" = "Gns. Poäng";
+"analysis.totalPoints" = "Totala Poäng";
+"analysis.completedQuizzes" = "Avslutade Quiz";
+"analysis.uniqueTeams" = "Unika Lag";
+"analysis.averageTeamsPerQuiz" = "Gns. Lag per Quiz";
+
 // MARK: - Email
 "email.send" = "Skicka E-post";
 "email.send.all" = "E-post till Alla Lag";
@@ -407,3 +444,140 @@
 "email.template.scheduleChange.subject" = "Viktigt: Quiz Schema Uppdatering";
 "email.template.scheduleChange.body" = "Hej,\n\nVi måste informera er om en schemaändring:\n\n🔄 Nytt datum: [NEW_DATE]\n🔄 Ny tid: [NEW_TIME]\n📍 Plats: [VENUE] (oförändrat)\n\nVi ber om ursäkt för besväret.\n\nVänligen bekräfta om ni fortfarande kan delta.\n\nTack för er förståelse!";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "Avbryt Quiz";
+"execution.cancel.returnToPlanning" = "Tillbaka till Planering";
+"execution.cancel.message" = "Quizet stoppas och alla omgångar markeras som ofullständiga. Inmatade poäng behålls.";
+"execution.liveQuiz" = "Live Quiz";
+"execution.enterScores" = "Ange Poäng";
+"execution.noActiveQuizzes" = "Inga Aktiva Quiz";
+"execution.noActiveQuizzes.description" = "Starta ett quiz i planeringsfasen";
+"execution.activeQuizzes.section" = "Aktiva Quiz (%d)";
+"execution.round.current" = "Aktuell Omgång";
+"execution.round.completed" = "Avslutad Omgång";
+"execution.rounds.edit" = "Redigera Omgångar";
+"execution.rounds.edit.help" = "Redigera poäng för redan avslutade omgångar";
+"execution.presentation.end" = "Avsluta Presentation";
+"execution.presentation.start" = "Presentation";
+"execution.presentation.help" = "Presentationsläge (⌘P)";
+"execution.cancel.help" = "Avbryt quiz och återgå till planering";
+"execution.complete" = "Slutför";
+"execution.complete.help" = "Slutför quiz (⌘E)";
+"execution.progress" = "Framsteg";
+"execution.rounds.progress" = "%d/%d Omgångar";
+"execution.round.previous" = "Föregående Omgång: %@";
+"execution.round.next" = "Nästa Omgång: %@";
+"execution.noRound.selected" = "Ingen Omgång Vald";
+"execution.noTeams" = "Inga Lag Tillgängliga";
+"execution.noTeams.description" = "Lägg till lag för att tilldela poäng";
+"execution.score.saved" = "Sparad: %d";
+"execution.actions" = "Åtgärder";
+"execution.reset" = "Återställ";
+"execution.saveAll" = "Spara Alla";
+"execution.round.completeAndContinue" = "Slutför Omgång och Fortsätt";
+"execution.round.completeLast" = "Slutför Sista Omgången";
+"execution.leaderboard.live" = "Live Resultattavla";
+"execution.editRounds.title" = "Redigera Omgångar";
+"execution.editRounds.rounds" = "Omgångar";
+"execution.editRounds.selectRound" = "Välj Omgång";
+"execution.editRounds.selectRound.description" = "Välj en omgång för att redigera poäng";
+"execution.editRounds.editScores" = "Redigera Poäng";
+"execution.editRounds.done" = "Klar";
+"execution.editRounds.roundName.placeholder" = "Omgångsnamn";
+"execution.editRounds.maxPoints.label" = "Max. Poäng:";
+"execution.editRounds.maxPoints.perTeam" = "per Lag";
+"execution.editRounds.maxPoints.display" = "Max. %d Poäng per Lag";
+"execution.editRounds.editSettings" = "Redigera Poäng";
+"execution.editRounds.editSettings.help" = "Redigera maximala poäng och omgångsnamn";
+"execution.editRounds.completed" = "Slutförd";
+"execution.editRounds.unsavedChanges" = "Du har osparade ändringar";
+"execution.editRounds.warning.maxPoints" = "Varning: Vissa lag har fler poäng än det nya maxvärdet";
+"execution.editRounds.warning.affectedTeams" = "Berörda Lag: %@";
+"execution.editRounds.warning.limit" = "Dessa begränsas automatiskt till %d poäng.";
+"execution.editRounds.round.complete" = "Markera Omgång som Slutförd";
+"execution.editRounds.round.reopen" = "Öppna Omgång igen";
+
+// MARK: - About Sheet
+"about.title" = "Om";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "Version %@ (%@)";
+"about.description" = "PubRanker är en omfattande quiz-hanteringsapp för macOS. Planera quiz-evenemang, hantera lag, kör frågesporter och analysera resultat - allt på ett ställe.";
+"about.features.title" = "Huvudfunktioner";
+"about.features.teamManagement" = "Laghantering med globala lag";
+"about.features.planning" = "Quiz-planering och förberedelse";
+"about.features.liveScoring" = "Live poänginmatning";
+"about.features.analysis" = "Detaljerad analys och statistik";
+"about.features.email" = "E-postmallar för lag";
+"about.technical.title" = "Teknisk information";
+"about.technical.version" = "Version";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "Plattform";
+"about.technical.copyright" = "Upphovsrätt";
+"about.feedback.rate" = "Betygsätt & Feedback";
+"about.feedback.title" = "Betyg & Feedback";
+"about.feedback.message" = "Hjälp oss att förbättra PubRanker!";
+"about.feedback.rateAppStore" = "Betygsätt i App Store";
+"about.feedback.missingFeatures" = "Saknar du funktioner?";
+"about.feedback.send" = "Skicka feedback";
+"about.feedback.email.message" = "Kontakta oss på:\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "Öppna e-post";
+"about.feedback.email.copy" = "Kopiera e-postadress";
+"about.feedback.email.copied" = "E-postadress kopierad";
+"about.feedback.email.copied.message" = "E-postadressen har kopierats till urklipp.";
+"about.appStore.review" = "App Store Recension";
+"about.appStore.notAvailable" = "Appen är ännu inte tillgänglig i App Store. Vänligen betygsätt appen när den har publicerats.";
+
+"planning.emptyState.title" = "Redo för ditt första quiz?";
+"planning.emptyState.description" = "Planera och organisera ditt pub quiz enkelt";
+"planning.emptyState.start" = "Börja planera";
+"quiz.edit.title" = "Redigera Quiz";
+"quiz.details" = "Quiz Detaljer";
+"quiz.name.placeholder" = "Ange namn";
+"quiz.venue.placeholder" = "Ange plats";
+"quiz.dateTime" = "Datum & Tid";
+"quiz.maxPoints" = "Max. Poäng";
+"quiz.noAvailableTeams.description" = "Alla lag är redan tilldelade till andra quiz";
+"common.add.count" = "Lägg till (%d)";
+"team.edit.help" = "Redigera lag";
+"team.remove.help" = "Ta bort lag från quiz";
+"team.remove.confirm" = "Ta bort lag från quiz?";
+"team.remove.message" = "Vill du verkligen ta bort '%@' från detta quiz? Laget kommer att finnas kvar i den globala laglistan.";
+"common.contactPerson" = "Kontaktperson";
+"common.email" = "E-post";
+"common.designSystem" = "Designsystem";
+"team.selectFromExisting" = "Välj från Befintliga (%d)";
+"score.enter.max" = "Ange Poäng (max. %d per Lag)";
+"score.nextRound" = "Fortsätt till Nästa Omgång";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "Slutför Omgång";
+"score.roundCompleted" = "Denna omgång är slutförd";
+"score.saved.title" = "Poäng Sparade! ✅";
+"score.saved.message" = "Poängen för %@ har sparats framgångsrikt.";
+"common.rounds.edit" = "Redigera Omgångar";
+"common.rounds.select" = "Välj Omgång";
+"common.rounds.select.description" = "Välj en omgång för att redigera poängen";
+"common.scores.edit" = "Redigera Poäng";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "Flest Vinster";
+"sort.mostParticipations" = "Flest Deltaganden";
+"sort.bestAverage" = "Bästa Gns. Placering";
+"sort.mostPoints" = "Flest Poäng";
+"sort.nameAZ" = "Namn (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "Quiz-Analys";
+"analysisTab.teamStatistics" = "Lagstatistik";
+"analysisTab.overallStatistics" = "Total Översikt";
+
+// MARK: - Common Actions
+"common.edit" = "Redigera";
+"common.remove" = "Ta bort";
+"common.confirmed" = "Deltagande bekräftat";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "Redigera Runda";
+"common.teamDetails" = "Lagdetaljer";
+"common.teamName" = "Lagnamn";
+"common.contactInfo" = "Kontaktinformation";
+"common.editTeam" = "Redigera Lag";

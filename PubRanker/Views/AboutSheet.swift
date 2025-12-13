@@ -13,6 +13,7 @@ struct AboutSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showingFeedbackDialog = false
     @State private var showingEmailDialog = false
+    @State private var selectedTab: AboutTab = .about
     
     var appName: String {
         Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "PubRanker"
@@ -27,10 +28,47 @@ struct AboutSheet: View {
     }
     
     var copyright: String {
-        Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String ?? "© 2025"
+        "iSupport.ch © 2025"
+    }
+    
+    enum AboutTab {
+        case about
+        case designSystem
     }
     
     var body: some View {
+        VStack(spacing: 0) {
+            #if DEBUG
+            // Tab Picker - only in Debug mode
+            Picker("Tab", selection: $selectedTab) {
+                Label(L10n.About.title, systemImage: "info.circle.fill")
+                    .tag(AboutTab.about)
+                Label(L10n.CommonUI.designSystem, systemImage: "paintpalette.fill")
+                    .tag(AboutTab.designSystem)
+            }
+            .pickerStyle(.segmented)
+            .padding(AppSpacing.md)
+            
+            Divider()
+            
+            // Content based on selected tab
+            Group {
+                switch selectedTab {
+                case .about:
+                    aboutContent
+                case .designSystem:
+                    DesignSystemDemoView()
+                }
+            }
+            #else
+            // Release mode - only About content
+            aboutContent
+            #endif
+        }
+        .frame(width: 1000, height: 800)
+    }
+    
+    private var aboutContent: some View {
         VStack(spacing: 0) {
             // Header
             VStack(spacing: 20) {
@@ -39,7 +77,7 @@ struct AboutSheet: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 128, height: 128)
-                        .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
+                        .shadow(AppShadow.lg)
                 } else {
                     ZStack {
                         Circle()
@@ -56,76 +94,77 @@ struct AboutSheet: View {
                             .font(.system(size: 64))
                             .foregroundStyle(.white)
                     }
-                    .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
+                    .shadow(AppShadow.lg)
                 }
                 
-                VStack(spacing: 8) {
+                VStack(spacing: AppSpacing.xxs) {
                     Text(appName)
                         .font(.system(size: 32, weight: .bold))
+                        .foregroundStyle(Color.appTextPrimary)
                     
-                    Text("QuizMaster Hub")
+                    Text(L10n.About.quizMasterHub)
                         .font(.title3)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                     
-                    Text("Version \(appVersion) (\(buildNumber))")
+                    Text(L10n.About.version(appVersion, buildNumber))
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
             }
-            .padding(.top, 40)
-            .padding(.bottom, 30)
+            .padding(.top, AppSpacing.xxl)
+            .padding(.bottom, AppSpacing.lg)
             
             Divider()
             
             // Content
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: AppSpacing.sectionSpacing) {
                     // Beschreibung
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("Über PubRanker", systemImage: "info.circle.fill")
+                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                        Label(L10n.About.title, systemImage: "info.circle.fill")
                             .font(.headline)
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(Color.appPrimary)
                         
-                        Text("PubRanker ist eine umfassende Quiz-Management-App für macOS. Planen Sie Quiz-Veranstaltungen, verwalten Sie Teams, führen Sie Quiz durch und analysieren Sie Ergebnisse - alles an einem Ort.")
+                        Text(L10n.About.description)
                             .font(.body)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     
                     Divider()
                     
                     // Features
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("Hauptfunktionen", systemImage: "star.fill")
+                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                        Label(L10n.About.Features.title, systemImage: "star.fill")
                             .font(.headline)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.appAccent)
                         
-                        VStack(alignment: .leading, spacing: 8) {
-                            FeatureRow(icon: "person.3.fill", text: "Team-Management mit globalen Teams")
-                            FeatureRow(icon: "calendar.badge.plus", text: "Quiz-Planung und -Vorbereitung")
-                            FeatureRow(icon: "play.circle.fill", text: "Live-Punkteeingabe während des Quiz")
-                            FeatureRow(icon: "chart.bar.fill", text: "Detaillierte Analyse und Statistiken")
-                            FeatureRow(icon: "envelope.fill", text: "E-Mail-Vorlagen für Teams")
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            FeatureRow(icon: "person.3.fill", text: L10n.About.Features.teamManagement)
+                            FeatureRow(icon: "calendar.badge.plus", text: L10n.About.Features.planning)
+                            FeatureRow(icon: "play.circle.fill", text: L10n.About.Features.liveScoring)
+                            FeatureRow(icon: "chart.bar.fill", text: L10n.About.Features.analysis)
+                            FeatureRow(icon: "envelope.fill", text: L10n.About.Features.email)
                         }
                     }
                     
                     Divider()
                     
                     // Technische Informationen
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("Technische Informationen", systemImage: "gearshape.fill")
+                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                        Label(L10n.About.Technical.title, systemImage: "gearshape.fill")
                             .font(.headline)
-                            .foregroundStyle(.purple)
+                            .foregroundStyle(Color.appSecondary)
                         
-                        VStack(alignment: .leading, spacing: 6) {
-                            InfoRow(label: "Version", value: "\(appVersion) (\(buildNumber))")
-                            InfoRow(label: "Bundle ID", value: Bundle.main.bundleIdentifier ?? "N/A")
-                            InfoRow(label: "Plattform", value: "macOS")
-                            InfoRow(label: "Copyright", value: copyright)
+                        VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                            InfoRow(label: L10n.About.Technical.version, value: "\(appVersion) (\(buildNumber))")
+                            InfoRow(label: L10n.About.Technical.bundleId, value: Bundle.main.bundleIdentifier ?? "N/A")
+                            InfoRow(label: L10n.About.Technical.platform, value: "macOS")
+                            InfoRow(label: L10n.About.Technical.copyright, value: copyright)
                         }
                     }
                 }
-                .padding(30)
+                .padding(AppSpacing.lg)
             }
             
             Divider()
@@ -135,42 +174,41 @@ struct AboutSheet: View {
                 Button {
                     showingFeedbackDialog = true
                 } label: {
-                    Label("Bewerten & Feedback", systemImage: "star.fill")
+                    Label(L10n.About.Feedback.rate, systemImage: "star.fill")
                 }
-                .buttonStyle(.bordered)
+                .secondaryGradientButton()
                 
                 Spacer()
                 
-                Button("Schließen") {
+                Button(L10n.Common.close) {
                     dismiss()
                 }
-                .buttonStyle(.borderedProminent)
+                .primaryGradientButton()
                 .keyboardShortcut(.escape)
             }
-            .padding(20)
+            .padding(AppSpacing.md)
         }
-        .frame(width: 600, height: 700)
-        .alert("Bewertung & Feedback", isPresented: $showingFeedbackDialog) {
-            Button("Im App Store bewerten") {
+        .alert(L10n.About.Feedback.title, isPresented: $showingFeedbackDialog) {
+            Button(L10n.About.Feedback.rateAppStore) {
                 openAppStoreReview()
             }
-            Button("Features vermisst?") {
+            Button(L10n.About.Feedback.missingFeatures) {
                 showingEmailDialog = true
             }
-            Button("Abbrechen", role: .cancel) {}
+            Button(L10n.Navigation.cancel, role: .cancel) {}
         } message: {
-            Text("Helfen Sie uns, PubRanker zu verbessern!")
+            Text(L10n.About.Feedback.message)
         }
-        .alert("Feedback senden", isPresented: $showingEmailDialog) {
-            Button("E-Mail öffnen") {
+        .alert(L10n.About.Feedback.send, isPresented: $showingEmailDialog) {
+            Button(L10n.About.Feedback.emailOpen) {
                 openEmailFeedback()
             }
-            Button("E-Mail-Adresse kopieren") {
+            Button(L10n.About.Feedback.emailCopy) {
                 copyEmailToClipboard()
             }
-            Button("Abbrechen", role: .cancel) {}
+            Button(L10n.Navigation.cancel, role: .cancel) {}
         } message: {
-            Text("Kontaktieren Sie uns unter:\n\nake_schmidi@me.com")
+            Text(L10n.About.Feedback.emailMessage)
         }
     }
     
@@ -185,10 +223,10 @@ struct AboutSheet: View {
         } else {
             // Alternative: Öffne App Store Connect oder zeige Info
             let alert = NSAlert()
-            alert.messageText = "App Store Bewertung"
-            alert.informativeText = "Die App ist noch nicht im App Store verfügbar. Bitte bewerten Sie die App, sobald sie veröffentlicht wurde."
+            alert.messageText = L10n.About.AppStore.review
+            alert.informativeText = L10n.About.AppStore.notAvailable
             alert.alertStyle = .informational
-            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: L10n.Alert.ok)
             alert.runModal()
         }
     }
@@ -210,10 +248,10 @@ struct AboutSheet: View {
         
         // Zeige kurze Bestätigung
         let alert = NSAlert()
-        alert.messageText = "E-Mail-Adresse kopiert"
-        alert.informativeText = "Die E-Mail-Adresse wurde in die Zwischenablage kopiert."
+        alert.messageText = L10n.About.Feedback.emailCopied
+        alert.informativeText = L10n.About.Feedback.emailCopiedMessage
         alert.alertStyle = .informational
-        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: L10n.Alert.ok)
         alert.runModal()
     }
 }
@@ -224,14 +262,15 @@ struct FeatureRow: View {
     let text: String
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             Image(systemName: icon)
                 .font(.body)
-                .foregroundStyle(.blue)
+                .foregroundStyle(Color.appPrimary)
                 .frame(width: 24)
             
             Text(text)
                 .font(.body)
+                .foregroundStyle(Color.appTextPrimary)
         }
     }
 }
@@ -245,11 +284,12 @@ struct InfoRow: View {
         HStack {
             Text(label + ":")
                 .font(.body)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
                 .frame(width: 100, alignment: .leading)
             
             Text(value)
                 .font(.body)
+                .foregroundStyle(Color.appTextPrimary)
                 .monospacedDigit()
         }
     }

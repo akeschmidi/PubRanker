@@ -28,7 +28,7 @@ struct ScoreEntryView: View {
                         .font(.title)
                         .bold()
                     
-                    Text("Punkte eingeben (max. \(round.maxPoints) pro Team)")
+                    Text(String(format: NSLocalizedString("score.enter.max", comment: "Enter points max"), round.maxPoints))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -36,9 +36,9 @@ struct ScoreEntryView: View {
                 
                 if quiz.safeTeams.isEmpty {
                     ContentUnavailableView(
-                        "Keine Teams vorhanden",
+                        NSLocalizedString("execution.noTeams", comment: "No teams"),
                         systemImage: "person.3.slash",
-                        description: Text("Füge Teams hinzu, um Punkte zu vergeben")
+                        description: Text(NSLocalizedString("execution.noTeams.description", comment: "No teams description"))
                     )
                 } else {
                     // Teams Liste
@@ -53,27 +53,25 @@ struct ScoreEntryView: View {
                         .padding(.vertical)
                     
                     // Action Buttons
-                    HStack(spacing: 16) {
+                    HStack(spacing: AppSpacing.sm) {
                         Button {
                             clearAllScores()
                         } label: {
-                            Label("Zurücksetzen", systemImage: "arrow.counterclockwise")
+                            Label(L10n.Execution.reset, systemImage: "arrow.counterclockwise")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.bordered)
-                        .controlSize(.large)
+                        .secondaryGradientButton(size: .large)
                         
                         Button {
                             saveAllScores()
                         } label: {
-                            Label("Speichern", systemImage: "checkmark.circle.fill")
+                            Label(L10n.Navigation.save, systemImage: "checkmark.circle.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
+                        .primaryGradientButton(size: .large)
                         .keyboardShortcut(.return, modifiers: .command)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppSpacing.screenPadding)
                     
                     // Next Round Button
                     if let nextRound = getNextRound() {
@@ -81,24 +79,22 @@ struct ScoreEntryView: View {
                             saveAllScores()
                             viewModel.completeRound(round)
                         } label: {
-                            VStack(spacing: 8) {
+                            VStack(spacing: AppSpacing.xxs) {
                                 HStack {
                                     Image(systemName: "arrow.right.circle.fill")
-                                    Text("Weiter zur nächsten Runde")
+                                    Text(NSLocalizedString("score.nextRound", comment: "Continue to next round"))
                                         .font(.headline)
                                 }
-                                Text("→ \(nextRound.name)")
+                                Text(String(format: NSLocalizedString("score.nextRound.name", comment: "Next round name"), nextRound.name))
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding()
+                            .padding(AppSpacing.md)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.green)
-                        .controlSize(.large)
-                        .padding(.horizontal)
-                        .padding(.top, 8)
+                        .primaryGradientButton(size: .large)
+                        .padding(.horizontal, AppSpacing.screenPadding)
+                        .padding(.top, AppSpacing.xxs)
                     } else if !round.isCompleted {
                         Button {
                             saveAllScores()
@@ -106,41 +102,40 @@ struct ScoreEntryView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "flag.checkered")
-                                Text("Runde abschließen")
+                                Text(NSLocalizedString("score.completeRound", comment: "Complete round"))
                                     .font(.headline)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding()
+                            .padding(AppSpacing.md)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.orange)
-                        .controlSize(.large)
-                        .padding(.horizontal)
-                        .padding(.top, 8)
+                        .accentGradientButton(size: .large)
+                        .padding(.horizontal, AppSpacing.screenPadding)
+                        .padding(.top, AppSpacing.xxs)
                     }
                     
                     if round.isCompleted {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
-                            Text("Diese Runde ist abgeschlossen")
+                                .foregroundStyle(Color.appSuccess)
+                            Text(NSLocalizedString("score.roundCompleted", comment: "Round completed"))
                                 .font(.subheadline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
-                        .padding()
+                        .padding(AppSpacing.md)
                         .frame(maxWidth: .infinity)
-                        .background(Color.green.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .padding(.horizontal)
-                        .padding(.top, 8)
+                        .background(Color.appSuccess.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
+                        .padding(.horizontal, AppSpacing.screenPadding)
+                        .padding(.top, AppSpacing.xxs)
                     }
                 }
             }
             .padding(.bottom, 20)
         }
-        .alert("Punkte gespeichert! ✅", isPresented: $showSuccessMessage) {
-            Button("OK") {}
+        .alert(NSLocalizedString("score.saved.title", comment: "Points saved"), isPresented: $showSuccessMessage) {
+            Button(L10n.Alert.ok) {}
         } message: {
-            Text("Die Punkte für \(savedRoundName) wurden erfolgreich gespeichert.")
+            Text(String(format: NSLocalizedString("score.saved.message", comment: "Points saved message"), savedRoundName))
         }
         .onAppear {
             loadCurrentScores()
@@ -179,7 +174,7 @@ struct ScoreEntryView: View {
                 } label: {
                     Image(systemName: "minus.circle.fill")
                         .font(.title2)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color.appAccent)
                 }
                 .buttonStyle(.plain)
                 .disabled(getScoreValue(for: team) <= 0)
@@ -208,19 +203,19 @@ struct ScoreEntryView: View {
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.title2)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.appSuccess)
                 }
                 .buttonStyle(.plain)
                 .disabled(getScoreValue(for: team) >= round.maxPoints)
                 
                 Text("/ \(round.maxPoints)")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
             }
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(AppSpacing.md)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
     }
     
     private func getScoreValue(for team: Team) -> Int {

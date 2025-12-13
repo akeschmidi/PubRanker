@@ -14,86 +14,42 @@ struct EditQuizSheet: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
-    
+
     @State private var quizName: String = ""
     @State private var venueName: String = ""
     @State private var quizDate: Date = Date()
     @State private var showingDeleteConfirmation = false
-    @State private var selectedTab: EditTab = .details
-    @State private var showingGlobalTeamPicker = false
-    
-    enum EditTab: String, CaseIterable, Identifiable {
-        case details = "Details"
-        case teams = "Teams"
-        case rounds = "Runden"
-        
-        var id: String { rawValue }
-        
-        var icon: String {
-            switch self {
-            case .details: return "info.circle.fill"
-            case .teams: return "person.3.fill"
-            case .rounds: return "list.number"
-            }
-        }
-    }
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // Tab Picker
-                Picker("Bereich", selection: $selectedTab) {
-                    ForEach(EditTab.allCases) { tab in
-                        Label(tab.rawValue, systemImage: tab.icon)
-                            .tag(tab)
+            detailsView
+                .navigationTitle("Quiz bearbeiten")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Schliessen") {
+                            saveChanges()
+                            dismiss()
+                        }
+                    }
+
+                    ToolbarItem(placement: .destructiveAction) {
+                        Button(role: .destructive) {
+                            showingDeleteConfirmation = true
+                        } label: {
+                            Label("Löschen", systemImage: "trash")
+                        }
                     }
                 }
-                .pickerStyle(.segmented)
-                .padding()
-                
-                // Tab Content
-                Group {
-                    switch selectedTab {
-                    case .details:
-                        detailsView
-                    case .teams:
-                        teamsEditView
-                    case .rounds:
-                        roundsEditView
+                .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
+                    Button("Abbrechen", role: .cancel) {}
+                    Button("Löschen", role: .destructive) {
+                        deleteQuiz()
                     }
+                } message: {
+                    Text("Möchtest du das Quiz '\(quiz.name)' wirklich löschen?")
                 }
-            }
-            .navigationTitle("Quiz bearbeiten")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Schließen") {
-                        saveChanges()
-                        dismiss()
-                    }
-                }
-                
-                ToolbarItem(placement: .destructiveAction) {
-                    Button(role: .destructive) {
-                        showingDeleteConfirmation = true
-                    } label: {
-                        Label("Löschen", systemImage: "trash")
-                    }
-                }
-            }
-            .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
-                Button("Abbrechen", role: .cancel) {}
-                Button("Löschen", role: .destructive) {
-                    deleteQuiz()
-                }
-            } message: {
-                Text("Möchtest du '\(quiz.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
-            }
-            .sheet(isPresented: $showingGlobalTeamPicker) {
-                GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams(for: quiz), modelContext: modelContext)
-            }
         }
-        .frame(minWidth: 800, minHeight: 600)
+        .frame(minWidth: 600, minHeight: 500)
         .onAppear {
             quizName = quiz.name
             venueName = quiz.venue
@@ -103,365 +59,184 @@ struct EditQuizSheet: View {
     
     private var detailsView: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: AppSpacing.md) {
                 // Quiz-Details Card
-                VStack(alignment: .leading, spacing: 16) {
-                    // Header
-                    HStack {
-                        Image(systemName: "info.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.blue)
-                        Text("Quiz-Details")
-                            .font(.headline)
-                        Spacer()
-                    }
-                    
-                    Divider()
-                    
-                    // Quiz-Name
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Quiz-Name", systemImage: "textformat")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                AppCard(style: .glassmorphism) {
+                    VStack(alignment: .leading, spacing: AppSpacing.sm) {
+                        // Header
+                        HStack {
+                            Image(systemName: "info.circle.fill")
+                                .font(.title2)
+                                .foregroundStyle(Color.appPrimary)
+                            Text("Quiz-Details")
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
+                            Spacer()
+                        }
                         
-                        TextField("Name eingeben", text: $quizName)
-                            .textFieldStyle(.roundedBorder)
-                            .font(.title3)
-                    }
-                    
-                    // Veranstaltungsort
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Veranstaltungsort", systemImage: "mappin.circle")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Divider()
                         
-                        TextField("Ort eingeben", text: $venueName)
-                            .textFieldStyle(.roundedBorder)
-                            .font(.body)
-                    }
-                    
-                    // Datum & Uhrzeit
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Datum & Uhrzeit", systemImage: "calendar")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        // Quiz-Name
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            Label("Quiz-Name", systemImage: "textformat")
+                                .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
+                            
+                            TextField("Name eingeben", text: $quizName)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.title3)
+                        }
                         
-                        DatePicker("", 
-                                  selection: $quizDate,
-                                  displayedComponents: [.date, .hourAndMinute])
-                            .labelsHidden()
-                            .datePickerStyle(.compact)
+                        // Veranstaltungsort
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            Label("Veranstaltungsort", systemImage: "mappin.circle")
+                                .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
+                            
+                            TextField("Ort eingeben", text: $venueName)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.body)
+                        }
+                        
+                        // Datum & Uhrzeit
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            Label("Datum & Uhrzeit", systemImage: "calendar")
+                                .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
+                            
+                            DatePicker("", 
+                                      selection: $quizDate,
+                                      displayedComponents: [.date, .hourAndMinute])
+                                .labelsHidden()
+                                .datePickerStyle(.compact)
+                        }
                     }
-                }
-                .padding(20)
-                .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.blue.opacity(0.3), lineWidth: 2)
                 }
                 
                 // Statistiken Card
-                VStack(alignment: .leading, spacing: 16) {
-                    // Header
-                    HStack {
-                        Image(systemName: "chart.bar.fill")
-                            .font(.title2)
-                            .foregroundStyle(.green)
-                        Text("Statistiken")
-                            .font(.headline)
-                        Spacer()
-                    }
-                    
-                    Divider()
-                    
-                    // Stats Grid
-                    HStack(spacing: 12) {
-                        statBox(
-                            title: "Teams",
-                            value: "\(quiz.safeTeams.count)",
-                            icon: "person.3.fill",
-                            color: .blue
-                        )
+                AppCard(style: .glassmorphism) {
+                    VStack(alignment: .leading, spacing: AppSpacing.sm) {
+                        // Header
+                        HStack {
+                            Image(systemName: "chart.bar.fill")
+                                .font(.title2)
+                                .foregroundStyle(Color.appSuccess)
+                            Text("Statistiken")
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
+                            Spacer()
+                        }
                         
-                        statBox(
-                            title: "Runden",
-                            value: "\(quiz.safeRounds.count)",
-                            icon: "list.number",
-                            color: .green
-                        )
+                        Divider()
                         
-                        statBox(
-                            title: "Max. Punkte",
-                            value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })",
-                            icon: "star.fill",
-                            color: .orange
-                        )
+                        // Stats Grid
+                        HStack(spacing: AppSpacing.xs) {
+                            statBox(
+                                title: "Teams",
+                                value: "\(quiz.safeTeams.count)",
+                                icon: "person.3.fill",
+                                color: Color.appPrimary
+                            )
+                            
+                            statBox(
+                                title: "Runden",
+                                value: "\(quiz.safeRounds.count)",
+                                icon: "list.number",
+                                color: Color.appSuccess
+                            )
+                            
+                            statBox(
+                                title: "Max. Punkte",
+                                value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })",
+                                icon: "star.fill",
+                                color: Color.appAccent
+                            )
+                        }
                     }
-                }
-                .padding(20)
-                .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.green.opacity(0.3), lineWidth: 2)
                 }
                 
                 // Status Card
-                VStack(alignment: .leading, spacing: 16) {
-                    // Header
-                    HStack {
-                        Image(systemName: "flag.fill")
-                            .font(.title2)
-                            .foregroundStyle(.purple)
-                        Text("Status")
-                            .font(.headline)
-                        Spacer()
-                    }
-                    
-                    Divider()
-                    
-                    HStack(spacing: 20) {
-                        statusIndicator(
-                            title: quiz.isActive ? "Aktiv" : "Geplant",
-                            icon: quiz.isActive ? "play.circle.fill" : "calendar",
-                            color: quiz.isActive ? .green : .gray
-                        )
+                AppCard(style: .glassmorphism) {
+                    VStack(alignment: .leading, spacing: AppSpacing.sm) {
+                        // Header
+                        HStack {
+                            Image(systemName: "flag.fill")
+                                .font(.title2)
+                                .foregroundStyle(Color.appSecondary)
+                            Text("Status")
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
+                            Spacer()
+                        }
                         
-                        statusIndicator(
-                            title: quiz.isCompleted ? "Abgeschlossen" : "Vorbereitung",
-                            icon: quiz.isCompleted ? "checkmark.circle.fill" : "hourglass.circle",
-                            color: quiz.isCompleted ? .blue : .orange
-                        )
+                        Divider()
+                        
+                        HStack(spacing: AppSpacing.md) {
+                            statusIndicator(
+                                title: quiz.isActive ? "Aktiv" : "Geplant",
+                                icon: quiz.isActive ? "play.circle.fill" : "calendar",
+                                color: quiz.isActive ? Color.appSuccess : Color.appTextSecondary
+                            )
+                            
+                            statusIndicator(
+                                title: quiz.isCompleted ? "Abgeschlossen" : "Vorbereitung",
+                                icon: quiz.isCompleted ? "checkmark.circle.fill" : "hourglass.circle",
+                                color: quiz.isCompleted ? Color.appPrimary : Color.appAccent
+                            )
+                        }
                     }
-                }
-                .padding(20)
-                .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.purple.opacity(0.3), lineWidth: 2)
                 }
             }
-            .padding(20)
+            .padding(AppSpacing.screenPadding)
         }
     }
     
     private func statBox(title: String, value: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: AppSpacing.xxs) {
             Image(systemName: icon)
                 .font(.title)
                 .foregroundStyle(color)
-            
+                .shadow(AppShadow.sm)
+
             Text(value)
-                .font(.system(size: 32, weight: .bold))
+                .font(.system(size: AppSpacing.xl, weight: .bold))
+                .foregroundStyle(color)
                 .monospacedDigit()
-            
+
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .padding(.vertical, AppSpacing.sm)
         .background(color.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
     }
     
     private func statusIndicator(title: String, icon: String, color: Color) -> some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             Image(systemName: icon)
                 .font(.title2)
                 .foregroundStyle(color)
-                .frame(width: 32, height: 32)
+                .frame(width: AppSpacing.xl, height: AppSpacing.xl)
                 .background(color.opacity(0.2))
                 .clipShape(Circle())
+                .shadow(AppShadow.sm)
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(title)
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
                 Text("Status")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
             
             Spacer()
         }
-        .padding(12)
+        .padding(AppSpacing.xs)
         .background(color.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-    
-    private var teamsEditView: some View {
-        let availableTeams = availableGlobalTeams(for: quiz)
-        
-        return VStack(spacing: 0) {
-            // Header mit Add Button
-            HStack {
-                Text("Teams verwalten")
-                    .font(.headline)
-                
-                Spacer()
-                
-                Menu {
-                    Button {
-                        addNewTeam()
-                    } label: {
-                        Label("Neues Team erstellen", systemImage: "plus.circle")
-                    }
-                    
-                    if !availableTeams.isEmpty {
-                        Divider()
-                        
-                        Button {
-                            showingGlobalTeamPicker = true
-                        } label: {
-                            Label("Aus vorhandenen wählen (\(availableTeams.count))", systemImage: "square.stack.3d.up.fill")
-                        }
-                    }
-                } label: {
-                    Label("Team hinzufügen", systemImage: "plus.circle.fill")
-                }
-                .buttonStyle(.borderedProminent)
-                .menuStyle(.button)
-            }
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
-            
-            Divider()
-            
-            if quiz.safeTeams.isEmpty {
-                VStack(spacing: 20) {
-                    Image(systemName: "person.3.fill")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.secondary)
-
-                    Text("Keine Teams")
-                        .font(.title2)
-                        .bold()
-
-                    Text("Füge Teams hinzu, um mit dem Quiz zu starten")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    VStack(spacing: 12) {
-                        Button {
-                            addNewTeam()
-                        } label: {
-                            Label("Neues Team hinzufügen", systemImage: "plus.circle.fill")
-                                .font(.headline)
-                                .frame(maxWidth: 400)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-
-                        Button {
-                            if !availableTeams.isEmpty {
-                                showingGlobalTeamPicker = true
-                            }
-                        } label: {
-                            Label(availableTeams.isEmpty ? "Keine vorhandenen Teams verfügbar" : "Aus vorhandenen wählen (\(availableTeams.count))", systemImage: "square.stack.3d.up.fill")
-                                .font(.headline)
-                                .frame(maxWidth: 400)
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.large)
-                        .disabled(availableTeams.isEmpty)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                List {
-                    ForEach(quiz.safeTeams) { team in
-                        EditableTeamRow(team: team, quiz: quiz, viewModel: viewModel)
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            viewModel.deleteTeam(quiz.safeTeams[index], from: quiz)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private func availableGlobalTeams(for quiz: Quiz) -> [Team] {
-        return allTeams.filter { team in
-            // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
-            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
-        }
-    }
-    
-    private func addNewTeam() {
-        let teamNumber = quiz.safeTeams.count + 1
-        let colors = ["#007AFF", "#FF3B30", "#34C759", "#FF9500", "#5856D6", "#FF2D55", "#5AC8FA", "#FFCC00"]
-        let colorIndex = (teamNumber - 1) % colors.count
-        
-        viewModel.addTeam(to: quiz, name: "Team \(teamNumber)", color: colors[colorIndex])
-    }
-    
-    private var roundsEditView: some View {
-        VStack(spacing: 0) {
-            if quiz.safeRounds.isEmpty {
-                VStack(spacing: 20) {
-                    Image(systemName: "list.number")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.secondary)
-
-                    Text("Keine Runden")
-                        .font(.title2)
-                        .bold()
-
-                    Text("Füge Runden hinzu, um Punkte zu vergeben")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    Button {
-                        addNewRound()
-                    } label: {
-                        Label("Erste Runde hinzufügen", systemImage: "plus.circle.fill")
-                            .font(.headline)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                List {
-                    ForEach(quiz.sortedRounds) { round in
-                        EditableRoundRow(round: round, quiz: quiz, viewModel: viewModel)
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            let round = quiz.sortedRounds[index]
-                            viewModel.deleteRound(round, from: quiz)
-                        }
-                    }
-                }
-
-                // Action Button am unteren Rand
-                Divider()
-
-                HStack {
-                    Button {
-                        addNewRound()
-                    } label: {
-                        Label("Runde hinzufügen", systemImage: "plus.circle.fill")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-            }
-        }
-    }
-    
-    private func addNewRound() {
-        let roundNumber = quiz.safeRounds.count + 1
-        viewModel.addRound(to: quiz, name: "Runde \(roundNumber)", maxPoints: 10)
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
     }
     
     private func saveChanges() {
@@ -504,37 +279,37 @@ struct GlobalTeamPickerSheet: View {
             VStack(spacing: 0) {
                 if availableTeams.isEmpty {
                     ContentUnavailableView(
-                        "Keine verfügbaren Teams",
+                        "Keine Teams verfügbar",
                         systemImage: "person.3.slash",
-                        description: Text("Alle Teams sind bereits anderen Quizzes zugeordnet")
+                        description: Text("Alle Teams sind bereits diesem Quiz zugeordnet")
                     )
                 } else {
                     List(filteredTeams, selection: $selectedTeams) { team in
-                        HStack(spacing: 12) {
-                            TeamIconView(team: team, size: 32)
+                        HStack(spacing: AppSpacing.xs) {
+                            TeamIconView(team: team, size: AppSpacing.xl)
 
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                                 Text(team.name)
                                     .font(.body)
 
                                 if !team.contactPerson.isEmpty {
-                                    HStack(spacing: 6) {
+                                    HStack(spacing: AppSpacing.xxxs) {
                                         Image(systemName: "person.fill")
                                             .font(.subheadline)
                                         Text(team.contactPerson)
                                             .font(.subheadline)
                                     }
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                                 }
 
-                                if team.isConfirmed {
-                                    HStack(spacing: 4) {
+                                if team.isConfirmed(for: quiz) {
+                                    HStack(spacing: AppSpacing.xxxs) {
                                         Image(systemName: "checkmark.circle.fill")
-                                            .foregroundStyle(.green)
+                                            .foregroundStyle(Color.appSuccess)
                                             .font(.body)
                                         Text("Bestätigt")
                                             .font(.subheadline)
-                                            .foregroundStyle(.green)
+                                            .foregroundStyle(Color.appSuccess)
                                     }
                                 }
                             }
@@ -543,11 +318,11 @@ struct GlobalTeamPickerSheet: View {
 
                             if selectedTeams.contains(team.id) {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(Color.appPrimary)
                                     .font(.title3)
                             }
                         }
-                        .padding(.vertical, 4)
+                        .padding(.vertical, AppSpacing.xxxs)
                         .contentShape(Rectangle())
                         .onTapGesture {
                             if selectedTeams.contains(team.id) {
@@ -569,10 +344,11 @@ struct GlobalTeamPickerSheet: View {
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Hinzufügen (\(selectedTeams.count))") {
+                    Button("\(selectedTeams.count) hinzufügen") {
                         addSelectedTeams()
                         dismiss()
                     }
+                    .primaryGradientButton()
                     .disabled(selectedTeams.isEmpty)
                 }
             }

@@ -53,8 +53,8 @@ final class QuizViewModel {
         let team = Team(name: name, color: color)
         team.contactPerson = contactPerson
         team.email = email
-        team.isConfirmed = isConfirmed
         team.imageData = imageData
+        team.setConfirmed(for: quiz, isConfirmed: isConfirmed)
         team.quizzes = [quiz]
         if quiz.teams == nil {
             quiz.teams = []
@@ -97,6 +97,10 @@ final class QuizViewModel {
         do {
             try context.save()
             selectedQuiz = quiz
+            
+            // Analytics: Quiz erstellt
+// AnalyticsService.shared.trackEvent(.quizCreated)
+// sendAnalyticsIfNeeded()
         } catch {
             print("Error saving quiz final: \(error)")
         }
@@ -120,12 +124,19 @@ final class QuizViewModel {
     func startQuiz(_ quiz: Quiz) {
         quiz.isActive = true
         saveContext()
+        
+        // Analytics: Quiz gestartet
+// AnalyticsService.shared.trackEvent(.quizStarted)
     }
     
     func completeQuiz(_ quiz: Quiz) {
         quiz.isActive = false
         quiz.isCompleted = true
         saveContext()
+        
+        // Analytics: Quiz abgeschlossen
+// AnalyticsService.shared.trackEvent(.quizCompleted)
+// sendAnalyticsIfNeeded()
     }
     
     func cancelQuiz(_ quiz: Quiz) {
@@ -152,8 +163,8 @@ final class QuizViewModel {
         let team = Team(name: name, color: color)
         team.contactPerson = contactPerson
         team.email = email
-        team.isConfirmed = isConfirmed
         team.imageData = imageData
+        team.setConfirmed(for: quiz, isConfirmed: isConfirmed)
         team.quizzes = [quiz]
         if quiz.teams == nil {
             quiz.teams = []
@@ -161,6 +172,34 @@ final class QuizViewModel {
         quiz.teams?.append(team)
         context.insert(team)
 
+        saveContext()
+        
+        // Analytics: Team erstellt
+// AnalyticsService.shared.trackEvent(.teamCreated)
+    }
+    
+    func addExistingTeam(_ team: Team, to quiz: Quiz) {
+        guard modelContext != nil else { return }
+        
+        // Prüfe ob Team bereits im Quiz ist
+        if quiz.teams?.contains(where: { $0.id == team.id }) ?? false {
+            return
+        }
+        
+        // Füge Quiz zur Team's quizzes Liste hinzu
+        if team.quizzes == nil {
+            team.quizzes = []
+        }
+        if !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false) {
+            team.quizzes?.append(quiz)
+        }
+        
+        // Füge Team zum Quiz hinzu
+        if quiz.teams == nil {
+            quiz.teams = []
+        }
+        quiz.teams?.append(team)
+        
         saveContext()
     }
     
@@ -186,10 +225,16 @@ final class QuizViewModel {
         saveContext()
     }
     
-    func updateTeamDetails(_ team: Team, contactPerson: String, email: String, isConfirmed: Bool) {
+    func updateTeamDetails(_ team: Team, contactPerson: String, email: String, isConfirmed: Bool, forQuiz quiz: Quiz? = nil) {
         team.contactPerson = contactPerson
         team.email = email
-        team.isConfirmed = isConfirmed
+        if let quiz = quiz {
+            // Quiz-spezifische Bestätigung setzen
+            team.setConfirmed(for: quiz, isConfirmed: isConfirmed)
+        } else {
+            // Fallback für alte Implementierung (Rückwärtskompatibilität)
+            team.isConfirmed = isConfirmed
+        }
         saveContext()
     }
     
@@ -214,6 +259,9 @@ final class QuizViewModel {
         context.insert(round)
         
         saveContext()
+        
+        // Analytics: Runde erstellt
+// AnalyticsService.shared.trackEvent(.roundCreated)
     }
     
     func deleteRound(_ round: Round, from quiz: Quiz) {
@@ -252,6 +300,9 @@ final class QuizViewModel {
     func updateScore(for team: Team, in round: Round, points: Int) {
         team.addScore(for: round, points: points)
         saveContext()
+        
+        // Analytics: Punkte eingegeben
+// AnalyticsService.shared.trackEvent(.scoreEntered)
     }
     
     func clearScore(for team: Team, in round: Round) {
@@ -269,6 +320,39 @@ final class QuizViewModel {
             try context.save()
         } catch {
             print("Error saving context: \(error)")
+        }
+    }
+    
+    // MARK: - Analytics
+    
+    /// Sendet aggregierte Statistiken an CloudKit (nur bei wichtigen Events)
+    private func sendAnalyticsIfNeeded() {
+        guard let context = modelContext else { return }
+        
+        // Query für Statistiken
+        let quizDescriptor = FetchDescriptor<Quiz>()
+        let teamDescriptor = FetchDescriptor<Team>()
+        
+        do {
+            let quizzes = try context.fetch(quizDescriptor)
+            let teams = try context.fetch(teamDescriptor)
+            
+            let totalQuizzes = quizzes.count
+            let totalTeams = teams.count
+            let totalRounds = quizzes.reduce(0) { $0 + $1.safeRounds.count }
+            let totalPoints = quizzes.reduce(into: 0) { total, quiz in
+                total += quiz.safeTeams.reduce(0) { $0 + $1.getTotalScore(for: quiz) }
+            }
+            
+            // Sende anonymisierte Statistiken
+            // AnalyticsService.shared.sendAnalytics(
+            //     totalQuizzes: totalQuizzes,
+            //     totalTeams: totalTeams,
+            //     totalRounds: totalRounds,
+            //     totalPoints: totalPoints
+            // )
+        } catch {
+            print("Error fetching analytics data: \(error)")
         }
     }
     

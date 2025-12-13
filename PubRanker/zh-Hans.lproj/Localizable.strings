@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "排行榜";
 "analysis.overview" = "概览";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "没有可用的问答";
+"analysis.noQuizzes.description" = "开始或完成问答后将显示在此处";
+"analysis.activeQuizzes.section" = "活跃问答 (%d)";
+"analysis.completedQuizzes.section" = "已完成问答 (%d)";
+"analysis.points" = "分数";
+"analysis.statistics" = "统计";
+"analysis.maxPoints" = "最大: %d";
+"analysis.allQuizzes" = "所有问答概览";
+"analysis.sorting" = "排序:";
+"analysis.noTeamStats.description" = "完成问答后可查看团队统计";
+"analysis.teams.section" = "团队 (%d)";
+"analysis.coreStats" = "核心统计";
+"analysis.performance" = "表现概览";
+"analysis.podiumRate" = "领奖台率";
+"analysis.bestRank" = "最佳排名";
+"analysis.worstRank" = "最差排名";
+"analysis.quizHistory" = "问答历史";
+"analysis.overview.description" = "所有已完成问答的统计";
+"analysis.teamLevel" = "团队水平";
+"analysis.maxScore" = "最高分数";
+"analysis.achievedScore" = "达成分数";
+"analysis.totalLevel" = "总体水平";
+"analysis.quizListing" = "问答列表";
+"analysis.average" = "平均";
+"analysis.noCompletedQuizzes" = "没有已完成的问答";
+"analysis.noStatistics" = "没有统计数据";
+"analysis.participation" = "参与次数";
+"analysis.wins" = "胜利";
+"analysis.winRate" = "胜率";
+"analysis.averageRank" = "平均排名";
+"analysis.averagePoints" = "平均分数";
+"analysis.totalPoints" = "总分数";
+"analysis.completedQuizzes" = "已完成问答";
+"analysis.uniqueTeams" = "独特团队";
+"analysis.averageTeamsPerQuiz" = "每场问答平均团队";
+
 // MARK: - Email
 "email.send" = "发送邮件";
 "email.send.all" = "发送邮件给所有队伍";
@@ -407,3 +444,140 @@
 "email.template.scheduleChange.subject" = "重要：问答时间表更新";
 "email.template.scheduleChange.body" = "您好，\n\n我们需要通知您时间表的更改：\n\n🔄 新日期: [NEW_DATE]\n🔄 新时间: [NEW_TIME]\n📍 地点: [VENUE] (未更改)\n\n我们对造成的不便表示歉意。\n\n请确认您是否仍能参加。\n\n感谢您的理解！";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "取消问答";
+"execution.cancel.returnToPlanning" = "返回规划";
+"execution.cancel.message" = "问答将停止，所有回合将被标记为未完成。已输入的分数将保留。";
+"execution.liveQuiz" = "实时问答";
+"execution.enterScores" = "输入分数";
+"execution.noActiveQuizzes" = "没有活跃的问答";
+"execution.noActiveQuizzes.description" = "在规划阶段开始一个问答";
+"execution.activeQuizzes.section" = "活跃问答 (%d)";
+"execution.round.current" = "当前回合";
+"execution.round.completed" = "已完成回合";
+"execution.rounds.edit" = "编辑回合";
+"execution.rounds.edit.help" = "编辑已完成回合的分数";
+"execution.presentation.end" = "结束演示";
+"execution.presentation.start" = "演示";
+"execution.presentation.help" = "演示模式 (⌘P)";
+"execution.cancel.help" = "取消问答并返回规划";
+"execution.complete" = "完成";
+"execution.complete.help" = "完成问答 (⌘E)";
+"execution.progress" = "进度";
+"execution.rounds.progress" = "%d/%d 回合";
+"execution.round.previous" = "上一回合: %@";
+"execution.round.next" = "下一回合: %@";
+"execution.noRound.selected" = "未选择回合";
+"execution.noTeams" = "没有可用的团队";
+"execution.noTeams.description" = "添加团队以分配分数";
+"execution.score.saved" = "已保存: %d";
+"execution.actions" = "操作";
+"execution.reset" = "重置";
+"execution.saveAll" = "全部保存";
+"execution.round.completeAndContinue" = "完成回合并继续";
+"execution.round.completeLast" = "完成最后一轮";
+"execution.leaderboard.live" = "实时排行榜";
+"execution.editRounds.title" = "编辑回合";
+"execution.editRounds.rounds" = "回合";
+"execution.editRounds.selectRound" = "选择回合";
+"execution.editRounds.selectRound.description" = "选择一个回合来编辑分数";
+"execution.editRounds.editScores" = "编辑分数";
+"execution.editRounds.done" = "完成";
+"execution.editRounds.roundName.placeholder" = "回合名称";
+"execution.editRounds.maxPoints.label" = "最大分数:";
+"execution.editRounds.maxPoints.perTeam" = "每队";
+"execution.editRounds.maxPoints.display" = "每队最多 %d 分";
+"execution.editRounds.editSettings" = "编辑分数";
+"execution.editRounds.editSettings.help" = "编辑最大分数和回合名称";
+"execution.editRounds.completed" = "已完成";
+"execution.editRounds.unsavedChanges" = "您有未保存的更改";
+"execution.editRounds.warning.maxPoints" = "警告：一些团队的分数超过了新的最大值";
+"execution.editRounds.warning.affectedTeams" = "受影响的团队: %@";
+"execution.editRounds.warning.limit" = "这些将自动限制为 %d 分。";
+"execution.editRounds.round.complete" = "将回合标记为完成";
+"execution.editRounds.round.reopen" = "重新打开回合";
+
+// MARK: - About Sheet
+"about.title" = "关于";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "版本 %@ (%@)";
+"about.description" = "PubRanker 是一款适用于 macOS 的综合问答管理应用。规划问答活动、管理团队、举办问答并分析结果——一应俱全。";
+"about.features.title" = "主要功能";
+"about.features.teamManagement" = "全球团队管理";
+"about.features.planning" = "问答规划与准备";
+"about.features.liveScoring" = "实时比分录入";
+"about.features.analysis" = "详细分析和统计";
+"about.features.email" = "团队邮件模板";
+"about.technical.title" = "技术信息";
+"about.technical.version" = "版本";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "平台";
+"about.technical.copyright" = "版权";
+"about.feedback.rate" = "评分与反馈";
+"about.feedback.title" = "评分与反馈";
+"about.feedback.message" = "帮助我们改进 PubRanker！";
+"about.feedback.rateAppStore" = "在 App Store 评分";
+"about.feedback.missingFeatures" = "缺少功能？";
+"about.feedback.send" = "发送反馈";
+"about.feedback.email.message" = "联系我们：\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "打开邮件";
+"about.feedback.email.copy" = "复制邮箱地址";
+"about.feedback.email.copied" = "邮箱地址已复制";
+"about.feedback.email.copied.message" = "邮箱地址已复制到剪贴板。";
+"about.appStore.review" = "App Store 评价";
+"about.appStore.notAvailable" = "该应用尚未在 App Store 上架。请在发布后评价此应用。";
+
+"planning.emptyState.title" = "准备好您的第一个问答了吗？";
+"planning.emptyState.description" = "轻松规划和整理您的酒吧问答";
+"planning.emptyState.start" = "开始规划";
+"quiz.edit.title" = "编辑问答";
+"quiz.details" = "问答详情";
+"quiz.name.placeholder" = "输入名称";
+"quiz.venue.placeholder" = "输入地点";
+"quiz.dateTime" = "日期和时间";
+"quiz.maxPoints" = "最大分数";
+"quiz.noAvailableTeams.description" = "所有团队已分配给其他问答";
+"common.add.count" = "添加 (%d)";
+"team.edit.help" = "编辑团队";
+"team.remove.help" = "从问答中移除团队";
+"team.remove.confirm" = "从问答中移除团队？";
+"team.remove.message" = "您真的想从本问答中移除 '%@' 吗？团队将保留在全局团队列表中。";
+"common.contactPerson" = "联系人";
+"common.email" = "电子邮件";
+"common.designSystem" = "设计系统";
+"team.selectFromExisting" = "从现有中选择 (%d)";
+"score.enter.max" = "输入分数（每队最多 %d）";
+"score.nextRound" = "继续下一轮";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "完成轮次";
+"score.roundCompleted" = "此轮次已完成";
+"score.saved.title" = "分数已保存！ ✅";
+"score.saved.message" = "%@ 的分数已成功保存。";
+"common.rounds.edit" = "编辑轮次";
+"common.rounds.select" = "选择轮次";
+"common.rounds.select.description" = "选择要编辑分数的轮次";
+"common.scores.edit" = "编辑分数";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "最多胜利";
+"sort.mostParticipations" = "最多参与";
+"sort.bestAverage" = "最佳平均排名";
+"sort.mostPoints" = "最多分数";
+"sort.nameAZ" = "名称 (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "问答分析";
+"analysisTab.teamStatistics" = "团队统计";
+"analysisTab.overallStatistics" = "整体概览";
+
+// MARK: - Common Actions
+"common.edit" = "编辑";
+"common.remove" = "移除";
+"common.confirmed" = "参与已确认";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "编辑回合";
+"common.teamDetails" = "团队详情";
+"common.teamName" = "团队名称";
+"common.contactInfo" = "联系信息";
+"common.editTeam" = "编辑团队";

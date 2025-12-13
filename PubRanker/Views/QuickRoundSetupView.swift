@@ -33,13 +33,13 @@ struct QuickRoundSetupView: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [Color.orange, Color.orange.opacity(0.7)],
+                                colors: [Color.appAccent, Color.appAccentLight],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                         .frame(width: 80, height: 80)
-                        .shadow(color: .orange.opacity(0.3), radius: 10)
+                        .shadow(AppShadow.lg)
                     
                     Image(systemName: "list.number")
                         .font(.system(size: 36))
@@ -53,11 +53,11 @@ struct QuickRoundSetupView: View {
                     
                     Text("Erstellen Sie mehrere Runden auf einmal")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
             }
-            .padding(.top, 40)
-            .padding(.bottom, 32)
+            .padding(.top, AppSpacing.xxl)
+            .padding(.bottom, AppSpacing.sectionSpacing)
             
             ScrollView {
                 VStack(spacing: 32) {
@@ -82,18 +82,18 @@ struct QuickRoundSetupView: View {
                                             .foregroundStyle(.secondary)
                                     }
                                     .frame(maxWidth: .infinity)
-                                    .padding()
+                                    .padding(AppSpacing.md)
                                     .background(
                                         numberOfRounds == preset.1 && maxPointsPerRound == preset.2
-                                            ? Color.accentColor.opacity(0.2)
-                                            : Color(nsColor: .controlBackgroundColor)
+                                            ? Color.appPrimary.opacity(0.2)
+                                            : Color.appBackgroundSecondary
                                     )
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
                                     .overlay {
-                                        RoundedRectangle(cornerRadius: 12)
+                                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
                                             .stroke(
                                                 numberOfRounds == preset.1 && maxPointsPerRound == preset.2
-                                                    ? Color.accentColor
+                                                    ? Color.appPrimary
                                                     : Color.clear,
                                                 lineWidth: 2
                                             )
@@ -110,9 +110,10 @@ struct QuickRoundSetupView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Image(systemName: "number.circle.fill")
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(Color.appPrimary)
                             Text("Anzahl der Runden")
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                         
                         HStack {
@@ -150,9 +151,10 @@ struct QuickRoundSetupView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Image(systemName: "star.circle.fill")
-                                .foregroundStyle(.yellow)
+                                .foregroundStyle(Color.appSecondary)
                             Text("Max. Punkte pro Runde")
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                         
                         HStack {
@@ -189,7 +191,7 @@ struct QuickRoundSetupView: View {
                                 Button("\(points)") {
                                     maxPointsPerRound = points
                                 }
-                                .buttonStyle(.bordered)
+                                .secondaryGradientButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -201,9 +203,10 @@ struct QuickRoundSetupView: View {
                     Toggle(isOn: $useCustomNames) {
                         HStack {
                             Image(systemName: "pencil.circle.fill")
-                                .foregroundStyle(.purple)
+                                .foregroundStyle(Color.appSecondary)
                             Text("Benutzerdefinierte Namen")
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                     }
                     .onChange(of: useCustomNames) { oldValue, newValue in
@@ -261,8 +264,8 @@ struct QuickRoundSetupView: View {
                                 }
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
-                                .background(Color(nsColor: .controlBackgroundColor))
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .background(Color.appBackgroundSecondary)
+                                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                             }
                             
                             if numberOfRounds > 3 {
@@ -278,7 +281,7 @@ struct QuickRoundSetupView: View {
             }
             
             // Action Buttons
-            HStack(spacing: 16) {
+            HStack(spacing: AppSpacing.sm) {
                 Button {
                     dismiss()
                 } label: {
@@ -286,28 +289,27 @@ struct QuickRoundSetupView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .secondaryGradientButton(size: .large)
                 
                 Button {
                     createRounds()
                     dismiss()
                 } label: {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "checkmark.circle.fill")
                         Text("\(numberOfRounds) Runden erstellen")
+                            .monospacedDigit()
                     }
                     .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .primaryGradientButton(size: .large)
             }
-            .padding(.horizontal, 40)
-            .padding(.vertical, 24)
+            .padding(.horizontal, AppSpacing.xxl)
+            .padding(.vertical, AppSpacing.sectionSpacing)
         }
         .frame(width: 650, height: 800)
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color.appBackground)
         .onAppear {
             updateRoundNames()
         }

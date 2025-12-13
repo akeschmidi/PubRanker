@@ -1,0 +1,777 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8F59D7F291C24541BE40AA86 /* PresentationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595E33B5B5284F6DABEC5412 /* PresentationWindowController.swift */; };
+		A10000001 /* PubRankerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000 /* PubRankerApp.swift */; };
+		A10000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000002 /* ContentView.swift */; };
+		A10000101 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000100 /* Quiz.swift */; };
+		A10000103 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000102 /* Team.swift */; };
+		A10000105 /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000104 /* Round.swift */; };
+		A10000107 /* EmailTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000106 /* EmailTemplate.swift */; };
+		A10000201 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000200 /* QuizViewModel.swift */; };
+		A10000301 /* QuizListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000300 /* QuizListView.swift */; };
+		A10000303 /* QuizDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000302 /* QuizDetailView.swift */; };
+		A10000305 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000304 /* LeaderboardView.swift */; };
+		A10000307 /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000306 /* TeamManagementView.swift */; };
+		A10000309 /* RoundManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000308 /* RoundManagementView.swift */; };
+		A10000311 /* ScoreEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000310 /* ScoreEntryView.swift */; };
+		A10000313 /* TeamSetupWizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000312 /* TeamSetupWizard.swift */; };
+		A10000315 /* QuickRoundSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000314 /* QuickRoundSetupView.swift */; };
+		A10000317 /* PlanningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000316 /* PlanningView.swift */; };
+		A10000319 /* ExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000318 /* ExecutionView.swift */; };
+		A10000321 /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000320 /* AnalysisView.swift */; };
+		A10000323 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000322 /* ColorExtension.swift */; };
+		A10000326 /* TeamIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000325 /* TeamIconView.swift */; };
+		A10000327 /* GlobalTeamsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000324 /* GlobalTeamsManagerView.swift */; };
+		A10000328 /* TeamSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000329 /* TeamSortOption.swift */; };
+		A10000330 /* GlobalTeamSidebarRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000331 /* GlobalTeamSidebarRow.swift */; };
+		A10000332 /* TeamCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000333 /* TeamCard.swift */; };
+		A10000334 /* StatBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000335 /* StatBadge.swift */; };
+		A10000336 /* QuizCheckboxRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000337 /* QuizCheckboxRow.swift */; };
+		A10000338 /* GlobalAddTeamSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000339 /* GlobalAddTeamSheet.swift */; };
+		A10000340 /* GlobalEditTeamSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000341 /* GlobalEditTeamSheet.swift */; };
+		A10000342 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000343 /* SidebarView.swift */; };
+		A10000344 /* TeamDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000345 /* TeamDetailView.swift */; };
+		A10000346 /* TeamsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000347 /* TeamsGridView.swift */; };
+		A10000348 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000349 /* EmptyStateView.swift */; };
+		A10000350 /* PlanningDetailTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000351 /* PlanningDetailTab.swift */; };
+		A10000352 /* PlannedQuizRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000353 /* PlannedQuizRow.swift */; };
+		A10000354 /* PlanningSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000355 /* PlanningSidebarView.swift */; };
+		A10000356 /* PlanningEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000357 /* PlanningEmptyStateView.swift */; };
+		A10000358 /* CompactQuizHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000359 /* CompactQuizHeader.swift */; };
+		A10000360 /* OverviewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000361 /* OverviewComponents.swift */; };
+		A10000362 /* PlanningDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000363 /* PlanningDetailView.swift */; };
+		A10000364 /* EditQuizSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000365 /* EditQuizSheet.swift */; };
+		A10000366 /* EditableTeamRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000367 /* EditableTeamRow.swift */; };
+		A10000368 /* EditableRoundRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000369 /* EditableRoundRow.swift */; };
+		A10000370 /* AboutSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000371 /* AboutSheet.swift */; };
+		A10000373 /* EasterEggSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000372 /* EasterEggSystem.swift */; };
+		A10000401 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000400 /* Assets.xcassets */; };
+		A10000601 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000600 /* EmailService.swift */; };
+		A10000611 /* EmailComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000610 /* EmailComposerView.swift */; };
+		C9137CE42ED450AB007B469E /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = C9137CE32ED450AB007B469E /* CLAUDE.md */; };
+		C928C3A02ED4A09100F38077 /* QuizChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C928C39A2ED4A09100F38077 /* QuizChartsView.swift */; };
+		C928C3A12ED4A09100F38077 /* AnalysisSharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C928C39D2ED4A09100F38077 /* AnalysisSharedComponents.swift */; };
+		C928C3A22ED4A09100F38077 /* TeamChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C928C39B2ED4A09100F38077 /* TeamChartsView.swift */; };
+		C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */; };
+		C9B345B12EDC6048005D5076 /* COLOR_ASSETS_SETUP.md in Resources */ = {isa = PBXBuildFile; fileRef = C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */; };
+		C9B345B22EDC6048005D5076 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AD2EDC6048005D5076 /* AppColors.swift */; };
+		C9B345B32EDC6048005D5076 /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AB2EDC6048005D5076 /* AppButton.swift */; };
+		C9B345B42EDC6048005D5076 /* AppSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AE2EDC6048005D5076 /* AppSpacing.swift */; };
+		C9B345B52EDC6048005D5076 /* AppCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AC2EDC6048005D5076 /* AppCard.swift */; };
+		C9B345B72EDC6288005D5076 /* DesignSystemDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */; };
+		C9B345B92EDDD42B005D5076 /* AppStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345B82EDDD42B005D5076 /* AppStatisticsView.swift */; };
+		C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */; };
+		DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C523D853111435688C12D13 /* PresentationModeView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4C523D853111435688C12D13 /* PresentationModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationModeView.swift; sourceTree = "<group>"; };
+		595E33B5B5284F6DABEC5412 /* PresentationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationWindowController.swift; sourceTree = "<group>"; };
+		A10000000 /* PubRankerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubRankerApp.swift; sourceTree = "<group>"; };
+		A10000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A10000100 /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		A10000102 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
+		A10000104 /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
+		A10000106 /* EmailTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailTemplate.swift; sourceTree = "<group>"; };
+		A10000200 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
+		A10000300 /* QuizListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizListView.swift; sourceTree = "<group>"; };
+		A10000302 /* QuizDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizDetailView.swift; sourceTree = "<group>"; };
+		A10000304 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		A10000306 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
+		A10000308 /* RoundManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundManagementView.swift; sourceTree = "<group>"; };
+		A10000310 /* ScoreEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreEntryView.swift; sourceTree = "<group>"; };
+		A10000312 /* TeamSetupWizard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamSetupWizard.swift; sourceTree = "<group>"; };
+		A10000314 /* QuickRoundSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRoundSetupView.swift; sourceTree = "<group>"; };
+		A10000316 /* PlanningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningView.swift; sourceTree = "<group>"; };
+		A10000318 /* ExecutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionView.swift; sourceTree = "<group>"; };
+		A10000320 /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
+		A10000322 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		A10000324 /* GlobalTeamsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTeamsManagerView.swift; sourceTree = "<group>"; };
+		A10000325 /* TeamIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamIconView.swift; sourceTree = "<group>"; };
+		A10000329 /* TeamSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamSortOption.swift; sourceTree = "<group>"; };
+		A10000331 /* GlobalTeamSidebarRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTeamSidebarRow.swift; sourceTree = "<group>"; };
+		A10000333 /* TeamCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCard.swift; sourceTree = "<group>"; };
+		A10000335 /* StatBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatBadge.swift; sourceTree = "<group>"; };
+		A10000337 /* QuizCheckboxRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizCheckboxRow.swift; sourceTree = "<group>"; };
+		A10000339 /* GlobalAddTeamSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalAddTeamSheet.swift; sourceTree = "<group>"; };
+		A10000341 /* GlobalEditTeamSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalEditTeamSheet.swift; sourceTree = "<group>"; };
+		A10000343 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		A10000345 /* TeamDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailView.swift; sourceTree = "<group>"; };
+		A10000347 /* TeamsGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsGridView.swift; sourceTree = "<group>"; };
+		A10000349 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		A10000351 /* PlanningDetailTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningDetailTab.swift; sourceTree = "<group>"; };
+		A10000353 /* PlannedQuizRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannedQuizRow.swift; sourceTree = "<group>"; };
+		A10000355 /* PlanningSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningSidebarView.swift; sourceTree = "<group>"; };
+		A10000357 /* PlanningEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningEmptyStateView.swift; sourceTree = "<group>"; };
+		A10000359 /* CompactQuizHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactQuizHeader.swift; sourceTree = "<group>"; };
+		A10000361 /* OverviewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewComponents.swift; sourceTree = "<group>"; };
+		A10000363 /* PlanningDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningDetailView.swift; sourceTree = "<group>"; };
+		A10000365 /* EditQuizSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQuizSheet.swift; sourceTree = "<group>"; };
+		A10000367 /* EditableTeamRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableTeamRow.swift; sourceTree = "<group>"; };
+		A10000369 /* EditableRoundRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableRoundRow.swift; sourceTree = "<group>"; };
+		A10000371 /* AboutSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSheet.swift; sourceTree = "<group>"; };
+		A10000372 /* EasterEggSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasterEggSystem.swift; sourceTree = "<group>"; };
+		A10000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A10000500 /* PubRanker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PubRanker.entitlements; sourceTree = "<group>"; };
+		A10000600 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
+		A10000610 /* EmailComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailComposerView.swift; sourceTree = "<group>"; };
+		A1FFFFFFF /* PubRanker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubRanker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9137CE32ED450AB007B469E /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = CLAUDE.md; sourceTree = "<group>"; };
+		C928C39A2ED4A09100F38077 /* QuizChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizChartsView.swift; sourceTree = "<group>"; };
+		C928C39B2ED4A09100F38077 /* TeamChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamChartsView.swift; sourceTree = "<group>"; };
+		C928C39D2ED4A09100F38077 /* AnalysisSharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSharedComponents.swift; sourceTree = "<group>"; };
+		C941F1F92EA7FA30004EE1C9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2002EA7FA30004EE1C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2012EA7FA30004EE1C9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2022EA7FA30004EE1C9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2032EA7FA30004EE1C9 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2042EA7FA30004EE1C9 /* de-CH */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "de-CH"; path = "de-CH.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C941F2052EA7FA30004EE1C9 /* fr-CH */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CH"; path = "fr-CH.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C941F2062EA7FA30004EE1C9 /* it-CH */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "it-CH"; path = "it-CH.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C941F2072EA7FA30004EE1C9 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2082EA7FA30004EE1C9 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C941F2092EA7FA30004EE1C9 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F20A2EA7FA30004EE1C9 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F20B2EA7FA30004EE1C9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F20C2EA7FA30004EE1C9 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F20D2EA7FA30004EE1C9 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C941F20E2EA7FA30004EE1C9 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F20F2EA7FA30004EE1C9 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2102EA7FA30004EE1C9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C941F2112EA7FA30004EE1C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C9B345AB2EDC6048005D5076 /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButton.swift; sourceTree = "<group>"; };
+		C9B345AC2EDC6048005D5076 /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
+		C9B345AD2EDC6048005D5076 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		C9B345AE2EDC6048005D5076 /* AppSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSpacing.swift; sourceTree = "<group>"; };
+		C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = COLOR_ASSETS_SETUP.md; sourceTree = "<group>"; };
+		C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystemDemoView.swift; sourceTree = "<group>"; };
+		C9B345B82EDDD42B005D5076 /* AppStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStatisticsView.swift; sourceTree = "<group>"; };
+		C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon_LiqidGlass.icon; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1FFFFFFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1000010 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10000100 /* Quiz.swift */,
+				A10000102 /* Team.swift */,
+				A10000104 /* Round.swift */,
+				A10000106 /* EmailTemplate.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A1000020 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A10000200 /* QuizViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A1000030 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C9B345B82EDDD42B005D5076 /* AppStatisticsView.swift */,
+				C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */,
+				C928C3A42ED4A67E00F38077 /* TeamManagement */,
+				C928C3A32ED4A66000F38077 /* Planning */,
+				C928C39F2ED4A09100F38077 /* Analysis */,
+				A10000325 /* TeamIconView.swift */,
+				A10000318 /* ExecutionView.swift */,
+				A10000300 /* QuizListView.swift */,
+				A10000302 /* QuizDetailView.swift */,
+				A10000304 /* LeaderboardView.swift */,
+				A10000306 /* TeamManagementView.swift */,
+				C928C3A52ED4A69100F38077 /* GlobalTeamsManager */,
+				A10000308 /* RoundManagementView.swift */,
+				A10000310 /* ScoreEntryView.swift */,
+				A10000312 /* TeamSetupWizard.swift */,
+				A10000314 /* QuickRoundSetupView.swift */,
+				4C523D853111435688C12D13 /* PresentationModeView.swift */,
+				A10000610 /* EmailComposerView.swift */,
+				A10000371 /* AboutSheet.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A1000050 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A10000322 /* ColorExtension.swift */,
+				595E33B5B5284F6DABEC5412 /* PresentationWindowController.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A1000060 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10000600 /* EmailService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A1FFFFFB = {
+			isa = PBXGroup;
+			children = (
+				C9137CE32ED450AB007B469E /* CLAUDE.md */,
+				A1FFFFFD /* PubRanker */,
+				A1FFFFFC /* Products */,
+				C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */,
+			);
+			sourceTree = "<group>";
+		};
+		A1FFFFFC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1FFFFFFF /* PubRanker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1FFFFFD /* PubRanker */ = {
+			isa = PBXGroup;
+			children = (
+				C9B345B02EDC6048005D5076 /* DesignSystem */,
+				A10000000 /* PubRankerApp.swift */,
+				A10000002 /* ContentView.swift */,
+				A10000372 /* EasterEggSystem.swift */,
+				A1000010 /* Models */,
+				A1000020 /* ViewModels */,
+				A1000030 /* Views */,
+				A1000050 /* Helpers */,
+				A1000060 /* Services */,
+				A10000400 /* Assets.xcassets */,
+				A10000500 /* PubRanker.entitlements */,
+				C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */,
+			);
+			path = PubRanker;
+			sourceTree = "<group>";
+		};
+		C928C39C2ED4A09100F38077 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				C928C39A2ED4A09100F38077 /* QuizChartsView.swift */,
+				C928C39B2ED4A09100F38077 /* TeamChartsView.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		C928C39E2ED4A09100F38077 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C928C39D2ED4A09100F38077 /* AnalysisSharedComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		C928C39F2ED4A09100F38077 /* Analysis */ = {
+			isa = PBXGroup;
+			children = (
+				C928C39C2ED4A09100F38077 /* Charts */,
+				C928C39E2ED4A09100F38077 /* Components */,
+				A10000320 /* AnalysisView.swift */,
+			);
+			path = Analysis;
+			sourceTree = "<group>";
+		};
+		C928C3A32ED4A66000F38077 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				A10000351 /* PlanningDetailTab.swift */,
+				A10000353 /* PlannedQuizRow.swift */,
+				A10000355 /* PlanningSidebarView.swift */,
+				A10000357 /* PlanningEmptyStateView.swift */,
+				A10000359 /* CompactQuizHeader.swift */,
+				A10000361 /* OverviewComponents.swift */,
+				A10000363 /* PlanningDetailView.swift */,
+				A10000365 /* EditQuizSheet.swift */,
+				A10000367 /* EditableTeamRow.swift */,
+				A10000369 /* EditableRoundRow.swift */,
+				A10000316 /* PlanningView.swift */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
+		C928C3A42ED4A67E00F38077 /* TeamManagement */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TeamManagement;
+			sourceTree = "<group>";
+		};
+		C928C3A52ED4A69100F38077 /* GlobalTeamsManager */ = {
+			isa = PBXGroup;
+			children = (
+				A10000329 /* TeamSortOption.swift */,
+				A10000331 /* GlobalTeamSidebarRow.swift */,
+				A10000333 /* TeamCard.swift */,
+				A10000335 /* StatBadge.swift */,
+				A10000337 /* QuizCheckboxRow.swift */,
+				A10000339 /* GlobalAddTeamSheet.swift */,
+				A10000341 /* GlobalEditTeamSheet.swift */,
+				A10000343 /* SidebarView.swift */,
+				A10000345 /* TeamDetailView.swift */,
+				A10000347 /* TeamsGridView.swift */,
+				A10000349 /* EmptyStateView.swift */,
+				A10000324 /* GlobalTeamsManagerView.swift */,
+			);
+			path = GlobalTeamsManager;
+			sourceTree = "<group>";
+		};
+		C9B345B02EDC6048005D5076 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C9B345AB2EDC6048005D5076 /* AppButton.swift */,
+				C9B345AC2EDC6048005D5076 /* AppCard.swift */,
+				C9B345AD2EDC6048005D5076 /* AppColors.swift */,
+				C9B345AE2EDC6048005D5076 /* AppSpacing.swift */,
+				C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1FFFFFE /* PubRanker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1000040 /* Build configuration list for PBXNativeTarget "PubRanker" */;
+			buildPhases = (
+				A1FFFFFA /* Sources */,
+				A1FFFFFB9 /* Resources */,
+				A1FFFFFFE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PubRanker;
+			productName = PubRanker;
+			productReference = A1FFFFFFF /* PubRanker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1FFFFFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2610;
+				TargetAttributes = {
+					A1FFFFFE = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A1000041 /* Build configuration list for PBXProject "PubRanker" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				de,
+				en,
+				es,
+				fr,
+				it,
+				"de-CH",
+				"fr-CH",
+				"it-CH",
+				rm,
+				"pt-BR",
+				nl,
+				pl,
+				ru,
+				ja,
+				"en-GB",
+				sv,
+				da,
+				ko,
+				"zh-Hans",
+				Base,
+			);
+			mainGroup = A1FFFFFB;
+			productRefGroup = A1FFFFFC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1FFFFFE /* PubRanker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1FFFFFB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */,
+				C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */,
+				C9B345B12EDC6048005D5076 /* COLOR_ASSETS_SETUP.md in Resources */,
+				C9137CE42ED450AB007B469E /* CLAUDE.md in Resources */,
+				A10000401 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1FFFFFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000001 /* PubRankerApp.swift in Sources */,
+				A10000003 /* ContentView.swift in Sources */,
+				A10000373 /* EasterEggSystem.swift in Sources */,
+				A10000101 /* Quiz.swift in Sources */,
+				A10000103 /* Team.swift in Sources */,
+				A10000105 /* Round.swift in Sources */,
+				A10000107 /* EmailTemplate.swift in Sources */,
+				A10000201 /* QuizViewModel.swift in Sources */,
+				A10000301 /* QuizListView.swift in Sources */,
+				A10000303 /* QuizDetailView.swift in Sources */,
+				A10000305 /* LeaderboardView.swift in Sources */,
+				A10000307 /* TeamManagementView.swift in Sources */,
+				A10000327 /* GlobalTeamsManagerView.swift in Sources */,
+				A10000328 /* TeamSortOption.swift in Sources */,
+				A10000330 /* GlobalTeamSidebarRow.swift in Sources */,
+				A10000332 /* TeamCard.swift in Sources */,
+				A10000334 /* StatBadge.swift in Sources */,
+				A10000336 /* QuizCheckboxRow.swift in Sources */,
+				A10000338 /* GlobalAddTeamSheet.swift in Sources */,
+				A10000340 /* GlobalEditTeamSheet.swift in Sources */,
+				A10000342 /* SidebarView.swift in Sources */,
+				A10000344 /* TeamDetailView.swift in Sources */,
+				A10000346 /* TeamsGridView.swift in Sources */,
+				A10000348 /* EmptyStateView.swift in Sources */,
+				A10000350 /* PlanningDetailTab.swift in Sources */,
+				A10000352 /* PlannedQuizRow.swift in Sources */,
+				A10000354 /* PlanningSidebarView.swift in Sources */,
+				A10000356 /* PlanningEmptyStateView.swift in Sources */,
+				C9B345B22EDC6048005D5076 /* AppColors.swift in Sources */,
+				C9B345B32EDC6048005D5076 /* AppButton.swift in Sources */,
+				C9B345B42EDC6048005D5076 /* AppSpacing.swift in Sources */,
+				C9B345B52EDC6048005D5076 /* AppCard.swift in Sources */,
+				A10000358 /* CompactQuizHeader.swift in Sources */,
+				A10000360 /* OverviewComponents.swift in Sources */,
+				A10000362 /* PlanningDetailView.swift in Sources */,
+				A10000364 /* EditQuizSheet.swift in Sources */,
+				C9B345B72EDC6288005D5076 /* DesignSystemDemoView.swift in Sources */,
+				A10000366 /* EditableTeamRow.swift in Sources */,
+				A10000368 /* EditableRoundRow.swift in Sources */,
+				A10000370 /* AboutSheet.swift in Sources */,
+				A10000309 /* RoundManagementView.swift in Sources */,
+				A10000311 /* ScoreEntryView.swift in Sources */,
+				A10000313 /* TeamSetupWizard.swift in Sources */,
+				A10000315 /* QuickRoundSetupView.swift in Sources */,
+				A10000317 /* PlanningView.swift in Sources */,
+				A10000319 /* ExecutionView.swift in Sources */,
+				C928C3A02ED4A09100F38077 /* QuizChartsView.swift in Sources */,
+				C928C3A12ED4A09100F38077 /* AnalysisSharedComponents.swift in Sources */,
+				C928C3A22ED4A09100F38077 /* TeamChartsView.swift in Sources */,
+				A10000321 /* AnalysisView.swift in Sources */,
+				A10000323 /* ColorExtension.swift in Sources */,
+				A10000326 /* TeamIconView.swift in Sources */,
+				DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */,
+				C9B345B92EDDD42B005D5076 /* AppStatisticsView.swift in Sources */,
+				8F59D7F291C24541BE40AA86 /* PresentationWindowController.swift in Sources */,
+				A10000601 /* EmailService.swift in Sources */,
+				A10000611 /* EmailComposerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C941F1F92EA7FA30004EE1C9 /* de */,
+				C941F2002EA7FA30004EE1C9 /* en */,
+				C941F2012EA7FA30004EE1C9 /* es */,
+				C941F2022EA7FA30004EE1C9 /* fr */,
+				C941F2032EA7FA30004EE1C9 /* it */,
+				C941F2042EA7FA30004EE1C9 /* de-CH */,
+				C941F2052EA7FA30004EE1C9 /* fr-CH */,
+				C941F2062EA7FA30004EE1C9 /* it-CH */,
+				C941F2072EA7FA30004EE1C9 /* rm */,
+				C941F2082EA7FA30004EE1C9 /* pt-BR */,
+				C941F2092EA7FA30004EE1C9 /* nl */,
+				C941F20A2EA7FA30004EE1C9 /* pl */,
+				C941F20B2EA7FA30004EE1C9 /* ru */,
+				C941F20C2EA7FA30004EE1C9 /* ja */,
+				C941F20D2EA7FA30004EE1C9 /* en-GB */,
+				C941F20E2EA7FA30004EE1C9 /* sv */,
+				C941F20F2EA7FA30004EE1C9 /* da */,
+				C941F2102EA7FA30004EE1C9 /* ko */,
+				C941F2112EA7FA30004EE1C9 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A1000042 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon_LiqidGlass;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				AUTOMATION_APPLE_EVENTS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = PubRanker/PubRanker.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 101;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 34DTFQCK2V;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
+				INFOPLIST_KEY_UILaunchStoryboardName = "App-Icon";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.8;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Debug;
+		};
+		A1000043 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon_LiqidGlass;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				AUTOMATION_APPLE_EVENTS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = PubRanker/PubRanker.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 101;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 34DTFQCK2V;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
+				INFOPLIST_KEY_UILaunchStoryboardName = "App-Icon";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1000040 /* Build configuration list for PBXNativeTarget "PubRanker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000042 /* Debug */,
+				A1000043 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1000041 /* Build configuration list for PBXProject "PubRanker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000042 /* Debug */,
+				A1000043 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1FFFFFF /* Project object */;
+}

@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "리더보드";
 "analysis.overview" = "개요";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "사용 가능한 퀴즈 없음";
+"analysis.noQuizzes.description" = "퀴즈를 시작하거나 완료하면 여기에 표시됩니다";
+"analysis.activeQuizzes.section" = "활성 퀴즈 (%d)";
+"analysis.completedQuizzes.section" = "완료된 퀴즈 (%d)";
+"analysis.points" = "점수";
+"analysis.statistics" = "통계";
+"analysis.maxPoints" = "최대: %d";
+"analysis.allQuizzes" = "모든 퀴즈 개요";
+"analysis.sorting" = "정렬:";
+"analysis.noTeamStats.description" = "팀 통계를 보려면 퀴즈를 완료하세요";
+"analysis.teams.section" = "팀 (%d)";
+"analysis.coreStats" = "핵심 통계";
+"analysis.performance" = "성과 개요";
+"analysis.podiumRate" = "시상대 비율";
+"analysis.bestRank" = "최고 순위";
+"analysis.worstRank" = "최저 순위";
+"analysis.quizHistory" = "퀴즈 기록";
+"analysis.overview.description" = "완료된 모든 퀴즈의 통계";
+"analysis.teamLevel" = "팀 수준";
+"analysis.maxScore" = "최대 점수";
+"analysis.achievedScore" = "달성 점수";
+"analysis.totalLevel" = "전체 수준";
+"analysis.quizListing" = "퀴즈 목록";
+"analysis.average" = "평균";
+"analysis.noCompletedQuizzes" = "완료된 퀴즈 없음";
+"analysis.noStatistics" = "통계 없음";
+"analysis.participation" = "참여";
+"analysis.wins" = "우승";
+"analysis.winRate" = "승률";
+"analysis.averageRank" = "평균 순위";
+"analysis.averagePoints" = "평균 점수";
+"analysis.totalPoints" = "총 점수";
+"analysis.completedQuizzes" = "완료된 퀴즈";
+"analysis.uniqueTeams" = "고유 팀";
+"analysis.averageTeamsPerQuiz" = "퀴즈당 평균 팀";
+
 // MARK: - Email
 "email.send" = "이메일 보내기";
 "email.send.all" = "모든 팀에 이메일";
@@ -407,3 +444,140 @@
 "email.template.scheduleChange.subject" = "중요: 퀴즈 일정 업데이트";
 "email.template.scheduleChange.body" = "안녕하세요,\n\n일정 변경에 대해 알려드립니다:\n\n🔄 새 날짜: [NEW_DATE]\n🔄 새 시간: [NEW_TIME]\n📍 장소: [VENUE] (변경 없음)\n\n불편을 드려 죄송합니다.\n\n여전히 참여 가능한지 확인해 주세요.\n\n이해해 주셔서 감사합니다!";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "퀴즈 취소";
+"execution.cancel.returnToPlanning" = "계획으로 돌아가기";
+"execution.cancel.message" = "퀴즈가 중지되고 모든 라운드가 미완료로 표시됩니다. 입력된 점수는 유지됩니다.";
+"execution.liveQuiz" = "라이브 퀴즈";
+"execution.enterScores" = "점수 입력";
+"execution.noActiveQuizzes" = "활성 퀴즈 없음";
+"execution.noActiveQuizzes.description" = "계획 단계에서 퀴즈를 시작하세요";
+"execution.activeQuizzes.section" = "활성 퀴즈 (%d)";
+"execution.round.current" = "현재 라운드";
+"execution.round.completed" = "완료된 라운드";
+"execution.rounds.edit" = "라운드 편집";
+"execution.rounds.edit.help" = "이미 완료된 라운드의 점수 편집";
+"execution.presentation.end" = "프레젠테이션 종료";
+"execution.presentation.start" = "프레젠테이션";
+"execution.presentation.help" = "프레젠테이션 모드 (⌘P)";
+"execution.cancel.help" = "퀴즈를 취소하고 계획으로 돌아가기";
+"execution.complete" = "완료";
+"execution.complete.help" = "퀴즈 완료 (⌘E)";
+"execution.progress" = "진행 상황";
+"execution.rounds.progress" = "%d/%d 라운드";
+"execution.round.previous" = "이전 라운드: %@";
+"execution.round.next" = "다음 라운드: %@";
+"execution.noRound.selected" = "라운드가 선택되지 않음";
+"execution.noTeams" = "사용 가능한 팀 없음";
+"execution.noTeams.description" = "점수를 할당하려면 팀을 추가하세요";
+"execution.score.saved" = "저장됨: %d";
+"execution.actions" = "작업";
+"execution.reset" = "재설정";
+"execution.saveAll" = "모두 저장";
+"execution.round.completeAndContinue" = "라운드 완료 및 계속";
+"execution.round.completeLast" = "마지막 라운드 완료";
+"execution.leaderboard.live" = "실시간 리더보드";
+"execution.editRounds.title" = "라운드 편집";
+"execution.editRounds.rounds" = "라운드";
+"execution.editRounds.selectRound" = "라운드 선택";
+"execution.editRounds.selectRound.description" = "점수를 편집할 라운드를 선택하세요";
+"execution.editRounds.editScores" = "점수 편집";
+"execution.editRounds.done" = "완료";
+"execution.editRounds.roundName.placeholder" = "라운드 이름";
+"execution.editRounds.maxPoints.label" = "최대 점수:";
+"execution.editRounds.maxPoints.perTeam" = "팀당";
+"execution.editRounds.maxPoints.display" = "팀당 최대 %d 점";
+"execution.editRounds.editSettings" = "점수 편집";
+"execution.editRounds.editSettings.help" = "최대 점수 및 라운드 이름 편집";
+"execution.editRounds.completed" = "완료됨";
+"execution.editRounds.unsavedChanges" = "저장하지 않은 변경 사항이 있습니다";
+"execution.editRounds.warning.maxPoints" = "경고: 일부 팀의 점수가 새 최대값보다 높습니다";
+"execution.editRounds.warning.affectedTeams" = "영향받는 팀: %@";
+"execution.editRounds.warning.limit" = "이 팀들은 자동으로 %d 점으로 제한됩니다.";
+"execution.editRounds.round.complete" = "라운드를 완료로 표시";
+"execution.editRounds.round.reopen" = "라운드 다시 열기";
+
+// MARK: - About Sheet
+"about.title" = "앱 정보";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "버전 %@ (%@)";
+"about.description" = "PubRanker는 macOS용 종합 퀴즈 관리 앱입니다. 퀴즈 이벤트 계획, 팀 관리, 퀴즈 진행 및 결과 분석을 한 곳에서.";
+"about.features.title" = "주요 기능";
+"about.features.teamManagement" = "글로벌 팀 관리";
+"about.features.planning" = "퀴즈 계획 및 준비";
+"about.features.liveScoring" = "실시간 점수 입력";
+"about.features.analysis" = "상세 분석 및 통계";
+"about.features.email" = "팀 이메일 템플릿";
+"about.technical.title" = "기술 정보";
+"about.technical.version" = "버전";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "플랫폼";
+"about.technical.copyright" = "저작권";
+"about.feedback.rate" = "평가 및 피드백";
+"about.feedback.title" = "평가 및 피드백";
+"about.feedback.message" = "PubRanker 개선에 도움을 주세요!";
+"about.feedback.rateAppStore" = "App Store에서 평가";
+"about.feedback.missingFeatures" = "기능이 부족하신가요?";
+"about.feedback.send" = "피드백 보내기";
+"about.feedback.email.message" = "문의처:\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "이메일 열기";
+"about.feedback.email.copy" = "이메일 주소 복사";
+"about.feedback.email.copied" = "이메일 주소 복사됨";
+"about.feedback.email.copied.message" = "이메일 주소가 클립보드에 복사되었습니다.";
+"about.appStore.review" = "App Store 리뷰";
+"about.appStore.notAvailable" = "이 앱은 아직 App Store에서 사용할 수 없습니다. 출시 후 평가해 주세요.";
+
+"planning.emptyState.title" = "첫 번째 퀴즈 준비되셨나요?";
+"planning.emptyState.description" = "펍 퀴즈를 쉽게 계획하고 정리하세요";
+"planning.emptyState.start" = "계획 시작하기";
+"quiz.edit.title" = "퀴즈 편집";
+"quiz.details" = "퀴즈 세부 정보";
+"quiz.name.placeholder" = "이름 입력";
+"quiz.venue.placeholder" = "장소 입력";
+"quiz.dateTime" = "날짜 및 시간";
+"quiz.maxPoints" = "최대 점수";
+"quiz.noAvailableTeams.description" = "모든 팀이 이미 다른 퀴즈에 할당되었습니다";
+"common.add.count" = "추가 (%d)";
+"team.edit.help" = "팀 편집";
+"team.remove.help" = "퀴즈에서 팀 제거";
+"team.remove.confirm" = "퀴즈에서 팀을 제거하시겠습니까?";
+"team.remove.message" = "정말로 '%@'을(를) 이 퀴즈에서 제거하시겠습니까? 팀은 전역 팀 목록에 남아 있습니다.";
+"common.contactPerson" = "연락처";
+"common.email" = "이메일";
+"common.designSystem" = "디자인 시스템";
+"team.selectFromExisting" = "기존 항목에서 선택 (%d)";
+"score.enter.max" = "점수 입력 (팀당 최대 %d)";
+"score.nextRound" = "다음 라운드로 계속";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "라운드 완료";
+"score.roundCompleted" = "이 라운드는 완료되었습니다";
+"score.saved.title" = "점수 저장됨! ✅";
+"score.saved.message" = "%@의 점수가 성공적으로 저장되었습니다.";
+"common.rounds.edit" = "라운드 편집";
+"common.rounds.select" = "라운드 선택";
+"common.rounds.select.description" = "점수를 편집할 라운드를 선택하세요";
+"common.scores.edit" = "점수 편집";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "최다 우승";
+"sort.mostParticipations" = "최다 참여";
+"sort.bestAverage" = "최고 평균 순위";
+"sort.mostPoints" = "최다 점수";
+"sort.nameAZ" = "이름 (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "퀴즈 분석";
+"analysisTab.teamStatistics" = "팀 통계";
+"analysisTab.overallStatistics" = "전체 개요";
+
+// MARK: - Common Actions
+"common.edit" = "편집";
+"common.remove" = "제거";
+"common.confirmed" = "참여 확인됨";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "라운드 편집";
+"common.teamDetails" = "팀 세부정보";
+"common.teamName" = "팀 이름";
+"common.contactInfo" = "연락처 정보";
+"common.editTeam" = "팀 편집";

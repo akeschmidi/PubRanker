@@ -25,22 +25,22 @@ struct EditRoundsSheet: View {
                 }
             }
             .listStyle(.sidebar)
-            .navigationTitle("Runden")
+            .navigationTitle(L10n.CommonUI.rounds)
         } detail: {
             if let round = selectedRound {
                 RoundEditDetailView(round: round, quiz: quiz, viewModel: viewModel)
             } else {
                 ContentUnavailableView(
-                    "Runde auswählen",
+                    NSLocalizedString("common.rounds.select", comment: "Select round"),
                     systemImage: "list.number",
-                    description: Text("Wähle eine Runde aus, um die Punkte zu bearbeiten")
+                    description: Text(NSLocalizedString("common.rounds.select.description", comment: "Select round description"))
                 )
             }
         }
-        .navigationTitle("Punkte bearbeiten")
+        .navigationTitle(NSLocalizedString("common.scores.edit", comment: "Edit scores"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Fertig") {
+                Button(L10n.CommonUI.done) {
                     dismiss()
                 }
             }
@@ -75,7 +75,7 @@ struct RoundRowView: View {
                 }
             }
             
-            Text("Max. \(round.maxPoints) Punkte")
+            Text(L10n.CommonUI.maxPoints(round.maxPoints))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -100,7 +100,7 @@ struct RoundEditDetailView: View {
                             .font(.title2)
                             .bold()
                         
-                        Text("Max. \(round.maxPoints) Punkte pro Team")
+                        Text(L10n.CommonUI.maxPointsPerTeam(round.maxPoints))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -111,7 +111,7 @@ struct RoundEditDetailView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
-                            Text("Abgeschlossen")
+                            Text(L10n.CommonUI.completed)
                                 .font(.subheadline)
                                 .foregroundStyle(.green)
                         }
@@ -125,24 +125,23 @@ struct RoundEditDetailView: View {
                 if hasChanges {
                     HStack {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundStyle(.orange)
-                        Text("Du hast ungespeicherte Änderungen")
+                            .foregroundStyle(Color.appAccent)
+                        Text(NSLocalizedString("execution.editRounds.unsavedChanges", comment: "Unsaved changes"))
                             .font(.subheadline)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.appAccent)
                         Spacer()
-                        Button("Speichern") {
+                        Button(L10n.Navigation.save) {
                             saveAllScores()
                         }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
+                        .primaryGradientButton()
                     }
                     .padding()
-                    .background(Color.orange.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .background(Color.appAccent.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                 }
             }
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
+            .padding(AppSpacing.md)
+            .background(Color.appBackgroundSecondary)
             
             Divider()
             
@@ -150,9 +149,9 @@ struct RoundEditDetailView: View {
             ScrollView {
                 if quiz.safeTeams.isEmpty {
                     ContentUnavailableView(
-                        "Keine Teams vorhanden",
+                        NSLocalizedString("execution.noTeams", comment: "No teams"),
                         systemImage: "person.3.slash",
-                        description: Text("Füge Teams hinzu, um Punkte zu vergeben")
+                        description: Text(NSLocalizedString("execution.noTeams.description", comment: "No teams description"))
                     )
                     .frame(maxHeight: 400)
                 } else {
@@ -180,40 +179,38 @@ struct RoundEditDetailView: View {
             }
             
             // Action Buttons
-            VStack(spacing: 12) {
-                HStack(spacing: 12) {
-                    Button("Zurücksetzen") {
+            VStack(spacing: AppSpacing.xs) {
+                HStack(spacing: AppSpacing.xs) {
+                    Button(L10n.Execution.reset) {
                         loadCurrentScores()
                         hasChanges = false
                     }
-                    .buttonStyle(.bordered)
+                    .secondaryGradientButton()
                     .disabled(!hasChanges)
                     
-                    Button("Alle speichern") {
+                    Button(L10n.Execution.saveAll) {
                         saveAllScores()
                     }
-                    .buttonStyle(.borderedProminent)
+                    .primaryGradientButton()
                     .disabled(!hasChanges)
                 }
                 
                 if !round.isCompleted {
-                    Button("Runde als abgeschlossen markieren") {
+                    Button(NSLocalizedString("execution.editRounds.round.complete", comment: "Mark round as completed")) {
                         saveAllScores()
                         viewModel.completeRound(round)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
+                    .successGradientButton()
                 } else {
-                    Button("Runde wieder öffnen") {
+                    Button(NSLocalizedString("execution.editRounds.round.reopen", comment: "Reopen round")) {
                         round.isCompleted = false
                         viewModel.saveContext()
                     }
-                    .buttonStyle(.bordered)
-                    .tint(.orange)
+                    .accentGradientButton()
                 }
             }
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
+            .padding(AppSpacing.md)
+            .background(Color.appBackgroundSecondary)
         }
         .onAppear {
             loadCurrentScores()
@@ -297,8 +294,8 @@ struct TeamEditCard: View {
                         .multilineTextAlignment(.center)
                         .frame(width: 80)
                         .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(nsColor: .controlBackgroundColor))
+                            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                                .fill(Color.appBackgroundSecondary)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
                                         .stroke(teamColor, lineWidth: 2)
@@ -338,9 +335,9 @@ struct TeamEditCard: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(nsColor: .windowBackgroundColor))
-                .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 1)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .fill(Color.appBackground)
+                .shadow(AppShadow.sm)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -354,5 +351,6 @@ struct TeamEditCard: View {
     let viewModel = QuizViewModel()
     return EditRoundsSheet(quiz: quiz, viewModel: viewModel)
 }
+
 
 

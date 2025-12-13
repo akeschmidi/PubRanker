@@ -47,13 +47,13 @@ struct ContentView: View {
                 // Main Navigation Header
                 mainNavigationHeader
                 
-                Divider()
+                //Divider()
                 
                 // Content based on selected workflow phase
                 Group {
                     switch selectedWorkflow {
                     case .teamsmanager:
-                        GlobalTeamsManagerView(viewModel: viewModel)
+                        GlobalTeamsManagerView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
                     case .planning:
                         PlanningView(viewModel: viewModel, selectedWorkflow: $selectedWorkflow)
                     case .execution:
@@ -63,7 +63,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .frame(minWidth: 1000, minHeight: 700)
+            .frame(minWidth: 1000, minHeight: 100)
             
             // Easter Egg Overlays
             EasterEggOverlayContainer(easterEggManager: easterEggManager)
@@ -76,45 +76,79 @@ struct ContentView: View {
     private var mainNavigationHeader: some View {
         HStack(spacing: 0) {
             // App Title
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.xs) {
                 EasterEggIconView(easterEggManager: easterEggManager)
-                
+
                 EasterEggTitleView(easterEggManager: easterEggManager)
             }
-            .padding(.leading, 24)
-            
+            .padding(.leading, AppSpacing.lg)
+
             Spacer()
-            
-            // Workflow Phase Picker
-            Picker("Workflow", selection: $selectedWorkflow) {
+
+            // Modern Workflow Phase Picker
+            HStack(spacing: AppSpacing.xxs) {
                 ForEach(WorkflowPhase.allCases) { phase in
-                    Label(phase.rawValue, systemImage: phase.icon)
-                        .tag(phase)
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            selectedWorkflow = phase
+                        }
+                    } label: {
+                        VStack(spacing: AppSpacing.xxxs) {
+                            Image(systemName: phase.icon)
+                                .font(.title3)
+                            Text(phase.rawValue)
+                                .font(.caption)
+                                .fontWeight(selectedWorkflow == phase ? .semibold : .regular)
+                        }
+                        .foregroundStyle(selectedWorkflow == phase ? .white : Color.appTextPrimary)
+                        .frame(width: 90)
+                        .padding(.vertical, AppSpacing.xs)
+                        .background(
+                            Group {
+                                if selectedWorkflow == phase {
+                                    RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                                        .fill(Color.appPrimary)
+                                        .shadow(radius: 2, y: 1)
+                                } else {
+                                    RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                                        .fill(Color.appBackgroundSecondary.opacity(0.5))
+                                }
+                            }
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .help(phase.description)
                 }
             }
-            .pickerStyle(.segmented)
-            .frame(width: 500)
-            
+            .padding(AppSpacing.xxxs)
+            .background(
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(Color.appBackgroundSecondary.opacity(0.9))
+                    .shadow(radius: 2, y: 1)
+            )
+
             Spacer()
-            
+
             // Click Counter (oben rechts)
             EasterEggClickCounter(easterEggManager: easterEggManager)
-            
+
             // Help Button
             Button {
                 showingAboutSheet = true
             } label: {
                 Image(systemName: "questionmark.circle")
                     .font(.title3)
+                    .foregroundStyle(Color.appTextSecondary)
             }
             .buttonStyle(.plain)
             .help("App-Informationen")
-            .padding(.trailing, 24)
+            .padding(.trailing, AppSpacing.lg)
         }
-        .padding(.vertical, 16)
+        //.padding(.top, AppSpacing.xxxs)
+        .padding(.bottom, AppSpacing.sm)
         .background(
             LinearGradient(
-                colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
+                colors: [Color.appBackgroundSecondary, Color.appBackground],
                 startPoint: .top,
                 endPoint: .bottom
             )

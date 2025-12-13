@@ -1,0 +1,5 @@
+✨ Neues Design
+• UI komplett überarbeitet – moderner und übersichtlicher
+
+🔧 Verbesserungen
+• Kleinere Bugfixes und Stabilitätsoptimierungen

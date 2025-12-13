@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "Klassement";
 "analysis.overview" = "Overzicht";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "Geen quizzen beschikbaar";
+"analysis.noQuizzes.description" = "Start of voltooi een quiz om deze hier te zien";
+"analysis.activeQuizzes.section" = "Actieve Quizzen (%d)";
+"analysis.completedQuizzes.section" = "Voltooide Quizzen (%d)";
+"analysis.points" = "Punten";
+"analysis.statistics" = "Statistieken";
+"analysis.maxPoints" = "Max: %d";
+"analysis.allQuizzes" = "Overzicht van alle quizzen";
+"analysis.sorting" = "Sorteren:";
+"analysis.noTeamStats.description" = "Voltooi quizzen om teamstatistieken te zien";
+"analysis.teams.section" = "Teams (%d)";
+"analysis.coreStats" = "Kernstatistieken";
+"analysis.performance" = "Prestatieoverzicht";
+"analysis.podiumRate" = "Podiumpercentage";
+"analysis.bestRank" = "Beste Ranking";
+"analysis.worstRank" = "Slechtste Ranking";
+"analysis.quizHistory" = "Quiz Geschiedenis";
+"analysis.overview.description" = "Statistieken van alle voltooide quizzen";
+"analysis.teamLevel" = "Teamniveau";
+"analysis.maxScore" = "Maximale Score";
+"analysis.achievedScore" = "Behaalde Score";
+"analysis.totalLevel" = "Totaal Niveau";
+"analysis.quizListing" = "Quiz Lijst";
+"analysis.average" = "Gemiddelde";
+"analysis.noCompletedQuizzes" = "Geen voltooide quizzen";
+"analysis.noStatistics" = "Geen statistieken";
+"analysis.participation" = "Deelnames";
+"analysis.wins" = "Overwinningen";
+"analysis.winRate" = "Winstpercentage";
+"analysis.averageRank" = "Gem. Ranking";
+"analysis.averagePoints" = "Gem. Punten";
+"analysis.totalPoints" = "Totale Punten";
+"analysis.completedQuizzes" = "Voltooide Quizzen";
+"analysis.uniqueTeams" = "Unieke Teams";
+"analysis.averageTeamsPerQuiz" = "Gem. Teams per Quiz";
+
 // MARK: - Email
 "email.send" = "E-mail Verzenden";
 "email.send.all" = "E-mail naar Alle Teams";
@@ -407,3 +444,142 @@
 "email.template.scheduleChange.subject" = "Belangrijk: Quiz Schema Update";
 "email.template.scheduleChange.body" = "Hallo,\n\nWe moeten je informeren over een schema wijziging:\n\n🔄 Nieuwe datum: [NEW_DATE]\n🔄 Nieuwe tijd: [NEW_TIME]\n📍 Locatie: [VENUE] (ongewijzigd)\n\nOnze excuses voor het ongemak.\n\nBevestig of je nog steeds kunt komen.\n\nBedankt voor je begrip!";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "Quiz Annuleren";
+"execution.cancel.returnToPlanning" = "Terug naar Planning";
+"execution.cancel.message" = "Het quiz wordt gestopt en alle rondes worden gemarkeerd als onvolledig. Ingevoerde punten worden behouden.";
+"execution.liveQuiz" = "Live Quiz";
+"execution.enterScores" = "Punten Invoeren";
+"execution.noActiveQuizzes" = "Geen Actieve Quizzes";
+"execution.noActiveQuizzes.description" = "Start een quiz in de planningsfase";
+"execution.activeQuizzes.section" = "Actieve Quizzes (%d)";
+"execution.live" = "LIVE";
+"execution.round.current" = "Huidige Ronde";
+"execution.round.completed" = "Voltooide Ronde";
+"execution.rounds.edit" = "Rondes Bewerken";
+"execution.rounds.edit.help" = "Punten van reeds voltooide rondes bewerken";
+"execution.presentation.end" = "Presentatie Beëindigen";
+"execution.presentation.start" = "Presentatie";
+"execution.presentation.help" = "Presentatie Modus (⌘P)";
+"execution.cancel.help" = "Quiz annuleren en terugkeren naar planning";
+"execution.complete" = "Voltooien";
+"execution.complete.help" = "Quiz voltooien (⌘E)";
+"execution.progress" = "Voortgang";
+"execution.rounds.progress" = "%d/%d Rondes";
+"execution.round.previous" = "Vorige Ronde: %@";
+"execution.round.next" = "Volgende Ronde: %@";
+"execution.noRound.selected" = "Geen Ronde Geselecteerd";
+"execution.noRound.description" = "Selecteer een ronde om punten in te voeren.";
+"execution.noTeams" = "Geen Teams Beschikbaar";
+"execution.noTeams.description" = "Voeg teams toe om punten toe te wijzen";
+"execution.score.saved" = "Opgeslagen: %d";
+"execution.actions" = "Acties";
+"execution.reset" = "Resetten";
+"execution.saveAll" = "Alles Opslaan";
+"execution.round.completeAndContinue" = "Ronde Voltooien en Doorgaan";
+"execution.round.completeLast" = "Laatste Ronde Voltooien";
+"execution.leaderboard.live" = "Live Ranglijst";
+"execution.editRounds.title" = "Rondes Bewerken";
+"execution.editRounds.rounds" = "Rondes";
+"execution.editRounds.selectRound" = "Selecteer Ronde";
+"execution.editRounds.selectRound.description" = "Selecteer een ronde om punten te bewerken";
+"execution.editRounds.editScores" = "Punten Bewerken";
+"execution.editRounds.done" = "Klaar";
+"execution.editRounds.roundName.placeholder" = "Ronde Naam";
+"execution.editRounds.maxPoints.label" = "Max. Punten:";
+"execution.editRounds.maxPoints.perTeam" = "per Team";
+"execution.editRounds.maxPoints.display" = "Max. %d Punten per Team";
+"execution.editRounds.editSettings" = "Punten Bewerken";
+"execution.editRounds.editSettings.help" = "Maximum punten en ronde naam bewerken";
+"execution.editRounds.completed" = "Voltooid";
+"execution.editRounds.unsavedChanges" = "Je hebt niet-opgeslagen wijzigingen";
+"execution.editRounds.warning.maxPoints" = "Waarschuwing: Sommige teams hebben meer punten dan het nieuwe maximum";
+"execution.editRounds.warning.affectedTeams" = "Betrokken Teams: %@";
+"execution.editRounds.warning.limit" = "Deze worden automatisch beperkt tot %d punten.";
+"execution.editRounds.round.complete" = "Markeer Ronde als Voltooid";
+"execution.editRounds.round.reopen" = "Ronde Heropenen";
+
+// MARK: - About Sheet
+"about.title" = "Over";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "Versie %@ (%@)";
+"about.description" = "PubRanker is een uitgebreide quiz-beheer-app voor macOS. Plan quiz-evenementen, beheer teams, voer quizzen uit en analyseer resultaten - alles op één plek.";
+"about.features.title" = "Hoofdfuncties";
+"about.features.teamManagement" = "Teambeheer met globale teams";
+"about.features.planning" = "Quiz planning en voorbereiding";
+"about.features.liveScoring" = "Live score-invoer tijdens quiz";
+"about.features.analysis" = "Gedetailleerde analyse en statistieken";
+"about.features.email" = "E-mailsjablonen voor teams";
+"about.technical.title" = "Technische informatie";
+"about.technical.version" = "Versie";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "Platform";
+"about.technical.copyright" = "Copyright";
+"about.feedback.rate" = "Beoordelen & Feedback";
+"about.feedback.title" = "Beoordeling & Feedback";
+"about.feedback.message" = "Help ons PubRanker te verbeteren!";
+"about.feedback.rateAppStore" = "Beoordeel in App Store";
+"about.feedback.missingFeatures" = "Functies gemist?";
+"about.feedback.send" = "Stuur feedback";
+"about.feedback.email.message" = "Neem contact met ons op via:\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "Open e-mail";
+"about.feedback.email.copy" = "Kopieer e-mailadres";
+"about.feedback.email.copied" = "E-mailadres gekopieerd";
+"about.feedback.email.copied.message" = "Het e-mailadres is naar het klembord gekopieerd.";
+"about.appStore.review" = "App Store Review";
+"about.appStore.notAvailable" = "De app is nog niet beschikbaar in de App Store. Beoordeel de app wanneer deze is gepubliceerd.";
+
+"planning.emptyState.title" = "Klaar voor je eerste quiz?";
+"planning.emptyState.description" = "Plan en organiseer je pub quiz eenvoudig";
+"planning.emptyState.start" = "Begin met plannen";
+"quiz.edit.title" = "Quiz Bewerken";
+"quiz.details" = "Quiz Details";
+"quiz.name.placeholder" = "Naam invoeren";
+"quiz.venue.placeholder" = "Locatie invoeren";
+"quiz.dateTime" = "Datum & Tijd";
+"quiz.maxPoints" = "Max. Punten";
+"quiz.noAvailableTeams.description" = "Alle teams zijn al toegewezen aan andere quizzes";
+"common.add.count" = "Toevoegen (%d)";
+"team.edit.help" = "Team bewerken";
+"team.remove.help" = "Team uit quiz verwijderen";
+"team.remove.confirm" = "Team uit quiz verwijderen?";
+"team.remove.message" = "Wil je '%@' echt uit deze quiz verwijderen? Het team blijft in de globale teamlijst.";
+"common.contactPerson" = "Contactpersoon";
+"common.email" = "E-mail";
+"common.designSystem" = "Design Systeem";
+"team.selectFromExisting" = "Selecteren uit Bestaande (%d)";
+"score.enter.max" = "Punten Invoeren (max. %d per Team)";
+"score.nextRound" = "Doorgaan naar Volgende Ronde";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "Ronde Voltooien";
+"score.roundCompleted" = "Deze ronde is voltooid";
+"score.saved.title" = "Punten Opgeslagen! ✅";
+"score.saved.message" = "De punten voor %@ zijn succesvol opgeslagen.";
+"common.rounds.edit" = "Rondes Bewerken";
+"common.rounds.select" = "Ronde Selecteren";
+"common.rounds.select.description" = "Selecteer een ronde om de punten te bewerken";
+"common.scores.edit" = "Punten Bewerken";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "Meeste Overwinningen";
+"sort.mostParticipations" = "Meeste Deelnames";
+"sort.bestAverage" = "Beste Gem. Ranking";
+"sort.mostPoints" = "Meeste Punten";
+"sort.nameAZ" = "Naam (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "Quiz Analyse";
+"analysisTab.teamStatistics" = "Team Statistieken";
+"analysisTab.overallStatistics" = "Totaal Overzicht";
+
+// MARK: - Common Actions
+"common.edit" = "Bewerken";
+"common.remove" = "Verwijderen";
+"common.confirmed" = "Deelname bevestigd";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "Ronde Bewerken";
+"common.teamDetails" = "Team Details";
+"common.teamName" = "Teamnaam";
+"common.contactInfo" = "Contactinformatie";
+"common.editTeam" = "Team Bewerken";

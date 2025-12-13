@@ -20,51 +20,51 @@ struct LeaderboardView: View {
     var body: some View {
         Group {
             if quiz.safeTeams.isEmpty {
-                VStack(spacing: 24) {
+                VStack(spacing: AppSpacing.sectionSpacing) {
                     Image(systemName: "trophy.fill")
                         .font(.system(size: 60))
-                        .foregroundStyle(.yellow)
-                    
-                    VStack(spacing: 8) {
+                        .foregroundStyle(Color.appSecondary)
+
+                    VStack(spacing: AppSpacing.xxs) {
                         Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
-                            .font(.title2)
-                            .bold()
-                        
+                            .font(Font.system(size: 20, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color.appTextPrimary)
+
                         Text(NSLocalizedString("empty.noTeams.leaderboard", comment: "Add teams to see leaderboard"))
-                            .font(.body)
-                            .foregroundStyle(.secondary)
+                            .font(Font.system(size: 14, weight: .regular))
+                            .foregroundStyle(Color.appTextSecondary)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal)
+                            .padding(.horizontal, AppSpacing.screenPadding)
                     }
-                    
+
                     Text(NSLocalizedString("empty.noTeams.leaderboard.action", comment: "Switch to teams tab"))
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal)
+                        .font(Font.system(size: 13, weight: .regular))
+                        .foregroundStyle(Color.appTextSecondary)
+                        .padding(.horizontal, AppSpacing.screenPadding)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if quiz.safeRounds.isEmpty {
-                VStack(spacing: 24) {
+                VStack(spacing: AppSpacing.sectionSpacing) {
                     Image(systemName: "number.circle.fill")
                         .font(.system(size: 60))
-                        .foregroundStyle(.blue)
-                    
-                    VStack(spacing: 8) {
+                        .foregroundStyle(Color.appPrimary)
+
+                    VStack(spacing: AppSpacing.xxs) {
                         Text(NSLocalizedString("empty.noRounds", comment: "No rounds"))
-                            .font(.title2)
-                            .bold()
-                        
+                            .font(Font.system(size: 20, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color.appTextPrimary)
+
                         Text(NSLocalizedString("empty.noRounds.message", comment: "Create rounds for quiz"))
-                            .font(.body)
-                            .foregroundStyle(.secondary)
+                            .font(Font.system(size: 14, weight: .regular))
+                            .foregroundStyle(Color.appTextSecondary)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal)
+                            .padding(.horizontal, AppSpacing.screenPadding)
                     }
                     
                     Text(NSLocalizedString("empty.noRounds.leaderboard.action", comment: "Switch to rounds tab"))
                         .font(.callout)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .padding(.horizontal, AppSpacing.screenPadding)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
@@ -75,11 +75,12 @@ struct LeaderboardView: View {
                         let topRanks = rankedTeams.filter { $0.rank <= 3 }
                         if topRanks.count >= 3 {
                             PodiumView(rankedTeams: topRanks, quiz: quiz)
-                                .padding(.bottom, 20)
+                                .padding(.bottom, AppSpacing.md)
+                                .transition(.scale.combined(with: .opacity))
                         }
-                        
+
                         // All Teams List
-                        LazyVStack(spacing: 8) {
+                        LazyVStack(spacing: AppSpacing.xxs) {
                             ForEach(calculateRanks(), id: \.team.id) { item in
                                 LeaderboardRowView(
                                     team: item.team,
@@ -87,10 +88,12 @@ struct LeaderboardView: View {
                                     quiz: quiz,
                                     isTopThree: item.rank <= 3
                                 )
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
                             }
                         }
+                        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: calculateRanks().map { $0.rank })
                     }
-                    .padding(24)
+                    .padding(AppSpacing.sectionSpacing)
                 }
             }
         }
@@ -172,7 +175,7 @@ struct CompactRankRow: View {
     let quiz: Quiz
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
             HStack {
                 Text(rankEmoji)
                     .font(.title)
@@ -182,34 +185,30 @@ struct CompactRankRow: View {
                 if teams.count > 1 {
                     Text(NSLocalizedString("leaderboard.rank.tied", comment: "Tied rank"))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
                 Spacer()
             }
             
             // Teams
-            HStack(spacing: 8) {
+            HStack(spacing: AppSpacing.xxs) {
                 ForEach(teams, id: \.team.id) { item in
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(Color(hex: item.team.color) ?? .blue)
-                            .frame(width: 8, height: 8)
-                        Text(item.team.name)
-                            .font(.caption)
-                            .lineLimit(1)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(rankColor.opacity(0.15))
-                    .clipShape(Capsule())
+                    Text(item.team.name)
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextPrimary)
+                        .lineLimit(1)
+                        .padding(.horizontal, AppSpacing.xxs)
+                        .padding(.vertical, AppSpacing.xxxs)
+                        .background(rankColor.opacity(0.15))
+                        .clipShape(Capsule())
                 }
             }
         }
-        .padding(12)
+        .padding(AppSpacing.xs)
         .background(rankColor.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .strokeBorder(rankColor.opacity(0.3), lineWidth: 2)
         )
     }
@@ -225,10 +224,10 @@ struct CompactRankRow: View {
     
     private var rankColor: Color {
         switch rank {
-        case 1: return .yellow
-        case 2: return .gray
-        case 3: return Color(red: 0.8, green: 0.5, blue: 0.2)
-        default: return .blue
+        case 1: return Color.appSecondary
+        case 2: return Color.appTextSecondary
+        case 3: return Color.appPrimary
+        default: return Color.appPrimary
         }
     }
 }
@@ -248,20 +247,23 @@ struct PodiumPlace: View {
             Text("\(team.getTotalScore(for: quiz))")
                 .font(.system(size: isShared ? 22 : 28, weight: .bold))
                 .foregroundStyle(rankColor)
+                .monospacedDigit()
             
             Text(team.name)
                 .font(.caption)
                 .bold()
+                .foregroundStyle(Color.appTextPrimary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
             
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                 .fill(rankColor.opacity(0.2))
                 .frame(width: isShared ? 80 : 100, height: isShared ? height * 0.8 : height)
                 .overlay(
                     Text("\(rank).")
                         .font(.system(size: isShared ? 28 : 36, weight: .bold))
                         .foregroundStyle(rankColor)
+                        .monospacedDigit()
                 )
         }
     }
@@ -277,10 +279,10 @@ struct PodiumPlace: View {
     
     private var rankColor: Color {
         switch rank {
-        case 1: return .yellow
-        case 2: return .gray
-        case 3: return Color(red: 0.8, green: 0.5, blue: 0.2)
-        default: return .blue
+        case 1: return Color.appSecondary
+        case 2: return Color.appTextSecondary
+        case 3: return Color.appPrimary
+        default: return Color.appPrimary
         }
     }
 }
@@ -306,11 +308,11 @@ struct LeaderboardRowView: View {
                     Circle()
                         .fill(rankColor)
                         .frame(width: 60, height: 60)
-                        .shadow(color: rankColor.opacity(0.4), radius: 8)
+                        .shadow(radius: 4, y: 2)
                 } else {
                     Circle()
-                        .strokeBorder(Color.secondary.opacity(0.3), lineWidth: 2)
-                        .background(Circle().fill(Color(nsColor: .controlBackgroundColor)))
+                        .strokeBorder(Color.appTextTertiary.opacity(0.3), lineWidth: 2)
+                        .background(Circle().fill(Color.appBackgroundSecondary))
                         .frame(width: 50, height: 50)
                 }
                 
@@ -318,47 +320,49 @@ struct LeaderboardRowView: View {
                     if isSharedRank {
                         Text("=")
                             .font(.caption2)
-                            .foregroundStyle(isTopThree ? .white.opacity(0.7) : .secondary)
+                            .foregroundStyle(isTopThree ? .white.opacity(0.7) : Color.appTextSecondary)
                     }
                     Text("\(rank)")
                         .font(isTopThree ? .title : .title3)
                         .bold()
-                        .foregroundStyle(isTopThree ? .white : .primary)
+                        .foregroundStyle(isTopThree ? .white : Color.appTextPrimary)
                 }
             }
             .frame(width: 60)
             
             // Team Info
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    TeamIconView(team: team, size: 12)
-                    
-                    Text(team.name)
-                        .font(.title3)
-                        .bold()
-                }
+            VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                Text(team.name)
+                    .font(.title3)
+                    .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 
-                HStack(spacing: 8) {
+                HStack(spacing: AppSpacing.xxs) {
                     ForEach(team.roundScores.prefix(6), id: \.roundId) { score in
-                        VStack(spacing: 2) {
+                        VStack(spacing: AppSpacing.xxxs) {
                             Text("\(score.points)")
                                 .font(.caption)
                                 .bold()
-                                .foregroundStyle(.primary)
-                            Text("R\(quiz.sortedRounds.firstIndex(where: { $0.id == score.roundId }).map { $0 + 1 } ?? 0)")
+                                .foregroundStyle(Color.appTextPrimary)
+                                .monospacedDigit()
+                                .contentTransition(.numericText())
+                            Text(L10n.CommonUI.roundNumber(quiz.sortedRounds.firstIndex(where: { $0.id == score.roundId }).map { $0 + 1 } ?? 0))
                                 .font(.system(size: 9))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
                         }
                         .frame(width: 32)
-                        .padding(.vertical, 4)
-                        .background(Color.secondary.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .padding(.vertical, AppSpacing.xxxs)
+                        .background(Color.appTextTertiary.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.xs))
+                        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: score.points)
                     }
                     
                     if team.roundScores.count > 6 {
                         Text("+\(team.roundScores.count - 6)")
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
                     }
                 }
             }
@@ -366,28 +370,26 @@ struct LeaderboardRowView: View {
             Spacer()
             
             // Total Score
-            VStack(alignment: .trailing, spacing: 4) {
+            VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
                 Text("\(team.getTotalScore(for: quiz))")
-                    .font(.system(size: 42, weight: .bold))
-                    .foregroundStyle(isTopThree ? rankColor : .primary)
+                    .font(Font.system(size: 48, weight: .bold, design: .rounded))
+                    .foregroundStyle(isTopThree ? rankColor : Color.appTextPrimary)
                     .monospacedDigit()
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.6, dampingFraction: 0.7), value: team.getTotalScore(for: quiz))
 
                 Text(NSLocalizedString("common.points", comment: "Points"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(Font.system(size: 11, weight: .regular))
+                    .foregroundStyle(Color.appTextSecondary)
                     .textCase(.uppercase)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 16)
-        .background {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(isTopThree ? rankColor.opacity(0.1) : Color(nsColor: .controlBackgroundColor))
-                .shadow(color: isTopThree ? rankColor.opacity(0.2) : .black.opacity(0.05), radius: isTopThree ? 8 : 3, y: 2)
-        }
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.vertical, AppSpacing.sm)
+        .appCard(style: isTopThree ? .elevated : .default, cornerRadius: AppCornerRadius.lg)
         .overlay {
             if isTopThree {
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
                     .strokeBorder(rankColor.opacity(0.3), lineWidth: 2)
             }
         }
@@ -395,10 +397,10 @@ struct LeaderboardRowView: View {
     
     private var rankColor: Color {
         switch rank {
-        case 1: return .yellow
-        case 2: return .gray
-        case 3: return Color(red: 0.8, green: 0.5, blue: 0.2)
-        default: return .blue
+        case 1: return Color.appSecondary
+        case 2: return Color.appTextSecondary
+        case 3: return Color.appPrimary
+        default: return Color.appPrimary
         }
     }
 }
@@ -438,15 +440,15 @@ struct TeamScoreDetailsView: View {
             Divider()
             
             HStack {
-                Text("Gesamtpunktzahl")
+                Text(L10n.CommonUI.totalScore)
                     .font(.headline)
                 
                 Spacer()
                 
-                Text("\(team.getTotalScore(for: quiz))")
+                    Text("\(team.getTotalScore(for: quiz))")
                     .font(.title)
                     .bold()
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(Color.appTextPrimary)
             }
         }
         .padding()

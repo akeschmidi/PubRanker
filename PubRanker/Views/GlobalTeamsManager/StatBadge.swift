@@ -14,31 +14,31 @@ struct StatBadge: View {
     let color: Color
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: AppSpacing.xs) {
             Image(systemName: icon)
                 .foregroundStyle(color)
                 .font(.title3)
                 .frame(width: 24)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(value)
                     .font(.title3)
                     .bold()
                     .monospacedDigit()
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(color)
                 Text(label)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
+        .padding(.horizontal, AppSpacing.xs)
+        .padding(.vertical, AppSpacing.xs)
         .background(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                 .fill(color.opacity(0.1))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                         .stroke(color.opacity(0.2), lineWidth: 1)
                 }
         )

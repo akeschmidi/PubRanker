@@ -11,13 +11,13 @@ struct EmptyStateView: View {
     let onCreateTeam: () -> Void
     
     var body: some View {
-        VStack(spacing: 32) {
-            VStack(spacing: 20) {
+        VStack(spacing: AppSpacing.sectionSpacing) {
+            VStack(spacing: AppSpacing.md) {
                 ZStack {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [.blue.opacity(0.1), .cyan.opacity(0.05)],
+                                colors: [Color.appPrimary.opacity(0.1), Color.appPrimaryLight.opacity(0.05)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -28,21 +28,22 @@ struct EmptyStateView: View {
                         .font(.system(size: 50))
                         .foregroundStyle(
                             LinearGradient(
-                                colors: [.blue, .cyan],
+                                colors: [Color.appPrimary, Color.appPrimaryLight],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                 }
 
-                VStack(spacing: 12) {
+                VStack(spacing: AppSpacing.xs) {
                     Text("Keine Teams vorhanden")
                         .font(.title2)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
 
                     Text("Erstellen Sie Ihr erstes Team, um es später einfach zu Quizzes hinzuzufügen")
                         .font(.body)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 450)
                 }
@@ -54,8 +55,7 @@ struct EmptyStateView: View {
                 Label("Erstes Team erstellen", systemImage: "plus.circle.fill")
                     .font(.body)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .primaryGradientButton(size: .large)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

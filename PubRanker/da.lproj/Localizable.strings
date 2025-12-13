@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "Rangliste";
 "analysis.overview" = "Oversigt";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "Ingen quizzer tilgængelige";
+"analysis.noQuizzes.description" = "Start eller afslut en quiz for at se den her";
+"analysis.activeQuizzes.section" = "Aktive Quizzer (%d)";
+"analysis.completedQuizzes.section" = "Afsluttede Quizzer (%d)";
+"analysis.points" = "Point";
+"analysis.statistics" = "Statistik";
+"analysis.maxPoints" = "Maks: %d";
+"analysis.allQuizzes" = "Oversigt over alle quizzer";
+"analysis.sorting" = "Sortering:";
+"analysis.noTeamStats.description" = "Afslut quizzer for at se holdstatistik";
+"analysis.teams.section" = "Hold (%d)";
+"analysis.coreStats" = "Kernestatistik";
+"analysis.performance" = "Præstationsoversigt";
+"analysis.podiumRate" = "Podiumrate";
+"analysis.bestRank" = "Bedste Placering";
+"analysis.worstRank" = "Værste Placering";
+"analysis.quizHistory" = "Quiz-Historik";
+"analysis.overview.description" = "Statistik for alle afsluttede quizzer";
+"analysis.teamLevel" = "Holdniveau";
+"analysis.maxScore" = "Maksimal Score";
+"analysis.achievedScore" = "Opnået Score";
+"analysis.totalLevel" = "Samlet Niveau";
+"analysis.quizListing" = "Quiz-Liste";
+"analysis.average" = "Gennemsnit";
+"analysis.noCompletedQuizzes" = "Ingen afsluttede quizzer";
+"analysis.noStatistics" = "Ingen statistik";
+"analysis.participation" = "Deltagelser";
+"analysis.wins" = "Sejre";
+"analysis.winRate" = "Sejrsrate";
+"analysis.averageRank" = "Gns. Placering";
+"analysis.averagePoints" = "Gns. Point";
+"analysis.totalPoints" = "Samlet Point";
+"analysis.completedQuizzes" = "Afsluttede Quizzer";
+"analysis.uniqueTeams" = "Unikke Hold";
+"analysis.averageTeamsPerQuiz" = "Gns. Hold pr. Quiz";
+
 // MARK: - Email
 "email.send" = "Send e-mail";
 "email.send.all" = "E-mail til alle hold";
@@ -407,3 +444,140 @@
 "email.template.scheduleChange.subject" = "Vigtigt: Quiz Tidsplan Opdatering";
 "email.template.scheduleChange.body" = "Hej,\n\nVi skal informere jer om en tidsplanændring:\n\n🔄 Ny dato: [NEW_DATE]\n🔄 Ny tid: [NEW_TIME]\n📍 Sted: [VENUE] (uændret)\n\nVi undskylder for ulejligheden.\n\nBekræft venligst om I stadig kan deltage.\n\nTak for jeres forståelse!";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "Annuller Quiz";
+"execution.cancel.returnToPlanning" = "Tilbage til Planlægning";
+"execution.cancel.message" = "Quizzen stopper, og alle runder markeres som ufuldstændige. Indtastede point bevares.";
+"execution.liveQuiz" = "Live Quiz";
+"execution.enterScores" = "Indtast Point";
+"execution.noActiveQuizzes" = "Ingen Aktive Quizzer";
+"execution.noActiveQuizzes.description" = "Start en quiz i planlægningsfasen";
+"execution.activeQuizzes.section" = "Aktive Quizzer (%d)";
+"execution.round.current" = "Nuværende Runde";
+"execution.round.completed" = "Afsluttet Runde";
+"execution.rounds.edit" = "Rediger Runder";
+"execution.rounds.edit.help" = "Rediger point for allerede afsluttede runder";
+"execution.presentation.end" = "Afslut Præsentation";
+"execution.presentation.start" = "Præsentation";
+"execution.presentation.help" = "Præsentationstilstand (⌘P)";
+"execution.cancel.help" = "Annuller quiz og vend tilbage til planlægning";
+"execution.complete" = "Afslut";
+"execution.complete.help" = "Afslut quiz (⌘E)";
+"execution.progress" = "Fremskridt";
+"execution.rounds.progress" = "%d/%d Runder";
+"execution.round.previous" = "Forrige Runde: %@";
+"execution.round.next" = "Næste Runde: %@";
+"execution.noRound.selected" = "Ingen Runde Valgt";
+"execution.noTeams" = "Ingen Hold Tilgængelige";
+"execution.noTeams.description" = "Tilføj hold for at tildele point";
+"execution.score.saved" = "Gemt: %d";
+"execution.actions" = "Handlinger";
+"execution.reset" = "Nulstil";
+"execution.saveAll" = "Gem Alle";
+"execution.round.completeAndContinue" = "Afslut Runde og Fortsæt";
+"execution.round.completeLast" = "Afslut Sidste Runde";
+"execution.leaderboard.live" = "Live Rangliste";
+"execution.editRounds.title" = "Rediger Runder";
+"execution.editRounds.rounds" = "Runder";
+"execution.editRounds.selectRound" = "Vælg Runde";
+"execution.editRounds.selectRound.description" = "Vælg en runde for at redigere point";
+"execution.editRounds.editScores" = "Rediger Point";
+"execution.editRounds.done" = "Færdig";
+"execution.editRounds.roundName.placeholder" = "Rundenavn";
+"execution.editRounds.maxPoints.label" = "Maks. Point:";
+"execution.editRounds.maxPoints.perTeam" = "per Hold";
+"execution.editRounds.maxPoints.display" = "Maks. %d Point per Hold";
+"execution.editRounds.editSettings" = "Rediger Point";
+"execution.editRounds.editSettings.help" = "Rediger maksimale point og rundenavn";
+"execution.editRounds.completed" = "Afsluttet";
+"execution.editRounds.unsavedChanges" = "Du har ændringer, der ikke er gemt";
+"execution.editRounds.warning.maxPoints" = "Advarsel: Nogle hold har flere point end det nye maksimum";
+"execution.editRounds.warning.affectedTeams" = "Berørte Hold: %@";
+"execution.editRounds.warning.limit" = "Disse begrænses automatisk til %d point.";
+"execution.editRounds.round.complete" = "Markér Runde som Afsluttet";
+"execution.editRounds.round.reopen" = "Genåbn Runde";
+
+// MARK: - About Sheet
+"about.title" = "Om";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "Version %@ (%@)";
+"about.description" = "PubRanker er en omfattende quiz-styringsapp til macOS. Planlæg quiz-begivenheder, administrer hold, afhold quizzer og analyser resultater - alt på ét sted.";
+"about.features.title" = "Hovedfunktioner";
+"about.features.teamManagement" = "Holdstyring med globale hold";
+"about.features.planning" = "Quiz-planlægning og forberedelse";
+"about.features.liveScoring" = "Live pointindtastning";
+"about.features.analysis" = "Detaljeret analyse og statistik";
+"about.features.email" = "E-mailskabeloner til hold";
+"about.technical.title" = "Teknisk information";
+"about.technical.version" = "Version";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "Platform";
+"about.technical.copyright" = "Ophavsret";
+"about.feedback.rate" = "Bedøm & Feedback";
+"about.feedback.title" = "Bedømmelse & Feedback";
+"about.feedback.message" = "Hjælp os med at forbedre PubRanker!";
+"about.feedback.rateAppStore" = "Bedøm i App Store";
+"about.feedback.missingFeatures" = "Mangler funktioner?";
+"about.feedback.send" = "Send feedback";
+"about.feedback.email.message" = "Kontakt os på:\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "Åbn e-mail";
+"about.feedback.email.copy" = "Kopiér e-mailadresse";
+"about.feedback.email.copied" = "E-mailadresse kopieret";
+"about.feedback.email.copied.message" = "E-mailadressen er blevet kopieret til udklipsholderen.";
+"about.appStore.review" = "App Store Anmeldelse";
+"about.appStore.notAvailable" = "Appen er endnu ikke tilgængelig i App Store. Bedøm venligst appen, når den er udgivet.";
+
+"planning.emptyState.title" = "Klar til dit første quiz?";
+"planning.emptyState.description" = "Planlæg og organiser dit pub quiz nemt";
+"planning.emptyState.start" = "Begynd at planlægge";
+"quiz.edit.title" = "Rediger Quiz";
+"quiz.details" = "Quiz Detaljer";
+"quiz.name.placeholder" = "Indtast navn";
+"quiz.venue.placeholder" = "Indtast sted";
+"quiz.dateTime" = "Dato & Tid";
+"quiz.maxPoints" = "Maks. Point";
+"quiz.noAvailableTeams.description" = "Alle hold er allerede tildelt til andre quizzes";
+"common.add.count" = "Tilføj (%d)";
+"team.edit.help" = "Rediger hold";
+"team.remove.help" = "Fjern hold fra quiz";
+"team.remove.confirm" = "Fjern hold fra quiz?";
+"team.remove.message" = "Vil du virkelig fjerne '%@' fra dette quiz? Holdet forbliver på den globale holdliste.";
+"common.contactPerson" = "Kontaktperson";
+"common.email" = "E-mail";
+"common.designSystem" = "Design System";
+"team.selectFromExisting" = "Vælg fra Eksisterende (%d)";
+"score.enter.max" = "Indtast Point (maks. %d per Hold)";
+"score.nextRound" = "Fortsæt til Næste Runde";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "Afslut Runde";
+"score.roundCompleted" = "Denne runde er afsluttet";
+"score.saved.title" = "Point Gemt! ✅";
+"score.saved.message" = "Pointene for %@ er blevet gemt med succes.";
+"common.rounds.edit" = "Rediger Runder";
+"common.rounds.select" = "Vælg Runde";
+"common.rounds.select.description" = "Vælg en runde for at redigere pointene";
+"common.scores.edit" = "Rediger Point";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "Flest Sejre";
+"sort.mostParticipations" = "Flest Deltagelser";
+"sort.bestAverage" = "Bedste Gns. Placering";
+"sort.mostPoints" = "Flest Point";
+"sort.nameAZ" = "Navn (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "Quiz-Analyse";
+"analysisTab.teamStatistics" = "Hold-Statistik";
+"analysisTab.overallStatistics" = "Samlet Oversigt";
+
+// MARK: - Common Actions
+"common.edit" = "Rediger";
+"common.remove" = "Fjern";
+"common.confirmed" = "Deltagelse bekræftet";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "Rediger Runde";
+"common.teamDetails" = "Team Detaljer";
+"common.teamName" = "Teamnavn";
+"common.contactInfo" = "Kontaktinformation";
+"common.editTeam" = "Rediger Team";

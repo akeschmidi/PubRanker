@@ -128,55 +128,57 @@ struct QuizHeaderView: View {
     @State private var exportedFileURL: URL?
     
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(alignment: .top, spacing: 20) {
+        VStack(spacing: AppSpacing.xs) {
+            HStack(alignment: .top, spacing: AppSpacing.md) {
                 // Quiz Info
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     HStack {
                         Text(quiz.name)
                             .font(.title2)
                             .bold()
+                            .foregroundStyle(Color.appTextPrimary)
                         
                         if quiz.isActive {
                             Label(NSLocalizedString("status.live", comment: "Live status"), systemImage: "circle.fill")
                                 .font(.caption)
                                 .foregroundStyle(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.green)
+                                .padding(.horizontal, AppSpacing.xxs)
+                                .padding(.vertical, AppSpacing.xxxs)
+                                .background(Color.appSuccess)
                                 .clipShape(Capsule())
                         } else if quiz.isCompleted {
                             Label(NSLocalizedString("status.completed", comment: "Completed status"), systemImage: "checkmark.circle.fill")
                                 .font(.caption)
                                 .foregroundStyle(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.blue)
+                                .padding(.horizontal, AppSpacing.xxs)
+                                .padding(.vertical, AppSpacing.xxxs)
+                                .background(Color.appPrimary)
                                 .clipShape(Capsule())
                         }
                     }
                     
-                    HStack(spacing: 16) {
+                    HStack(spacing: AppSpacing.sm) {
                         if !quiz.venue.isEmpty {
                             Label(quiz.venue, systemImage: "mappin.circle")
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
                         }
                         
                         Label(quiz.date.formatted(date: .abbreviated, time: .shortened), systemImage: "calendar")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                         
                         Label(String(format: NSLocalizedString("quiz.teams.count", comment: "Teams count"), quiz.safeTeams.count), systemImage: "person.3")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
                     }
                 }
                 
                 Spacer()
                 
                 // Action Buttons
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     // E-Mail Button
                     if !quiz.safeTeams.isEmpty {
                         Button {
@@ -184,6 +186,7 @@ struct QuizHeaderView: View {
                         } label: {
                             Label(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"), systemImage: "envelope.fill")
                         }
+                        .accentGradientButton()
                         .help(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"))
                     }
                     
@@ -207,6 +210,7 @@ struct QuizHeaderView: View {
                             Image(systemName: "square.and.arrow.up")
                         }
                     }
+                    .secondaryGradientButton()
                     .help(NSLocalizedString("export.title", comment: "Export quiz"))
                     
                     if quiz.isActive {
@@ -215,8 +219,7 @@ struct QuizHeaderView: View {
                         } label: {
                             Label(NSLocalizedString("status.complete", comment: "Complete quiz"), systemImage: "flag.checkered")
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.red)
+                        .accentGradientButton()
                         .keyboardShortcut("e", modifiers: .command)
                         .help(NSLocalizedString("status.complete", comment: "Complete quiz") + " (⌘E)")
                     } else if !quiz.isCompleted {
@@ -225,8 +228,7 @@ struct QuizHeaderView: View {
                         } label: {
                             Label(NSLocalizedString("status.start", comment: "Start quiz"), systemImage: "play.fill")
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.green)
+                        .primaryGradientButton()
                         .keyboardShortcut("s", modifiers: .command)
                         .help(NSLocalizedString("status.start", comment: "Start quiz") + " (⌘S)")
                     }
@@ -235,26 +237,27 @@ struct QuizHeaderView: View {
             
             // Progress Bar
             if quiz.safeRounds.count > 0 {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     HStack {
                         Text(NSLocalizedString("status.progress", comment: "Progress"))
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                         Spacer()
                         Text(String(format: NSLocalizedString("status.roundsCompleted", comment: "Rounds completed"), quiz.completedRoundsCount, quiz.safeRounds.count))
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
                     }
                     
                     ProgressView(value: quiz.progress)
-                        .tint(.blue)
+                        .tint(Color.appPrimary)
                 }
             }
         }
-        .padding(20)
+        .padding(AppSpacing.md)
         .background(
             LinearGradient(
-                colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
+                colors: [Color.appBackgroundSecondary, Color.appBackground],
                 startPoint: .top,
                 endPoint: .bottom
             )

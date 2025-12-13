@@ -35,12 +35,12 @@ struct GlobalAddTeamSheet: View {
                     TextField("Team-Name", text: $teamName)
                         .textFieldStyle(.roundedBorder)
 
-                    VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
                         Text("Team-Icon")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                         
-                        HStack(spacing: 16) {
+                        HStack(spacing: AppSpacing.sm) {
                             // Vorschau
                             Group {
                                 if let imageData = imageData, let nsImage = NSImage(data: imageData) {
@@ -53,26 +53,26 @@ struct GlobalAddTeamSheet: View {
                                             Circle()
                                                 .stroke(Color.white.opacity(0.6), lineWidth: 2)
                                         }
-                                        .shadow(color: Color.black.opacity(0.2), radius: 4)
+                                        .shadow(AppShadow.sm)
                                 } else {
                                     Circle()
-                                        .fill(Color(hex: selectedColor) ?? .blue)
+                                        .fill(Color(hex: selectedColor) ?? Color.appPrimary)
                                         .frame(width: 60, height: 60)
                                         .overlay {
                                             Circle()
                                                 .stroke(Color.white.opacity(0.6), lineWidth: 2)
                                         }
-                                        .shadow(color: Color(hex: selectedColor)?.opacity(0.4) ?? .clear, radius: 4)
+                                        .shadow(AppShadow.sm)
                                 }
                             }
                             
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                                 Button {
                                     showingImagePicker = true
                                 } label: {
                                     Label("Bild auswählen", systemImage: "photo")
                                 }
-                                .buttonStyle(.bordered)
+                                .primaryGradientButton()
                                 
                                 if imageData != nil {
                                     Button {
@@ -80,7 +80,7 @@ struct GlobalAddTeamSheet: View {
                                     } label: {
                                         Label("Bild entfernen", systemImage: "trash")
                                     }
-                                    .buttonStyle(.bordered)
+                                    .accentGradientButton()
                                 }
                             }
                         }
@@ -90,19 +90,20 @@ struct GlobalAddTeamSheet: View {
                         // Farbauswahl
                         Text("Farbe")
                             .font(.body)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
 
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 12) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: AppSpacing.xs) {
                             ForEach(availableColors, id: \.self) { colorHex in
                                 Circle()
-                                    .fill(Color(hex: colorHex) ?? .blue)
+                                    .fill(Color(hex: colorHex) ?? Color.appPrimary)
                                     .frame(width: 40, height: 40)
                                     .overlay {
                                         if selectedColor == colorHex {
                                             Circle()
-                                                .stroke(Color.primary, lineWidth: 3)
+                                                .stroke(Color.appTextPrimary, lineWidth: 3)
                                         }
                                     }
+                                    .shadow(AppShadow.sm)
                                     .onTapGesture {
                                         selectedColor = colorHex
                                         imageData = nil // Bild entfernen wenn Farbe gewählt wird

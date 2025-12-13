@@ -11,41 +11,37 @@ struct PlanningEmptyStateView: View {
     let onCreateQuiz: () -> Void
     
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: AppSpacing.xl) {
             Spacer()
             
-            VStack(spacing: 24) {
+            VStack(spacing: AppSpacing.sectionSpacing) {
                 // Icon
                 ZStack {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [.blue.opacity(0.3), .cyan.opacity(0.2)],
+                                colors: [Color.appPrimary.opacity(0.3), Color.appSecondary.opacity(0.2)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                         .frame(width: 120, height: 120)
-                    
+                        .shadow(AppShadow.lg)
+
                     Image(systemName: "calendar.badge.plus")
                         .font(.system(size: 50))
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [.blue, .cyan],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .foregroundStyle(Color.gradientPubTheme)
                 }
                 
-                VStack(spacing: 8) {
-                    Text("Bereit für dein erstes Quiz?")
+                VStack(spacing: AppSpacing.xxs) {
+                    Text("Noch keine Quizzes geplant")
                         .font(.title2)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
                     
-                    Text("Plane und organisiere dein Pub Quiz ganz einfach")
+                    Text("Erstelle dein erstes Quiz und füge Teams sowie Runden hinzu")
                         .font(.body)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                         .multilineTextAlignment(.center)
                 }
                 
@@ -53,34 +49,23 @@ struct PlanningEmptyStateView: View {
                 Button {
                     onCreateQuiz()
                 } label: {
-                    HStack(spacing: 12) {
+                    HStack(spacing: AppSpacing.xs) {
                         Image(systemName: "plus.circle.fill")
                             .font(.title3)
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Neues Quiz erstellen")
+
+                        VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                            Text("Neues Quiz")
                                 .font(.body)
                                 .bold()
-                            Text("Starte mit der Planung")
+                            Text("Hier starten")
                                 .font(.subheadline)
                         }
                     }
                     .frame(maxWidth: 300)
-                    .padding(.vertical, 20)
-                    .padding(.horizontal, 32)
-                    .background(
-                        LinearGradient(
-                            colors: [.blue, .cyan],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(color: .blue.opacity(0.3), radius: 12, y: 6)
                 }
-                .buttonStyle(.plain)
+                .primaryGradientButton(size: .large)
                 .keyboardShortcut("n", modifiers: .command)
+                .shadow(AppShadow.lg)
             }
             
             Spacer()

@@ -13,11 +13,12 @@ struct QuizChartsView: View {
     let quiz: Quiz
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: AppSpacing.sectionSpacing) {
             Text("Visualisierungen")
                 .font(.title2)
                 .bold()
-                .padding(.horizontal)
+                .foregroundStyle(Color.appTextPrimary)
+                .padding(.horizontal, AppSpacing.screenPadding)
 
             // Team Points Bar Chart
             TeamPointsChart(quiz: quiz)
@@ -38,14 +39,15 @@ struct TeamPointsChart: View {
     let quiz: Quiz
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
             HStack {
                 Image(systemName: "chart.bar.fill")
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(Color.appPrimary)
                 Text("Punkteverteilung")
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
 
             if quiz.safeTeams.isEmpty {
                 ChartEmptyStateView(
@@ -60,28 +62,37 @@ struct TeamPointsChart: View {
                             x: .value("Punkte", team.totalScore),
                             y: .value("Team", team.name)
                         )
-                        .foregroundStyle(Color(hex: team.color) ?? .blue)
+                        .foregroundStyle(Color.appPrimary)
+                        .cornerRadius(AppCornerRadius.xs)
                         .annotation(position: .trailing, alignment: .leading) {
                             Text("\(team.totalScore)")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .padding(.leading, 4)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
+                                .padding(.leading, AppSpacing.xxxs)
                         }
                     }
                 }
                 .frame(height: CGFloat(max(300, quiz.safeTeams.count * 40)))
                 .chartXAxis {
-                    AxisMarks(position: .bottom)
+                    AxisMarks(position: .bottom) { value in
+                        AxisValueLabel()
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
                 }
                 .chartYAxis {
                     AxisMarks(position: .leading) { value in
                         AxisValueLabel()
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                        AxisGridLine()
+                            .foregroundStyle(Color.appTextTertiary.opacity(0.3))
                     }
                 }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .padding(.horizontal)
+                .padding(AppSpacing.md)
+                .appCard(style: .glassmorphism)
+                .padding(.horizontal, AppSpacing.screenPadding)
             }
         }
     }
@@ -93,11 +104,11 @@ struct RoundPerformanceChart: View {
 
     // Vordefinierte, gut unterscheidbare Farben
     private let chartColors: [Color] = [
-        .blue,
-        .orange,
-        .green,
-        .red,
-        .purple
+        Color.appPrimary,
+        Color.appAccent,
+        Color.appSuccess,
+        Color.appSecondary,
+        Color.appPrimaryDark
     ]
 
     private func getChartColor(for index: Int) -> Color {
@@ -105,14 +116,15 @@ struct RoundPerformanceChart: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
             HStack {
                 Image(systemName: "chart.line.uptrend.xyaxis")
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(Color.appSecondary)
                 Text("Performance über Runden")
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
 
             if quiz.safeTeams.isEmpty || quiz.safeRounds.isEmpty {
                 ChartEmptyStateView(
@@ -121,7 +133,7 @@ struct RoundPerformanceChart: View {
                     description: quiz.safeTeams.isEmpty ? "Füge Teams zum Quiz hinzu" : "Füge Runden zum Quiz hinzu"
                 )
             } else {
-                VStack(spacing: 16) {
+                VStack(spacing: AppSpacing.sm) {
                     Chart {
                         ForEach(Array(quiz.sortedTeamsByScore.prefix(5).enumerated()), id: \.element.id) { index, team in
                             ForEach(quiz.sortedRounds) { round in
@@ -139,7 +151,7 @@ struct RoundPerformanceChart: View {
                                             .frame(width: 10, height: 10)
                                             .overlay {
                                                 Circle()
-                                                    .stroke(.white, lineWidth: 2)
+                                                    .stroke(Color.appBackground, lineWidth: 2)
                                             }
                                     }
                                     .interpolationMethod(.catmullRom)
@@ -151,49 +163,55 @@ struct RoundPerformanceChart: View {
                     .chartYAxis {
                         AxisMarks(position: .leading) { value in
                             AxisGridLine()
+                                .foregroundStyle(Color.appTextTertiary.opacity(0.3))
                             AxisValueLabel()
+                                .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
                         }
                     }
                     .chartXAxis {
                         AxisMarks { value in
                             AxisGridLine()
+                                .foregroundStyle(Color.appTextTertiary.opacity(0.3))
                             AxisValueLabel()
                                 .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
                         }
                     }
-                    .padding()
-                    .background(Color(nsColor: .controlBackgroundColor))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(AppSpacing.md)
+                    .appCard(style: .glassmorphism)
 
                     // Custom Legend
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                         Text("Legende")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
 
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .leading, spacing: 8) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .leading, spacing: AppSpacing.xxs) {
                             ForEach(Array(quiz.sortedTeamsByScore.prefix(5).enumerated()), id: \.element.id) { index, team in
-                                HStack(spacing: 8) {
+                                HStack(spacing: AppSpacing.xxs) {
                                     Circle()
                                         .fill(getChartColor(for: index))
                                         .frame(width: 12, height: 12)
                                     Text(team.name)
                                         .font(.caption)
+                                        .foregroundStyle(Color.appTextPrimary)
                                         .lineLimit(1)
                                     Spacer(minLength: 0)
                                 }
                             }
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppSpacing.screenPadding)
 
                     if quiz.safeTeams.count > 5 {
                         Text("Zeigt die Top 5 Teams")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .padding(.horizontal, AppSpacing.screenPadding)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, AppSpacing.screenPadding)
             }
         }
     }
@@ -204,14 +222,15 @@ struct RoundDistributionChart: View {
     let quiz: Quiz
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
             HStack {
                 Image(systemName: "chart.bar.xaxis")
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.appAccent)
                 Text("Punkteverteilung pro Runde")
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
 
             if quiz.safeRounds.isEmpty {
                 ChartEmptyStateView(
@@ -237,22 +256,26 @@ struct RoundDistributionChart: View {
                             x: .value("Runde", round.name),
                             y: .value("Durchschnitt", avgScore)
                         )
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.appAccent)
+                        .cornerRadius(AppCornerRadius.xs)
                         .annotation(position: .top, alignment: .center) {
                             Text("Ø \(String(format: "%.1f", avgScore))")
                                 .font(.caption2)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
                         }
 
                         BarMark(
                             x: .value("Runde", round.name),
                             y: .value("Maximum", maxScore)
                         )
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.appSuccess)
+                        .cornerRadius(AppCornerRadius.xs)
                         .annotation(position: .top, alignment: .center) {
                             Text("Max \(maxScore)")
                                 .font(.caption2)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
                         }
                     }
                 }
@@ -261,37 +284,47 @@ struct RoundDistributionChart: View {
                     AxisMarks { value in
                         AxisValueLabel()
                             .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                        AxisGridLine()
+                            .foregroundStyle(Color.appTextTertiary.opacity(0.3))
                     }
                 }
                 .chartYAxis {
-                    AxisMarks(position: .leading)
+                    AxisMarks(position: .leading) { value in
+                        AxisValueLabel()
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                        AxisGridLine()
+                            .foregroundStyle(Color.appTextTertiary.opacity(0.3))
+                    }
                 }
                 .chartForegroundStyleScale([
-                    "Durchschnitt": .orange,
-                    "Maximum": .green
+                    "Durchschnitt": Color.appAccent,
+                    "Maximum": Color.appSuccess
                 ])
-                .chartLegend(position: .bottom, spacing: 8) {
-                    HStack(spacing: 20) {
-                        HStack(spacing: 6) {
+                .chartLegend(position: .bottom, spacing: AppSpacing.xxs) {
+                    HStack(spacing: AppSpacing.md) {
+                        HStack(spacing: AppSpacing.xxxs) {
                             Circle()
-                                .fill(.orange)
+                                .fill(Color.appAccent)
                                 .frame(width: 12, height: 12)
                             Text("Durchschnitt")
                                 .font(.caption)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
-                        HStack(spacing: 6) {
+                        HStack(spacing: AppSpacing.xxxs) {
                             Circle()
-                                .fill(.green)
+                                .fill(Color.appSuccess)
                                 .frame(width: 12, height: 12)
                             Text("Maximum")
                                 .font(.caption)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                     }
                 }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .padding(.horizontal)
+                .padding(AppSpacing.md)
+                .appCard(style: .glassmorphism)
+                .padding(.horizontal, AppSpacing.screenPadding)
             }
         }
     }

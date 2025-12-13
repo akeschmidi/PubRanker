@@ -17,33 +17,33 @@ struct QuizCheckboxRow: View {
         Button {
             onToggle()
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.xs) {
                 // Checkbox
                 ZStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(isSelected ? Color.blue : Color.secondary.opacity(0.3), lineWidth: 2)
+                    RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                        .stroke(isSelected ? Color.appPrimary : Color.appTextTertiary.opacity(0.3), lineWidth: 2)
                         .frame(width: 24, height: 24)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(isSelected ? Color.blue.opacity(0.1) : Color.clear)
+                            RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                .fill(isSelected ? Color.appPrimary.opacity(0.1) : Color.clear)
                         )
 
                     if isSelected {
                         Image(systemName: "checkmark")
                             .font(.body)
                             .bold()
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(Color.appPrimary)
                     }
                 }
 
                 // Quiz Info
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     Text(quiz.name)
                         .font(.body)
                         .bold()
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(Color.appTextPrimary)
 
-                    HStack(spacing: 12) {
+                    HStack(spacing: AppSpacing.xs) {
                         if !quiz.venue.isEmpty {
                             Label(quiz.venue, systemImage: "mappin.circle")
                                 .font(.subheadline)
@@ -51,32 +51,35 @@ struct QuizCheckboxRow: View {
                         Label(quiz.date.formatted(date: .abbreviated, time: .shortened), systemImage: "clock")
                             .font(.subheadline)
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
 
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Label("\(quiz.safeTeams.count)", systemImage: "person.3")
                             .font(.subheadline)
                         Label("\(quiz.safeRounds.count)", systemImage: "list.number")
                             .font(.subheadline)
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                 }
 
                 Spacer()
             }
-            .padding(12)
+            .padding(AppSpacing.xs)
             .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Color.blue.opacity(0.05) : Color(nsColor: .controlBackgroundColor))
+                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                    .fill(isSelected ? Color.appPrimary.opacity(0.05) : Color.appBackgroundSecondary)
             )
             .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Color.blue.opacity(0.3) : Color.clear, lineWidth: 2)
+                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                    .stroke(isSelected ? Color.appPrimary.opacity(0.3) : Color.clear, lineWidth: 2)
             }
         }
         .buttonStyle(.plain)
     }
 }
+
+
+
 
 
 

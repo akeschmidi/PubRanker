@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import AppKit
 
 @main
 struct PubRankerApp: App {
@@ -16,8 +17,13 @@ struct PubRankerApp: App {
         WindowGroup {
             ContentView()
                 .environment(viewModel)
+                .background(WindowAccessor())
         }
         .modelContainer(sharedModelContainer)
+        .windowToolbarStyle(.unifiedCompact(showsTitle: false))
+        .commands {
+            CommandGroup(replacing: .newItem) {}
+        }
     }
     
     // MARK: - Model Container with iCloud Support
@@ -64,4 +70,33 @@ struct PubRankerApp: App {
             }
         }
     }()
+}
+
+// MARK: - Window Accessor for transparent titlebar with visible buttons
+struct WindowAccessor: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            if let window = view.window {
+                window.titlebarAppearsTransparent = true
+                window.titleVisibility = .hidden
+                window.styleMask.insert(.fullSizeContentView)
+                window.tabbingMode = .disallowed
+                
+                // Hide window tab overview button
+                if let titlebarContainer = window.standardWindowButton(.closeButton)?.superview?.superview {
+                    for subview in titlebarContainer.subviews {
+                        let className = String(describing: type(of: subview))
+                        if className.contains("NSTitlebarAccessoryClipView") || 
+                           className.contains("NSToolbarView") {
+                            subview.isHidden = true
+                        }
+                    }
+                }
+            }
+        }
+        return view
+    }
+    
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }

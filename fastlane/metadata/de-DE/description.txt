@@ -1,0 +1,62 @@
+PubRanker – Dein professionelles Pub-Quiz Management
+
+Die ultimative App für Quiz-Master, die ihr Pub-Quiz auf das nächste Level heben wollen. Von der Planung über die Durchführung bis zur Auswertung – alles elegant in einer App.
+
+━━━━━━━━━━━━━━━━━━━━
+
+📋 3-PHASEN WORKFLOW
+
+Dein Quiz, perfekt organisiert:
+
+• Planen – Erstelle Quizze, definiere Teams und gestalte Runden
+• Durchführen – Live-Scoring in Echtzeit während des Quiz
+• Auswerten – Detaillierte Statistiken und flexible Export-Funktionen
+
+━━━━━━━━━━━━━━━━━━━━
+
+🖥️ PRÄSENTATIONSMODUS
+
+Beeindrucke dein Publikum mit einem Live-Leaderboard auf dem zweiten Bildschirm – perfekt für Beamer oder große Monitore:
+
+• Animiertes Podium für die Top 3 Teams
+• Echtzeit-Ranking mit dynamischer Auf-/Abstiegsanzeige
+• Professionelle Visualisierung mit Team-Farben
+• Aktuelle Rundenwertung prominent im Blick
+
+━━━━━━━━━━━━━━━━━━━━
+
+⭐ FEATURES
+
+• Intuitive Teamverwaltung mit individuellen Farben
+• Globale Teamdatenbank – verwalte Stammteams quiz-übergreifend
+• Flexible Runden mit unterschiedlichen Punktewerten
+• Automatische Ranglisten-Berechnung
+• E-Mail-Versand – verschicke Ergebnisse direkt an Teams
+• Unterstützung für beliebig viele Teams und Runden
+• Natives Design für macOS
+
+━━━━━━━━━━━━━━━━━━━━
+
+☁️ ICLOUD-SYNCHRONISATION
+
+Deine Quizze werden automatisch auf allen deinen Macs synchronisiert – nahtlos und ohne Aufwand.
+
+━━━━━━━━━━━━━━━━━━━━
+
+🌍 MEHRSPRACHIG
+
+Vollständig lokalisiert: Deutsch, Englisch, Französisch, Spanisch, Italienisch, Niederländisch, Portugiesisch, Polnisch, Russisch, Schwedisch, Dänisch, Japanisch, Koreanisch, Chinesisch und Schweizer Dialekte.
+
+━━━━━━━━━━━━━━━━━━━━
+
+PERFEKT FÜR:
+
+✓ Pub-Quiz Veranstalter
+✓ Kneipen und Bars
+✓ Trivia-Nights
+✓ Team-Events & Firmen-Teambuilding
+✓ Quiz-Clubs und private Runden
+
+━━━━━━━━━━━━━━━━━━━━
+
+Mach dein nächstes Quiz zum unvergesslichen Erlebnis – mit PubRanker!

@@ -29,7 +29,15 @@ struct PlanningView: View {
                 selectedQuiz: $selectedQuiz,
                 showingNewQuizSheet: $showingNewQuizSheet,
                 plannedQuizzes: plannedQuizzes,
-                viewModel: viewModel
+                viewModel: viewModel,
+                onEditQuiz: { quiz in
+                    selectedQuiz = quiz
+                    showingEditQuizSheet = true
+                },
+                onDeleteQuiz: { quiz in
+                    quizToDelete = quiz
+                    showingDeleteConfirmation = true
+                }
             )
         } detail: {
             if let quiz = selectedQuiz {
@@ -75,11 +83,11 @@ struct PlanningView: View {
                 GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams(for: quiz), modelContext: modelContext)
             }
         }
-        .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
-            Button("Abbrechen", role: .cancel) {
+        .alert(L10n.Planning.deleteConfirm, isPresented: $showingDeleteConfirmation) {
+            Button(L10n.Navigation.cancel, role: .cancel) {
                 quizToDelete = nil
             }
-            Button("Löschen", role: .destructive) {
+            Button(L10n.Navigation.delete, role: .destructive) {
                 if let quiz = quizToDelete {
                     viewModel.deleteQuiz(quiz)
                     quizToDelete = nil

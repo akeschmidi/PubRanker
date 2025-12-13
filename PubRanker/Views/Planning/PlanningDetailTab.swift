@@ -8,11 +8,19 @@
 import SwiftUI
 
 enum PlanningDetailTab: String, CaseIterable, Identifiable {
-    case overview = "Übersicht"
-    case teams = "Teams"
-    case rounds = "Runden"
+    case overview
+    case teams
+    case rounds
     
     var id: String { rawValue }
+    
+    var title: String {
+        switch self {
+        case .overview: return "Übersicht"
+        case .teams: return "Teams"
+        case .rounds: return "Runden"
+        }
+    }
     
     var icon: String {
         switch self {
@@ -22,6 +30,9 @@ enum PlanningDetailTab: String, CaseIterable, Identifiable {
         }
     }
 }
+
+
+
 
 
 

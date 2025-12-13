@@ -31,19 +31,20 @@ struct EditableTeamRow: View {
     var body: some View {
         VStack(spacing: 0) {
             // Hauptinhalt
-            HStack(spacing: 16) {
+            HStack(spacing: AppSpacing.sm) {
                 // Team-Icon (Bild oder Farbe)
                 TeamIconView(team: team, size: 40)
-                .help(isEditing ? "Bild oder Farbe ändern" : "Team-Icon")
+                .help(isEditing ? "Team-Icon ändern" : "Team-Icon")
                 .onTapGesture {
                     if isEditing {
                         showingColorPicker.toggle()
                     }
                 }
                 .popover(isPresented: $showingColorPicker) {
-                    VStack(spacing: 20) {
+                    VStack(spacing: AppSpacing.md) {
                         Text("Team-Icon wählen")
                             .font(.headline)
+                            .foregroundStyle(Color.appTextPrimary)
                         
                         // Bildauswahl
                         Button {
@@ -52,9 +53,9 @@ struct EditableTeamRow: View {
                         } label: {
                             Label("Bild auswählen", systemImage: "photo")
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 8)
+                                .padding(.vertical, AppSpacing.xxs)
                         }
-                        .buttonStyle(.bordered)
+                        .primaryGradientButton()
                         
                         // Bild entfernen, wenn vorhanden
                         if team.imageData != nil {
@@ -64,9 +65,9 @@ struct EditableTeamRow: View {
                             } label: {
                                 Label("Bild entfernen", systemImage: "trash")
                                     .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 8)
+                                    .padding(.vertical, AppSpacing.xxs)
                             }
-                            .buttonStyle(.bordered)
+                            .accentGradientButton()
                         }
                         
                         Divider()
@@ -74,24 +75,24 @@ struct EditableTeamRow: View {
                         // Farbauswahl
                         Text("Farbe wählen")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                         
-                        LazyVGrid(columns: Array(repeating: GridItem(.fixed(44), spacing: 12), count: 6), spacing: 12) {
+                        LazyVGrid(columns: Array(repeating: GridItem(.fixed(44), spacing: AppSpacing.xs), count: 6), spacing: AppSpacing.xs) {
                             ForEach(availableColors, id: \.self) { colorHex in
                                 Circle()
-                                    .fill(Color(hex: colorHex) ?? .blue)
+                                    .fill(Color(hex: colorHex) ?? Color.appPrimary)
                                     .frame(width: 44, height: 44)
                                     .overlay {
                                         if team.color == colorHex {
                                             Circle()
-                                                .stroke(Color.primary, lineWidth: 3)
+                                                .stroke(Color.appTextPrimary, lineWidth: AppSpacing.xxxs)
                                             Image(systemName: "checkmark")
                                                 .foregroundStyle(.white)
                                                 .font(.title3)
                                                 .bold()
                                         }
                                     }
-                                    .shadow(color: Color(hex: colorHex)?.opacity(0.4) ?? .clear, radius: 2)
+                                    .shadow(AppShadow.sm)
                                     .onTapGesture {
                                         team.color = colorHex
                                         team.imageData = nil // Bild entfernen wenn Farbe gewählt wird
@@ -100,30 +101,30 @@ struct EditableTeamRow: View {
                             }
                         }
                     }
-                    .padding(20)
+                    .padding(AppSpacing.md)
                 }
                 
                 // Team-Informationen
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     if isEditing {
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: AppSpacing.xs) {
                             // Team Name
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                                 Text("Team-Name")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                                     .bold()
-                                TextField("Team Name", text: $editedName)
+                                TextField("Team-Name", text: $editedName)
                                     .textFieldStyle(.roundedBorder)
                             }
                             
                             Divider()
                             
                             // Team Details
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: AppSpacing.xs) {
                                 Text("Kontaktinformationen")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                                     .bold()
                                 
                                 TextField("Kontaktperson", text: $contactPerson)
@@ -137,51 +138,51 @@ struct EditableTeamRow: View {
                             }
                         }
                     } else {
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                             // Team Name
                             Text(team.name)
                                 .font(.title3)
                                 .bold()
-                                .foregroundStyle(.primary)
+                                .foregroundStyle(Color.appTextPrimary)
                             
                             // Details
-                            if !team.contactPerson.isEmpty || !team.email.isEmpty || team.isConfirmed {
-                                VStack(alignment: .leading, spacing: 6) {
+                            if !team.contactPerson.isEmpty || !team.email.isEmpty || team.isConfirmed(for: quiz) {
+                                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                                     if !team.contactPerson.isEmpty {
-                                        HStack(spacing: 6) {
+                                        HStack(spacing: AppSpacing.xxxs) {
                                             Image(systemName: "person.fill")
                                                 .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                                .frame(width: 16)
+                                                .foregroundStyle(Color.appTextSecondary)
+                                                .frame(width: AppSpacing.sm)
                                             Text(team.contactPerson)
                                                 .font(.subheadline)
-                                                .foregroundStyle(.secondary)
+                                                .foregroundStyle(Color.appTextSecondary)
                                         }
                                     }
-                                    
+
                                     if !team.email.isEmpty {
-                                        HStack(spacing: 6) {
+                                        HStack(spacing: AppSpacing.xxxs) {
                                             Image(systemName: "envelope.fill")
                                                 .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                                .frame(width: 16)
+                                                .foregroundStyle(Color.appTextSecondary)
+                                                .frame(width: AppSpacing.sm)
                                             Text(team.email)
                                                 .font(.subheadline)
-                                                .foregroundStyle(.secondary)
+                                                .foregroundStyle(Color.appTextSecondary)
                                         }
                                     }
                                     
-                                    if team.isConfirmed {
-                                        HStack(spacing: 6) {
+                                    if team.isConfirmed(for: quiz) {
+                                        HStack(spacing: AppSpacing.xxxs) {
                                             Image(systemName: "checkmark.circle.fill")
-                                                .foregroundStyle(.green)
+                                                .foregroundStyle(Color.appSuccess)
                                                 .font(.caption)
                                             Text("Bestätigt")
                                                 .font(.subheadline)
-                                                .foregroundStyle(.green)
+                                                .foregroundStyle(Color.appSuccess)
                                                 .bold()
                                         }
-                                        .padding(.top, 2)
+                                        .padding(.top, AppSpacing.xxxs)
                                     }
                                 }
                             }
@@ -192,85 +193,93 @@ struct EditableTeamRow: View {
                 Spacer()
                 
                 // Action Buttons - Größer und besser sichtbar
-                HStack(spacing: 12) {
-                    // Bearbeiten/Speichern Button - Größer und prominenter
-                    Button {
-                        if isEditing {
+                HStack(spacing: AppSpacing.xs) {
+                    if isEditing {
+                        // Speichern Button (nur im Bearbeitungsmodus)
+                        Button {
                             saveChanges()
-                        } else {
+                        } label: {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.body)
+                                Text("Speichern")
+                                    .font(.body)
+                            }
+                        }
+                        .successGradientButton()
+                        .help("Änderungen speichern")
+                        
+                        // Abbrechen Button (nur im Bearbeitungsmodus)
+                        Button {
+                            isEditing = false
+                        } label: {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.body)
+                                Text("Abbrechen")
+                                    .font(.body)
+                            }
+                        }
+                        .secondaryGradientButton()
+                        .help("Bearbeitung abbrechen")
+                    } else {
+                        // Bearbeiten Button (immer sichtbar wenn nicht im Bearbeitungsmodus)
+                        Button {
                             editedName = team.name
                             contactPerson = team.contactPerson
                             email = team.email
-                            isConfirmed = team.isConfirmed
+                            isConfirmed = team.isConfirmed(for: quiz)
                             isEditing = true
+                        } label: {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "pencil")
+                                    .font(.body)
+                                Text("Bearbeiten")
+                                    .font(.body)
+                            }
                         }
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: isEditing ? "checkmark.circle.fill" : "pencil.circle.fill")
-                                .font(.body)
-                            Text(isEditing ? "Speichern" : "Bearbeiten")
-                                .font(.body)
+                        .primaryGradientButton()
+                        .help("Team bearbeiten")
+                        
+                        // Löschen Button - Größer und prominenter
+                        Button {
+                            showingDeleteConfirmation = true
+                        } label: {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "trash")
+                                    .font(.body)
+                            }
                         }
-                        .bold()
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
-                        .background(isEditing ? Color.green : Color.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .accentGradientButton()
+                        .help("Team entfernen")
                     }
-                    .buttonStyle(.plain)
-                    .help(isEditing ? "Speichern" : "Bearbeiten")
-
-                    // Löschen Button - Größer und prominenter
-                    Button {
-                        showingDeleteConfirmation = true
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "trash.circle.fill")
-                                .font(.body)
-                            Text("Entfernen")
-                                .font(.body)
-                        }
-                        .bold()
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
-                        .background(Color.red)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                    }
-                    .buttonStyle(.plain)
-                    .help("Team aus Quiz entfernen")
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, isEditing ? 20 : 16)
+            .padding(.horizontal, AppSpacing.md)
+            .padding(.vertical, isEditing ? AppSpacing.md : AppSpacing.sm)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(nsColor: .controlBackgroundColor))
-                .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
-        )
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(
                     LinearGradient(
                         colors: [
-                            Color(hex: team.color)?.opacity(0.4) ?? .blue.opacity(0.4),
-                            Color(hex: team.color)?.opacity(0.2) ?? .blue.opacity(0.2)
+                            Color(hex: team.color)?.opacity(0.4) ?? Color.appPrimary.opacity(0.4),
+                            Color(hex: team.color)?.opacity(0.2) ?? Color.appPrimary.opacity(0.2)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 2.5
+                    lineWidth: AppSpacing.xxxs
                 )
         }
-        .alert("Team aus Quiz entfernen?", isPresented: $showingDeleteConfirmation) {
+        .alert("Team entfernen?", isPresented: $showingDeleteConfirmation) {
             Button("Abbrechen", role: .cancel) {}
             Button("Entfernen", role: .destructive) {
                 viewModel.deleteTeam(team, from: quiz)
             }
         } message: {
-            Text("Möchtest du '\(team.name)' wirklich aus diesem Quiz entfernen? Das Team bleibt in der globalen Team-Liste erhalten.")
+            Text("'\(team.name)' wird aus diesem Quiz entfernt, bleibt aber im globalen Team-Manager erhalten.")
         }
         .fileImporter(
             isPresented: $showingImagePicker,

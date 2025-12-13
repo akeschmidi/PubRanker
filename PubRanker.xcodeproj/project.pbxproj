@@ -60,7 +60,14 @@
 		C928C3A12ED4A09100F38077 /* AnalysisSharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C928C39D2ED4A09100F38077 /* AnalysisSharedComponents.swift */; };
 		C928C3A22ED4A09100F38077 /* TeamChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C928C39B2ED4A09100F38077 /* TeamChartsView.swift */; };
 		C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */; };
+		C9B345B12EDC6048005D5076 /* COLOR_ASSETS_SETUP.md in Resources */ = {isa = PBXBuildFile; fileRef = C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */; };
+		C9B345B22EDC6048005D5076 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AD2EDC6048005D5076 /* AppColors.swift */; };
+		C9B345B32EDC6048005D5076 /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AB2EDC6048005D5076 /* AppButton.swift */; };
+		C9B345B42EDC6048005D5076 /* AppSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AE2EDC6048005D5076 /* AppSpacing.swift */; };
+		C9B345B52EDC6048005D5076 /* AppCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345AC2EDC6048005D5076 /* AppCard.swift */; };
+		C9B345B72EDC6288005D5076 /* DesignSystemDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */; };
 		C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */; };
+		C9LOC00002 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9LOC00001 /* LocalizationManager.swift */; };
 		DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C523D853111435688C12D13 /* PresentationModeView.swift */; };
 /* End PBXBuildFile section */
 
@@ -139,7 +146,14 @@
 		C941F20F2EA7FA30004EE1C9 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C941F2102EA7FA30004EE1C9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C941F2112EA7FA30004EE1C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C9B345AB2EDC6048005D5076 /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButton.swift; sourceTree = "<group>"; };
+		C9B345AC2EDC6048005D5076 /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
+		C9B345AD2EDC6048005D5076 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		C9B345AE2EDC6048005D5076 /* AppSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSpacing.swift; sourceTree = "<group>"; };
+		C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = COLOR_ASSETS_SETUP.md; sourceTree = "<group>"; };
+		C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystemDemoView.swift; sourceTree = "<group>"; };
 		C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon_LiqidGlass.icon; sourceTree = "<group>"; };
+		C9LOC00001 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +189,7 @@
 		A1000030 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */,
 				C928C3A42ED4A67E00F38077 /* TeamManagement */,
 				C928C3A32ED4A66000F38077 /* Planning */,
 				C928C39F2ED4A09100F38077 /* Analysis */,
@@ -234,6 +249,8 @@
 		A1FFFFFD /* PubRanker */ = {
 			isa = PBXGroup;
 			children = (
+				C9B345B02EDC6048005D5076 /* DesignSystem */,
+				C9LOC00003 /* Localization */,
 				A10000000 /* PubRankerApp.swift */,
 				A10000002 /* ContentView.swift */,
 				A10000372 /* EasterEggSystem.swift */,
@@ -320,6 +337,26 @@
 			path = GlobalTeamsManager;
 			sourceTree = "<group>";
 		};
+		C9B345B02EDC6048005D5076 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C9B345AB2EDC6048005D5076 /* AppButton.swift */,
+				C9B345AC2EDC6048005D5076 /* AppCard.swift */,
+				C9B345AD2EDC6048005D5076 /* AppColors.swift */,
+				C9B345AE2EDC6048005D5076 /* AppSpacing.swift */,
+				C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		C9LOC00003 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				C9LOC00001 /* LocalizationManager.swift */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -398,6 +435,7 @@
 			files = (
 				C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */,
 				C941F1FE2EA7FA30004EE1C9 /* Localizable.strings in Resources */,
+				C9B345B12EDC6048005D5076 /* COLOR_ASSETS_SETUP.md in Resources */,
 				C9137CE42ED450AB007B469E /* CLAUDE.md in Resources */,
 				A10000401 /* Assets.xcassets in Resources */,
 			);
@@ -410,6 +448,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9LOC00002 /* LocalizationManager.swift in Sources */,
 				A10000001 /* PubRankerApp.swift in Sources */,
 				A10000003 /* ContentView.swift in Sources */,
 				A10000373 /* EasterEggSystem.swift in Sources */,
@@ -438,10 +477,15 @@
 				A10000352 /* PlannedQuizRow.swift in Sources */,
 				A10000354 /* PlanningSidebarView.swift in Sources */,
 				A10000356 /* PlanningEmptyStateView.swift in Sources */,
+				C9B345B22EDC6048005D5076 /* AppColors.swift in Sources */,
+				C9B345B32EDC6048005D5076 /* AppButton.swift in Sources */,
+				C9B345B42EDC6048005D5076 /* AppSpacing.swift in Sources */,
+				C9B345B52EDC6048005D5076 /* AppCard.swift in Sources */,
 				A10000358 /* CompactQuizHeader.swift in Sources */,
 				A10000360 /* OverviewComponents.swift in Sources */,
 				A10000362 /* PlanningDetailView.swift in Sources */,
 				A10000364 /* EditQuizSheet.swift in Sources */,
+				C9B345B72EDC6288005D5076 /* DesignSystemDemoView.swift in Sources */,
 				A10000366 /* EditableTeamRow.swift in Sources */,
 				A10000368 /* EditableRoundRow.swift in Sources */,
 				A10000370 /* AboutSheet.swift in Sources */,
@@ -540,7 +584,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 102;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -583,7 +627,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -652,7 +696,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 102;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -689,7 +733,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 2.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;

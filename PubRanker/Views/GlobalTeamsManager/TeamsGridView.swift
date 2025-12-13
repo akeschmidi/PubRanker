@@ -16,15 +16,15 @@ struct TeamsGridView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [
-                GridItem(.adaptive(minimum: 300, maximum: 400), spacing: 20)
-            ], spacing: 20) {
+                GridItem(.adaptive(minimum: 300, maximum: 400), spacing: AppSpacing.md)
+            ], spacing: AppSpacing.md) {
                 ForEach(teams) { team in
                     TeamCard(team: team, viewModel: viewModel, onDelete: {
                         onDelete(team)
                     })
                 }
             }
-            .padding(24)
+            .padding(AppSpacing.sectionSpacing)
         }
     }
 }

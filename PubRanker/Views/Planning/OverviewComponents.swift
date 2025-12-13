@@ -13,12 +13,12 @@ struct QuickStatsGrid: View {
     let quiz: Quiz
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             CompactStatCard(
                 title: "Teams",
                 value: "\(quiz.safeTeams.count)",
                 icon: "person.3.fill",
-                color: .blue,
+                color: Color.appPrimary,
                 isComplete: !quiz.safeTeams.isEmpty
             )
             
@@ -26,7 +26,7 @@ struct QuickStatsGrid: View {
                 title: "Runden",
                 value: "\(quiz.safeRounds.count)",
                 icon: "list.number",
-                color: .green,
+                color: Color.appSuccess,
                 isComplete: !quiz.safeRounds.isEmpty
             )
             
@@ -34,7 +34,7 @@ struct QuickStatsGrid: View {
                 title: "Max. Punkte",
                 value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })",
                 icon: "star.fill",
-                color: .orange,
+                color: Color.appAccent,
                 isComplete: !quiz.safeRounds.isEmpty
             )
         }
@@ -50,7 +50,7 @@ struct CompactStatCard: View {
     let isComplete: Bool
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             ZStack {
                 Circle()
                     .fill(
@@ -61,13 +61,14 @@ struct CompactStatCard: View {
                         )
                     )
                     .frame(width: 56, height: 56)
+                    .shadow(AppShadow.sm)
 
                 Image(systemName: icon)
                     .font(.title2)
                     .foregroundStyle(color)
             }
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(value)
                     .font(.system(size: 28, weight: .bold))
                     .monospacedDigit()
@@ -75,32 +76,22 @@ struct CompactStatCard: View {
 
                 Text(title)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
 
             Spacer()
 
             if isComplete {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Color.appSuccess)
                     .font(.title2)
             }
         }
-        .padding(16)
-        .background(
-            LinearGradient(
-                colors: [
-                    color.opacity(0.05),
-                    color.opacity(0.02)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(AppSpacing.sm)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(color.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .stroke(color.opacity(0.2), lineWidth: AppSpacing.xxxs)
         }
     }
 }
@@ -110,23 +101,23 @@ struct StatusCardsSection: View {
     let quiz: Quiz
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             StatusCard(
                 title: quiz.safeTeams.isEmpty ? "Teams fehlen" : "Teams bereit",
                 icon: quiz.safeTeams.isEmpty ? "person.3.slash.fill" : "person.3.fill",
-                color: quiz.safeTeams.isEmpty ? .orange : .green
+                color: quiz.safeTeams.isEmpty ? Color.appAccent : Color.appSuccess
             )
             
             StatusCard(
                 title: quiz.safeRounds.isEmpty ? "Runden fehlen" : "Runden bereit",
                 icon: quiz.safeRounds.isEmpty ? "list.number" : "checkmark.circle.fill",
-                color: quiz.safeRounds.isEmpty ? .orange : .green
+                color: quiz.safeRounds.isEmpty ? Color.appAccent : Color.appSuccess
             )
             
             StatusCard(
                 title: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? "Bereit zum Start" : "Nicht bereit",
                 icon: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? "checkmark.circle.fill" : "exclamationmark.circle.fill",
-                color: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? .green : .gray
+                color: (!quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty) ? Color.appSuccess : Color.appTextSecondary
             )
         }
     }
@@ -139,22 +130,21 @@ struct StatusCard: View {
     let color: Color
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: AppSpacing.xxs) {
             Image(systemName: icon)
                 .foregroundStyle(color)
                 .font(.title3)
             
             Text(title)
                 .font(.body)
+                .foregroundStyle(color)
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .background(color.opacity(0.1))
-        .foregroundStyle(color)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(AppSpacing.md)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
         .overlay {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(color.opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                .stroke(color.opacity(0.3), lineWidth: AppSpacing.xxxs)
         }
     }
 }
@@ -169,11 +159,12 @@ struct CompactTeamOverview: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
             HStack {
                 Label("Teams (\(quiz.safeTeams.count))", systemImage: "person.3.fill")
                     .font(.title3)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
 
                 Spacer()
 
@@ -183,45 +174,45 @@ struct CompactTeamOverview: View {
                     Text("Verwalten")
                         .font(.body)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.regular)
+                .secondaryGradientButton()
             }
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 12)], spacing: 12) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: AppSpacing.xs)], spacing: AppSpacing.xs) {
                 ForEach(sortedTeams) { team in
-                    CompactTeamCard(team: team)
+                    CompactTeamCard(team: team, quiz: quiz)
                 }
             }
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(AppSpacing.md)
+        .appCard(style: .default)
     }
 }
 
 // MARK: - Compact Team Card
 struct CompactTeamCard: View {
     let team: Team
+    let quiz: Quiz
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+            HStack(spacing: AppSpacing.xs) {
                 TeamIconView(team: team, size: 44)
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     Text(team.name)
                         .font(.body)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
                         .lineLimit(1)
 
                     if !team.contactPerson.isEmpty {
-                        HStack(spacing: 4) {
+                        HStack(spacing: AppSpacing.xxxs) {
                             Image(systemName: "person.fill")
                                 .font(.caption2)
                             Text(team.contactPerson)
                                 .font(.caption)
                         }
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                         .lineLimit(1)
                     }
                 }
@@ -229,36 +220,36 @@ struct CompactTeamCard: View {
                 Spacer()
 
                 // Status Indicator
-                VStack(spacing: 4) {
-                    if team.isConfirmed {
+                VStack(spacing: AppSpacing.xxxs) {
+                    if team.isConfirmed(for: quiz) {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.appSuccess)
                             .font(.title3)
                     }
 
                     if !team.email.isEmpty {
                         Image(systemName: "envelope.fill")
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(Color.appPrimary)
                             .font(.caption)
                     }
                 }
             }
         }
-        .padding(12)
+        .padding(AppSpacing.xs)
         .background(
             LinearGradient(
                 colors: [
-                    (Color(hex: team.color) ?? .blue).opacity(0.08),
-                    (Color(hex: team.color) ?? .blue).opacity(0.03)
+                    (Color(hex: team.color) ?? Color.appPrimary).opacity(0.08),
+                    (Color(hex: team.color) ?? Color.appPrimary).opacity(0.03)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         )
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
         .overlay {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color(hex: team.color)?.opacity(0.4) ?? .clear, lineWidth: 1.5)
+            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                .stroke(Color(hex: team.color)?.opacity(0.4) ?? Color.clear, lineWidth: AppSpacing.xxxs)
         }
     }
 }
@@ -269,11 +260,12 @@ struct CompactRoundsOverview: View {
     let onManage: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
             HStack {
                 Label("Runden (\(quiz.safeRounds.count))", systemImage: "list.number")
                     .font(.title3)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 
                 Spacer()
                 
@@ -283,19 +275,17 @@ struct CompactRoundsOverview: View {
                     Text("Verwalten")
                         .font(.body)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.regular)
+                .secondaryGradientButton()
             }
             
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 10)], spacing: 10) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: AppSpacing.xs)], spacing: AppSpacing.xs) {
                 ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
                     CompactRoundCard(round: round, index: index)
                 }
             }
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(AppSpacing.md)
+        .appCard(style: .default)
     }
 }
 
@@ -305,28 +295,30 @@ struct CompactRoundCard: View {
     let index: Int
     
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: AppSpacing.xxxs) {
             Text("R\(index + 1)")
                 .font(.body)
                 .bold()
                 .foregroundStyle(.white)
                 .frame(width: 36, height: 36)
-                .background(.blue)
+                .background(Color.appPrimary)
                 .clipShape(Circle())
-            
+                .shadow(AppShadow.sm)
+
             Text(round.name)
                 .font(.body)
+                .foregroundStyle(Color.appTextPrimary)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
-            
+
             Text("\(round.maxPoints) Pkt")
                 .font(.body)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
+                .monospacedDigit()
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
-        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.vertical, AppSpacing.xs)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
     }
 }
 

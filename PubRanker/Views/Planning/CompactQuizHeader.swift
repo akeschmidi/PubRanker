@@ -15,19 +15,20 @@ struct CompactQuizHeader: View {
     let onStart: () -> Void
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: AppSpacing.sm) {
             // Quiz Info
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.xs) {
                 Image(systemName: "calendar.circle.fill")
                     .font(.title2)
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(Color.appPrimary)
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     Text(quiz.name)
                         .font(.title2)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
                     
-                    HStack(spacing: 12) {
+                    HStack(spacing: AppSpacing.xs) {
                         if !quiz.venue.isEmpty {
                             Label(quiz.venue, systemImage: "mappin.circle")
                                 .font(.body)
@@ -35,65 +36,61 @@ struct CompactQuizHeader: View {
                         Label(quiz.date.formatted(date: .abbreviated, time: .shortened), systemImage: "clock")
                             .font(.body)
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                 }
             }
             
             Spacer()
             
-            // Action Buttons (kompakter)
-            HStack(spacing: 8) {
+            // Action Buttons
+            HStack(spacing: AppSpacing.xxs) {
                 Button {
                     onEdit()
                 } label: {
-                    Image(systemName: "pencil.circle.fill")
-                        .font(.title3)
+                    HStack(spacing: AppSpacing.xxxs) {
+                        Image(systemName: "pencil")
+                            .font(.body)
+                        Text("Bearbeiten")
+                            .font(.body)
+                            .bold()
+                    }
                 }
-                .buttonStyle(.plain)
+                .primaryGradientButton()
                 .help("Quiz bearbeiten")
                 
                 Button {
                     onDelete()
                 } label: {
-                    Image(systemName: "trash.circle.fill")
-                        .font(.title3)
-                        .foregroundStyle(.red)
+                    HStack(spacing: AppSpacing.xxxs) {
+                        Image(systemName: "trash")
+                            .font(.body)
+                        Text("Löschen")
+                            .font(.body)
+                            .bold()
+                    }
                 }
-                .buttonStyle(.plain)
+                .accentGradientButton()
                 .help("Quiz löschen")
                 
                 if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
                     Button {
                         onStart()
                     } label: {
-                        HStack(spacing: 6) {
+                        HStack(spacing: AppSpacing.xxxs) {
                             Image(systemName: "play.circle.fill")
                                 .font(.body)
                             Text("Starten")
                                 .font(.body)
                                 .bold()
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(
-                            LinearGradient(
-                                colors: [.green, .green.opacity(0.8)],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .shadow(color: .green.opacity(0.3), radius: 4)
                     }
-                    .buttonStyle(.plain)
+                    .successGradientButton()
                     .keyboardShortcut("s", modifiers: .command)
                     .help("Quiz starten (⌘S)")
                 }
             }
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
+        .padding(AppSpacing.md)
     }
 }
 

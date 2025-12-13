@@ -1,0 +1,62 @@
+PubRanker – Your Professional Pub Quiz Management
+
+The ultimate app for quiz masters who want to take their pub quiz to the next level. From planning to execution to evaluation – everything elegantly in one app.
+
+━━━━━━━━━━━━━━━━━━━━
+
+📋 3-PHASE WORKFLOW
+
+Your quiz, perfectly organized:
+
+• Plan – Create quizzes, define teams and design rounds
+• Execute – Live scoring in real-time during the quiz
+• Evaluate – Detailed statistics and flexible export functions
+
+━━━━━━━━━━━━━━━━━━━━
+
+🖥️ PRESENTATION MODE
+
+Impress your audience with a live leaderboard on a second screen – perfect for projectors or large monitors:
+
+• Animated podium for the top 3 teams
+• Real-time ranking with dynamic rise/fall indicators
+• Professional visualization with team colors
+• Current round scores prominently displayed
+
+━━━━━━━━━━━━━━━━━━━━
+
+⭐ FEATURES
+
+• Intuitive team management with individual colors
+• Global team database – manage regular teams across quizzes
+• Flexible rounds with different point values
+• Automatic ranking calculation
+• Email sending – send results directly to teams
+• Support for unlimited teams and rounds
+• Native design for macOS
+
+━━━━━━━━━━━━━━━━━━━━
+
+☁️ ICLOUD SYNC
+
+Your quizzes are automatically synced across all your Macs – seamlessly and effortlessly.
+
+━━━━━━━━━━━━━━━━━━━━
+
+🌍 MULTILINGUAL
+
+Fully localized: German, English, French, Spanish, Italian, Dutch, Portuguese, Polish, Russian, Swedish, Danish, Japanese, Korean, Chinese and Swiss dialects.
+
+━━━━━━━━━━━━━━━━━━━━
+
+PERFECT FOR:
+
+✓ Pub quiz organizers
+✓ Pubs and bars
+✓ Trivia nights
+✓ Team events & corporate team building
+✓ Quiz clubs and private gatherings
+
+━━━━━━━━━━━━━━━━━━━━
+
+Make your next quiz an unforgettable experience – with PubRanker!

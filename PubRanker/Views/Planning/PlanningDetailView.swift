@@ -34,14 +34,13 @@ struct PlanningDetailView: View {
             // Tab Picker
             Picker("Ansicht", selection: $selectedDetailTab) {
                 ForEach(PlanningDetailTab.allCases) { tab in
-                    Label(tab.rawValue, systemImage: tab.icon)
+                    Label(tab.title, systemImage: tab.icon)
                         .tag(tab)
                 }
             }
             .pickerStyle(.segmented)
-            .padding(.horizontal)
-            .padding(.vertical, 12)
-            .background(Color(nsColor: .controlBackgroundColor))
+            .padding(.horizontal, AppSpacing.screenPadding)
+            .padding(.vertical, AppSpacing.xs)
             
             Divider()
             
@@ -68,7 +67,7 @@ struct OverviewTabContent: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: AppSpacing.md) {
                 // Quick Stats
                 QuickStatsGrid(quiz: quiz)
                 
@@ -89,7 +88,7 @@ struct OverviewTabContent: View {
                     }
                 }
             }
-            .padding()
+            .padding(AppSpacing.screenPadding)
         }
     }
 }

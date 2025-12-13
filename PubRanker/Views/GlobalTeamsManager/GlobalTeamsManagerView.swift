@@ -10,6 +10,7 @@ import SwiftData
 
 struct GlobalTeamsManagerView: View {
     @Bindable var viewModel: QuizViewModel
+    @Binding var selectedWorkflow: ContentView.WorkflowPhase
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
 
@@ -20,6 +21,11 @@ struct GlobalTeamsManagerView: View {
     @State private var showingDeleteAlert = false
     @State private var showingEditSheet = false
     @State private var sortOption: TeamSortOption = .dateNewest
+
+    // Multi-Select Mode
+    @State private var isMultiSelectMode = false
+    @State private var selectedTeamIDs: Set<Team.ID> = []
+    @State private var showingMultiDeleteAlert = false
 
     var filteredTeams: [Team] {
         let filtered = searchText.isEmpty ? allTeams : allTeams.filter { team in
@@ -90,6 +96,9 @@ struct GlobalTeamsManagerView: View {
                 showingEmailComposer: $showingEmailComposer,
                 showingDeleteAlert: $showingDeleteAlert,
                 filteredTeams: filteredTeams,
+                isMultiSelectMode: $isMultiSelectMode,
+                selectedTeamIDs: $selectedTeamIDs,
+                showingMultiDeleteAlert: $showingMultiDeleteAlert,
                 onCreateTestData: onCreateTestDataClosure
             )
         } detail: {
@@ -102,6 +111,11 @@ struct GlobalTeamsManagerView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                // Empty group to override default sidebar toggle
+            }
+        }
         .sheet(isPresented: $showingAddTeamSheet) {
             GlobalAddTeamSheet(viewModel: viewModel, modelContext: modelContext)
         }
@@ -127,6 +141,16 @@ struct GlobalTeamsManagerView: View {
                 Text("Möchten Sie das Team '\(team.name)' wirklich löschen?")
             }
         }
+        .alert("Teams löschen", isPresented: $showingMultiDeleteAlert) {
+            Button("Abbrechen", role: .cancel) {
+                // Keep selection
+            }
+            Button("Alle \(selectedTeamIDs.count) Teams löschen", role: .destructive) {
+                deleteMultipleTeams()
+            }
+        } message: {
+            Text("Möchten Sie wirklich \(selectedTeamIDs.count) Teams löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+        }
         .onAppear {
             if selectedTeam == nil && !allTeams.isEmpty {
                 selectedTeam = allTeams.first
@@ -148,6 +172,8 @@ struct GlobalTeamsManagerView: View {
             if let team = selectedTeam {
                 TeamDetailView(
                     team: team,
+                    viewModel: viewModel,
+                    selectedWorkflow: $selectedWorkflow,
                     showingEditSheet: $showingEditSheet,
                     showingDeleteAlert: $showingDeleteAlert
                 )
@@ -168,6 +194,23 @@ struct GlobalTeamsManagerView: View {
         modelContext.delete(team)
         try? modelContext.save()
         selectedTeam = nil
+    }
+
+    private func deleteMultipleTeams() {
+        let teamsToDelete = allTeams.filter { selectedTeamIDs.contains($0.id) }
+
+        for team in teamsToDelete {
+            modelContext.delete(team)
+        }
+
+        do {
+            try modelContext.save()
+            selectedTeamIDs.removeAll()
+            isMultiSelectMode = false
+            selectedTeam = allTeams.first
+        } catch {
+            print("❌ Fehler beim Löschen der Teams: \(error)")
+        }
     }
     
     #if DEBUG

@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "Ranking";
 "analysis.overview" = "Przegląd";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "Brak dostępnych quizów";
+"analysis.noQuizzes.description" = "Rozpocznij lub zakończ quiz, aby go tu zobaczyć";
+"analysis.activeQuizzes.section" = "Aktywne Quizy (%d)";
+"analysis.completedQuizzes.section" = "Zakończone Quizy (%d)";
+"analysis.points" = "Punkty";
+"analysis.statistics" = "Statystyki";
+"analysis.maxPoints" = "Maks: %d";
+"analysis.allQuizzes" = "Przegląd wszystkich quizów";
+"analysis.sorting" = "Sortowanie:";
+"analysis.noTeamStats.description" = "Zakończ quizy, aby zobaczyć statystyki drużyn";
+"analysis.teams.section" = "Drużyny (%d)";
+"analysis.coreStats" = "Główne Statystyki";
+"analysis.performance" = "Przegląd Wyników";
+"analysis.podiumRate" = "Wskaźnik Podium";
+"analysis.bestRank" = "Najlepsza Pozycja";
+"analysis.worstRank" = "Najgorsza Pozycja";
+"analysis.quizHistory" = "Historia Quizów";
+"analysis.overview.description" = "Statystyki wszystkich zakończonych quizów";
+"analysis.teamLevel" = "Poziom Drużyn";
+"analysis.maxScore" = "Maksymalny Wynik";
+"analysis.achievedScore" = "Osiągnięty Wynik";
+"analysis.totalLevel" = "Całkowity Poziom";
+"analysis.quizListing" = "Lista Quizów";
+"analysis.average" = "Średnia";
+"analysis.noCompletedQuizzes" = "Brak zakończonych quizów";
+"analysis.noStatistics" = "Brak statystyk";
+"analysis.participation" = "Uczestnictwa";
+"analysis.wins" = "Zwycięstwa";
+"analysis.winRate" = "Wskaźnik Zwycięstw";
+"analysis.averageRank" = "Śr. Pozycja";
+"analysis.averagePoints" = "Śr. Punkty";
+"analysis.totalPoints" = "Suma Punktów";
+"analysis.completedQuizzes" = "Zakończone Quizy";
+"analysis.uniqueTeams" = "Unikalne Drużyny";
+"analysis.averageTeamsPerQuiz" = "Śr. Drużyn na Quiz";
+
 // MARK: - Email
 "email.send" = "Wyślij E-mail";
 "email.send.all" = "E-mail do Wszystkich Zespołów";
@@ -407,3 +444,142 @@
 "email.template.scheduleChange.subject" = "Ważne: Aktualizacja harmonogramu Quizu";
 "email.template.scheduleChange.body" = "Witaj,\n\nMusimy poinformować Cię o zmianie harmonogramu:\n\n🔄 Nowa data: [NEW_DATE]\n🔄 Nowa godzina: [NEW_TIME]\n📍 Miejsce: [VENUE] (bez zmian)\n\nPrzepraszamy za niedogodności.\n\nProsimy o potwierdzenie, czy nadal możesz przyjść.\n\nDziękujemy za zrozumienie!";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "Anuluj Quiz";
+"execution.cancel.returnToPlanning" = "Powrót do Planowania";
+"execution.cancel.message" = "Quiz zostanie zatrzymany, a wszystkie rundy zostaną oznaczone jako nieukończone. Wprowadzone punkty zostaną zachowane.";
+"execution.liveQuiz" = "Quiz na Żywo";
+"execution.enterScores" = "Wprowadź Punkty";
+"execution.noActiveQuizzes" = "Brak Aktywnych Quizów";
+"execution.noActiveQuizzes.description" = "Rozpocznij quiz w fazie planowania";
+"execution.activeQuizzes.section" = "Aktywne Quizy (%d)";
+"execution.live" = "NA ŻYWO";
+"execution.round.current" = "Bieżąca Runda";
+"execution.round.completed" = "Ukończona Runda";
+"execution.rounds.edit" = "Edytuj Rundy";
+"execution.rounds.edit.help" = "Edytuj punkty już ukończonych rund";
+"execution.presentation.end" = "Zakończ Prezentację";
+"execution.presentation.start" = "Prezentacja";
+"execution.presentation.help" = "Tryb Prezentacji (⌘P)";
+"execution.cancel.help" = "Anuluj quiz i wróć do planowania";
+"execution.complete" = "Zakończ";
+"execution.complete.help" = "Zakończ quiz (⌘E)";
+"execution.progress" = "Postęp";
+"execution.rounds.progress" = "%d/%d Rund";
+"execution.round.previous" = "Poprzednia Runda: %@";
+"execution.round.next" = "Następna Runda: %@";
+"execution.noRound.selected" = "Nie Wybrano Rundy";
+"execution.noRound.description" = "Wybierz rundę, aby wprowadzić punkty.";
+"execution.noTeams" = "Brak Dostępnych Drużyn";
+"execution.noTeams.description" = "Dodaj drużyny, aby przypisać punkty";
+"execution.score.saved" = "Zapisano: %d";
+"execution.actions" = "Akcje";
+"execution.reset" = "Resetuj";
+"execution.saveAll" = "Zapisz Wszystko";
+"execution.round.completeAndContinue" = "Ukończ Rundę i Kontynuuj";
+"execution.round.completeLast" = "Ukończ Ostatnią Rundę";
+"execution.leaderboard.live" = "Ranking na Żywo";
+"execution.editRounds.title" = "Edytuj Rundy";
+"execution.editRounds.rounds" = "Rundy";
+"execution.editRounds.selectRound" = "Wybierz Rundę";
+"execution.editRounds.selectRound.description" = "Wybierz rundę, aby edytować punkty";
+"execution.editRounds.editScores" = "Edytuj Punkty";
+"execution.editRounds.done" = "Gotowe";
+"execution.editRounds.roundName.placeholder" = "Nazwa Rundy";
+"execution.editRounds.maxPoints.label" = "Maks. Punkty:";
+"execution.editRounds.maxPoints.perTeam" = "na Drużynę";
+"execution.editRounds.maxPoints.display" = "Maks. %d Punktów na Drużynę";
+"execution.editRounds.editSettings" = "Edytuj Punkty";
+"execution.editRounds.editSettings.help" = "Edytuj maksymalne punkty i nazwę rundy";
+"execution.editRounds.completed" = "Ukończone";
+"execution.editRounds.unsavedChanges" = "Masz niezapisane zmiany";
+"execution.editRounds.warning.maxPoints" = "Ostrzeżenie: Niektóre drużyny mają więcej punktów niż nowe maksimum";
+"execution.editRounds.warning.affectedTeams" = "Dotyczy Drużyn: %@";
+"execution.editRounds.warning.limit" = "Zostaną one automatycznie ograniczone do %d punktów.";
+"execution.editRounds.round.complete" = "Oznacz Rundę jako Ukończoną";
+"execution.editRounds.round.reopen" = "Otwórz Ponownie Rundę";
+
+// MARK: - About Sheet
+"about.title" = "O aplikacji";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "Wersja %@ (%@)";
+"about.description" = "PubRanker to kompleksowa aplikacja do zarządzania quizami dla macOS. Planuj wydarzenia quizowe, zarządzaj drużynami, przeprowadzaj quizy i analizuj wyniki - wszystko w jednym miejscu.";
+"about.features.title" = "Główne funkcje";
+"about.features.teamManagement" = "Zarządzanie drużynami z globalnymi drużynami";
+"about.features.planning" = "Planowanie i przygotowanie quizów";
+"about.features.liveScoring" = "Wprowadzanie wyników na żywo";
+"about.features.analysis" = "Szczegółowa analiza i statystyki";
+"about.features.email" = "Szablony e-mail dla drużyn";
+"about.technical.title" = "Informacje techniczne";
+"about.technical.version" = "Wersja";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "Platforma";
+"about.technical.copyright" = "Prawa autorskie";
+"about.feedback.rate" = "Oceń i opinia";
+"about.feedback.title" = "Ocena i opinia";
+"about.feedback.message" = "Pomóż nam ulepszyć PubRanker!";
+"about.feedback.rateAppStore" = "Oceń w App Store";
+"about.feedback.missingFeatures" = "Brakuje funkcji?";
+"about.feedback.send" = "Wyślij opinię";
+"about.feedback.email.message" = "Skontaktuj się z nami:\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "Otwórz e-mail";
+"about.feedback.email.copy" = "Kopiuj adres e-mail";
+"about.feedback.email.copied" = "Adres e-mail skopiowany";
+"about.feedback.email.copied.message" = "Adres e-mail został skopiowany do schowka.";
+"about.appStore.review" = "Recenzja App Store";
+"about.appStore.notAvailable" = "Aplikacja nie jest jeszcze dostępna w App Store. Oceń aplikację po jej opublikowaniu.";
+
+"planning.emptyState.title" = "Gotowy na swój pierwszy quiz?";
+"planning.emptyState.description" = "Zaplanuj i zorganizuj swój pub quiz łatwo";
+"planning.emptyState.start" = "Zacznij planować";
+"quiz.edit.title" = "Edytuj Quiz";
+"quiz.details" = "Szczegóły Quizu";
+"quiz.name.placeholder" = "Wprowadź nazwę";
+"quiz.venue.placeholder" = "Wprowadź miejsce";
+"quiz.dateTime" = "Data i Godzina";
+"quiz.maxPoints" = "Maks. Punkty";
+"quiz.noAvailableTeams.description" = "Wszystkie drużyny są już przypisane do innych quizów";
+"common.add.count" = "Dodaj (%d)";
+"team.edit.help" = "Edytuj drużynę";
+"team.remove.help" = "Usuń drużynę z quizu";
+"team.remove.confirm" = "Usunąć drużynę z quizu?";
+"team.remove.message" = "Czy naprawdę chcesz usunąć '%@' z tego quizu? Drużyna pozostanie na globalnej liście drużyn.";
+"common.contactPerson" = "Osoba Kontaktowa";
+"common.email" = "E-mail";
+"common.designSystem" = "System Projektowy";
+"team.selectFromExisting" = "Wybierz z Istniejących (%d)";
+"score.enter.max" = "Wprowadź Punkty (maks. %d na Drużynę)";
+"score.nextRound" = "Przejdź do Następnej Rundy";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "Zakończ Rundę";
+"score.roundCompleted" = "Ta runda jest zakończona";
+"score.saved.title" = "Punkty Zapisane! ✅";
+"score.saved.message" = "Punkty dla %@ zostały pomyślnie zapisane.";
+"common.rounds.edit" = "Edytuj Rundy";
+"common.rounds.select" = "Wybierz Rundę";
+"common.rounds.select.description" = "Wybierz rundę, aby edytować punkty";
+"common.scores.edit" = "Edytuj Punkty";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "Najwięcej Zwycięstw";
+"sort.mostParticipations" = "Najwięcej Uczestnictw";
+"sort.bestAverage" = "Najlepsza Śr. Pozycja";
+"sort.mostPoints" = "Najwięcej Punktów";
+"sort.nameAZ" = "Nazwa (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "Analiza Quizu";
+"analysisTab.teamStatistics" = "Statystyki Drużyn";
+"analysisTab.overallStatistics" = "Przegląd Ogólny";
+
+// MARK: - Common Actions
+"common.edit" = "Edytuj";
+"common.remove" = "Usuń";
+"common.confirmed" = "Uczestnictwo potwierdzone";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "Edytuj Rundę";
+"common.teamDetails" = "Szczegóły Drużyny";
+"common.teamName" = "Nazwa Drużyny";
+"common.contactInfo" = "Informacje Kontaktowe";
+"common.editTeam" = "Edytuj Drużynę";

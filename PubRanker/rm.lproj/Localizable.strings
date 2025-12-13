@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "Ranglista";
 "analysis.overview" = "Survista";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "Nagins quizs disponibels";
+"analysis.noQuizzes.description" = "Cumenza u terminescha in quiz per al vesair qua";
+"analysis.activeQuizzes.section" = "Quizs Activs (%d)";
+"analysis.completedQuizzes.section" = "Quizs Terminads (%d)";
+"analysis.points" = "Puncts";
+"analysis.statistics" = "Statisticas";
+"analysis.maxPoints" = "Max: %d";
+"analysis.allQuizzes" = "Survista da tut ils quizs";
+"analysis.sorting" = "Sortar:";
+"analysis.noTeamStats.description" = "Terminescha quizs per vesair la statistica da las equipas";
+"analysis.teams.section" = "Equipas (%d)";
+"analysis.coreStats" = "Statisticas Principalas";
+"analysis.performance" = "Survista da la Prestaziun";
+"analysis.podiumRate" = "Rata da Podium";
+"analysis.bestRank" = "Meglra Plazza";
+"analysis.worstRank" = "Pli Mala Plazza";
+"analysis.quizHistory" = "Historia dals Quizs";
+"analysis.overview.description" = "Statisticas da tut ils quizs terminads";
+"analysis.teamLevel" = "Nivel da las Equipas";
+"analysis.maxScore" = "Puncts Maximals";
+"analysis.achievedScore" = "Puncts Cuntanschids";
+"analysis.totalLevel" = "Nivel Total";
+"analysis.quizListing" = "Glista dals Quizs";
+"analysis.average" = "Media";
+"analysis.noCompletedQuizzes" = "Nagins quizs terminads";
+"analysis.noStatistics" = "Naginas statisticas";
+"analysis.participation" = "Participaziuns";
+"analysis.wins" = "Victorias";
+"analysis.winRate" = "Rata da Victoria";
+"analysis.averageRank" = "Ø Plazza";
+"analysis.averagePoints" = "Ø Puncts";
+"analysis.totalPoints" = "Puncts Totals";
+"analysis.completedQuizzes" = "Quizs Terminads";
+"analysis.uniqueTeams" = "Equipas Unicas";
+"analysis.averageTeamsPerQuiz" = "Ø Equipas per Quiz";
+
 // MARK: - Email
 "email.send" = "Trametter E-mail";
 "email.send.all" = "E-mail a Tut las Equipas";
@@ -407,3 +444,140 @@
 "email.template.scheduleChange.subject" = "Impurtant: Actualisaziun da program Quiz";
 "email.template.scheduleChange.body" = "Tgei,\n\nNus stuain t'informar davart ina midada da program:\n\n🔄 Nova data: [NEW_DATE]\n🔄 Nova ura: [NEW_TIME]\n📍 Lieu: [VENUE] (betg midà)\n\nNus ans scusain per l'inconvenienza.\n\nPer plaschair conferma sche ti pos anc participar.\n\nGrazia per tia chapientscha!";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "Interrumper Quiz";
+"execution.cancel.returnToPlanning" = "Enavos a la Planisaziun";
+"execution.cancel.message" = "Il quiz vegn stoppà e tuttas rundas vegnian marcadas sco betg cumplet. Ils puncts endatads vegnan mantegnids.";
+"execution.liveQuiz" = "Quiz Live";
+"execution.enterScores" = "Endrizzar Puncts";
+"execution.noActiveQuizzes" = "Nagins Quizs Activs";
+"execution.noActiveQuizzes.description" = "Aviar in quiz en la fasa da planisaziun";
+"execution.activeQuizzes.section" = "Quizs Activs (%d)";
+"execution.round.current" = "Runda Actuala";
+"execution.round.completed" = "Runda Finida";
+"execution.rounds.edit" = "Modifitgar Rundas";
+"execution.rounds.edit.help" = "Modifitgar ils puncts da rundas gia finidas";
+"execution.presentation.end" = "Finir Presentaziun";
+"execution.presentation.start" = "Presentaziun";
+"execution.presentation.help" = "Modus Presentaziun (⌘P)";
+"execution.cancel.help" = "Interrumper quiz e turnar a la planisaziun";
+"execution.complete" = "Finir";
+"execution.complete.help" = "Finir quiz (⌘E)";
+"execution.progress" = "Progress";
+"execution.rounds.progress" = "%d/%d Rundas";
+"execution.round.previous" = "Runda Precedenta: %@";
+"execution.round.next" = "Proxima Runda: %@";
+"execution.noRound.selected" = "Nagina Runda Tschernida";
+"execution.noTeams" = "Naginas Equipas Disponiblas";
+"execution.noTeams.description" = "Agiuntar equipas per assignar puncts";
+"execution.score.saved" = "Memorisà: %d";
+"execution.actions" = "Acziuns";
+"execution.reset" = "Resettar";
+"execution.saveAll" = "Memorisar Tut";
+"execution.round.completeAndContinue" = "Finir Runda e Cuntinuar";
+"execution.round.completeLast" = "Finir l'Ultima Runda";
+"execution.leaderboard.live" = "Ranglista Live";
+"execution.editRounds.title" = "Modifitgar Rundas";
+"execution.editRounds.rounds" = "Rundas";
+"execution.editRounds.selectRound" = "Tscherner Runda";
+"execution.editRounds.selectRound.description" = "Tscherni ina runda per modifitgar ils puncts";
+"execution.editRounds.editScores" = "Modifitgar Puncts";
+"execution.editRounds.done" = "Finì";
+"execution.editRounds.roundName.placeholder" = "Num da la Runda";
+"execution.editRounds.maxPoints.label" = "Max. Puncts:";
+"execution.editRounds.maxPoints.perTeam" = "per Equipa";
+"execution.editRounds.maxPoints.display" = "Max. %d Puncts per Equipa";
+"execution.editRounds.editSettings" = "Modifitgar Puncts";
+"execution.editRounds.editSettings.help" = "Modifitgar puncts maximals e num da la runda";
+"execution.editRounds.completed" = "Finì";
+"execution.editRounds.unsavedChanges" = "Ti has midadas betg memorisadas";
+"execution.editRounds.warning.maxPoints" = "Attenziun: Tschertas equipas han dapli puncts che il nov maxim";
+"execution.editRounds.warning.affectedTeams" = "Equipas Pertutgadas: %@";
+"execution.editRounds.warning.limit" = "Questas vegnan automaticamain limitadas a %d puncts.";
+"execution.editRounds.round.complete" = "Marcar Runda sco Finida";
+"execution.editRounds.round.reopen" = "Ruvrir Runda";
+
+// MARK: - About Sheet
+"about.title" = "Davart";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "Versiun %@ (%@)";
+"about.description" = "PubRanker è ina app cumpletta per administrar quizzes per macOS. Planescha events da quiz, administrescha equipas, fa quizzes ed analisescha resultats - tut en in lieu.";
+"about.features.title" = "Funcziuns principalas";
+"about.features.teamManagement" = "Administraziun d'equipas cun equipas globalas";
+"about.features.planning" = "Planisaziun e preparaziun da quizzes";
+"about.features.liveScoring" = "Endataziun da puncts en directa";
+"about.features.analysis" = "Analisa e statistica detagliada";
+"about.features.email" = "Models d'e-mail per equipas";
+"about.technical.title" = "Infurmaziuns tecnicas";
+"about.technical.version" = "Versiun";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "Plattafurma";
+"about.technical.copyright" = "Dretgs d'autur";
+"about.feedback.rate" = "Valitar & Feedback";
+"about.feedback.title" = "Valitaziun & Feedback";
+"about.feedback.message" = "Gida nus a meglierar PubRanker!";
+"about.feedback.rateAppStore" = "Valitar en l'App Store";
+"about.feedback.missingFeatures" = "Funcziuns che mancan?";
+"about.feedback.send" = "Trametter feedback";
+"about.feedback.email.message" = "Contactescha nus via:\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "Avrir e-mail";
+"about.feedback.email.copy" = "Copiar adressa d'e-mail";
+"about.feedback.email.copied" = "Adressa d'e-mail copiada";
+"about.feedback.email.copied.message" = "L'adressa d'e-mail è vegnida copiada en il clipboard.";
+"about.appStore.review" = "Recenziun da l'App Store";
+"about.appStore.notAvailable" = "L'app n'è anc betg disponibla en l'App Store. Valitescha l'app suenter che ella è vegnida publicada.";
+
+"planning.emptyState.title" = "Pront per tes emprim quiz?";
+"planning.emptyState.description" = "Planescha ed organisescha tes pub quiz a moda simpla";
+"planning.emptyState.start" = "Cumenzar cun planisar";
+"quiz.edit.title" = "Modifitgar Quiz";
+"quiz.details" = "Detagls dal Quiz";
+"quiz.name.placeholder" = "Endatar num";
+"quiz.venue.placeholder" = "Endatar lieu";
+"quiz.dateTime" = "Data & Ura";
+"quiz.maxPoints" = "Max. Puncts";
+"quiz.noAvailableTeams.description" = "Tut las squadras èn gia assignadas ad auters quizzes";
+"common.add.count" = "Agiuntar (%d)";
+"team.edit.help" = "Modifitgar squadra";
+"team.remove.help" = "Allontanar squadra dal quiz";
+"team.remove.confirm" = "Allontanar squadra dal quiz?";
+"team.remove.message" = "Vuls ti propi allontanar '%@' da quest quiz? La squadra resta en la glista globala da las squadras.";
+"common.contactPerson" = "Persuna da contact";
+"common.email" = "E-mail";
+"common.designSystem" = "Design System";
+"team.selectFromExisting" = "Tscherner da quels existents (%d)";
+"score.enter.max" = "Endatar Puncts (max. %d per Squadra)";
+"score.nextRound" = "Cuntinuar cun la proxima runda";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "Finir la runda";
+"score.roundCompleted" = "Questa runda è finida";
+"score.saved.title" = "Puncts memorisads! ✅";
+"score.saved.message" = "Ils puncts per %@ èn vegnids memorisads cun success.";
+"common.rounds.edit" = "Modifitgar rundas";
+"common.rounds.select" = "Tscherner runda";
+"common.rounds.select.description" = "Tscherner ina runda per modifitgar ils puncts";
+"common.scores.edit" = "Modifitgar puncts";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "Pli Blers Victorias";
+"sort.mostParticipations" = "Pli Blers Participaziuns";
+"sort.bestAverage" = "Meglra Ø Plazza";
+"sort.mostPoints" = "Pli Blers Puncts";
+"sort.nameAZ" = "Num (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "Analisa dal Quiz";
+"analysisTab.teamStatistics" = "Statistica da las Equipas";
+"analysisTab.overallStatistics" = "Survista Totala";
+
+// MARK: - Common Actions
+"common.edit" = "Modifitgar";
+"common.remove" = "Allontanar";
+"common.confirmed" = "Participaziun confermada";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "Modifitgar Runda";
+"common.teamDetails" = "Detagls da l'Equipa";
+"common.teamName" = "Num da l'Equipa";
+"common.contactInfo" = "Infurmaziuns da Contact";
+"common.editTeam" = "Modifitgar Equipa";

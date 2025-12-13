@@ -15,12 +15,13 @@ final class Team {
     var color: String = "#007AFF"
     var totalScore: Int = 0
     var roundScores: [RoundScore] = []
+    var quizConfirmations: [QuizConfirmation] = []
     var createdAt: Date = Date()
     
     // Team Details
     var contactPerson: String = ""
     var email: String = ""
-    var isConfirmed: Bool = false
+    var isConfirmed: Bool = false // Deprecated: Verwende isConfirmed(for:) stattdessen
     var imageData: Data? = nil
     
     @Relationship(deleteRule: .nullify, inverse: \Quiz.teams)
@@ -66,6 +67,22 @@ final class Team {
             .filter { quizRoundIds.contains($0.roundId) }
             .reduce(0) { $0 + $1.points }
     }
+    
+    // MARK: - Quiz Confirmation Methods
+    
+    /// Setzt die Bestätigung für ein bestimmtes Quiz
+    func setConfirmed(for quiz: Quiz, isConfirmed: Bool) {
+        if let index = quizConfirmations.firstIndex(where: { $0.quizId == quiz.id }) {
+            quizConfirmations[index].isConfirmed = isConfirmed
+        } else {
+            quizConfirmations.append(QuizConfirmation(quizId: quiz.id, quizName: quiz.name, isConfirmed: isConfirmed))
+        }
+    }
+    
+    /// Gibt zurück, ob das Team für ein bestimmtes Quiz bestätigt ist
+    func isConfirmed(for quiz: Quiz) -> Bool {
+        return quizConfirmations.first(where: { $0.quizId == quiz.id })?.isConfirmed ?? false
+    }
 }
 
 // MARK: - RoundScore
@@ -73,4 +90,11 @@ struct RoundScore: Codable {
     var roundId: UUID
     var roundName: String
     var points: Int
+}
+
+// MARK: - QuizConfirmation
+struct QuizConfirmation: Codable {
+    var quizId: UUID
+    var quizName: String
+    var isConfirmed: Bool
 }

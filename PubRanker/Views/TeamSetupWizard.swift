@@ -6,15 +6,27 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TeamSetupWizard: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     
+    @State private var mode: TeamSetupMode = .createNew
     @State private var numberOfTeams: Int = 4
     @State private var teamNames: [String] = []
+    @State private var selectedTeams: Set<UUID> = []
+    @State private var showingAddTeamSheet = false
+    @State private var showingGlobalTeamPicker = false
     @FocusState private var focusedField: Int?
+    
+    enum TeamSetupMode {
+        case createNew
+        case selectExisting
+    }
     
     let presetCounts = [4, 6, 8, 10]
     
@@ -30,6 +42,14 @@ struct TeamSetupWizard: View {
         "Trivia Titans",
         "Rätsel-Ritter"
     ]
+    
+    var availableGlobalTeams: [Team] {
+        allTeams.filter { team in
+            // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
+            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
+        }
+        .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -67,7 +87,87 @@ struct TeamSetupWizard: View {
             
             ScrollView {
                 VStack(spacing: 32) {
-                    // Number of Teams
+                    // Mode Selection
+                    VStack(alignment: .leading, spacing: AppSpacing.sm) {
+                        Text("Methode")
+                            .font(.headline)
+                            .foregroundStyle(Color.appTextPrimary)
+                        
+                        Picker("Methode", selection: $mode) {
+                            Label("Neue Teams erstellen", systemImage: "plus.circle.fill")
+                                .tag(TeamSetupMode.createNew)
+                            Label("Aus vorhandenen Teams auswählen", systemImage: "checkmark.circle.fill")
+                                .tag(TeamSetupMode.selectExisting)
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                    
+                    Divider()
+                    
+                    if mode == .createNew {
+                        createNewTeamsView
+                    } else {
+                        selectExistingTeamsView
+                    }
+                }
+                .padding(.horizontal, 40)
+            }
+            
+            // Action Buttons
+            HStack(spacing: AppSpacing.sm) {
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Abbrechen")
+                        .frame(maxWidth: .infinity)
+                }
+                .keyboardShortcut(.escape)
+                .secondaryGradientButton(size: .large)
+                
+                Button {
+                    if mode == .createNew {
+                        createTeams()
+                        dismiss()
+                    } else {
+                        // Im selectExisting-Modus werden Teams über die Sheets hinzugefügt
+                        dismiss()
+                    }
+                } label: {
+                    HStack(spacing: AppSpacing.xxs) {
+                        Image(systemName: "checkmark.circle.fill")
+                        if mode == .createNew {
+                            Text("\(numberOfTeams) Teams erstellen")
+                                .monospacedDigit()
+                        } else {
+                            Text("Fertig")
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .keyboardShortcut(.return, modifiers: .command)
+                .primaryGradientButton(size: .large)
+            }
+            .padding(.horizontal, AppSpacing.xxl)
+            .padding(.vertical, AppSpacing.sectionSpacing)
+        }
+        .frame(width: 650, height: 750)
+        .background(Color.appBackground)
+        .sheet(isPresented: $showingAddTeamSheet) {
+            AddTeamSheet(quiz: quiz, viewModel: viewModel)
+        }
+        .sheet(isPresented: $showingGlobalTeamPicker) {
+            GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams, modelContext: modelContext)
+        }
+        .onAppear {
+            updateTeamNames()
+            focusedField = 0
+        }
+    }
+    
+    // MARK: - Create New Teams View
+    private var createNewTeamsView: some View {
+        VStack(spacing: 32) {
+            // Number of Teams
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Image(systemName: "number.circle.fill")
@@ -107,13 +207,13 @@ struct TeamSetupWizard: View {
                         .frame(maxWidth: .infinity)
                         
                         // Quick buttons
-                        HStack(spacing: 8) {
+                        HStack(spacing: AppSpacing.xxs) {
                             ForEach(presetCounts, id: \.self) { count in
                                 Button("\(count)") {
                                     numberOfTeams = count
                                     updateTeamNames()
                                 }
-                                .buttonStyle(.bordered)
+                                .secondaryGradientButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -125,9 +225,10 @@ struct TeamSetupWizard: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Image(systemName: "pencil.circle.fill")
-                                .foregroundStyle(.purple)
+                                .foregroundStyle(Color.appSecondary)
                             Text("Team-Namen")
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                             
                             Spacer()
                             
@@ -137,8 +238,7 @@ struct TeamSetupWizard: View {
                                 Label("Zufällige Namen", systemImage: "shuffle")
                                     .font(.caption)
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
+                            .secondaryGradientButton()
                         }
                         
                         VStack(spacing: 12) {
@@ -198,8 +298,8 @@ struct TeamSetupWizard: View {
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color(nsColor: .controlBackgroundColor))
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .background(Color.appBackgroundSecondary)
+                                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                             }
                             
                             if numberOfTeams > 3 {
@@ -210,44 +310,55 @@ struct TeamSetupWizard: View {
                             }
                         }
                     }
-                }
-                .padding(.horizontal, 40)
-            }
-            
-            // Action Buttons
-            HStack(spacing: 16) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Abbrechen")
-                        .frame(maxWidth: .infinity)
-                }
-                .keyboardShortcut(.escape)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                
-                Button {
-                    createTeams()
-                    dismiss()
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("\(numberOfTeams) Teams erstellen")
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-            }
-            .padding(.horizontal, 40)
-            .padding(.vertical, 24)
         }
-        .frame(width: 650, height: 750)
-        .background(Color(nsColor: .windowBackgroundColor))
-        .onAppear {
-            updateTeamNames()
-            focusedField = 0
+    }
+    
+    // MARK: - Select Existing Teams View
+    private var selectExistingTeamsView: some View {
+        VStack(spacing: AppSpacing.sectionSpacing) {
+            if availableGlobalTeams.isEmpty {
+                VStack(spacing: AppSpacing.md) {
+                    Image(systemName: "person.3.slash.fill")
+                        .font(.system(size: 48))
+                        .foregroundStyle(Color.appTextSecondary)
+                    
+                    Text("Keine verfügbaren Teams")
+                        .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
+                    
+                    Text("Erstellen Sie zuerst Teams im Teams-Manager")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.appTextSecondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, AppSpacing.xxl)
+            } else {
+                VStack(spacing: AppSpacing.xs) {
+                    Text("Teams hinzufügen")
+                        .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    HStack(spacing: AppSpacing.xs) {
+                        Button {
+                            showingAddTeamSheet = true
+                        } label: {
+                            Label("Team hinzufügen", systemImage: "plus.circle.fill")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .primaryGradientButton(size: .large)
+                        
+                        Button {
+                            showingGlobalTeamPicker = true
+                        } label: {
+                            Label("Aus vorhandenen wählen (\(availableGlobalTeams.count))", systemImage: "square.stack.3d.up.fill")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .secondaryGradientButton(size: .large)
+                    }
+                }
+                .padding(.vertical, AppSpacing.md)
+            }
         }
     }
     
@@ -298,5 +409,74 @@ struct TeamSetupWizard: View {
             let color = getTeamColorHex(for: index)
             viewModel.addTeam(to: quiz, name: name, color: color)
         }
+    }
+    
+    private func addSelectedTeams() {
+        for teamId in selectedTeams {
+            if let team = allTeams.first(where: { $0.id == teamId }) {
+                viewModel.addExistingTeam(team, to: quiz)
+            }
+        }
+    }
+}
+
+// MARK: - Team Wizard Selection Row
+struct TeamWizardSelectionRow: View {
+    let team: Team
+    let isSelected: Bool
+    let onToggle: () -> Void
+    
+    var body: some View {
+        Button(action: onToggle) {
+            HStack(spacing: AppSpacing.sm) {
+                // Checkbox
+                ZStack {
+                    RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                        .fill(isSelected ? Color.appPrimary : Color.clear)
+                        .frame(width: 24, height: 24)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                .strokeBorder(
+                                    isSelected ? Color.appPrimary : Color.appTextTertiary,
+                                    lineWidth: 2
+                                )
+                        )
+                    
+                    if isSelected {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+                
+                // Team Icon
+                TeamIconView(team: team, size: 32)
+                
+                // Team Name
+                Text(team.name)
+                    .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
+                
+                Spacer()
+                
+                // Team Color Indicator
+                Circle()
+                    .fill(Color(hex: team.color) ?? Color.appPrimary)
+                    .frame(width: 16, height: 16)
+            }
+            .padding(AppSpacing.sm)
+            .background(
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(isSelected ? Color.appPrimary.opacity(0.1) : Color.appBackgroundSecondary)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .strokeBorder(
+                        isSelected ? Color.appPrimary.opacity(0.3) : Color.appTextTertiary.opacity(0.2),
+                        lineWidth: isSelected ? 2 : 1
+                    )
+            )
+        }
+        .buttonStyle(.plain)
     }
 }

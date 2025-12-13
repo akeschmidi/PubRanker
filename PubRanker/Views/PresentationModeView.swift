@@ -22,59 +22,52 @@ struct PresentationModeView: View {
     var body: some View {
         ZStack {
             // Background Gradient
-            LinearGradient(
-                colors: [
-                    Color(red: 0.05, green: 0.05, blue: 0.15),
-                    Color(red: 0.1, green: 0.1, blue: 0.2)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            Color.gradientPubTheme
+                .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // Header
                 presentationHeader
-                    .padding(.horizontal, 60)
-                    .padding(.top, 20)
-                    .padding(.bottom, 10)
+                    .padding(.horizontal, AppSpacing.xxxl)
+                    .padding(.top, AppSpacing.md)
+                    .padding(.bottom, AppSpacing.xxs)
 
                 // Aktive Runde Banner
                 if let currentRound = quiz.currentRound {
                     activeRoundBanner(currentRound)
-                        .padding(.horizontal, 60)
-                        .padding(.vertical, 12)
+                        .padding(.horizontal, AppSpacing.xxxl)
+                        .padding(.vertical, AppSpacing.xs)
                 }
 
                 // PODIUM für Top 3
                 if sortedTeams.count >= 3 {
                     podiumView
-                        .padding(.horizontal, 60)
-                        .padding(.vertical, 20)
+                        .padding(.horizontal, AppSpacing.xxxl)
+                        .padding(.vertical, AppSpacing.md)
                 } else if !sortedTeams.isEmpty {
                     // Falls weniger als 3 Teams, zeige einfache Podium-Version
                     simplePodiumView
-                        .padding(.horizontal, 60)
-                        .padding(.vertical, 20)
+                        .padding(.horizontal, AppSpacing.xxxl)
+                        .padding(.vertical, AppSpacing.md)
                 }
 
                 // Weitere Plätze (ab Platz 4)
                 if sortedTeams.count > 3 {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("WEITERE PLÄTZE")
+                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                        Text(L10n.CommonUI.additionalPlaces)
                             .font(.system(size: 18, weight: .bold))
                             .foregroundStyle(.white.opacity(0.6))
-                            .padding(.horizontal, 60)
-                            .padding(.top, 16)
-                            .padding(.bottom, 8)
+                            .padding(.horizontal, AppSpacing.xxxl)
+                            .padding(.top, AppSpacing.sm)
+                            .padding(.bottom, AppSpacing.xxs)
 
                         // Grid Layout für mehr Platz
                         LazyVGrid(
                             columns: [
-                                GridItem(.flexible(), spacing: 12),
-                                GridItem(.flexible(), spacing: 12)
+                                GridItem(.flexible(), spacing: AppSpacing.xs),
+                                GridItem(.flexible(), spacing: AppSpacing.xs)
                             ],
-                            spacing: 8
+                            spacing: AppSpacing.xxs
                         ) {
                             let rankings = quiz.getTeamRankings()
                             let remainingRankings = rankings.dropFirst(3)
@@ -87,8 +80,8 @@ struct PresentationModeView: View {
                                 )
                             }
                         }
-                        .padding(.horizontal, 60)
-                        .padding(.bottom, 20)
+                        .padding(.horizontal, AppSpacing.xxxl)
+                        .padding(.bottom, AppSpacing.md)
                     }
                 }
 
@@ -117,25 +110,19 @@ struct PresentationModeView: View {
     private var presentationHeader: some View {
         HStack {
             // Trophy Icon & Quiz Name
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.xs) {
                 Image(systemName: "trophy.fill")
                     .font(.system(size: 32))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.yellow, .orange],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .shadow(color: .yellow.opacity(0.5), radius: 8)
+                    .foregroundStyle(Color.gradientSecondary)
+                    .shadow(AppShadow.secondary)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     Text(quiz.name)
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
 
                     if !quiz.venue.isEmpty {
-                        HStack(spacing: 6) {
+                        HStack(spacing: AppSpacing.xxxs) {
                             Image(systemName: "mappin.circle.fill")
                                 .font(.system(size: 10))
                             Text(quiz.venue)
@@ -151,19 +138,13 @@ struct PresentationModeView: View {
     }
 
     private func activeRoundBanner(_ round: Round) -> some View {
-        HStack(spacing: 20) {
+        HStack(spacing: AppSpacing.md) {
             // Play Icon
             ZStack {
                 Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [.green, .green.opacity(0.7)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(Color.gradientSuccess)
                     .frame(width: 50, height: 50)
-                    .shadow(color: .green.opacity(0.5), radius: 10)
+                    .shadow(AppShadow.success)
 
                 Image(systemName: "play.fill")
                     .font(.system(size: 24))
@@ -178,58 +159,42 @@ struct PresentationModeView: View {
             Spacer()
 
             // Max Punkte Info
-            VStack(alignment: .trailing, spacing: 4) {
+            VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
                 Text("MAX. PUNKTE")
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white.opacity(0.6))
                     .tracking(1)
 
-                HStack(spacing: 6) {
+                HStack(spacing: AppSpacing.xxxs) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 20))
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(Color.appSecondary)
 
                     Text("\(round.maxPoints)")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(Color.appSecondary)
                 }
             }
         }
-        .padding(.horizontal, 32)
-        .padding(.vertical, 20)
+        .padding(.horizontal, AppSpacing.xl)
+        .padding(.vertical, AppSpacing.md)
         .background(
             ZStack {
                 // Gradient Background
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.green.opacity(0.25),
-                                Color.green.opacity(0.15)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
+                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                    .fill(Color.appSuccess.opacity(0.2))
 
                 // Border
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        LinearGradient(
-                            colors: [.green.opacity(0.6), .green.opacity(0.3)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 2
-                    )
+                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                    .stroke(Color.appSuccess.opacity(0.5), lineWidth: 2)
 
                 // Glow
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.green.opacity(0.1))
+                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                    .fill(Color.appSuccess.opacity(0.1))
                     .blur(radius: 10)
             }
         )
-        .shadow(color: .green.opacity(0.3), radius: 15, y: 5)
+        .shadow(AppShadow.success)
     }
 
     private var podiumView: some View {
@@ -322,10 +287,10 @@ struct PresentationPodiumPlace: View {
 
     var rankColor: Color {
         switch rank {
-        case 1: return .yellow
-        case 2: return Color(red: 0.75, green: 0.75, blue: 0.75)
-        case 3: return Color(red: 0.8, green: 0.5, blue: 0.2)
-        default: return .blue
+        case 1: return Color.appSecondary
+        case 2: return Color.appTextSecondary
+        case 3: return Color.appPrimary
+        default: return Color.appAccent
         }
     }
 
@@ -340,12 +305,12 @@ struct PresentationPodiumPlace: View {
     var body: some View {
         VStack(spacing: 0) {
             // Team Info oben
-            VStack(spacing: 6) {
+            VStack(spacing: AppSpacing.xxxs) {
                 // Rank Change Indicator
                 if rankChanged {
                     Image(systemName: rankImproved ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
                         .font(.system(size: 20))
-                        .foregroundStyle(rankImproved ? .green : .red)
+                        .foregroundStyle(rankImproved ? Color.appSuccess : Color.red)
                 } else {
                     Image(systemName: "minus.circle.fill")
                         .font(.system(size: 20))
@@ -355,17 +320,11 @@ struct PresentationPodiumPlace: View {
                 // Medaille/Rang
                 ZStack {
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [rankColor, rankColor.opacity(0.7)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .fill(rankColor)
                         .frame(width: 60, height: 60)
-                        .shadow(color: rankColor.opacity(0.6), radius: 10)
+                        .shadow(radius: 4, y: 2)
 
-                    VStack(spacing: 2) {
+                    VStack(spacing: AppSpacing.xxxs) {
                         if rank == 1 {
                             Image(systemName: "crown.fill")
                                 .font(.system(size: 24))
@@ -390,11 +349,11 @@ struct PresentationPodiumPlace: View {
                     .minimumScaleFactor(0.5)
 
                 // Score mit Team-Farbe
-                HStack(spacing: 6) {
+                HStack(spacing: AppSpacing.xxxs) {
                     Circle()
                         .fill(teamColor)
                         .frame(width: 12, height: 12)
-                        .shadow(color: teamColor.opacity(0.6), radius: 4)
+                        .shadow(radius: 3, y: 1)
 
                     Text("\(team.getTotalScore(for: quiz))")
                         .font(.system(size: rank == 1 ? 36 : 32, weight: .bold, design: .rounded))
@@ -402,30 +361,24 @@ struct PresentationPodiumPlace: View {
                         .contentTransition(.numericText())
                         .monospacedDigit()
 
-                    Text("PTS")
+                    Text(L10n.CommonUI.points)
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.5))
                 }
-                .padding(.top, 4)
+                .padding(.top, AppSpacing.xxxs)
             }
-            .padding(.horizontal, 12)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
+            .padding(.horizontal, AppSpacing.xs)
+            .padding(.top, AppSpacing.xs)
+            .padding(.bottom, AppSpacing.xxs)
 
             // Podest-Sockel
             ZStack(alignment: .bottom) {
                 // Hauptsockel
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [rankColor.opacity(0.4), rankColor.opacity(0.2)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                RoundedRectangle(cornerRadius: AppCornerRadius.md, style: .continuous)
+                    .fill(rankColor.opacity(0.3))
                     .frame(height: height)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        RoundedRectangle(cornerRadius: AppCornerRadius.md, style: .continuous)
                             .stroke(rankColor.opacity(0.6), lineWidth: 3)
                     }
 
@@ -433,7 +386,7 @@ struct PresentationPodiumPlace: View {
                 Text("\(rank)")
                     .font(.system(size: rank == 1 ? 80 : 70, weight: .black, design: .rounded))
                     .foregroundStyle(rankColor.opacity(0.2))
-                    .padding(.bottom, 20)
+                    .padding(.bottom, AppSpacing.md)
             }
         }
         .frame(width: rank == 1 ? 240 : 220)
@@ -470,7 +423,7 @@ struct CompactTeamRow: View {
     }
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: AppSpacing.xxs) {
             // Rang
             ZStack {
                 Circle()
@@ -487,7 +440,7 @@ struct CompactTeamRow: View {
                 if rankChanged {
                     Image(systemName: rankImproved ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
                         .font(.system(size: 16))
-                        .foregroundStyle(rankImproved ? .green : .red)
+                        .foregroundStyle(rankImproved ? Color.appSuccess : Color.red)
                 } else {
                     Image(systemName: "minus.circle.fill")
                         .font(.system(size: 16))
@@ -500,7 +453,7 @@ struct CompactTeamRow: View {
             Circle()
                 .fill(teamColor)
                 .frame(width: 14, height: 14)
-                .shadow(color: teamColor.opacity(0.6), radius: 3)
+                .shadow(radius: 3, y: 1)
 
             // Team Name
             Text(team.name)
@@ -509,10 +462,10 @@ struct CompactTeamRow: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
 
-            Spacer(minLength: 4)
+            Spacer(minLength: AppSpacing.xxxs)
 
             // Score
-            HStack(spacing: 4) {
+            HStack(spacing: AppSpacing.xxxs) {
                 Image(systemName: "star.fill")
                     .font(.system(size: 12))
                     .foregroundStyle(.white.opacity(0.5))
@@ -522,18 +475,18 @@ struct CompactTeamRow: View {
                     .foregroundStyle(.white)
                     .monospacedDigit()
 
-                Text("PTS")
+                Text(L10n.CommonUI.points)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(.white.opacity(0.4))
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 8)
+        .padding(.horizontal, AppSpacing.sm)
+        .padding(.vertical, AppSpacing.xxs)
         .background(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .fill(.white.opacity(0.05))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
                         .stroke(.white.opacity(0.1), lineWidth: 1)
                 }
         )
@@ -572,7 +525,15 @@ struct ConfettiView: View {
     }
 
     private func createConfetti(in size: CGSize) {
-        let colors: [Color] = [.red, .blue, .green, .yellow, .orange, .purple, .pink]
+        let colors: [Color] = [
+            Color.appPrimary,
+            Color.appSecondary,
+            Color.appAccent,
+            Color.appSuccess,
+            Color.red,
+            Color.blue,
+            Color.purple
+        ]
 
         for _ in 0..<100 {
             let piece = ConfettiPiece(

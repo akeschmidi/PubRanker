@@ -15,28 +15,34 @@ struct SidebarView: View {
     @Binding var showingAddTeamSheet: Bool
     @Binding var showingEmailComposer: Bool
     @Binding var showingDeleteAlert: Bool
-    
+
     let filteredTeams: [Team]
+
+    @Binding var isMultiSelectMode: Bool
+    @Binding var selectedTeamIDs: Set<Team.ID>
+    @Binding var showingMultiDeleteAlert: Bool
+
     let onCreateTestData: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Label("Team-Manager", systemImage: "person.3.fill")
                         .font(.title2)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
                     Text("Teams verwalten und organisieren")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
                 
                 // Moderner + Button
                 Button {
                     showingAddTeamSheet = true
                 } label: {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "plus.circle.fill")
                             .font(.body)
                         Text("Neues Team")
@@ -44,27 +50,15 @@ struct SidebarView: View {
                             .bold()
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(
-                        LinearGradient(
-                            colors: [.blue, .cyan],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .shadow(color: .blue.opacity(0.3), radius: 6, y: 3)
                 }
-                .buttonStyle(.plain)
+                .primaryGradientButton()
                 .help("Neues Team erstellen")
                 
                 // E-Mail Button
                 Button {
                     showingEmailComposer = true
                 } label: {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "envelope.fill")
                             .font(.body)
                         Text(NSLocalizedString("email.send.all", comment: "Email to all teams"))
@@ -72,29 +66,17 @@ struct SidebarView: View {
                             .bold()
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(
-                        LinearGradient(
-                            colors: [.orange, .red],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .shadow(color: .orange.opacity(0.3), radius: 6, y: 3)
                 }
-                .buttonStyle(.plain)
+                .accentGradientButton()
                 .help(NSLocalizedString("email.send.all", comment: "Email to all teams"))
-                
+
                 #if DEBUG
                 // Debug Button für Testdaten
                 if let onCreateTestData = onCreateTestData {
                     Button {
                         onCreateTestData()
                     } label: {
-                        HStack(spacing: 8) {
+                        HStack(spacing: AppSpacing.xxs) {
                             Image(systemName: "wand.and.stars")
                                 .font(.body)
                             Text("🧪 Testdaten erstellen")
@@ -102,33 +84,21 @@ struct SidebarView: View {
                                 .bold()
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
-                        .background(
-                            LinearGradient(
-                                colors: [.purple.opacity(0.7), .pink.opacity(0.7)],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .shadow(color: .purple.opacity(0.3), radius: 6, y: 3)
                     }
-                    .buttonStyle(.plain)
+                    .secondaryGradientButton()
                     .help("Erstellt Test-Teams und Quizzes (nur Debug)")
                 }
                 #endif
             }
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
+            .padding(AppSpacing.md)
+            .background(Color.appBackgroundSecondary)
             
             Divider()
             
             // Search Bar
-            HStack(spacing: 10) {
+            HStack(spacing: AppSpacing.xs) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                     .font(.body)
                     .frame(width: 20)
                 TextField("Teams durchsuchen...", text: $searchText)
@@ -139,31 +109,31 @@ struct SidebarView: View {
                         searchText = ""
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .font(.body)
                     }
                     .buttonStyle(.plain)
                     .help("Suche zurücksetzen")
                 }
             }
-            .padding(12)
+            .padding(AppSpacing.xs)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(nsColor: .controlBackgroundColor))
+                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                    .fill(Color.appBackgroundSecondary)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                            .stroke(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
                     }
             )
-            .padding(.horizontal)
-            .padding(.vertical, 12)
+            .padding(.horizontal, AppSpacing.screenPadding)
+            .padding(.vertical, AppSpacing.xs)
             
             Divider()
             
-            // Sort Menu
-            HStack(spacing: 10) {
+            // Sort Menu und Auswählen Button
+            HStack(spacing: AppSpacing.xs) {
                 Image(systemName: "arrow.up.arrow.down")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                     .font(.caption)
                     .frame(width: 16)
                 
@@ -186,36 +156,70 @@ struct SidebarView: View {
                         }
                     }
                 } label: {
-                    HStack(spacing: 6) {
+                    HStack(spacing: AppSpacing.xxxs) {
                         Text("Sortieren:")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                         Text(sortOption.rawValue)
                             .font(.caption)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(Color.appTextPrimary)
                             .lineLimit(1)
                         Image(systemName: "chevron.down")
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
                 }
                 .buttonStyle(.plain)
                 
                 Spacer()
+                
+                // Löschen Button (ersetzt Auswählen-Button wenn Teams ausgewählt)
+                if isMultiSelectMode && !selectedTeamIDs.isEmpty {
+                    Button {
+                        showingMultiDeleteAlert = true
+                    } label: {
+                        HStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "trash.fill")
+                                .font(.caption)
+                            Text("\(selectedTeamIDs.count)")
+                                .font(.caption)
+                                .bold()
+                                .monospacedDigit()
+                        }
+                    }
+                    .accentGradientButton()
+                    .help("\(selectedTeamIDs.count) Teams löschen")
+                    .transition(.scale.combined(with: .opacity))
+                } else {
+                    // Multi-Select Toggle Button (nur Icon, kein Text)
+                    Button {
+                        isMultiSelectMode.toggle()
+                        if !isMultiSelectMode {
+                            selectedTeamIDs.removeAll()
+                        }
+                    } label: {
+                        Image(systemName: isMultiSelectMode ? "checkmark.circle.fill" : "checkmark.circle")
+                            .font(.caption)
+                    }
+                    .secondaryGradientButton()
+                    .help(isMultiSelectMode ? "Multi-Select beenden" : "Mehrere Teams auswählen")
+                    .transition(.scale.combined(with: .opacity))
+                }
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
+            .padding(.horizontal, AppSpacing.xs)
+            .padding(.vertical, AppSpacing.xs)
             .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                    .fill(Color.appBackgroundSecondary.opacity(0.5))
             )
-            .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.horizontal, AppSpacing.screenPadding)
+            .padding(.vertical, AppSpacing.xxs)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isMultiSelectMode)
             
             Divider()
             
             // Teams List
-            List(selection: $selectedTeam) {
+            List(selection: isMultiSelectMode ? nil : $selectedTeam) {
                 if filteredTeams.isEmpty {
                     ContentUnavailableView(
                         "Keine Teams gefunden",
@@ -226,27 +230,102 @@ struct SidebarView: View {
                 } else {
                     Section {
                         ForEach(filteredTeams) { team in
-                            GlobalTeamSidebarRow(team: team)
-                                .tag(team)
+                            if isMultiSelectMode {
+                                MultiSelectTeamRow(
+                                    team: team,
+                                    isSelected: selectedTeamIDs.contains(team.id)
+                                )
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    if selectedTeamIDs.contains(team.id) {
+                                        selectedTeamIDs.remove(team.id)
+                                    } else {
+                                        selectedTeamIDs.insert(team.id)
+                                    }
+                                }
+                            } else {
+                                GlobalTeamSidebarRow(team: team)
+                                    .tag(team)
+                            }
                         }
                         .onDelete { indexSet in
-                            for index in indexSet {
-                                let team = filteredTeams[index]
-                                selectedTeam = team
-                                showingDeleteAlert = true
+                            if !isMultiSelectMode {
+                                for index in indexSet {
+                                    let team = filteredTeams[index]
+                                    selectedTeam = team
+                                    showingDeleteAlert = true
+                                }
                             }
                         }
                     } header: {
-                        Text("Teams (\(filteredTeams.count))")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
+                        HStack {
+                            Text("Teams (\(filteredTeams.count))")
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
+
+                            if isMultiSelectMode && !filteredTeams.isEmpty {
+                                Spacer()
+                                Button {
+                                    if selectedTeamIDs.count == filteredTeams.count {
+                                        selectedTeamIDs.removeAll()
+                                    } else {
+                                        selectedTeamIDs = Set(filteredTeams.map { $0.id })
+                                    }
+                                } label: {
+                                    Text(selectedTeamIDs.count == filteredTeams.count ? "Alle abwählen" : "Alle wählen")
+                                        .font(.caption)
+                                        .foregroundStyle(Color.appPrimary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
                     }
                 }
             }
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
         }
+        .navigationTitle("")
         .frame(minWidth: 280, idealWidth: 320)
+    }
+}
+
+// MARK: - Multi-Select Team Row
+
+struct MultiSelectTeamRow: View {
+    let team: Team
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: AppSpacing.xs) {
+            // Checkbox
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.title3)
+                .foregroundStyle(isSelected ? Color.appPrimary : Color.appTextTertiary)
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
+
+            // Team Icon
+            TeamIconView(team: team, size: 32)
+
+            // Team Info
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                Text(team.name)
+                    .font(.body)
+                    .bold()
+                    .foregroundStyle(Color.appTextPrimary)
+
+                if !team.contactPerson.isEmpty {
+                    Text(team.contactPerson)
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                }
+            }
+
+            Spacer()
+        }
+        .padding(.vertical, AppSpacing.xxs)
+        .contentShape(Rectangle())
     }
 }
 

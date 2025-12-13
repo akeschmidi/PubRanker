@@ -12,31 +12,32 @@ struct GlobalTeamSidebarRow: View {
     let team: Team
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             TeamIconView(team: team, size: 36)
             
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(team.name)
                     .font(.body)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                     .lineLimit(1)
                 
                 if let quizzes = team.quizzes, !quizzes.isEmpty {
-                    HStack(spacing: 4) {
+                    HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: "link.circle.fill")
                             .font(.caption)
                         Text("\(quizzes.count)")
                             .font(.caption)
                             .monospacedDigit()
                     }
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(Color.appSecondary)
                 }
             }
             
             Spacer()
         }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 4)
+        .padding(.vertical, AppSpacing.xxxs)
+        .padding(.horizontal, AppSpacing.xxxs)
         .contentShape(Rectangle())
     }
 }

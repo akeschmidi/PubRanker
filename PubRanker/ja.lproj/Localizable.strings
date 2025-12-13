@@ -344,6 +344,43 @@
 "analysis.leaderboard" = "リーダーボード";
 "analysis.overview" = "概要";
 
+// MARK: - Analysis View (v2.0)
+"analysis.noQuizzes" = "利用可能なクイズなし";
+"analysis.noQuizzes.description" = "クイズを開始または完了すると、ここに表示されます";
+"analysis.activeQuizzes.section" = "アクティブなクイズ (%d)";
+"analysis.completedQuizzes.section" = "完了したクイズ (%d)";
+"analysis.points" = "ポイント";
+"analysis.statistics" = "統計";
+"analysis.maxPoints" = "最大: %d";
+"analysis.allQuizzes" = "すべてのクイズの概要";
+"analysis.sorting" = "並び替え:";
+"analysis.noTeamStats.description" = "チーム統計を表示するにはクイズを完了してください";
+"analysis.teams.section" = "チーム (%d)";
+"analysis.coreStats" = "主要統計";
+"analysis.performance" = "パフォーマンス概要";
+"analysis.podiumRate" = "表彰台率";
+"analysis.bestRank" = "最高順位";
+"analysis.worstRank" = "最低順位";
+"analysis.quizHistory" = "クイズ履歴";
+"analysis.overview.description" = "完了したすべてのクイズの統計";
+"analysis.teamLevel" = "チームレベル";
+"analysis.maxScore" = "最大スコア";
+"analysis.achievedScore" = "達成スコア";
+"analysis.totalLevel" = "総合レベル";
+"analysis.quizListing" = "クイズ一覧";
+"analysis.average" = "平均";
+"analysis.noCompletedQuizzes" = "完了したクイズなし";
+"analysis.noStatistics" = "統計なし";
+"analysis.participation" = "参加";
+"analysis.wins" = "優勝";
+"analysis.winRate" = "勝率";
+"analysis.averageRank" = "平均順位";
+"analysis.averagePoints" = "平均ポイント";
+"analysis.totalPoints" = "合計ポイント";
+"analysis.completedQuizzes" = "完了したクイズ";
+"analysis.uniqueTeams" = "ユニークチーム";
+"analysis.averageTeamsPerQuiz" = "クイズあたりの平均チーム";
+
 // MARK: - Email
 "email.send" = "メールを送信";
 "email.send.all" = "全チームにメール";
@@ -407,3 +444,140 @@
 "email.template.scheduleChange.subject" = "重要: クイズスケジュールの更新";
 "email.template.scheduleChange.body" = "皆様へ、\n\nスケジュール変更についてお知らせします：\n\n🔄 新しい日付: [NEW_DATE]\n🔄 新しい時間: [NEW_TIME]\n📍 場所: [VENUE] (変更なし)\n\nご不便をおかけして申し訳ございません。\n\nご参加可能かどうかご確認ください。\n\nご理解いただきありがとうございます！";
 
+// MARK: - Execution View (v2.0)
+"execution.cancel.title" = "クイズをキャンセル";
+"execution.cancel.returnToPlanning" = "計画に戻る";
+"execution.cancel.message" = "クイズが停止され、すべてのラウンドは未完了としてマークされます。入力されたポイントは保持されます。";
+"execution.liveQuiz" = "ライブクイズ";
+"execution.enterScores" = "スコアを入力";
+"execution.noActiveQuizzes" = "アクティブなクイズなし";
+"execution.noActiveQuizzes.description" = "計画フェーズでクイズを開始してください";
+"execution.activeQuizzes.section" = "アクティブなクイズ (%d)";
+"execution.round.current" = "現在のラウンド";
+"execution.round.completed" = "完了したラウンド";
+"execution.rounds.edit" = "ラウンドを編集";
+"execution.rounds.edit.help" = "すでに完了したラウンドのポイントを編集";
+"execution.presentation.end" = "プレゼンテーションを終了";
+"execution.presentation.start" = "プレゼンテーション";
+"execution.presentation.help" = "プレゼンテーションモード (⌘P)";
+"execution.cancel.help" = "クイズをキャンセルして計画に戻る";
+"execution.complete" = "完了";
+"execution.complete.help" = "クイズを完了 (⌘E)";
+"execution.progress" = "進行状況";
+"execution.rounds.progress" = "%d/%d ラウンド";
+"execution.round.previous" = "前のラウンド: %@";
+"execution.round.next" = "次のラウンド: %@";
+"execution.noRound.selected" = "ラウンドが選択されていません";
+"execution.noTeams" = "利用可能なチームなし";
+"execution.noTeams.description" = "ポイントを割り当てるにはチームを追加してください";
+"execution.score.saved" = "保存済み: %d";
+"execution.actions" = "アクション";
+"execution.reset" = "リセット";
+"execution.saveAll" = "すべて保存";
+"execution.round.completeAndContinue" = "ラウンドを完了して続行";
+"execution.round.completeLast" = "最後のラウンドを完了";
+"execution.leaderboard.live" = "ライブリーダーボード";
+"execution.editRounds.title" = "ラウンドを編集";
+"execution.editRounds.rounds" = "ラウンド";
+"execution.editRounds.selectRound" = "ラウンドを選択";
+"execution.editRounds.selectRound.description" = "ポイントを編集するラウンドを選択";
+"execution.editRounds.editScores" = "ポイントを編集";
+"execution.editRounds.done" = "完了";
+"execution.editRounds.roundName.placeholder" = "ラウンド名";
+"execution.editRounds.maxPoints.label" = "最大ポイント:";
+"execution.editRounds.maxPoints.perTeam" = "チームあたり";
+"execution.editRounds.maxPoints.display" = "チームあたり最大 %d ポイント";
+"execution.editRounds.editSettings" = "ポイントを編集";
+"execution.editRounds.editSettings.help" = "最大ポイントとラウンド名を編集";
+"execution.editRounds.completed" = "完了";
+"execution.editRounds.unsavedChanges" = "保存されていない変更があります";
+"execution.editRounds.warning.maxPoints" = "警告: 一部のチームのポイントが新しい最大値を超えています";
+"execution.editRounds.warning.affectedTeams" = "影響を受けるチーム: %@";
+"execution.editRounds.warning.limit" = "これらは自動的に %d ポイントに制限されます。";
+"execution.editRounds.round.complete" = "ラウンドを完了としてマーク";
+"execution.editRounds.round.reopen" = "ラウンドを再開";
+
+// MARK: - About Sheet
+"about.title" = "このアプリについて";
+"about.quizMasterHub" = "QuizMaster Hub";
+"about.version" = "バージョン %@ (%@)";
+"about.description" = "PubRankerはmacOS用の包括的なクイズ管理アプリです。クイズイベントの計画、チーム管理、クイズの実施、結果分析をすべて一箇所で。";
+"about.features.title" = "主な機能";
+"about.features.teamManagement" = "グローバルチーム管理";
+"about.features.planning" = "クイズの計画と準備";
+"about.features.liveScoring" = "リアルタイムスコア入力";
+"about.features.analysis" = "詳細な分析と統計";
+"about.features.email" = "チーム用メールテンプレート";
+"about.technical.title" = "技術情報";
+"about.technical.version" = "バージョン";
+"about.technical.bundleId" = "Bundle ID";
+"about.technical.platform" = "プラットフォーム";
+"about.technical.copyright" = "著作権";
+"about.feedback.rate" = "評価とフィードバック";
+"about.feedback.title" = "評価とフィードバック";
+"about.feedback.message" = "PubRankerの改善にご協力ください！";
+"about.feedback.rateAppStore" = "App Storeで評価";
+"about.feedback.missingFeatures" = "機能が足りませんか？";
+"about.feedback.send" = "フィードバックを送信";
+"about.feedback.email.message" = "お問い合わせ：\n\nake_schmidi@me.com";
+"about.feedback.email.open" = "メールを開く";
+"about.feedback.email.copy" = "メールアドレスをコピー";
+"about.feedback.email.copied" = "メールアドレスをコピーしました";
+"about.feedback.email.copied.message" = "メールアドレスがクリップボードにコピーされました。";
+"about.appStore.review" = "App Storeレビュー";
+"about.appStore.notAvailable" = "このアプリはまだApp Storeで公開されていません。公開後に評価してください。";
+
+"planning.emptyState.title" = "最初のクイズの準備はできていますか？";
+"planning.emptyState.description" = "パブクイズを簡単に計画・整理";
+"planning.emptyState.start" = "計画を始める";
+"quiz.edit.title" = "クイズを編集";
+"quiz.details" = "クイズ詳細";
+"quiz.name.placeholder" = "名前を入力";
+"quiz.venue.placeholder" = "場所を入力";
+"quiz.dateTime" = "日付と時刻";
+"quiz.maxPoints" = "最大ポイント";
+"quiz.noAvailableTeams.description" = "すべてのチームは既に他のクイズに割り当てられています";
+"common.add.count" = "追加 (%d)";
+"team.edit.help" = "チームを編集";
+"team.remove.help" = "クイズからチームを削除";
+"team.remove.confirm" = "クイズからチームを削除しますか？";
+"team.remove.message" = "本当に '%@' をこのクイズから削除しますか？チームはグローバルチームリストに残ります。";
+"common.contactPerson" = "連絡先";
+"common.email" = "メール";
+"common.designSystem" = "デザインシステム";
+"team.selectFromExisting" = "既存から選択 (%d)";
+"score.enter.max" = "ポイントを入力（チームあたり最大 %d）";
+"score.nextRound" = "次のラウンドに進む";
+"score.nextRound.name" = "→ %@";
+"score.completeRound" = "ラウンドを完了";
+"score.roundCompleted" = "このラウンドは完了しました";
+"score.saved.title" = "ポイントを保存しました！ ✅";
+"score.saved.message" = "%@ のポイントが正常に保存されました。";
+"common.rounds.edit" = "ラウンドを編集";
+"common.rounds.select" = "ラウンドを選択";
+"common.rounds.select.description" = "ポイントを編集するラウンドを選択";
+"common.scores.edit" = "ポイントを編集";
+
+
+// MARK: - Sorting
+"sort.mostWins" = "最多優勝";
+"sort.mostParticipations" = "最多参加";
+"sort.bestAverage" = "最高平均順位";
+"sort.mostPoints" = "最多ポイント";
+"sort.nameAZ" = "名前 (A-Z)";
+
+// MARK: - Analysis Tabs
+"analysisTab.quizAnalysis" = "クイズ分析";
+"analysisTab.teamStatistics" = "チーム統計";
+"analysisTab.overallStatistics" = "総合概要";
+
+// MARK: - Common Actions
+"common.edit" = "編集";
+"common.remove" = "削除";
+"common.confirmed" = "参加確認済み";
+"common.roundNumber" = "R%d";
+"common.round.edit" = "ラウンドを編集";
+"common.teamDetails" = "チーム詳細";
+"common.teamName" = "チーム名";
+"common.contactInfo" = "連絡先情報";
+"common.editTeam" = "チームを編集";

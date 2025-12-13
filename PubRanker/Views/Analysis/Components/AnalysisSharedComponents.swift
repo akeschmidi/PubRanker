@@ -33,17 +33,24 @@ struct ChartEmptyStateView: View {
         .frame(maxWidth: .infinity)
         .frame(height: 200)
         .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .padding(.horizontal)
     }
 }
 
 // MARK: - Analysis Tab Enum
-enum AnalysisTab: String, CaseIterable {
-    case quizAnalysis = "Quiz-Auswertung"
-    case teamStatistics = "Team-Statistiken"
-    case overallStatistics = "Gesamt-Übersicht"
+enum AnalysisTab: CaseIterable {
+    case quizAnalysis
+    case teamStatistics
+    case overallStatistics
+
+    var rawValue: String {
+        switch self {
+        case .quizAnalysis: return NSLocalizedString("analysisTab.quizAnalysis", comment: "Quiz Analysis")
+        case .teamStatistics: return NSLocalizedString("analysisTab.teamStatistics", comment: "Team Statistics")
+        case .overallStatistics: return NSLocalizedString("analysisTab.overallStatistics", comment: "Overall Statistics")
+        }
+    }
 
     var icon: String {
         switch self {
@@ -74,7 +81,7 @@ struct ActiveQuizRowAnalysis: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Circle()
-                    .fill(.green)
+                    .fill(Color.appSuccess)
                     .frame(width: 8, height: 8)
 
                 Text(quiz.name)

@@ -102,7 +102,7 @@ struct TeamStatisticsView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
+            .background(Color.appBackgroundSecondary)
 
             Divider()
 
@@ -125,11 +125,11 @@ struct TeamStatisticsView: View {
             }
             .padding(12)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(nsColor: .controlBackgroundColor))
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(Color.appBackgroundSecondary)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                            .stroke(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
                     }
             )
             .padding(.horizontal)
@@ -382,7 +382,7 @@ struct TeamStatisticsView: View {
                     .frame(height: 12)
                 }
                 .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
+                .background(Color.appBackgroundSecondary)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
 
                 // Best & Worst Performance
@@ -491,11 +491,11 @@ struct TeamStatisticsView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(nsColor: .controlBackgroundColor))
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .fill(Color.appBackgroundSecondary)
         )
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(rankColor(performance.rank).opacity(0.3), lineWidth: 2)
         }
     }
@@ -516,8 +516,8 @@ struct TeamStatisticsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .background(Color.appBackgroundSecondary)
+                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
     }
 
     private func podiumBadge(place: Int, count: Int, color: Color, total: Int) -> some View {

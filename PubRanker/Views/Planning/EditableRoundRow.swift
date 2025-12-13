@@ -17,11 +17,11 @@ struct EditableRoundRow: View {
     
     var statusColor: Color {
         if round.isCompleted {
-            return .green
+            return Color.appSuccess
         } else if quiz.isActive && quiz.currentRound?.id == round.id {
-            return .orange
+            return Color.appAccent
         } else {
-            return .gray
+            return Color.appTextSecondary
         }
     }
     
@@ -46,7 +46,7 @@ struct EditableRoundRow: View {
     }
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: AppSpacing.sm) {
             // Runden-Nummer Badge
             ZStack {
                 Circle()
@@ -57,24 +57,25 @@ struct EditableRoundRow: View {
                             endPoint: .bottomTrailing
                         )
                     )
-                    .frame(width: 48, height: 48)
-                    .shadow(color: statusColor.opacity(0.4), radius: 6, x: 0, y: 2)
-                
+                    .frame(width: AppSpacing.xxxl, height: AppSpacing.xxxl)
+                    .shadow(AppShadow.md)
+
                 Text("R\(getRoundNumber())")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: AppSpacing.sm, weight: .bold))
                     .foregroundStyle(.white)
+                    .monospacedDigit()
             }
             
             // Runden-Info
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(round.name)
                     .font(.title3)
                     .bold()
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Color.appTextPrimary)
                 
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     // Status
-                    HStack(spacing: 4) {
+                    HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: statusIcon)
                             .font(.caption)
                             .foregroundStyle(statusColor)
@@ -82,19 +83,20 @@ struct EditableRoundRow: View {
                             .font(.subheadline)
                             .foregroundStyle(statusColor)
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, AppSpacing.xxs)
+                    .padding(.vertical, AppSpacing.xxxs)
                     .background(statusColor.opacity(0.15))
                     .clipShape(Capsule())
                     
                     // Punkte
-                    HStack(spacing: 4) {
+                    HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: "star.fill")
                             .font(.caption)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.appAccent)
                         Text("\(round.maxPoints) Pkt")
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
                     }
                 }
             }
@@ -113,22 +115,21 @@ struct EditableRoundRow: View {
             Button {
                 showingEditSheet = true
             } label: {
-                Image(systemName: "pencil.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(.blue)
+                HStack(spacing: AppSpacing.xxs) {
+                    Image(systemName: "pencil")
+                        .font(.body)
+                    Text("Bearbeiten")
+                        .font(.body)
+                }
             }
-            .buttonStyle(.plain)
+            .primaryGradientButton()
             .help("Runde bearbeiten")
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(nsColor: .controlBackgroundColor))
-                .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
-        )
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.vertical, AppSpacing.sm)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(
                     LinearGradient(
                         colors: [
@@ -138,7 +139,7 @@ struct EditableRoundRow: View {
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 2.5
+                    lineWidth: AppSpacing.xxxs
                 )
         }
         .sheet(isPresented: $showingEditSheet) {

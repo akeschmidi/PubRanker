@@ -32,6 +32,7 @@ struct PlanningView: View {
                 plannedQuizzes: plannedQuizzes,
                 viewModel: viewModel
             )
+            .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 500)
         } detail: {
             if let quiz = selectedQuiz {
                 PlanningDetailView(
@@ -56,8 +57,19 @@ struct PlanningView: View {
         .navigationSplitViewStyle(.balanced)
         .onAppear {
             viewModel.setContext(modelContext)
-            if selectedQuiz == nil && !plannedQuizzes.isEmpty {
+            // If navigating from Teams Manager with a selected quiz, use it
+            if let navigationQuiz = viewModel.selectedQuiz {
+                selectedQuiz = navigationQuiz
+                viewModel.selectedQuiz = nil // Clear after using
+            } else if selectedQuiz == nil && !plannedQuizzes.isEmpty {
                 selectedQuiz = plannedQuizzes.first
+            }
+        }
+        .onChange(of: viewModel.selectedQuiz) { oldValue, newValue in
+            // If viewModel.selectedQuiz is set externally (e.g., from Teams Manager), update local selection
+            if let newQuiz = newValue {
+                selectedQuiz = newQuiz
+                viewModel.selectedQuiz = nil // Clear after using
             }
         }
         .onChange(of: plannedQuizzes) { oldValue, newValue in
@@ -88,7 +100,7 @@ struct PlanningView: View {
             }
         } message: {
             if let quiz = quizToDelete {
-                Text("Möchtest du '\(quiz.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+                Text("Möchtest du das Quiz '\(quiz.name)' wirklich löschen?")
             }
         }
     }

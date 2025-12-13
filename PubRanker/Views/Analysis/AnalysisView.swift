@@ -40,8 +40,8 @@ struct AnalysisView: View {
                 }
             }
             .pickerStyle(.segmented)
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
+            .padding(.horizontal, AppSpacing.screenPadding)
+            .padding(.vertical, AppSpacing.xs)
 
             Divider()
 
@@ -90,36 +90,42 @@ struct AnalysisView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                // Empty group to override default sidebar toggle
+            }
+        }
     }
-    
+
     private var sidebar: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(alignment: .leading, spacing: 8) {
-                Label("Quiz Auswerten", systemImage: "chart.bar.fill")
+            VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                Label(L10n.Analysis.title, systemImage: "chart.bar.fill")
                     .font(.title2)
                     .bold()
-                Text("Ergebnisse analysieren")
+                    .foregroundStyle(Color.appTextPrimary)
+                Text(L10n.Analysis.subtitle)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
-            
+            .padding(AppSpacing.md)
+            .background(Color.appBackgroundSecondary)
+
             Divider()
-            
+
             // Quiz List
             List(selection: $selectedQuiz) {
                 if analyzableQuizzes.isEmpty {
                     ContentUnavailableView(
-                        "Keine Quiz vorhanden",
+                        L10n.Analysis.noQuizzes,
                         systemImage: "chart.bar",
-                        description: Text("Starte oder beende ein Quiz, um es hier zu sehen")
+                        description: Text(L10n.Analysis.noQuizzesDescription())
                     )
                 } else {
                     if !activeQuizzes.isEmpty {
-                        Section("Aktive Quiz (\(activeQuizzes.count))") {
+                        Section(L10n.Analysis.activeQuizzesSection(activeQuizzes.count)) {
                             ForEach(activeQuizzes) { quiz in
                                 ActiveQuizRowAnalysis(quiz: quiz)
                                     .tag(quiz)
@@ -142,9 +148,9 @@ struct AnalysisView: View {
                             }
                         }
                     }
-                    
+
                     if !completedQuizzes.isEmpty {
-                        Section("Abgeschlossene Quiz (\(completedQuizzes.count))") {
+                        Section(L10n.Analysis.completedQuizzesSection(completedQuizzes.count)) {
                             ForEach(completedQuizzes) { quiz in
                                 CompletedQuizRow(quiz: quiz)
                                     .tag(quiz)
@@ -171,6 +177,7 @@ struct AnalysisView: View {
             }
             .listStyle(.sidebar)
         }
+        .navigationTitle("")
         .alert(NSLocalizedString("export.success.title", comment: "Export success title"), isPresented: $showingExportDialog) {
             if let fileURL = exportedFileURL {
                 Button(NSLocalizedString("export.showInFinder", comment: "Show in Finder")) {
@@ -183,7 +190,7 @@ struct AnalysisView: View {
                     }
                 }
             }
-            Button("OK") {}
+            Button(L10n.Alert.ok) {}
         } message: {
             if let fileURL = exportedFileURL {
                 Text(String(format: NSLocalizedString("export.success.message", comment: "Export success message"), fileURL.lastPathComponent))
@@ -204,43 +211,43 @@ struct AnalysisView: View {
             Text(String(format: NSLocalizedString("quiz.delete.message", comment: "Delete quiz message"), quiz.name))
         }
     }
-    
+
     private func deleteQuiz(_ quiz: Quiz) {
         // Wenn das zu löschende Quiz aktuell ausgewählt ist, deselektiere es
         if selectedQuiz?.id == quiz.id {
             selectedQuiz = nil
         }
-        
+
         // Lösche das Quiz aus dem ModelContext
         modelContext.delete(quiz)
-        
+
         // Setze den State zurück
         quizToDelete = nil
     }
-    
+
     private func analysisDetailView(for quiz: Quiz) -> some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: AppSpacing.sectionSpacing) {
                 // Quiz Result Header
                 resultHeader(quiz)
-                
+
                 // Export Section
                 exportSection(quiz)
-                
+
                 Divider()
-                
+
                 // Winner Podium
                 if quiz.safeTeams.count >= 3 {
                     winnerPodium(quiz)
                 }
-                
+
                 Divider()
-                
+
                 // Full Results
                 fullResultsSection(quiz)
-                
+
                 Divider()
-                
+
                 // Statistics
                 statisticsSection(quiz)
 
@@ -254,142 +261,142 @@ struct AnalysisView: View {
                 // Round-by-Round Breakdown
                 roundBreakdown(quiz)
             }
-            .padding(.vertical)
+            .padding(.vertical, AppSpacing.screenPadding)
         }
     }
-    
+
     private func resultHeader(_ quiz: Quiz) -> some View {
-        VStack(spacing: 16) {
+        VStack(spacing: AppSpacing.sm) {
             // Trophy/Chart Icon
             ZStack {
                 Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: quiz.isCompleted ? [.yellow, .orange] : [.blue, .cyan],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(quiz.isCompleted ? Color.appSecondary : Color.appPrimary)
                     .frame(width: 80, height: 80)
-                    .shadow(color: (quiz.isCompleted ? Color.orange : Color.blue).opacity(0.4), radius: 10)
-                
+                    .shadow(radius: 4, y: 2)
+
                 Image(systemName: quiz.isCompleted ? "trophy.fill" : "chart.bar.fill")
                     .font(.system(size: 40))
                     .foregroundStyle(.white)
             }
-            
+
             // Quiz Info
-            VStack(spacing: 8) {
+            VStack(spacing: AppSpacing.xxs) {
                 Text(quiz.name)
                     .font(.title)
                     .bold()
-                
-                HStack(spacing: 16) {
+                    .foregroundStyle(Color.appTextPrimary)
+
+                HStack(spacing: AppSpacing.sm) {
                     if !quiz.venue.isEmpty {
                         Label(quiz.venue, systemImage: "mappin.circle")
                     }
                     Label(quiz.date.formatted(date: .abbreviated, time: .shortened), systemImage: "calendar")
                 }
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
-                
+                .foregroundStyle(Color.appTextSecondary)
+
                 if quiz.isCompleted {
-                    Label("Abgeschlossen", systemImage: "checkmark.circle.fill")
+                    Label(NSLocalizedString("status.completed", comment: "Completed"), systemImage: "checkmark.circle.fill")
                         .font(.caption)
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color.green)
+                        .padding(.horizontal, AppSpacing.xs)
+                        .padding(.vertical, AppSpacing.xxxs)
+                        .background(Color.appSuccess)
                         .clipShape(Capsule())
                 } else {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Circle()
-                            .fill(.green)
+                            .fill(Color.appSuccess)
                             .frame(width: 8, height: 8)
-                        Label("Live - läuft gerade", systemImage: "circle.fill")
+                        Label(NSLocalizedString("analysis.liveRunning", comment: "Live - running"), systemImage: "circle.fill")
                             .font(.caption)
                             .foregroundStyle(.white)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.green)
+                    .padding(.horizontal, AppSpacing.xs)
+                    .padding(.vertical, AppSpacing.xxxs)
+                    .background(Color.appSuccess)
                     .clipShape(Capsule())
                 }
-                
+
                 if !quiz.isCompleted {
-                    Text("Zwischenstand nach \(quiz.completedRoundsCount) von \(quiz.safeRounds.count) Runden")
+                    Text(L10n.Analysis.interimAfterRounds(quiz.completedRoundsCount, quiz.safeRounds.count))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
                 }
             }
         }
-        .padding()
+        .padding(AppSpacing.md)
     }
-    
+
     private func exportSection(_ quiz: Quiz) -> some View {
-        VStack(spacing: 12) {
-            Text("Ergebnisse exportieren")
+        VStack(spacing: AppSpacing.xs) {
+            Text(L10n.Analysis.exportResults)
                 .font(.headline)
-            
-            HStack(spacing: 16) {
+                .foregroundStyle(Color.appTextPrimary)
+
+            HStack(spacing: AppSpacing.sm) {
                 Button {
                     exportQuiz(quiz: quiz, format: .json)
                 } label: {
-                    VStack(spacing: 8) {
+                    VStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "doc.text.fill")
                             .font(.largeTitle)
+                            .foregroundStyle(Color.appPrimary)
                         Text("JSON")
                             .font(.caption)
+                            .foregroundStyle(Color.appTextPrimary)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(AppSpacing.md)
                 }
                 .buttonStyle(.plain)
-                
+                .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+
                 Button {
                     exportQuiz(quiz: quiz, format: .csv)
                 } label: {
-                    VStack(spacing: 8) {
+                    VStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "tablecells.fill")
                             .font(.largeTitle)
+                            .foregroundStyle(Color.appSuccess)
                         Text("CSV")
                             .font(.caption)
+                            .foregroundStyle(Color.appTextPrimary)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(AppSpacing.md)
                 }
                 .buttonStyle(.plain)
+                .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, AppSpacing.screenPadding)
     }
-    
+
     private func winnerPodium(_ quiz: Quiz) -> some View {
-        VStack(spacing: 16) {
+        VStack(spacing: AppSpacing.sm) {
             HStack {
-                Text(quiz.isCompleted ? "Siegertreppchen" : "Aktuelle Führung")
+                Text(quiz.isCompleted ? NSLocalizedString("analysis.winnerPodium", comment: "Winner Podium") : NSLocalizedString("analysis.currentLeadership", comment: "Current Leadership"))
                     .font(.title2)
                     .bold()
-                
+                    .foregroundStyle(Color.appTextPrimary)
+
                 if !quiz.isCompleted {
-                    Text("(Zwischenstand)")
+                    Text(NSLocalizedString("analysis.interim", comment: "Interim"))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
             }
-            
-            HStack(alignment: .bottom, spacing: 20) {
+
+            HStack(alignment: .bottom, spacing: AppSpacing.md) {
                 // 2nd Place
                 if quiz.sortedTeamsByScore.count > 1 {
                     podiumPlace(
                         team: quiz.sortedTeamsByScore[1],
                         place: 2,
                         height: 120,
-                        color: .gray,
+                        color: Color.appTextSecondary,
                         quiz: quiz
                     )
                 }
@@ -400,7 +407,7 @@ struct AnalysisView: View {
                         team: quiz.sortedTeamsByScore[0],
                         place: 1,
                         height: 160,
-                        color: .yellow,
+                        color: Color.appSecondary,
                         quiz: quiz
                     )
                 }
@@ -411,91 +418,92 @@ struct AnalysisView: View {
                         team: quiz.sortedTeamsByScore[2],
                         place: 3,
                         height: 100,
-                        color: Color(red: 0.8, green: 0.5, blue: 0.2),
+                        color: Color.appPrimary,
                         quiz: quiz
                     )
                 }
             }
         }
-        .padding()
+        .padding(AppSpacing.md)
     }
-    
+
     private func podiumPlace(team: Team, place: Int, height: CGFloat, color: Color, quiz: Quiz) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: AppSpacing.xs) {
             // Medal
             ZStack {
                 Circle()
                     .fill(color)
                     .frame(width: 60, height: 60)
-                    .shadow(color: color.opacity(0.5), radius: 8)
+                    .shadow(radius: 3, y: 1)
 
                 Text("\(place)")
                     .font(.title)
                     .bold()
                     .foregroundStyle(.white)
+                    .monospacedDigit()
             }
 
             // Team Info
-            VStack(spacing: 4) {
+            VStack(spacing: AppSpacing.xxxs) {
                 Text(team.name)
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("\(team.getTotalScore(for: quiz)) Punkte")
+                Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), team.getTotalScore(for: quiz)))
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
             }
-            
+
             // Podium Base
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                 .fill(color.opacity(0.3))
                 .frame(width: 100, height: height)
                 .overlay {
                     Text("#\(place)")
                         .font(.system(size: 48, weight: .bold))
                         .foregroundStyle(color.opacity(0.5))
+                        .monospacedDigit()
                 }
         }
     }
-    
+
     private func fullResultsSection(_ quiz: Quiz) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
             HStack {
                 Image(systemName: "list.number")
                     .font(.title2)
-                    .foregroundStyle(.blue)
-                Text("Rangliste")
+                    .foregroundStyle(Color.appPrimary)
+                Text(L10n.Analysis.leaderboard)
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
             }
-            .padding(.horizontal)
-            
-            LazyVStack(spacing: 12) {
+            .padding(.horizontal, AppSpacing.screenPadding)
+
+            LazyVStack(spacing: AppSpacing.xs) {
                 ForEach(Array(quiz.sortedTeamsByScore.enumerated()), id: \.element.id) { index, team in
                     modernResultCard(team: team, rank: index + 1, quiz: quiz)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
         }
     }
-    
+
     private func modernResultCard(team: Team, rank: Int, quiz: Quiz) -> some View {
-        HStack(spacing: 0) {
+        let isTopThree = rank <= 3
+
+        return HStack(spacing: 0) {
             // Rang Badge
             ZStack {
-                if rank <= 3 {
+                if isTopThree {
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [rankColor(rank), rankColor(rank).opacity(0.7)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .fill(rankColor(rank))
                         .frame(width: 60, height: 60)
-                        .shadow(color: rankColor(rank).opacity(0.4), radius: 6)
-                    
-                    VStack(spacing: 2) {
+                        .shadow(radius: 3, y: 1)
+
+                    VStack(spacing: AppSpacing.xxxs) {
                         if rank == 1 {
                             Image(systemName: "crown.fill")
                                 .font(.title3)
@@ -505,233 +513,237 @@ struct AnalysisView: View {
                                 .font(.title2)
                                 .bold()
                                 .foregroundStyle(.white)
+                                .monospacedDigit()
                         }
                     }
                 } else {
                     Circle()
-                        .fill(Color(nsColor: .controlBackgroundColor))
+                        .fill(Color.appBackgroundSecondary)
                         .frame(width: 50, height: 50)
-                    
+
                     Text("\(rank)")
                         .font(.title3)
                         .bold()
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
                 }
             }
-            .padding(.trailing, 16)
-            
+            .padding(.trailing, AppSpacing.sm)
+
             // Team Info
-            HStack(spacing: 12) {
-                // Team Icon (Bild oder Farbe)
-                TeamIconView(team: team, size: 32)
-                
-                VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: AppSpacing.xs) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     Text(team.name)
                         .font(.headline)
-                    
+                        .foregroundStyle(Color.appTextPrimary)
+
                     // Fortschrittsbalken relativ zur höchsten Punktzahl
                     if quiz.safeTeams.count > 1, let maxScore = quiz.sortedTeamsByScore.first?.getTotalScore(for: quiz), maxScore > 0 {
                         GeometryReader { geometry in
                             ZStack(alignment: .leading) {
                                 // Hintergrund
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(Color.gray.opacity(0.2))
+                                RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                    .fill(Color.appTextTertiary.opacity(0.2))
                                     .frame(height: 6)
 
-                                // Fortschritt
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(Color(hex: team.color) ?? .blue)
+                                // Fortschritt - einheitliche Farbe basierend auf Rank
+                                RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                    .fill(isTopThree ? rankColor(rank) : Color.appPrimary)
                                     .frame(width: geometry.size.width * CGFloat(team.getTotalScore(for: quiz)) / CGFloat(maxScore), height: 6)
                             }
                         }
                         .frame(height: 6)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 // Punkte Display
-                VStack(spacing: 4) {
+                VStack(spacing: AppSpacing.xxxs) {
                     Text("\(team.getTotalScore(for: quiz))")
                         .font(.system(size: 32, weight: .bold))
                         .monospacedDigit()
-                        .foregroundStyle(rank <= 3 ? rankColor(rank) : .primary)
+                        .foregroundStyle(rank <= 3 ? rankColor(rank) : Color.appTextPrimary)
 
-                    Text("Punkte")
+                    Text(L10n.Analysis.points)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                         .textCase(.uppercase)
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, AppSpacing.xs)
             }
-            .padding(.vertical, 12)
-            .padding(.trailing, 16)
+            .padding(.vertical, AppSpacing.xs)
+            .padding(.trailing, AppSpacing.sm)
         }
-        .padding(.leading, 16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(rank <= 3 ? rankColor(rank).opacity(0.08) : Color(nsColor: .controlBackgroundColor).opacity(0.5))
-        )
+        .padding(.leading, AppSpacing.sm)
+        .appCard(style: isTopThree ? .elevated : .default, cornerRadius: AppCornerRadius.lg)
         .overlay {
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(rank <= 3 ? rankColor(rank).opacity(0.3) : Color.gray.opacity(0.2), lineWidth: 2)
+            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                .stroke(isTopThree ? rankColor(rank).opacity(0.3) : Color.appTextTertiary.opacity(0.2), lineWidth: 2)
         }
     }
-    
+
     private func rankColor(_ rank: Int) -> Color {
         switch rank {
-        case 1: return .yellow
-        case 2: return .gray
-        case 3: return Color(red: 0.8, green: 0.5, blue: 0.2)
-        default: return .secondary
+        case 1: return Color.appSecondary
+        case 2: return Color.appTextSecondary
+        case 3: return Color.appPrimary
+        default: return Color.appTextSecondary
         }
     }
-    
+
     private func statisticsSection(_ quiz: Quiz) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Statistiken")
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            Text(L10n.Analysis.statistics)
                 .font(.title2)
                 .bold()
-                .padding(.horizontal)
-            
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                .foregroundStyle(Color.appTextPrimary)
+                .padding(.horizontal, AppSpacing.screenPadding)
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: AppSpacing.sm) {
                 statCard(
-                    title: "Teilnehmer",
+                    title: NSLocalizedString("stats.participants", comment: "Participants"),
                     value: "\(quiz.safeTeams.count)",
                     icon: "person.3.fill",
-                    color: .blue
+                    color: Color.appPrimary
                 )
-                
+
                 statCard(
-                    title: "Runden",
+                    title: NSLocalizedString("quiz.rounds", comment: "Rounds"),
                     value: "\(quiz.safeRounds.count)",
                     icon: "list.number",
-                    color: .green
+                    color: Color.appSuccess
                 )
-                
+
                 statCard(
-                    title: "Höchste Punktzahl",
+                    title: NSLocalizedString("stats.highestScore", comment: "Highest Score"),
                     value: "\(quiz.sortedTeamsByScore.first?.getTotalScore(for: quiz) ?? 0)",
                     icon: "star.fill",
-                    color: .yellow
+                    color: Color.appSecondary
                 )
-                
+
                 statCard(
-                    title: "Durchschnitt",
+                    title: NSLocalizedString("stats.average", comment: "Average"),
                     value: String(format: "%.1f", averageScore(quiz)),
                     icon: "chart.line.uptrend.xyaxis",
-                    color: .orange
+                    color: Color.appAccent
                 )
-                
+
                 statCard(
-                    title: "Gesamt Punkte",
+                    title: NSLocalizedString("analysis.totalPoints", comment: "Total Points"),
                     value: "\(totalPoints(quiz))",
                     icon: "sum",
-                    color: .purple
+                    color: Color.appSecondary
                 )
-                
+
                 statCard(
-                    title: "Max. möglich",
+                    title: NSLocalizedString("analysis.maxScore", comment: "Max Score"),
                     value: "\(maxPossiblePoints(quiz))",
                     icon: "trophy.fill",
-                    color: .cyan
+                    color: Color.appPrimary
                 )
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
         }
     }
-    
+
     private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: AppSpacing.xs) {
             Image(systemName: icon)
                 .font(.title)
                 .foregroundStyle(color)
             Text(value)
                 .font(.title)
                 .bold()
+                .foregroundStyle(color)
+                .monospacedDigit()
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 20)
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.vertical, AppSpacing.md)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
     }
-    
+
     private func roundBreakdown(_ quiz: Quiz) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Runden-Analyse")
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            Text(L10n.Analysis.roundBreakdown)
                 .font(.title2)
                 .bold()
-                .padding(.horizontal)
-            
-            LazyVStack(spacing: 12) {
+                .foregroundStyle(Color.appTextPrimary)
+                .padding(.horizontal, AppSpacing.screenPadding)
+
+            LazyVStack(spacing: AppSpacing.xs) {
                 ForEach(quiz.sortedRounds) { round in
                     roundAnalysisCard(round: round, quiz: quiz)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
         }
     }
-    
+
     private func roundAnalysisCard(round: Round, quiz: Quiz) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(round.name)
-                    .font(.headline)
-                
-                Spacer()
-                
-                Text("Max: \(round.maxPoints)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            // Top scorer in this round
-            if let topScorer = quiz.safeTeams.max(by: { 
-                ($0.getScore(for: round) ?? 0) < ($1.getScore(for: round) ?? 0) 
-            }) {
+        AppCard(style: .default) {
+            VStack(alignment: .leading, spacing: AppSpacing.xs) {
                 HStack {
-                    Label(topScorer.name, systemImage: "star.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(.orange)
-                    
+                    Text(round.name)
+                        .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
+
                     Spacer()
-                    
-                    Text("\(topScorer.getScore(for: round) ?? 0) Punkte")
-                        .font(.subheadline)
-                        .bold()
+
+                    Text(L10n.Analysis.maxPoints(round.maxPoints))
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(Color.orange.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 6))
-            }
-            
-            // Average for this round
-            let avgScore = quiz.safeTeams.reduce(0.0) { total, team in
-                total + Double(team.getScore(for: round) ?? 0)
-            } / Double(quiz.safeTeams.count)
-            
-            HStack {
-                Label("Durchschnitt", systemImage: "chart.bar")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                
-                Spacer()
-                
-                Text(String(format: "%.1f Punkte", avgScore))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+
+                // Top scorer in this round
+                if let topScorer = quiz.safeTeams.max(by: {
+                    ($0.getScore(for: round) ?? 0) < ($1.getScore(for: round) ?? 0)
+                }) {
+                    HStack {
+                        Label(topScorer.name, systemImage: "star.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.appAccent)
+
+                        Spacer()
+
+                        Text(String(format: NSLocalizedString("common.points.count", comment: "Points"), topScorer.getScore(for: round) ?? 0))
+                            .font(.subheadline)
+                            .bold()
+                            .foregroundStyle(Color.appTextPrimary)
+                            .monospacedDigit()
+                    }
+                    .padding(.horizontal, AppSpacing.xs)
+                    .padding(.vertical, AppSpacing.xxs)
+                    .background(Color.appAccent.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.xs))
+                }
+
+                // Average for this round
+                let avgScore = quiz.safeTeams.reduce(0.0) { total, team in
+                    total + Double(team.getScore(for: round) ?? 0)
+                } / Double(quiz.safeTeams.count)
+
+                HStack {
+                    Label(NSLocalizedString("analysis.average", comment: "Average"), systemImage: "chart.bar")
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+
+                    Spacer()
+
+                    Text(String(format: "%.1f %@", avgScore, NSLocalizedString("common.points", comment: "Points")))
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
+                }
             }
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
-    
+
     private func exportQuiz(quiz: Quiz, format: ExportFormat) {
         if let fileURL = viewModel.saveQuizExport(quiz: quiz, format: format) {
             exportedFileURL = fileURL
@@ -750,16 +762,16 @@ struct AnalysisView: View {
     private func totalPoints(_ quiz: Quiz) -> Int {
         quiz.safeTeams.reduce(0) { $0 + $1.getTotalScore(for: quiz) }
     }
-    
+
     private func maxPossiblePoints(_ quiz: Quiz) -> Int {
         quiz.safeRounds.reduce(0) { $0 + $1.maxPoints }
     }
-    
+
     private var emptyState: some View {
         ContentUnavailableView(
-            "Keine abgeschlossenen Quiz",
+            NSLocalizedString("analysis.noCompletedQuizzes", comment: "No completed quizzes"),
             systemImage: "chart.bar",
-            description: Text("Beende ein Quiz, um die Ergebnisse hier zu analysieren")
+            description: Text(L10n.Analysis.noTeamStatsDescription())
         )
     }
 }
@@ -851,6 +863,11 @@ struct TeamStatisticsView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                // Empty group to override default sidebar toggle
+            }
+        }
         .onAppear {
             updateTeamStatistics()
         }
@@ -863,25 +880,26 @@ struct TeamStatisticsView: View {
     private var sidebar: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(alignment: .leading, spacing: 8) {
-                Label("Team-Statistiken", systemImage: "chart.bar.doc.horizontal.fill")
+            VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                Label(NSLocalizedString("team.statistics", comment: "Team Statistics"), systemImage: "chart.bar.doc.horizontal.fill")
                     .font(.title2)
                     .bold()
-                Text("Übersicht über alle Quiz")
+                    .foregroundStyle(Color.appTextPrimary)
+                Text(NSLocalizedString("analysis.allQuizzes", comment: "Overview of all quizzes"))
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color(nsColor: .controlBackgroundColor))
+            .padding(AppSpacing.md)
+            .background(Color.appBackgroundSecondary)
 
             Divider()
 
             // Search
-            HStack(spacing: 10) {
+            HStack(spacing: AppSpacing.xs) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
-                TextField("Team suchen...", text: $searchText)
+                    .foregroundStyle(Color.appTextSecondary)
+                TextField(NSLocalizedString("common.search", comment: "Search"), text: $searchText)
                     .textFieldStyle(.plain)
 
                 if !searchText.isEmpty {
@@ -889,22 +907,22 @@ struct TeamStatisticsView: View {
                         searchText = ""
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(12)
+            .padding(AppSpacing.xs)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(nsColor: .controlBackgroundColor))
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(Color.appBackgroundSecondary)
                     .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                            .stroke(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
                     }
             )
-            .padding(.horizontal)
-            .padding(.vertical, 12)
+            .padding(.horizontal, AppSpacing.md)
+            .padding(.vertical, AppSpacing.xs)
 
             Divider()
 
@@ -916,7 +934,7 @@ struct TeamStatisticsView: View {
                     } label: {
                         HStack {
                             Image(systemName: option.icon)
-                            Text(option.rawValue)
+                            Text(option.localizedName)
                             if sortOption == option {
                                 Image(systemName: "checkmark")
                             }
@@ -925,19 +943,21 @@ struct TeamStatisticsView: View {
                 }
             } label: {
                 HStack {
-                    Text("Sortierung:")
+                    Text(L10n.Analysis.sorting)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(sortOption.rawValue)
+                        .foregroundStyle(Color.appTextSecondary)
+                    Text(sortOption.localizedName)
                         .font(.caption)
+                        .foregroundStyle(Color.appTextPrimary)
                     Image(systemName: "chevron.down")
                         .font(.caption2)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
+                .padding(.horizontal, AppSpacing.xs)
+                .padding(.vertical, AppSpacing.xxs)
             }
             .buttonStyle(.plain)
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.md)
 
             Divider()
 
@@ -945,12 +965,12 @@ struct TeamStatisticsView: View {
             List(selection: $selectedTeam) {
                 if filteredAndSortedStats.isEmpty {
                     ContentUnavailableView(
-                        "Keine Statistiken",
+                        NSLocalizedString("analysis.noStatistics", comment: "No statistics"),
                         systemImage: "chart.bar",
-                        description: Text("Beende Quiz, um Team-Statistiken zu sehen")
+                        description: Text(L10n.Analysis.noTeamStatsDescription())
                     )
                 } else {
-                    Section("Teams (\(filteredAndSortedStats.count))") {
+                    Section(L10n.Analysis.teamsSection(filteredAndSortedStats.count)) {
                         ForEach(filteredAndSortedStats) { stats in
                             TeamStatsRow(stats: stats)
                                 .tag(stats)
@@ -960,12 +980,13 @@ struct TeamStatisticsView: View {
             }
             .listStyle(.sidebar)
         }
+        .navigationTitle("")
     }
 
     // MARK: - Detail View
     private func detailView(for stats: TeamStats) -> some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: AppSpacing.sectionSpacing) {
                 // Team Header
                 teamHeader(stats)
 
@@ -989,14 +1010,14 @@ struct TeamStatisticsView: View {
                 // Quiz History
                 quizHistory(stats)
             }
-            .padding(.vertical)
+            .padding(.vertical, AppSpacing.screenPadding)
         }
     }
 
     private func teamHeader(_ stats: TeamStats) -> some View {
-        VStack(spacing: 16) {
+        VStack(spacing: AppSpacing.sm) {
             // Team Icon/Trophy
-            HStack(spacing: 20) {
+            HStack(spacing: AppSpacing.md) {
                 if let imageData = stats.teamImageData, let nsImage = NSImage(data: imageData) {
                     Image(nsImage: nsImage)
                         .resizable()
@@ -1005,21 +1026,15 @@ struct TeamStatisticsView: View {
                         .clipShape(Circle())
                         .overlay {
                             Circle()
-                                .stroke(Color(hex: stats.teamColor) ?? .blue, lineWidth: 4)
+                                .stroke(Color(hex: stats.teamColor) ?? Color.appPrimary, lineWidth: 4)
                         }
-                        .shadow(color: (Color(hex: stats.teamColor) ?? .blue).opacity(0.4), radius: 10)
+                        .shadow(AppShadow.lg)
                 } else {
                     ZStack {
                         Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [Color(hex: stats.teamColor) ?? .blue, (Color(hex: stats.teamColor) ?? .blue).opacity(0.7)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
+                            .fill(Color(hex: stats.teamColor) ?? Color.appPrimary)
                             .frame(width: 100, height: 100)
-                            .shadow(color: (Color(hex: stats.teamColor) ?? .blue).opacity(0.4), radius: 10)
+                            .shadow(radius: 4, y: 2)
 
                         if stats.winsCount > 0 {
                             Image(systemName: "trophy.fill")
@@ -1033,305 +1048,309 @@ struct TeamStatisticsView: View {
                     }
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(stats.teamName)
                         .font(.system(size: 32, weight: .bold))
+                        .foregroundStyle(Color.appTextPrimary)
 
-                    HStack(spacing: 16) {
-                        Label("\(stats.participationCount) Quiz", systemImage: "list.number")
+                    HStack(spacing: AppSpacing.sm) {
+                        Label(String(format: "%d %@", stats.participationCount, NSLocalizedString("quiz.title", comment: "Quiz")), systemImage: "list.number")
                             .font(.subheadline)
+                            .foregroundStyle(Color.appTextSecondary)
 
                         if stats.winsCount > 0 {
-                            Label("\(stats.winsCount) Siege", systemImage: "trophy.fill")
+                            Label(String(format: "%d %@", stats.winsCount, NSLocalizedString("analysis.wins", comment: "Wins")), systemImage: "trophy.fill")
                                 .font(.subheadline)
-                                .foregroundStyle(.yellow)
+                                .foregroundStyle(Color.appSecondary)
                         }
                     }
-                    .foregroundStyle(.secondary)
                 }
 
                 Spacer()
             }
         }
-        .padding()
+        .padding(AppSpacing.md)
     }
 
     private func keyStatistics(_ stats: TeamStats) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Kernstatistiken")
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            Text(L10n.Analysis.coreStats)
                 .font(.title2)
                 .bold()
-                .padding(.horizontal)
+                .foregroundStyle(Color.appTextPrimary)
+                .padding(.horizontal, AppSpacing.screenPadding)
 
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: AppSpacing.sm) {
                 statsCard(
-                    title: "Teilnahmen",
+                    title: NSLocalizedString("analysis.participation", comment: "Participation"),
                     value: "\(stats.participationCount)",
                     icon: "number.circle.fill",
-                    color: .blue
+                    color: Color.appPrimary
                 )
 
                 statsCard(
-                    title: "Siege",
+                    title: NSLocalizedString("analysis.wins", comment: "Wins"),
                     value: "\(stats.winsCount)",
                     icon: "trophy.fill",
-                    color: .yellow
+                    color: Color.appSecondary
                 )
 
                 statsCard(
-                    title: "Siegrate",
+                    title: NSLocalizedString("analysis.winRate", comment: "Win rate"),
                     value: String(format: "%.1f%%", stats.winRate),
                     icon: "percent",
-                    color: .green
+                    color: Color.appSuccess
                 )
 
                 statsCard(
-                    title: "Ø Platzierung",
+                    title: NSLocalizedString("analysis.averageRank", comment: "Average rank"),
                     value: String(format: "%.1f", stats.averageRank),
                     icon: "list.number",
-                    color: .orange
+                    color: Color.appAccent
                 )
 
                 statsCard(
-                    title: "Ø Punkte",
+                    title: NSLocalizedString("analysis.averagePoints", comment: "Average points"),
                     value: String(format: "%.1f", stats.averagePoints),
                     icon: "star.fill",
-                    color: .purple
+                    color: Color.appPrimary
                 )
 
                 statsCard(
-                    title: "Gesamtpunkte",
+                    title: NSLocalizedString("analysis.totalPoints", comment: "Total points"),
                     value: "\(stats.totalPoints)",
                     icon: "sum",
-                    color: .cyan
+                    color: Color.appSecondary
                 )
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
         }
     }
 
     private func performanceOverview(_ stats: TeamStats) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Leistungsübersicht")
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            Text(L10n.Analysis.performance)
                 .font(.title2)
                 .bold()
-                .padding(.horizontal)
+                .foregroundStyle(Color.appTextPrimary)
+                .padding(.horizontal, AppSpacing.screenPadding)
 
-            VStack(spacing: 16) {
+            VStack(spacing: AppSpacing.sm) {
                 // Podium Statistics
-                HStack(spacing: 20) {
-                    podiumBadge(place: 1, count: stats.winsCount, color: .yellow, total: stats.participationCount)
-                    podiumBadge(place: 2, count: stats.secondPlaceCount, color: .gray, total: stats.participationCount)
-                    podiumBadge(place: 3, count: stats.thirdPlaceCount, color: Color(red: 0.8, green: 0.5, blue: 0.2), total: stats.participationCount)
+                HStack(spacing: AppSpacing.md) {
+                    podiumBadge(place: 1, count: stats.winsCount, color: Color.appSecondary, total: stats.participationCount)
+                    podiumBadge(place: 2, count: stats.secondPlaceCount, color: Color.appTextSecondary, total: stats.participationCount)
+                    podiumBadge(place: 3, count: stats.thirdPlaceCount, color: Color.appPrimary, total: stats.participationCount)
                 }
                 .frame(maxWidth: .infinity)
 
                 // Podium Rate
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("Podiumsrate")
-                            .font(.headline)
-                        Spacer()
-                        Text(String(format: "%.1f%%", stats.podiumRate))
-                            .font(.title2)
-                            .bold()
-                            .monospacedDigit()
-                    }
-
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.gray.opacity(0.2))
-                                .frame(height: 12)
-
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(
-                                    LinearGradient(
-                                        colors: [.yellow, .orange, .red],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .frame(width: geometry.size.width * (stats.podiumRate / 100), height: 12)
+                AppCard(style: .default) {
+                    VStack(spacing: AppSpacing.xxs) {
+                        HStack {
+                            Text(L10n.Analysis.podiumRate)
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
+                            Spacer()
+                            Text(String(format: "%.1f%%", stats.podiumRate))
+                                .font(.title2)
+                                .bold()
+                                .foregroundStyle(Color.appTextPrimary)
+                                .monospacedDigit()
                         }
+
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                    .fill(Color.appTextTertiary.opacity(0.2))
+                                    .frame(height: 12)
+
+                                RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                    .fill(Color.appSecondary)
+                                    .frame(width: geometry.size.width * (stats.podiumRate / 100), height: 12)
+                            }
+                        }
+                        .frame(height: 12)
                     }
-                    .frame(height: 12)
                 }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
 
                 // Best & Worst Performance
-                HStack(spacing: 16) {
-                    VStack(spacing: 8) {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(.green)
-                        Text("Beste Platzierung")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(stats.bestRank).")
-                            .font(.title2)
-                            .bold()
+                HStack(spacing: AppSpacing.sm) {
+                    AppCard(style: .default) {
+                        VStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .font(.title)
+                                .foregroundStyle(Color.appSuccess)
+                            Text(L10n.Analysis.bestRank)
+                                .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
+                            Text("\(stats.bestRank).")
+                                .font(.title2)
+                                .bold()
+                                .foregroundStyle(Color.appTextPrimary)
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
 
-                    VStack(spacing: 8) {
-                        Image(systemName: "arrow.down.circle.fill")
-                            .font(.title)
-                            .foregroundStyle(.red)
-                        Text("Schlechteste Platzierung")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text("\(stats.worstRank).")
-                            .font(.title2)
-                            .bold()
+                    AppCard(style: .default) {
+                        VStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "arrow.down.circle.fill")
+                                .font(.title)
+                                .foregroundStyle(Color.appPrimary)
+                            Text(L10n.Analysis.worstRank)
+                                .font(.caption)
+                                .foregroundStyle(Color.appTextSecondary)
+                            Text("\(stats.worstRank).")
+                                .font(.title2)
+                                .bold()
+                                .foregroundStyle(Color.appTextPrimary)
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.red.opacity(0.1))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
         }
     }
 
     private func quizHistory(_ stats: TeamStats) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
             HStack {
-                Text("Quiz-Historie")
+                Text(L10n.Analysis.quizHistory)
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 Text("(\(stats.quizHistory.count))")
                     .font(.title2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
 
-            LazyVStack(spacing: 12) {
+            LazyVStack(spacing: AppSpacing.xs) {
                 ForEach(Array(stats.quizHistory.enumerated()), id: \.element.quizName) { index, performance in
                     quizHistoryCard(performance: performance)
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, AppSpacing.screenPadding)
         }
     }
 
     private func quizHistoryCard(performance: TeamStats.QuizPerformance) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: AppSpacing.sm) {
             // Rank Badge
             ZStack {
                 Circle()
                     .fill(rankColor(performance.rank))
                     .frame(width: 50, height: 50)
+                    .shadow(radius: 2, y: 1)
 
                 Text("\(performance.rank)")
                     .font(.title3)
                     .bold()
                     .foregroundStyle(.white)
+                    .monospacedDigit()
             }
 
             // Quiz Info
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(performance.quizName)
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
 
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     Label(performance.quizDate.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
                         .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
 
                     Label("\(performance.totalTeams) Teams", systemImage: "person.3")
                         .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
-                .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             // Points
-            VStack(spacing: 4) {
+            VStack(spacing: AppSpacing.xxxs) {
                 Text("\(performance.points)")
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                     .monospacedDigit()
 
-                Text("Punkte")
+                Text(L10n.Analysis.points)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                     .textCase(.uppercase)
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(nsColor: .controlBackgroundColor))
-        )
+        .padding(AppSpacing.sm)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(rankColor(performance.rank).opacity(0.3), lineWidth: 2)
         }
     }
 
     private func statsCard(title: String, value: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: AppSpacing.xs) {
             Image(systemName: icon)
                 .font(.title)
                 .foregroundStyle(color)
             Text(value)
                 .font(.title)
                 .bold()
+                .foregroundStyle(color)
                 .monospacedDigit()
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 20)
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.vertical, AppSpacing.md)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
     }
 
     private func podiumBadge(place: Int, count: Int, color: Color, total: Int) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: AppSpacing.xxs) {
             ZStack {
                 Circle()
                     .fill(color)
                     .frame(width: 60, height: 60)
-                    .shadow(color: color.opacity(0.5), radius: 8)
+                    .shadow(radius: 3, y: 1)
 
                 Text("\(place)")
                     .font(.title)
                     .bold()
                     .foregroundStyle(.white)
+                    .monospacedDigit()
             }
 
             Text("\(count)×")
                 .font(.title2)
                 .bold()
+                .foregroundStyle(Color.appTextPrimary)
                 .monospacedDigit()
 
             if total > 0 {
                 Text(String(format: "%.0f%%", Double(count) / Double(total) * 100))
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
             }
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(AppSpacing.sm)
         .background(color.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
     }
 
     private var emptyState: some View {
         ContentUnavailableView(
-            "Keine Team-Statistiken",
+            NSLocalizedString("analysis.noStatistics", comment: "No statistics"),
             systemImage: "chart.bar",
-            description: Text("Beende Quiz, um Team-Statistiken zu sehen")
+            description: Text(L10n.Analysis.noTeamStatsDescription())
         )
     }
 
@@ -1422,6 +1441,15 @@ struct TeamStatisticsView: View {
             return stats.sorted { $0.teamName.localizedCompare($1.teamName) == .orderedAscending }
         }
     }
+
+    private func rankColor(_ rank: Int) -> Color {
+        switch rank {
+        case 1: return Color.appSecondary
+        case 2: return Color.appTextSecondary
+        case 3: return Color.appPrimary
+        default: return Color.appTextSecondary
+        }
+    }
 }
 
 // MARK: - Team Stats Builder
@@ -1484,7 +1512,7 @@ struct TeamStatsRow: View {
     let stats: TeamStats
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: AppSpacing.xs) {
             // Team Icon
             if let imageData = stats.teamImageData, let nsImage = NSImage(data: imageData) {
                 Image(nsImage: nsImage)
@@ -1494,51 +1522,62 @@ struct TeamStatsRow: View {
                     .clipShape(Circle())
             } else {
                 Circle()
-                    .fill(Color(hex: stats.teamColor) ?? .blue)
+                    .fill(Color(hex: stats.teamColor) ?? Color.appPrimary)
                     .frame(width: 36, height: 36)
             }
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(stats.teamName)
                     .font(.body)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
 
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     if stats.winsCount > 0 {
-                        HStack(spacing: 4) {
+                        HStack(spacing: AppSpacing.xxxs) {
                             Image(systemName: "trophy.fill")
                                 .font(.caption)
                             Text("\(stats.winsCount)")
                                 .font(.caption)
                                 .monospacedDigit()
                         }
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(Color.appSecondary)
                     }
 
-                    HStack(spacing: 4) {
+                    HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: "list.number")
                             .font(.caption)
                         Text("\(stats.participationCount)")
                             .font(.caption)
                             .monospacedDigit()
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                 }
             }
 
             Spacer()
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, AppSpacing.xxxs)
     }
 }
 
 // MARK: - Stats Sort Option
-enum StatsSortOption: String, CaseIterable {
-    case mostWins = "Meiste Siege"
-    case mostParticipations = "Meiste Teilnahmen"
-    case bestAverage = "Beste Ø Platzierung"
-    case mostPoints = "Meiste Punkte"
-    case nameAZ = "Name (A-Z)"
+enum StatsSortOption: CaseIterable {
+    case mostWins
+    case mostParticipations
+    case bestAverage
+    case mostPoints
+    case nameAZ
+
+    var localizedName: String {
+        switch self {
+        case .mostWins: return NSLocalizedString("sort.mostWins", comment: "Most Wins")
+        case .mostParticipations: return NSLocalizedString("sort.mostParticipations", comment: "Most Participations")
+        case .bestAverage: return NSLocalizedString("sort.bestAverage", comment: "Best Average")
+        case .mostPoints: return NSLocalizedString("sort.mostPoints", comment: "Most Points")
+        case .nameAZ: return NSLocalizedString("sort.nameAZ", comment: "Name A-Z")
+        }
+    }
 
     var icon: String {
         switch self {
@@ -1582,195 +1621,190 @@ struct OverallStatisticsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: AppSpacing.sectionSpacing) {
                 // Header
-                VStack(spacing: 16) {
+                VStack(spacing: AppSpacing.sm) {
                     Image(systemName: "chart.pie.fill")
                         .font(.system(size: 60))
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Color.appPrimary)
 
-                    Text("Gesamt-Übersicht")
+                    Text(NSLocalizedString("analysis.overview", comment: "Overall Overview"))
                         .font(.title)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
 
-                    Text("Statistiken über alle abgeschlossenen Quiz")
+                    Text(NSLocalizedString("analysis.overview.description", comment: "Statistics for all completed quizzes"))
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
-                .padding()
+                .padding(AppSpacing.md)
 
                 Divider()
 
                 // Key Statistics Grid
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: AppSpacing.sm) {
                     statCard(
-                        title: "Abgeschlossene Quiz",
+                        title: NSLocalizedString("analysis.completedQuizzes", comment: "Completed quizzes"),
                         value: "\(completedQuizzes.count)",
                         icon: "checkmark.circle.fill",
-                        color: .green
+                        color: Color.appSuccess
                     )
 
                     statCard(
-                        title: "Unique Teams",
+                        title: NSLocalizedString("analysis.uniqueTeams", comment: "Unique teams"),
                         value: "\(totalUniqueTeams)",
                         icon: "person.3.fill",
-                        color: .blue
+                        color: Color.appPrimary
                     )
 
                     statCard(
-                        title: "Ø Teams pro Quiz",
+                        title: NSLocalizedString("analysis.averageTeamsPerQuiz", comment: "Average teams per quiz"),
                         value: String(format: "%.1f", averageTeamsPerQuiz),
                         icon: "chart.bar.fill",
-                        color: .orange
+                        color: Color.appAccent
                     )
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, AppSpacing.screenPadding)
 
                 Divider()
 
                 // Team Performance Level
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: AppSpacing.sm) {
                     HStack {
                         Image(systemName: "target")
-                            .foregroundStyle(.purple)
-                        Text("Niveau der Teams")
+                            .foregroundStyle(Color.appSecondary)
+                        Text(L10n.Analysis.teamLevel)
                             .font(.title2)
+                            .foregroundStyle(Color.appTextPrimary)
                             .bold()
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppSpacing.screenPadding)
 
-                    VStack(spacing: 16) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Maximale Punktzahl")
-                                    .font(.headline)
-                                Text("\(totalMaxPossiblePoints) Punkte")
-                                    .font(.system(size: 32, weight: .bold))
-                                    .foregroundStyle(.blue)
+                    VStack(spacing: AppSpacing.sm) {
+                        AppCard(style: .default) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                                    Text(L10n.Analysis.maxScore)
+                                        .font(.headline)
+                                        .foregroundStyle(Color.appTextPrimary)
+                                    Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), totalMaxPossiblePoints))
+                                        .font(.system(size: 32, weight: .bold))
+                                        .foregroundStyle(Color.appPrimary)
+                                        .monospacedDigit()
+                                }
+                                Spacer()
                             }
-                            Spacer()
                         }
-                        .padding()
-                        .background(Color.blue.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
 
-                        HStack {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Erreichte Punktzahl")
-                                    .font(.headline)
-                                Text("\(totalMaxAchievedPoints) Punkte")
-                                    .font(.system(size: 32, weight: .bold))
-                                    .foregroundStyle(.green)
+                        AppCard(style: .default) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                                    Text(L10n.Analysis.achievedScore)
+                                        .font(.headline)
+                                        .foregroundStyle(Color.appTextPrimary)
+                                    Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), totalMaxAchievedPoints))
+                                        .font(.system(size: 32, weight: .bold))
+                                        .foregroundStyle(Color.appSuccess)
+                                        .monospacedDigit()
+                                }
+                                Spacer()
                             }
-                            Spacer()
                         }
-                        .padding()
-                        .background(Color.green.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
 
                         // Performance Percentage
                         if totalMaxPossiblePoints > 0 {
                             let percentage = Double(totalMaxAchievedPoints) / Double(totalMaxPossiblePoints) * 100
 
-                            VStack(spacing: 8) {
-                                HStack {
-                                    Text("Gesamt-Niveau")
-                                        .font(.headline)
-                                    Spacer()
-                                    Text(String(format: "%.1f%%", percentage))
-                                        .font(.title)
-                                        .bold()
-                                        .foregroundStyle(.purple)
-                                }
-
-                                GeometryReader { geometry in
-                                    ZStack(alignment: .leading) {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.gray.opacity(0.2))
-                                            .frame(height: 16)
-
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(
-                                                LinearGradient(
-                                                    colors: [.blue, .purple, .pink],
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                )
-                                            )
-                                            .frame(width: geometry.size.width * (percentage / 100), height: 16)
+                            AppCard(style: .default) {
+                                VStack(spacing: AppSpacing.xxs) {
+                                    HStack {
+                                        Text(L10n.Analysis.totalLevel)
+                                            .font(.headline)
+                                            .foregroundStyle(Color.appTextPrimary)
+                                        Spacer()
+                                        Text(String(format: "%.1f%%", percentage))
+                                            .font(.title)
+                                            .bold()
+                                            .foregroundStyle(Color.appSecondary)
+                                            .monospacedDigit()
                                     }
+
+                                    GeometryReader { geometry in
+                                        ZStack(alignment: .leading) {
+                                            RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                                .fill(Color.appTextTertiary.opacity(0.2))
+                                                .frame(height: 16)
+
+                                            RoundedRectangle(cornerRadius: AppCornerRadius.xs)
+                                                .fill(Color.appSecondary)
+                                                .frame(width: geometry.size.width * (percentage / 100), height: 16)
+                                        }
+                                    }
+                                    .frame(height: 16)
                                 }
-                                .frame(height: 16)
                             }
-                            .padding()
-                            .background(Color.purple.opacity(0.1))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppSpacing.screenPadding)
                 }
 
                 Divider()
 
                 // Quiz List
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: AppSpacing.sm) {
                     HStack {
                         Image(systemName: "list.bullet")
-                            .foregroundStyle(.cyan)
-                        Text("Quiz-Auflistung")
+                            .foregroundStyle(Color.appAccent)
+                        Text(L10n.Analysis.quizListing)
                             .font(.title2)
                             .bold()
+                            .foregroundStyle(Color.appTextPrimary)
                         Text("(\(completedQuizzes.count))")
                             .font(.title2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppSpacing.screenPadding)
 
-                    LazyVStack(spacing: 12) {
+                    LazyVStack(spacing: AppSpacing.xs) {
                         ForEach(completedQuizzes) { quiz in
                             quizCard(quiz: quiz)
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, AppSpacing.screenPadding)
                 }
             }
-            .padding(.vertical)
+            .padding(.vertical, AppSpacing.screenPadding)
         }
     }
 
     private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: AppSpacing.xs) {
             Image(systemName: icon)
                 .font(.title)
                 .foregroundStyle(color)
             Text(value)
                 .font(.title)
                 .bold()
+                .foregroundStyle(color)
                 .monospacedDigit()
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 20)
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.vertical, AppSpacing.md)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
     }
 
     private func quizCard(quiz: Quiz) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: AppSpacing.sm) {
             // Quiz Icon
             ZStack {
                 Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [.cyan, .blue],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(Color.appAccent)
                     .frame(width: 50, height: 50)
+                    .shadow(radius: 2, y: 1)
 
                 Image(systemName: "trophy.fill")
                     .foregroundStyle(.white)
@@ -1778,52 +1812,53 @@ struct OverallStatisticsView: View {
             }
 
             // Quiz Info
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(quiz.name)
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
 
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     if !quiz.venue.isEmpty {
                         Label(quiz.venue, systemImage: "mappin.circle")
                             .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
                     Label(quiz.date.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
                         .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
-                .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             // Stats
-            VStack(spacing: 8) {
-                HStack(spacing: 4) {
+            VStack(spacing: AppSpacing.xxs) {
+                HStack(spacing: AppSpacing.xxxs) {
                     Image(systemName: "person.3.fill")
                         .font(.caption)
                     Text("\(quiz.safeTeams.count)")
                         .font(.caption)
                         .bold()
+                        .monospacedDigit()
                 }
-                .foregroundStyle(.blue)
+                .foregroundStyle(Color.appPrimary)
 
-                HStack(spacing: 4) {
+                HStack(spacing: AppSpacing.xxxs) {
                     Image(systemName: "list.number")
                         .font(.caption)
                     Text("\(quiz.safeRounds.count)")
                         .font(.caption)
                         .bold()
+                        .monospacedDigit()
                 }
-                .foregroundStyle(.green)
+                .foregroundStyle(Color.appSuccess)
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(nsColor: .controlBackgroundColor))
-        )
+        .padding(AppSpacing.sm)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.cyan.opacity(0.3), lineWidth: 2)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .stroke(Color.appAccent.opacity(0.3), lineWidth: 2)
         }
     }
 }

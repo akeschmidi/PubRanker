@@ -97,7 +97,7 @@ struct EmailComposerView: View {
                         Label(NSLocalizedString("email.composer.send", comment: ""), systemImage: "envelope.open.fill")
                     }
                     .disabled(selectedTeams.isEmpty || subject.isEmpty)
-                    .buttonStyle(.borderedProminent)
+                    .primaryGradientButton()
                     .keyboardShortcut(.return, modifiers: .command)
                 }
             }
@@ -117,7 +117,8 @@ struct EmailComposerView: View {
                 Spacer()
                 Text("\(selectedTeams.count)/\(teamsWithEmail.count)")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
             }
             .padding()
             .background(.background)
@@ -127,7 +128,7 @@ struct EmailComposerView: View {
             // Search Bar
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                 TextField(NSLocalizedString("email.composer.search", comment: ""), text: $searchText)
                     .textFieldStyle(.plain)
                 if !searchText.isEmpty {
@@ -135,16 +136,16 @@ struct EmailComposerView: View {
                         searchText = ""
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(8)
-            .background(.quaternary.opacity(0.5))
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .padding(.horizontal)
-            .padding(.top, 12)
+            .padding(AppSpacing.xxs)
+            .background(Color.appBackgroundSecondary.opacity(0.5))
+            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.xs))
+            .padding(.horizontal, AppSpacing.screenPadding)
+            .padding(.top, AppSpacing.xs)
 
             // Filter Mode Selector
             if !allQuizzes.isEmpty && quiz == nil {
@@ -188,8 +189,8 @@ struct EmailComposerView: View {
                                     .font(.caption)
                             }
                             .padding(8)
-                            .background(.quaternary.opacity(0.5))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .background(Color.appBackgroundSecondary.opacity(0.5))
+                            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.xs))
                         }
                         .buttonStyle(.plain)
                     }
@@ -284,7 +285,7 @@ struct EmailComposerView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 60)
-                .background(.quaternary.opacity(0.3))
+                .background(Color.appBackgroundSecondary.opacity(0.3))
 
                 Divider()
             }
@@ -332,7 +333,7 @@ struct EmailComposerView: View {
                 TextEditor(text: $emailBody)
                     .font(.body)
                     .scrollContentBackground(.hidden)
-                    .background(Color(nsColor: .textBackgroundColor))
+                    .background(Color.appBackground)
                     .overlay {
                         RoundedRectangle(cornerRadius: 6)
                             .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
@@ -394,7 +395,7 @@ struct TeamSelectionRow: View {
             HStack(spacing: 10) {
                 // Checkbox
                 Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                    .foregroundStyle(isSelected ? .blue : .secondary)
+                    .foregroundStyle(isSelected ? Color.appPrimary : Color.appTextSecondary)
                     .font(.title3)
 
                 // Team Icon
@@ -404,26 +405,26 @@ struct TeamSelectionRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(team.name)
                         .font(.body)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(Color.appTextPrimary)
 
                     if !team.contactPerson.isEmpty {
                         Text(team.contactPerson)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
 
                     Text(team.email)
                         .font(.caption2)
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Color.appPrimary)
                 }
 
                 Spacer()
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
+            .padding(.horizontal, AppSpacing.xxs)
+            .padding(.vertical, AppSpacing.xxs)
             .contentShape(Rectangle())
-            .background(isSelected ? Color.blue.opacity(0.1) : Color.clear)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .background(isSelected ? Color.appPrimary.opacity(0.1) : Color.clear)
+            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.xs))
         }
         .buttonStyle(.plain)
     }
@@ -449,13 +450,13 @@ struct RecipientTag: View {
             }
             .buttonStyle(.plain)
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(.blue.opacity(0.15))
+        .padding(.horizontal, AppSpacing.xxs)
+        .padding(.vertical, AppSpacing.xxxs)
+        .background(Color.appPrimary.opacity(0.15))
         .clipShape(Capsule())
         .overlay {
             Capsule()
-                .strokeBorder(.blue.opacity(0.3), lineWidth: 1)
+                .strokeBorder(Color.appPrimary.opacity(0.3), lineWidth: 1)
         }
     }
 }
@@ -470,12 +471,13 @@ struct TemplatePickerView: View {
             // Header
             HStack {
                 Image(systemName: "doc.text.fill")
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(Color.appPrimary)
                 Text(NSLocalizedString("email.composer.templates.title", comment: ""))
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
                 Spacer()
             }
-            .padding()
+            .padding(AppSpacing.md)
             .background(.regularMaterial)
 
             Divider()
@@ -489,17 +491,17 @@ struct TemplatePickerView: View {
                             HStack(spacing: 12) {
                                 Image(systemName: template.icon)
                                     .font(.title3)
-                                    .foregroundStyle(.blue)
+                                    .foregroundStyle(Color.appPrimary)
                                     .frame(width: 32)
 
-                                VStack(alignment: .leading, spacing: 4) {
+                                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                                     Text(template.name)
                                         .font(.headline)
-                                        .foregroundStyle(.primary)
+                                        .foregroundStyle(Color.appTextPrimary)
 
                                     Text(template.subject)
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Color.appTextSecondary)
                                         .lineLimit(2)
                                 }
 

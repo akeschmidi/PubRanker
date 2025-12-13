@@ -157,21 +157,22 @@ struct QuizRowView: View {
     let quiz: Quiz
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
             HStack {
                 Text(quiz.name)
                     .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
                 
                 Spacer()
                 
                 if quiz.isActive {
                     Label("Live", systemImage: "circle.fill")
                         .font(.caption)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.appSuccess)
                 } else if quiz.isCompleted {
                     Label("Beendet", systemImage: "checkmark.circle.fill")
                         .font(.caption)
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Color.appPrimary)
                 }
             }
             
@@ -179,37 +180,41 @@ struct QuizRowView: View {
                 if !quiz.venue.isEmpty {
                     Label(quiz.venue, systemImage: "mappin.circle")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
                 
                 Spacer()
                 
                 Text(quiz.date, style: .date)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
             
             HStack {
                 Label(String(format: NSLocalizedString("quiz.teams.count", comment: "Teams count"), quiz.safeTeams.count), systemImage: "person.3")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
                 
                 Label(String(format: NSLocalizedString("round.count", comment: "Rounds count"), quiz.safeRounds.count), systemImage: "list.number")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
                 
                 if quiz.safeRounds.count > 0 {
                     ProgressView(value: quiz.progress)
+                        .tint(Color.appPrimary)
                         .frame(width: 60)
                 }
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, AppSpacing.xxxs)
     }
 }
 
 struct NewQuizSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Bindable var viewModel: QuizViewModel
 
     // Wizard State
@@ -225,6 +230,8 @@ struct NewQuizSheet: View {
     // Step 2: Teams - use existing sheets
     @State private var showingTeamWizard = false
     @State private var showingAddTeam = false
+    @State private var showingGlobalTeamPicker = false
+    @Query(sort: \Team.createdAt, order: .reverse) private var allTeams: [Team]
 
     // Step 3: Rounds - use existing sheets
     @State private var showingRoundWizard = false
@@ -277,7 +284,7 @@ struct NewQuizSheet: View {
             navigationButtons
         }
         .frame(width: 900, height: 800)
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color.appBackground)
         .onAppear {
             focusedField = .name
             // Wizard-Modus aktivieren
@@ -320,32 +327,32 @@ struct NewQuizSheet: View {
                         // Step Title
                         Text(step.title)
                             .font(.system(size: 14, weight: currentStep == step ? .bold : .regular))
-                            .foregroundStyle(currentStep == step ? .primary : .secondary)
+                            .foregroundStyle(currentStep == step ? Color.appTextPrimary : Color.appTextSecondary)
 
                         // Connector Line
                         if step != .rounds {
                             Rectangle()
-                                .fill(step.rawValue < currentStep.rawValue ? Color.blue : Color.secondary.opacity(0.3))
+                                .fill(step.rawValue < currentStep.rawValue ? Color.appPrimary : Color.appTextTertiary.opacity(0.3))
                                 .frame(height: 2)
                                 .frame(maxWidth: .infinity)
                         }
                     }
                 }
             }
-            .padding(.horizontal, 40)
-            .padding(.top, 32)
-            .padding(.bottom, 16)
+            .padding(.horizontal, AppSpacing.xxl)
+            .padding(.top, AppSpacing.sectionSpacing)
+            .padding(.bottom, AppSpacing.sm)
         }
-        .background(Color(nsColor: .controlBackgroundColor))
+        .background(Color.appBackgroundSecondary)
     }
 
     private func stepColor(for step: WizardStep) -> Color {
         if step.rawValue < currentStep.rawValue {
-            return .green
+            return Color.appSuccess
         } else if step == currentStep {
-            return .blue
+            return Color.appPrimary
         } else {
-            return .secondary.opacity(0.3)
+            return Color.appTextTertiary.opacity(0.3)
         }
     }
 
@@ -389,9 +396,10 @@ struct NewQuizSheet: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Image(systemName: "text.quote")
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(Color.appPrimary)
                             Text("Quiz-Name")
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
 
                         TextField("z.B. Pub Quiz April 2024", text: $quizName)
@@ -404,9 +412,10 @@ struct NewQuizSheet: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Image(systemName: "mappin.circle.fill")
-                                .foregroundStyle(.red)
+                                .foregroundStyle(Color.appAccent)
                             Text("Ort")
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
 
                         TextField("z.B. Murphy's Pub", text: $venue)
@@ -455,13 +464,13 @@ struct NewQuizSheet: View {
                         .padding(20)
                         .frame(maxWidth: .infinity)
                         .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color(nsColor: .controlBackgroundColor))
-                                .shadow(color: .black.opacity(0.05), radius: 10, y: 4)
+                            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                                .fill(Color.appBackgroundSecondary)
+                                .shadow(AppShadow.md)
                         )
                         .overlay {
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(.green.opacity(0.2), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                                .stroke(Color.appSuccess.opacity(0.2), lineWidth: 1)
                         }
 
                         // Uhrzeit Card
@@ -502,13 +511,13 @@ struct NewQuizSheet: View {
                         .padding(20)
                         .frame(maxWidth: .infinity)
                         .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color(nsColor: .controlBackgroundColor))
-                                .shadow(color: .black.opacity(0.05), radius: 10, y: 4)
+                            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                                .fill(Color.appBackgroundSecondary)
+                                .shadow(AppShadow.md)
                         )
                         .overlay {
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(.orange.opacity(0.2), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                                .stroke(Color.appAccent.opacity(0.2), lineWidth: 1)
                         }
                     }
                 }
@@ -523,33 +532,14 @@ struct NewQuizSheet: View {
     private var teamsStepView: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(spacing: 16) {
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.blue, Color.cyan],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 80, height: 80)
-                        .shadow(color: .blue.opacity(0.3), radius: 10)
+            VStack(spacing: 8) {
+                Text("Teams hinzufügen")
+                    .font(.title)
+                    .bold()
 
-                    Image(systemName: "person.3.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(.white)
-                }
-
-                VStack(spacing: 8) {
-                    Text("Teams hinzufügen")
-                        .font(.title)
-                        .bold()
-
-                    Text("Füge die teilnehmenden Teams hinzu")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+                Text("Füge die teilnehmenden Teams hinzu")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             }
             .padding(.top, 32)
             .padding(.bottom, 24)
@@ -559,10 +549,6 @@ struct NewQuizSheet: View {
                 if quiz.safeTeams.isEmpty {
                     // Empty state with action buttons
                     VStack(spacing: 24) {
-                        Image(systemName: "person.3.fill")
-                            .font(.system(size: 60))
-                            .foregroundStyle(.secondary)
-
                         VStack(spacing: 8) {
                             Text("Noch keine Teams hinzugefügt")
                                 .font(.title2)
@@ -574,24 +560,34 @@ struct NewQuizSheet: View {
                                 .multilineTextAlignment(.center)
                         }
 
-                        HStack(spacing: 12) {
-                            Button {
-                                showingTeamWizard = true
-                            } label: {
-                                Label("Mehrere Teams", systemImage: "person.3.fill")
-                                    .font(.headline)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.large)
+                        VStack(spacing: AppSpacing.sm) {
+                            HStack(spacing: 12) {
+                                Button {
+                                    showingTeamWizard = true
+                                } label: {
+                                    Label("Mehrere Teams", systemImage: "person.3.fill")
+                                        .font(.headline)
+                                }
+                                .primaryGradientButton(size: .large)
 
-                            Button {
-                                showingAddTeam = true
-                            } label: {
-                                Label("Einzelnes Team", systemImage: "plus.circle")
-                                    .font(.headline)
+                                Button {
+                                    showingAddTeam = true
+                                } label: {
+                                    Label("Einzelnes Team", systemImage: "plus.circle")
+                                        .font(.headline)
+                                }
+                                .secondaryGradientButton(size: .large)
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.large)
+                            
+                            if let quiz = createdQuiz, !availableGlobalTeams(for: quiz).isEmpty {
+                                Button {
+                                    showingGlobalTeamPicker = true
+                                } label: {
+                                    Label("Aus vorhandenen wählen (\(availableGlobalTeams(for: quiz).count))", systemImage: "square.stack.3d.up.fill")
+                                        .font(.headline)
+                                }
+                                .secondaryGradientButton(size: .large)
+                            }
                         }
                     }
                     .frame(maxHeight: .infinity)
@@ -615,30 +611,39 @@ struct NewQuizSheet: View {
                                             .foregroundStyle(.secondary)
                                     }
                                     .padding()
-                                    .background(Color(nsColor: .controlBackgroundColor))
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .background(Color.appBackgroundSecondary)
+                                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                                 }
                             }
                             .padding(.horizontal, 40)
                         }
 
                         // Add more buttons
-                        HStack(spacing: 12) {
-                            Button {
-                                showingTeamWizard = true
-                            } label: {
-                                Label("Mehrere Teams", systemImage: "person.3.fill")
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.regular)
+                        VStack(spacing: AppSpacing.sm) {
+                            HStack(spacing: 12) {
+                                Button {
+                                    showingTeamWizard = true
+                                } label: {
+                                    Label("Mehrere Teams", systemImage: "person.3.fill")
+                                }
+                                .primaryGradientButton()
 
-                            Button {
-                                showingAddTeam = true
-                            } label: {
-                                Label("Einzelnes Team", systemImage: "plus.circle")
+                                Button {
+                                    showingAddTeam = true
+                                } label: {
+                                    Label("Einzelnes Team", systemImage: "plus.circle")
+                                }
+                                .secondaryGradientButton()
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.regular)
+                            
+                            if !availableGlobalTeams(for: quiz).isEmpty {
+                                Button {
+                                    showingGlobalTeamPicker = true
+                                } label: {
+                                    Label("Aus vorhandenen wählen (\(availableGlobalTeams(for: quiz).count))", systemImage: "square.stack.3d.up.fill")
+                                }
+                                .secondaryGradientButton()
+                            }
                         }
                         .padding(.horizontal, 40)
                         .padding(.bottom, 16)
@@ -658,6 +663,19 @@ struct NewQuizSheet: View {
                 AddTeamSheet(quiz: quiz, viewModel: viewModel)
             }
         }
+        .sheet(isPresented: $showingGlobalTeamPicker) {
+            if let quiz = createdQuiz {
+                GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams(for: quiz), modelContext: modelContext)
+            }
+        }
+    }
+    
+    private func availableGlobalTeams(for quiz: Quiz) -> [Team] {
+        allTeams.filter { team in
+            // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
+            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
+        }
+        .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
     }
 
     // MARK: - Step 3: Rounds
@@ -723,8 +741,7 @@ struct NewQuizSheet: View {
                                 Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
                                     .font(.headline)
                             }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.large)
+                            .primaryGradientButton(size: .large)
 
                             Button {
                                 showingAddRound = true
@@ -732,8 +749,7 @@ struct NewQuizSheet: View {
                                 Label("Einzelne Runde", systemImage: "plus.circle")
                                     .font(.headline)
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.large)
+                            .secondaryGradientButton(size: .large)
                         }
                     }
                     .frame(maxHeight: .infinity)
@@ -765,8 +781,8 @@ struct NewQuizSheet: View {
                                         Spacer()
                                     }
                                     .padding()
-                                    .background(Color(nsColor: .controlBackgroundColor))
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .background(Color.appBackgroundSecondary)
+                                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                                 }
                             }
                             .padding(.horizontal, 40)
@@ -779,16 +795,14 @@ struct NewQuizSheet: View {
                             } label: {
                                 Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
                             }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.regular)
+                            .primaryGradientButton()
 
                             Button {
                                 showingAddRound = true
                             } label: {
                                 Label("Einzelne Runde", systemImage: "plus.circle")
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.regular)
+                            .secondaryGradientButton()
                         }
                         .padding(.horizontal, 40)
                         .padding(.bottom, 16)
@@ -834,8 +848,7 @@ struct NewQuizSheet: View {
                 .frame(maxWidth: .infinity)
             }
             .keyboardShortcut(.escape)
-            .buttonStyle(.bordered)
-            .controlSize(.large)
+            .secondaryGradientButton(size: .large)
 
             // Next/Create Button
             Button {
@@ -870,12 +883,11 @@ struct NewQuizSheet: View {
                 .frame(maxWidth: .infinity)
             }
             .keyboardShortcut(.return, modifiers: .command)
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .primaryGradientButton(size: .large)
             .disabled(!canProceed)
         }
-        .padding(.horizontal, 40)
-        .padding(.vertical, 24)
+        .padding(.horizontal, AppSpacing.xxl)
+        .padding(.vertical, AppSpacing.sectionSpacing)
     }
 
     // MARK: - Helper Methods

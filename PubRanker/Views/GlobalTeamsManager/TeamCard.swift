@@ -17,22 +17,23 @@ struct TeamCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.xs) {
                 TeamIconView(team: team, size: 40)
 
                 Text(team.name)
                     .font(.body)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                     .lineLimit(1)
 
                 Spacer()
             }
-            .padding(16)
+            .padding(AppSpacing.sm)
             .background(
                 LinearGradient(
                     colors: [
-                        (Color(hex: team.color) ?? .blue).opacity(0.1),
-                        (Color(hex: team.color) ?? .blue).opacity(0.05)
+                        (Color(hex: team.color) ?? Color.appPrimary).opacity(0.1),
+                        (Color(hex: team.color) ?? Color.appPrimary).opacity(0.05)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -41,93 +42,92 @@ struct TeamCard: View {
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: AppSpacing.xs) {
                 if !team.contactPerson.isEmpty {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "person.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .frame(width: 20)
                         Text(team.contactPerson)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
                 }
 
                 if !team.email.isEmpty {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "envelope.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .frame(width: 20)
                         Text(team.email)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .lineLimit(1)
                     }
                 }
 
                 // Bestätigungsstatus
-                HStack(spacing: 8) {
+                HStack(spacing: AppSpacing.xxs) {
                     Image(systemName: team.isConfirmed ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(team.isConfirmed ? .green : .secondary)
+                        .foregroundStyle(team.isConfirmed ? Color.appSuccess : Color.appTextSecondary)
                         .frame(width: 20)
                     Text(team.isConfirmed ? "Bestätigt" : "Nicht bestätigt")
                         .font(.subheadline)
-                        .foregroundStyle(team.isConfirmed ? .green : .secondary)
+                        .foregroundStyle(team.isConfirmed ? Color.appSuccess : Color.appTextSecondary)
                 }
 
                 if let quizzes = team.quizzes, !quizzes.isEmpty {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "link.circle.fill")
-                            .foregroundStyle(.purple)
+                            .foregroundStyle(Color.appSecondary)
                             .frame(width: 20)
                         if quizzes.count == 1 {
                             Text("Zugeordnet zu: \(quizzes[0].name)")
                                 .font(.body)
-                                .foregroundStyle(.purple)
+                                .foregroundStyle(Color.appSecondary)
                         } else {
                             Text("Zugeordnet zu \(quizzes.count) Quizzes")
                                 .font(.body)
-                                .foregroundStyle(.purple)
+                                .foregroundStyle(Color.appSecondary)
                         }
                     }
-                    .padding(.top, 4)
+                    .padding(.top, AppSpacing.xxxs)
                 } else {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "circle.dotted")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .frame(width: 20)
                             .font(.body)
                         Text("Nicht zugeordnet")
                             .font(.body)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
-                    .padding(.top, 4)
+                    .padding(.top, AppSpacing.xxxs)
                 }
 
-                HStack(spacing: 8) {
+                HStack(spacing: AppSpacing.xxs) {
                     Image(systemName: "calendar")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                         .frame(width: 20)
                         .font(.body)
                     Text("Erstellt: \(team.createdAt.formatted(date: .abbreviated, time: .omitted))")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16)
+            .padding(AppSpacing.sm)
 
             Divider()
 
-            HStack(spacing: 8) {
+            HStack(spacing: AppSpacing.xxs) {
                 Button {
                     showingEditSheet = true
                 } label: {
                     Label("Bearbeiten", systemImage: "pencil")
                         .font(.body)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.regular)
+                .primaryGradientButton(size: .small)
 
                 Spacer()
 
@@ -137,15 +137,12 @@ struct TeamCard: View {
                     Image(systemName: "trash")
                         .font(.body)
                 }
-                .buttonStyle(.plain)
-                .foregroundStyle(.red)
+                .accentGradientButton(size: .small)
             }
-            .padding(12)
-            .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+            .padding(AppSpacing.xs)
+            .background(Color.appBackgroundSecondary.opacity(0.5))
         }
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .sheet(isPresented: $showingEditSheet) {
             GlobalEditTeamSheet(team: team, viewModel: viewModel)
         }

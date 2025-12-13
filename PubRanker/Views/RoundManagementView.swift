@@ -44,7 +44,7 @@ struct RoundManagementView: View {
     private var contentArea: some View {
         Group {
             if quiz.safeRounds.isEmpty || quiz.safeTeams.isEmpty {
-                VStack(spacing: 20) {
+                VStack(spacing: AppSpacing.md) {
                     if quiz.safeTeams.isEmpty {
                         emptyTeamsView
                     } else {
@@ -56,29 +56,28 @@ struct RoundManagementView: View {
                 VStack(spacing: 0) {
                     // Einfache Rundenliste - KEINE Punkteeingabe mehr!
                     ScrollView {
-                        VStack(spacing: 12) {
+                        VStack(spacing: AppSpacing.xs) {
                             ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
                                 roundListCard(round: round, index: index)
                             }
                         }
-                        .padding()
+                        .padding(AppSpacing.screenPadding)
                     }
 
                     // Action Buttons am unteren Rand
                     Divider()
 
-                    HStack(spacing: 12) {
+                    HStack(spacing: AppSpacing.xs) {
                         Button {
                             showingAddRoundSheet = true
                         } label: {
                             Label("Runde hinzufügen", systemImage: "plus.circle.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
+                        .primaryGradientButton(size: .large)
                     }
-                    .padding()
-                    .background(Color(nsColor: .controlBackgroundColor))
+                    .padding(AppSpacing.md)
+                    .background(Color.appBackgroundSecondary)
                 }
             }
         }
@@ -87,13 +86,14 @@ struct RoundManagementView: View {
     // MARK: - Round List Card
     
     private func roundListCard(round: Round, index: Int) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: AppSpacing.sm) {
             // Runden-Nummer und Status
-            VStack(spacing: 4) {
-                Text("R\(index + 1)")
+            VStack(spacing: AppSpacing.xxxs) {
+                Text(L10n.CommonUI.roundNumber(index + 1))
                     .font(.caption)
                     .bold()
                     .foregroundStyle(.white)
+                    .monospacedDigit()
                     .frame(width: 32, height: 32)
                     .background(getRoundStatusColor(for: round))
                     .clipShape(Circle())
@@ -101,38 +101,40 @@ struct RoundManagementView: View {
                 if round.isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.caption)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.appSuccess)
                 } else if quiz.isActive && quiz.currentRound?.id == round.id {
                     Image(systemName: "circle.fill")
                         .font(.caption)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.appAccent)
                         .symbolEffect(.pulse)
                 }
             }
             
             // Runden-Info
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(round.name)
                     .font(.headline)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     Label("\(round.maxPoints) Pkt", systemImage: "star.fill")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
                     
                     if round.isCompleted {
-                        Label("Abgeschlossen", systemImage: "checkmark.circle.fill")
+                        Label(L10n.CommonUI.completed, systemImage: "checkmark.circle.fill")
                             .font(.caption)
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.appSuccess)
                     } else if quiz.isActive && quiz.currentRound?.id == round.id {
-                        Label("Aktiv", systemImage: "circle.fill")
+                        Label(L10n.CommonUI.running, systemImage: "circle.fill")
                             .font(.caption)
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(Color.appAccent)
                     } else {
-                        Label("Vorbereitung", systemImage: "hourglass")
+                        Label(NSLocalizedString("common.round.status.preparation", comment: "Preparation"), systemImage: "hourglass")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
                 }
             }
@@ -144,15 +146,16 @@ struct RoundManagementView: View {
                 let completedTeams = quiz.safeTeams.filter { $0.hasScore(for: round) }.count
                 let totalTeams = quiz.safeTeams.count
                 
-                VStack(alignment: .trailing, spacing: 4) {
+                VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
                     Text("\(completedTeams)/\(totalTeams)")
                         .font(.title3)
                         .bold()
+                        .foregroundStyle(Color.appTextPrimary)
                         .monospacedDigit()
                     
-                    Text("Teams")
+                    Text(L10n.CommonUI.teams)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
             }
             
@@ -160,18 +163,21 @@ struct RoundManagementView: View {
             Button {
                 selectedRound = round
             } label: {
-                Image(systemName: "pencil.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(.blue)
+                HStack(spacing: AppSpacing.xxs) {
+                    Image(systemName: "pencil")
+                        .font(.body)
+                    Text(L10n.CommonUI.edit)
+                        .font(.body)
+                }
             }
-            .buttonStyle(.plain)
+            .primaryGradientButton()
+            .help(NSLocalizedString("common.round.edit.help", comment: "Edit round help"))
         }
-        .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(AppSpacing.md)
+        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .stroke(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
         }
     }
 
@@ -180,60 +186,61 @@ struct RoundManagementView: View {
     // Helper to get round status color
     private func getRoundStatusColor(for round: Round) -> Color {
         if round.isCompleted {
-            return .green
+            return Color.appSuccess
         } else if quiz.isActive && quiz.currentRound?.id == round.id {
-            return .orange
+            return Color.appAccent
         } else {
-            return .gray
+            return Color.appTextSecondary
         }
     }
     
     private var emptyTeamsView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: AppSpacing.md) {
             Image(systemName: "person.3.fill")
                 .font(.system(size: 60))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appTextSecondary)
             
-            VStack(spacing: 8) {
+            VStack(spacing: AppSpacing.xxs) {
                 Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 
                 Text(NSLocalizedString("empty.noTeams.beforeRounds", comment: "Add teams before rounds"))
                     .font(.body)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                     .multilineTextAlignment(.center)
             }
         }
-        .padding()
+        .padding(AppSpacing.screenPadding)
     }
     
     private var emptyRoundsView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: AppSpacing.md) {
             Image(systemName: "number.circle.fill")
                 .font(.system(size: 60))
-                .foregroundStyle(.blue)
+                .foregroundStyle(Color.appPrimary)
             
-            VStack(spacing: 8) {
+            VStack(spacing: AppSpacing.xxs) {
                 Text(NSLocalizedString("empty.noRounds", comment: "No rounds"))
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 
                 Text(NSLocalizedString("empty.noRounds.management", comment: "Add rounds to assign points"))
                     .font(.body)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                     .multilineTextAlignment(.center)
             }
             
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.xs) {
                 Button {
                     showingRoundWizard = true
                 } label: {
                     Label(NSLocalizedString("round.new.multiple", comment: "Multiple rounds"), systemImage: "rectangle.stack.fill")
                         .font(.headline)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .primaryGradientButton(size: .large)
                 
                 Button {
                     showingAddRoundSheet = true
@@ -241,11 +248,10 @@ struct RoundManagementView: View {
                     Label(NSLocalizedString("round.new.single", comment: "Single round"), systemImage: "plus.circle")
                         .font(.headline)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .secondaryGradientButton(size: .large)
             }
         }
-        .padding()
+        .padding(AppSpacing.screenPadding)
     }
 } // schließt RoundManagementView
 
@@ -269,48 +275,51 @@ struct CurrentRoundBanner: View {
     }
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: AppSpacing.xs) {
             HStack {
                 // Left side - Current Round Info
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     Image(systemName: "circle.fill")
                         .font(.title3)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.appAccent)
                         .symbolEffect(.pulse)
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("AKTUELLE RUNDE")
+                    VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                        Text(L10n.CommonUI.currentRound)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                             .bold()
                         
                         Text(currentRound.name)
                             .font(.title2)
                             .bold()
+                            .foregroundStyle(Color.appTextPrimary)
                     }
                 }
                 
                 Spacer()
                 
                 // Center - Progress
-                VStack(spacing: 6) {
-                    HStack(spacing: 8) {
+                VStack(spacing: AppSpacing.xxxs) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "person.3.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appTextSecondary)
                         Text("\(completedTeamsCount) von \(totalTeams) Teams")
                             .font(.subheadline)
                             .bold()
+                            .foregroundStyle(Color.appTextPrimary)
+                            .monospacedDigit()
                     }
                     
                     ProgressView(value: progress)
                         .frame(width: 200)
-                        .tint(progress == 1.0 ? .green : .orange)
+                        .tint(progress == 1.0 ? Color.appSuccess : Color.appAccent)
                 }
                 
                 Spacer()
                 
                 // Right side - Actions
-                HStack(spacing: 12) {
+                HStack(spacing: AppSpacing.xs) {
                     if progress == 1.0 {
                         Button {
                             viewModel.completeRound(currentRound)
@@ -318,33 +327,33 @@ struct CurrentRoundBanner: View {
                             Label(NSLocalizedString("round.complete", comment: "Complete round"), systemImage: "checkmark.circle.fill")
                                 .font(.headline)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.green)
-                        .controlSize(.large)
+                        .successGradientButton(size: .large)
                     } else {
-                        VStack(alignment: .trailing, spacing: 2) {
+                        VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
                             Text(String(format: NSLocalizedString("common.missing", comment: "Missing count"), totalTeams - completedTeamsCount))
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
                             Text(String(format: NSLocalizedString("common.points.maxLabel", comment: "Max points label"), currentRound.maxPoints))
                                 .font(.caption2)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .monospacedDigit()
                         }
                     }
                 }
             }
         }
-        .padding(20)
+        .padding(AppSpacing.md)
         .background(
             LinearGradient(
-                colors: [Color.orange.opacity(0.15), Color.orange.opacity(0.05)],
+                colors: [Color.appAccent.opacity(0.15), Color.appAccent.opacity(0.05)],
                 startPoint: .leading,
                 endPoint: .trailing
             )
         )
         .overlay(alignment: .bottom) {
             Rectangle()
-                .fill(Color.orange)
+                .fill(Color.appAccent)
                 .frame(height: 3)
         }
     }
@@ -367,19 +376,19 @@ struct RoundCompletionIndicator: View {
         HStack(spacing: 3) {
             ForEach(0..<min(totalTeams, 5), id: \.self) { index in
                 Circle()
-                    .fill(index < teamsWithScores ? Color.green : Color.secondary.opacity(0.3))
+                    .fill(index < teamsWithScores ? Color.appSuccess : Color.appTextTertiary.opacity(0.3))
                     .frame(width: 6, height: 6)
             }
             
             if totalTeams > 5 {
                 Text("+\(totalTeams - 5)")
                     .font(.system(size: 8))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
         }
         .padding(.horizontal, 4)
         .padding(.vertical, 2)
-        .background(Color.secondary.opacity(0.05))
+        .background(Color.appBackgroundSecondary.opacity(0.5))
         .clipShape(Capsule())
     }
 }
@@ -468,7 +477,7 @@ struct ScoreCell: View {
                         } else {
                             Text("–")
                                 .font(.system(size: 36, weight: .bold))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
                         }
                         
                         // Info Label
@@ -476,18 +485,18 @@ struct ScoreCell: View {
                             if let score = currentScore, score > 0 {
                                 Text("\(score)")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                                 Text("/")
                                     .font(.caption2)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                             }
                             Text(String(format: NSLocalizedString("score.points", comment: "Points"), round.maxPoints))
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
                         }
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
-                        .background(Color.secondary.opacity(0.1))
+                        .background(Color.appBackgroundSecondary.opacity(0.5))
                         .clipShape(Capsule())
                     }
                     .frame(maxWidth: .infinity)
@@ -512,7 +521,7 @@ struct ScoreCell: View {
                             .stroke(
                                 (currentScore ?? 0) > 0
                                     ? Color.accentColor.opacity(0.4)
-                                    : Color.secondary.opacity(0.2),
+                                    : Color.appTextTertiary.opacity(0.2),
                                 lineWidth: (currentScore ?? 0) > 0 ? 2 : 1
                             )
                     }
@@ -583,28 +592,30 @@ struct EditRoundSheet: View {
     @FocusState private var focusedField: Bool
     
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: AppSpacing.md) {
             // Header
-            VStack(spacing: 8) {
+            VStack(spacing: AppSpacing.xxs) {
                 Image(systemName: "pencil.circle.fill")
                     .font(.system(size: 50))
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(Color.appPrimary)
                 
-                Text("Runde bearbeiten")
+                Text(NSLocalizedString("common.round.edit", comment: "Edit round"))
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
                 
-                Text("R\(getRoundNumber())")
+                Text(L10n.CommonUI.roundNumber(getRoundNumber()))
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
             }
-            .padding(.top, 20)
+            .padding(.top, AppSpacing.md)
             
             // Form
-            VStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
+            VStack(spacing: AppSpacing.md) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(NSLocalizedString("round.name", comment: "Round name"))
                         .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
                     
                     TextField(NSLocalizedString("round.name.placeholder", comment: "Round name placeholder"), text: $roundName)
                         .textFieldStyle(.roundedBorder)
@@ -612,9 +623,10 @@ struct EditRoundSheet: View {
                         .focused($focusedField)
                 }
                 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
                         .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
                     
                     HStack {
                         Button {
@@ -646,56 +658,55 @@ struct EditRoundSheet: View {
                 }
                 
                 // Quick Presets
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                     
-                    HStack(spacing: 12) {
+                    HStack(spacing: AppSpacing.xs) {
                         ForEach([5, 10, 15, 20], id: \.self) { points in
                             Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
                                 maxPoints = points
                             }
-                            .buttonStyle(.bordered)
+                            .secondaryGradientButton()
                         }
                     }
                 }
             }
-            .padding(.horizontal, 30)
+            .padding(.horizontal, AppSpacing.xxl)
             
             Spacer()
             
             // Action Buttons
-            HStack(spacing: 12) {
+            HStack(spacing: AppSpacing.sm) {
                 Button(role: .destructive) {
                     showingDeleteConfirmation = true
                 } label: {
-                    Label("Löschen", systemImage: "trash")
+                    Label(L10n.Navigation.delete, systemImage: "trash")
+                        .frame(minWidth: 80)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .accentGradientButton(size: .large)
                 
                 Spacer()
                 
-                Button("Abbrechen") {
+                Button(L10n.Navigation.cancel) {
                     dismiss()
                 }
                 .keyboardShortcut(.escape)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .secondaryGradientButton(size: .large)
                 
-                Button("Speichern") {
+                Button(L10n.Navigation.save) {
                     saveChanges()
                     dismiss()
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .primaryGradientButton(size: .large)
                 .disabled(roundName.isEmpty)
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, AppSpacing.md)
+            .padding(.horizontal, AppSpacing.xl)
         }
-        .frame(width: 500, height: 550)
+        .frame(width: 550, height: 550)
         .onAppear {
             roundName = round.name
             maxPoints = round.maxPoints
@@ -738,28 +749,31 @@ struct QuickRoundSheet: View {
     @FocusState private var focusedField: Bool
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: AppSpacing.md) {
             // Header
-            VStack(spacing: 8) {
+            VStack(spacing: AppSpacing.xxs) {
                 Image(systemName: "number.circle.fill")
                     .font(.system(size: 50))
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(Color.appPrimary)
 
-                Text("Neue Runde erstellen")
+                Text(NSLocalizedString("common.round.create", comment: "Create round"))
                     .font(.title2)
                     .bold()
+                    .foregroundStyle(Color.appTextPrimary)
 
-                Text("Runde \(quiz.safeRounds.count + 1)")
+                Text(String(format: NSLocalizedString("common.round", comment: "Round"), quiz.safeRounds.count + 1))
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
             }
-            .padding(.top, 20)
+            .padding(.top, AppSpacing.md)
 
             // Form
-            VStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
+            VStack(spacing: AppSpacing.md) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(NSLocalizedString("round.name", comment: "Round name"))
                         .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
 
                     TextField(NSLocalizedString("round.name.placeholder", comment: "Round name placeholder"), text: $roundName)
                         .textFieldStyle(.roundedBorder)
@@ -767,9 +781,10 @@ struct QuickRoundSheet: View {
                         .focused($focusedField)
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
                         .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
 
                     HStack {
                         Button {
@@ -800,29 +815,28 @@ struct QuickRoundSheet: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .padding(.horizontal, 30)
+            .padding(.horizontal, AppSpacing.xxl)
 
             Spacer()
 
             // Action Buttons
-            HStack(spacing: 12) {
-                Button("Abbrechen") {
+            HStack(spacing: AppSpacing.xs) {
+                Button(L10n.Navigation.cancel) {
                     dismiss()
                 }
                 .keyboardShortcut(.escape)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .secondaryGradientButton(size: .large)
 
-                Button("Runde erstellen") {
+                Button(NSLocalizedString("common.round.create.button", comment: "Create round button")) {
                     viewModel.addRound(to: quiz, name: roundName, maxPoints: maxPoints)
                     dismiss()
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .primaryGradientButton(size: .large)
                 .disabled(roundName.isEmpty)
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, AppSpacing.md)
+            .padding(.horizontal, AppSpacing.xxl)
         }
         .frame(width: 500, height: 450)
         .onAppear {
@@ -859,13 +873,13 @@ struct RoundWizardSheet: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [Color.orange, Color.orange.opacity(0.7)],
+                                colors: [Color.appAccent, Color.appAccentLight],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                         .frame(width: 80, height: 80)
-                        .shadow(color: .orange.opacity(0.3), radius: 10)
+                        .shadow(AppShadow.lg)
                     
                     Image(systemName: "list.number")
                         .font(.system(size: 36))
@@ -873,13 +887,13 @@ struct RoundWizardSheet: View {
                 }
                 
                 VStack(spacing: 8) {
-                    Text("Runden-Setup")
+                    Text(L10n.CommonUI.roundSetup)
                         .font(.title)
                         .bold()
                     
-                    Text("Erstellen Sie mehrere Runden auf einmal")
+                    Text(L10n.CommonUI.roundSetupDescription)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appTextSecondary)
                 }
             }
             .padding(.top, 40)
@@ -905,21 +919,21 @@ struct RoundWizardSheet: View {
                                             .font(.caption)
                                         Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), preset.2))
                                             .font(.caption2)
-                                            .foregroundStyle(.secondary)
+                                            .foregroundStyle(Color.appTextSecondary)
                                     }
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(
                                         numberOfRounds == preset.1 && maxPointsPerRound == preset.2
-                                            ? Color.accentColor.opacity(0.2)
-                                            : Color(nsColor: .controlBackgroundColor)
+                                            ? Color.appPrimary.opacity(0.2)
+                                            : Color.appBackgroundSecondary
                                     )
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
                                     .overlay {
-                                        RoundedRectangle(cornerRadius: 12)
+                                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
                                             .stroke(
                                                 numberOfRounds == preset.1 && maxPointsPerRound == preset.2
-                                                    ? Color.accentColor
+                                                    ? Color.appPrimary
                                                     : Color.clear,
                                                 lineWidth: 2
                                             )
@@ -936,9 +950,10 @@ struct RoundWizardSheet: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Image(systemName: "number.circle.fill")
-                                .foregroundStyle(.blue)
-                            Text("Anzahl der Runden")
+                                .foregroundStyle(Color.appPrimary)
+                            Text(L10n.CommonUI.numberOfRounds)
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                         
                         HStack {
@@ -974,14 +989,14 @@ struct RoundWizardSheet: View {
                         .frame(maxWidth: .infinity)
                         
                         // Quick buttons
-                        HStack(spacing: 8) {
+                        HStack(spacing: AppSpacing.xxs) {
                             ForEach([4, 5, 6, 8, 10], id: \.self) { count in
                                 Button("\(count)") {
                                     numberOfRounds = count
                                     updateRoundNames()
                                     updateRoundPoints()
                                 }
-                                .buttonStyle(.bordered)
+                                .secondaryGradientButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -992,9 +1007,10 @@ struct RoundWizardSheet: View {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
                                 Image(systemName: "star.circle.fill")
-                                    .foregroundStyle(.yellow)
+                                    .foregroundStyle(Color.appSecondary)
                                 Text(NSLocalizedString("common.points.perRound", comment: "Max points per round"))
                                     .font(.headline)
+                                    .foregroundStyle(Color.appTextPrimary)
                             }
                             
                             HStack {
@@ -1028,12 +1044,12 @@ struct RoundWizardSheet: View {
                             .frame(maxWidth: .infinity)
                             
                             // Quick buttons
-                            HStack(spacing: 8) {
+                            HStack(spacing: AppSpacing.xxs) {
                                 ForEach([5, 10, 15, 20], id: \.self) { points in
                                     Button("\(points)") {
                                         maxPointsPerRound = points
                                     }
-                                    .buttonStyle(.bordered)
+                                    .secondaryGradientButton()
                                 }
                             }
                             .frame(maxWidth: .infinity)
@@ -1046,9 +1062,10 @@ struct RoundWizardSheet: View {
                     Toggle(isOn: $useCustomPoints) {
                         HStack {
                             Image(systemName: "star.circle.fill")
-                                .foregroundStyle(.yellow)
+                                .foregroundStyle(Color.appSecondary)
                             Text(NSLocalizedString("common.points.custom", comment: "Custom points per round"))
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                     }
                     .onChange(of: useCustomPoints) { oldValue, newValue in
@@ -1063,9 +1080,10 @@ struct RoundWizardSheet: View {
                     Toggle(isOn: $useCustomNames) {
                         HStack {
                             Image(systemName: "pencil.circle.fill")
-                                .foregroundStyle(.purple)
-                            Text("Benutzerdefinierte Namen")
+                                .foregroundStyle(Color.appSecondary)
+                            Text(L10n.CommonUI.customNames)
                                 .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
                         }
                     }
                     .onChange(of: useCustomNames) { oldValue, newValue in
@@ -1079,13 +1097,13 @@ struct RoundWizardSheet: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text(useCustomNames && useCustomPoints ? NSLocalizedString("round.names.custom", comment: "Round names and points") : useCustomNames ? NSLocalizedString("round.names.only", comment: "Round names only") : NSLocalizedString("common.points.perRound", comment: "Max points"))
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.appTextSecondary)
                             
                             ForEach(0..<numberOfRounds, id: \.self) { index in
                                 HStack(spacing: 12) {
-                                    Text("R\(index + 1)")
+                                    Text(L10n.CommonUI.roundNumber(index + 1))
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Color.appTextSecondary)
                                         .frame(width: 30)
                                     
                                     if useCustomNames {
@@ -1118,7 +1136,7 @@ struct RoundWizardSheet: View {
                                             
                                             Text(NSLocalizedString("score.pointsUnit", comment: "Points unit"))
                                                 .font(.caption)
-                                                .foregroundStyle(.secondary)
+                                                .foregroundStyle(Color.appTextSecondary)
                                         }
                                     }
                                 }
@@ -1128,13 +1146,13 @@ struct RoundWizardSheet: View {
                     
                     // Preview
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Vorschau")
+                        Text(L10n.CommonUI.preview)
                             .font(.headline)
                         
                         VStack(alignment: .leading, spacing: 8) {
                             ForEach(0..<min(numberOfRounds, 3), id: \.self) { index in
                                 HStack {
-                                    Text("Runde \(index + 1):")
+                                    Text(L10n.CommonUI.roundPreview(index + 1))
                                         .font(.subheadline)
                                     Text(getRoundName(for: index))
                                         .font(.subheadline)
@@ -1142,18 +1160,18 @@ struct RoundWizardSheet: View {
                                     Spacer()
                                     Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), getRoundPoints(for: index)))
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Color.appTextSecondary)
                                 }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color(nsColor: .controlBackgroundColor))
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .padding(.horizontal, AppSpacing.xs)
+                                .padding(.vertical, AppSpacing.xxs)
+                                .background(Color.appBackgroundSecondary)
+                                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                             }
                             
                             if numberOfRounds > 3 {
                                 Text("... und \(numberOfRounds - 3) weitere")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Color.appTextSecondary)
                                     .padding(.leading, 12)
                             }
                         }
@@ -1163,36 +1181,35 @@ struct RoundWizardSheet: View {
             }
             
             // Action Buttons
-            HStack(spacing: 16) {
+            HStack(spacing: AppSpacing.sm) {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Abbrechen")
+                    Text(L10n.Navigation.cancel)
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .secondaryGradientButton(size: .large)
                 
                 Button {
                     createRounds()
                     dismiss()
                 } label: {
-                    HStack(spacing: 8) {
+                    HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "checkmark.circle.fill")
                         Text("\(numberOfRounds) Runden erstellen")
+                            .monospacedDigit()
                     }
                     .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+                .primaryGradientButton(size: .large)
             }
-            .padding(.horizontal, 40)
-            .padding(.vertical, 24)
+            .padding(.horizontal, AppSpacing.xxl)
+            .padding(.vertical, AppSpacing.sectionSpacing)
         }
         .frame(width: 650, height: 800)
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(Color.appBackground)
         .onAppear {
             updateRoundNames()
             updateRoundPoints()

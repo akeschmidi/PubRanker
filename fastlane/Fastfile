@@ -1,0 +1,52 @@
+# Fastlane Konfiguration für PubRanker
+
+default_platform(:mac)
+
+platform :mac do
+  
+  desc "Metadaten vom App Store herunterladen"
+  lane :download_metadata do
+    download_app_privacy_details_from_app_store
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      run_precheck_before_submit: false
+    )
+  end
+
+  desc "Metadaten zum App Store hochladen"
+  lane :upload_metadata do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: false,
+      automatic_release: false
+    )
+  end
+
+  desc "Nur Screenshots hochladen"
+  lane :upload_screenshots do
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      force: true,
+      overwrite_screenshots: true
+    )
+  end
+
+  desc "Alles hochladen (Metadaten + Screenshots)"
+  lane :upload_all do
+    deliver(
+      skip_binary_upload: true,
+      force: true,
+      overwrite_screenshots: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: false
+    )
+  end
+
+end

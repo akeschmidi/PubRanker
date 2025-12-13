@@ -175,15 +175,75 @@ struct EasterEggTitleView: View {
     @ObservedObject var easterEggManager: EasterEggManager
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("PubRanker")
-                .font(.title2)
-                .bold()
-                .foregroundStyle(easterEggManager.matrixMode ? .green : .primary)
-            Text("QuizMaster Hub")
-                .font(.caption)
-                .foregroundStyle(easterEggManager.matrixMode ? .green.opacity(0.7) : .secondary)
+        HStack(spacing: AppSpacing.xs) {
+            // App Icon Badge
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: easterEggManager.matrixMode 
+                                ? [.green, .green.opacity(0.7)]
+                                : [Color.appPrimaryDark, Color.appPrimaryLight],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 40, height: 40)
+                    .shadow(AppShadow.sm)
+                
+                Image(systemName: "trophy.fill")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+            
+            // Title Text
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                Text("PubRanker")
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundStyle(
+                        easterEggManager.matrixMode 
+                            ? LinearGradient(
+                                colors: [.green, .green.opacity(0.8)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                            : LinearGradient(
+                                colors: [Color.appPrimaryDark, Color.appPrimaryLight],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                    )
+                
+                Text("QuizMaster Hub")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(
+                        easterEggManager.matrixMode 
+                            ? .green.opacity(0.7)
+                            : Color.appTextSecondary
+                    )
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+            }
         }
+        .padding(.vertical, AppSpacing.xxs)
+        .padding(.horizontal, AppSpacing.sm)
+        .background(
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .fill(
+                    easterEggManager.matrixMode
+                        ? Color.black.opacity(0.3)
+                        : Color.appBackgroundSecondary.opacity(0.5)
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .strokeBorder(
+                    easterEggManager.matrixMode
+                        ? .green.opacity(0.3)
+                        : Color.appPrimary.opacity(0.2),
+                    lineWidth: 1
+                )
+        )
     }
 }
 
@@ -193,21 +253,25 @@ struct EasterEggClickCounter: View {
     
     var body: some View {
         if easterEggManager.clickCount > 0 {
-            HStack(spacing: 6) {
+            HStack(spacing: AppSpacing.xxxs) {
                 Image(systemName: "hand.tap.fill")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                 Text("\(easterEggManager.clickCount)")
                     .font(.caption)
                     .monospacedDigit()
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appTextSecondary)
                     .contentTransition(.numericText())
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
+            .padding(.horizontal, AppSpacing.xs)
+            .padding(.vertical, AppSpacing.xxxs)
             .background(
                 Capsule()
-                    .fill(Color(nsColor: .controlBackgroundColor).opacity(0.6))
+                    .fill(Color.appBackgroundSecondary.opacity(0.8))
+            )
+            .overlay(
+                Capsule()
+                    .strokeBorder(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
             )
             .transition(.scale.combined(with: .opacity))
         }
