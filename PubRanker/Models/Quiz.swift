@@ -17,6 +17,7 @@ final class Quiz {
     var isActive: Bool = false
     var isCompleted: Bool = false
     var createdAt: Date = Date()
+    var maxTeams: Int? = nil
     
     @Relationship(deleteRule: .nullify)
     var teams: [Team]? = []
@@ -51,6 +52,10 @@ final class Quiz {
     
     var sortedTeamsByScore: [Team] {
         safeTeams.sorted { $0.getTotalScore(for: self) > $1.getTotalScore(for: self) }
+    }
+    
+    var confirmedTeamsCount: Int {
+        safeTeams.filter { $0.isConfirmed(for: self) }.count
     }
     
     var currentRound: Round? {

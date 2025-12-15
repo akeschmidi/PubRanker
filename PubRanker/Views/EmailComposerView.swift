@@ -58,7 +58,7 @@ struct EmailComposerView: View {
     }
 
     var teamsWithEmail: [Team] {
-        filteredTeams.filter { !$0.email.isEmpty }
+        filteredTeams.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
 
     var selectedTeams: [Team] {
@@ -67,6 +67,24 @@ struct EmailComposerView: View {
 
     var allSelected: Bool {
         !teamsWithEmail.isEmpty && selectedTeamIds.count == teamsWithEmail.count
+    }
+    
+    /// Dynamischer Titel basierend auf Quiz-Auswahl
+    private var emailComposerTitle: String {
+        if let quiz = quiz {
+            return String(format: NSLocalizedString("email.composer.quiz.title", comment: ""), quiz.name)
+        } else {
+            return NSLocalizedString("email.composer.title", comment: "")
+        }
+    }
+    
+    /// Dynamischer Untertitel mit Empfänger-Anzahl
+    private var emailComposerSubtitle: String {
+        let count = teamsWithEmail.count
+        if count > 0 {
+            return String(format: NSLocalizedString("email.composer.recipientsAvailable", comment: ""), count)
+        }
+        return ""
     }
 
     var body: some View {
@@ -80,8 +98,8 @@ struct EmailComposerView: View {
                 emailComposerPanel
                     .frame(minWidth: 500)
             }
-            .navigationTitle(NSLocalizedString("email.composer.title", comment: ""))
-            .navigationSubtitle(quiz?.name ?? "")
+            .navigationTitle(emailComposerTitle)
+            .navigationSubtitle(emailComposerSubtitle)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(NSLocalizedString("navigation.cancel", comment: "")) {

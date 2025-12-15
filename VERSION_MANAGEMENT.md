@@ -1,50 +1,185 @@
 # Versionsverwaltung
 
-## Automatisches Erhöhen der Build-Version
+## ⚠️ WICHTIG: Build-Nummer vs. Marketing-Version
 
-Es gibt zwei Möglichkeiten, die Build-Version automatisch zu erhöhen:
+| Feld | In Xcode | Info.plist Key | Beispiel | Regel |
+|------|----------|----------------|----------|-------|
+| **Build-Nummer** | Build | `CFBundleVersion` | `201` | Muss bei JEDEM Upload höher sein |
+| **Marketing-Version** | Version | `CFBundleShortVersionString` | `2.2` | Kann gleich bleiben bei Bug-Fixes |
 
-### Option 1: Manuelles Skript (Empfohlen)
+---
 
-Vor jedem App Store Upload das Skript ausführen:
+## 🚀 Empfohlene Methode: Fastlane (Automatisch)
+
+### Bei jedem Release:
+
+```bash
+cd PubRanker
+fastlane bump_build
+```
+
+Oder direkt Release erstellen und hochladen:
+
+```bash
+fastlane release
+```
+
+### Wie es funktioniert:
+1. Liest Git Commit Count
+2. Addiert Offset (200) um über App Store Version zu bleiben
+3. Setzt IMMER eine höhere Nummer
+
+---
+
+## 🛠 Alternative: Manuelles Script
+
+```bash
+./Scripts/auto_increment_build.sh
+```
+
+Oder das ältere Script:
 
 ```bash
 ./increment_version.sh
 ```
 
-Das Skript:
-- Liest die aktuelle Version aus der Projektdatei
-- Erhöht sie automatisch um 1
-- Aktualisiert beide Build-Konfigurationen (Debug & Release)
+---
 
-**Vorteil:** Du hast volle Kontrolle, wann die Version erhöht wird.
+## ⚙️ Xcode Build Phase (Automatisch bei Archive)
 
-### Option 2: Automatisch bei jedem Release-Build
+### Einrichtung:
 
-Füge das Build Phase Script zu deinem Xcode-Projekt hinzu:
-
-1. Öffne das Projekt in Xcode
-2. Wähle das Target "PubRanker"
-3. Gehe zu "Build Phases"
-4. Klicke auf "+" und wähle "New Run Script Phase"
-5. Verschiebe die Phase NACH "Copy Bundle Resources"
-6. Füge folgendes Script ein:
+1. **Xcode öffnen** → Target "PubRanker"
+2. **Edit Scheme...** (⌘<)
+3. Links: **Archive** → **Pre-actions**
+4. **+** → "New Run Script Action"
+5. **Shell:** `/bin/bash`
+6. **Script einfügen:**
 
 ```bash
-"${PROJECT_DIR}/increment_version_build_phase.sh"
+"${PROJECT_DIR}/Scripts/auto_increment_build.sh"
 ```
 
-**Vorteil:** Die Version wird automatisch bei jedem Archive-Build erhöht.
+7. **"Provide build settings from":** PubRanker
 
-**Hinweis:** Bei Option 2 wird die Version bei jedem Release-Build erhöht, auch wenn du nicht hochlädst. Option 1 gibt dir mehr Kontrolle.
+### Ergebnis:
+- Bei jedem **Archive** (Release-Build) wird die Build-Nummer automatisch erhöht
+- Debug-Builds bleiben unberührt
 
-## Aktuelle Version prüfen
+---
 
-Die aktuelle Build-Version findest du in:
-- `PubRanker.xcodeproj/project.pbxproj` (Zeile mit `CURRENT_PROJECT_VERSION`)
-- Oder in Xcode: Target → General → Version
+## 📊 Aktuelle Werte
 
-## Marketing Version
+| Wert | Aktuell |
+|------|---------|
+| Marketing-Version | 2.2 |
+| Build-Nummer | 201+ |
+| Letzte App Store Version | 200 |
 
-Die Marketing Version (z.B. 1.7) wird separat verwaltet und sollte manuell in Xcode geändert werden, wenn du eine neue Hauptversion veröffentlichst.
+### Prüfen:
 
+```bash
+# In project.pbxproj
+grep "CURRENT_PROJECT_VERSION" PubRanker.xcodeproj/project.pbxproj
+
+# Oder in Xcode:
+# Target → General → Identity → Build
+```
+
+---
+
+## 🔢 Build-Nummer Strategie
+
+### Git-basiert (Empfohlen):
+```
+Build-Nummer = 200 (Offset) + Git Commit Count
+```
+
+**Vorteile:**
+- ✅ Immer eindeutig
+- ✅ Immer aufsteigend
+- ✅ Kann nicht versehentlich zurückgesetzt werden
+- ✅ Reproduzierbar auf jedem System
+
+### Fallback (wenn kein Git):
+```
+Build-Nummer = YYYYMMDDHHMM (Timestamp)
+```
+
+---
+
+## ❌ Häufige Fehler vermeiden
+
+### Fehler: "CFBundleVersion must be higher"
+```
+This bundle is invalid. The value for key CFBundleVersion [1] 
+must contain a higher version than that of the previously uploaded version [200].
+```
+
+**Ursache:** Build-Nummer wurde zurückgesetzt oder nicht erhöht.
+
+**Lösung:**
+```bash
+fastlane bump_build
+# Oder manuell in project.pbxproj:
+# CURRENT_PROJECT_VERSION = 201; (oder höher)
+```
+
+### Prävention:
+1. **Nie** CURRENT_PROJECT_VERSION manuell auf niedrigen Wert setzen
+2. **Immer** Fastlane oder Script vor Upload verwenden
+3. **Xcode Build Phase** für automatisches Inkrement einrichten
+
+---
+
+## 📝 Workflow für App Store Release
+
+### Empfohlener Ablauf:
+
+```bash
+# 1. Änderungen committen
+git add .
+git commit -m "Release 2.2"
+
+# 2. Build-Nummer erhöhen + Archive erstellen + hochladen
+fastlane release
+
+# 3. In App Store Connect: Review einreichen
+```
+
+### Alternativer Ablauf (manuell):
+
+```bash
+# 1. Build-Nummer erhöhen
+./Scripts/auto_increment_build.sh
+
+# 2. In Xcode: Product → Archive
+
+# 3. In Organizer: Distribute App → App Store Connect
+```
+
+---
+
+## 🔄 Marketing-Version ändern
+
+Die Marketing-Version (2.2 → 2.3) wird **manuell** geändert:
+
+### In Xcode:
+1. Target → General → Identity → Version
+2. Neuen Wert eingeben (z.B. "2.3")
+
+### Per Script:
+```bash
+# Alle Vorkommen ersetzen
+sed -i '' 's/MARKETING_VERSION = 2.2;/MARKETING_VERSION = 2.3;/g' \
+    PubRanker.xcodeproj/project.pbxproj
+```
+
+### Wann erhöhen?
+- **Major (1.0 → 2.0):** Große Änderungen, neues Design
+- **Minor (2.2 → 2.3):** Neue Features
+- **Keine Erhöhung:** Bug-Fixes (nur Build-Nummer erhöhen)
+
+---
+
+*Zuletzt aktualisiert: Dezember 2024*

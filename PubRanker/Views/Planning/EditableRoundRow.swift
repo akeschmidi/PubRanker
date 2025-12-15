@@ -93,7 +93,7 @@ struct EditableRoundRow: View {
                         Image(systemName: "star.fill")
                             .font(.caption)
                             .foregroundStyle(Color.appAccent)
-                        Text("\(round.maxPoints) Pkt")
+                        Text("\(round.maxPoints ?? 0) Pkt")
                             .font(.subheadline)
                             .foregroundStyle(Color.appTextSecondary)
                             .monospacedDigit()

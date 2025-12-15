@@ -150,6 +150,15 @@
 "common.points.of" = "de %d Pontos";
 "common.points.perRound" = "Máx. Pontos por Rodada";
 "common.points.custom" = "Pontos Individuais por Rodada";
+"common.winner" = "Vencedor:";
+"common.visualizations" = "Visualizações";
+"common.pointDistribution" = "Distribuição de pontos";
+"common.performanceOverRounds" = "Desempenho por rodadas";
+"common.legend" = "Legenda";
+"common.showsTop5" = "Mostra os 5 melhores times";
+"common.pointDistributionPerRound" = "Distribuição de pontos por rodada";
+"common.average" = "Média";
+"common.maximum" = "Máximo";
 "common.missing" = "%d ainda faltam";
 "common.delete.confirm" = "Você realmente deseja excluir \"%@\"? Esta ação não pode ser desfeita.";
 "common.quickSelect" = "Seleção Rápida";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Escolher Cor";
 "teams.rank" = "Posição %d";
 "teams.points" = "Pontos";
+"teams.confirmed" = "confirmados";
+"teams.defined" = "definidos";
+"teams.assigned" = "atribuídos";
+"teams.setMax" = "Definir máx";
+"teams.maxTeams" = "Máximo de equipes";
+"teams.maxTeams.title" = "Limite de equipes";
+"teams.maxTeams.header" = "Número máximo de equipes";
+"teams.maxTeams.footer" = "Deixe vazio para ilimitado";
+"teams.maxTeams.description" = "Defina o número máximo de equipes para este quiz";
+"teams.maxTeams.enable" = "Ativar limite de equipes";
+"teams.maxTeams.unlimited" = "Ilimitado";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Gerenciar Rodadas";
@@ -548,6 +569,7 @@
 "common.email" = "E-mail";
 "common.designSystem" = "Sistema de Design";
 "team.selectFromExisting" = "Selecionar dos Existentes (%d)";
+"team.noExistingTeams" = "Nenhuma equipe existente";
 "score.enter.max" = "Digitar Pontos (máx. %d por Equipe)";
 "score.nextRound" = "Continuar para Próxima Rodada";
 "score.nextRound.name" = "→ %@";
@@ -583,3 +605,18 @@
 "common.teamName" = "Nome da Equipe";
 "common.contactInfo" = "Informações de Contato";
 "common.editTeam" = "Editar Equipe";
+
+// MARK: - Team Statistics
+"team.statistics" = "Estatísticas da Equipe";
+
+// MARK: - Common UI
+"common.start" = "Iniciar";
+"common.round.status.preparation" = "Preparação";
+"common.round.status.active" = "Ativo";
+"common.round.status.completed" = "Concluído";
+
+"round.noMaxPoints" = "Sem pontos máx";
+"round.noMaxPointsShort" = "Sem máx pts";
+"round.unlimited" = "(ilimitado)";
+"round.noMaxPointsSet" = "Nenhuma pontuação máxima definida";
+"common.round.create.button" = "Criar rodada";

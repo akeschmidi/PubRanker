@@ -4,6 +4,65 @@ default_platform(:mac)
 
 platform :mac do
   
+  # =============================================================================
+  # BUILD & RELEASE
+  # =============================================================================
+  
+  desc "Build-Nummer automatisch erhöhen"
+  lane :bump_build do
+    # Lese aktuelle Version
+    current_build = get_build_number(xcodeproj: "PubRanker.xcodeproj")
+    
+    # Git Commit Count als Basis + Offset (200 = letzte App Store Version)
+    git_commit_count = sh("git rev-list --count HEAD").strip.to_i
+    offset = 200
+    new_build = [offset + git_commit_count, current_build.to_i + 1].max
+    
+    # Setze neue Build-Nummer
+    increment_build_number(
+      build_number: new_build.to_s,
+      xcodeproj: "PubRanker.xcodeproj"
+    )
+    
+    UI.success("✅ Build-Nummer: #{current_build} → #{new_build}")
+  end
+  
+  desc "Für App Store Release vorbereiten (Build erhöhen + Archive)"
+  lane :prepare_release do
+    # Erst Build-Nummer erhöhen
+    bump_build
+    
+    # Dann bauen
+    build_mac_app(
+      scheme: "PubRanker",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "./build"
+    )
+    
+    UI.success("✅ Release-Build erstellt in ./build")
+  end
+  
+  desc "Release zum App Store hochladen"
+  lane :release do
+    # Build-Nummer erhöhen und bauen
+    prepare_release
+    
+    # Zum App Store hochladen
+    deliver(
+      skip_metadata: true,
+      skip_screenshots: true,
+      force: true,
+      submit_for_review: false
+    )
+    
+    UI.success("✅ App zum App Store Connect hochgeladen")
+  end
+  
+  # =============================================================================
+  # METADATA
+  # =============================================================================
+  
   desc "Metadaten vom App Store herunterladen"
   lane :download_metadata do
     download_app_privacy_details_from_app_store
@@ -50,3 +109,4 @@ platform :mac do
   end
 
 end
+

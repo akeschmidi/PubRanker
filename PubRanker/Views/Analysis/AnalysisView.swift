@@ -694,10 +694,16 @@ struct AnalysisView: View {
 
                     Spacer()
 
-                    Text(L10n.Analysis.maxPoints(round.maxPoints))
-                        .font(.caption)
-                        .foregroundStyle(Color.appTextSecondary)
-                        .monospacedDigit()
+                    if let maxPoints = round.maxPoints {
+                        Text(L10n.Analysis.maxPoints(asInt(maxPoints)))
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
+                    } else {
+                        Text(L10n.Round.noMaxPoints)
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
                 }
 
                 // Top scorer in this round
@@ -764,8 +770,11 @@ struct AnalysisView: View {
     }
 
     private func maxPossiblePoints(_ quiz: Quiz) -> Int {
-        quiz.safeRounds.reduce(0) { $0 + $1.maxPoints }
+        quiz.safeRounds.reduce(0) { $0 + asInt($1.maxPoints) }
     }
+
+    private func asInt(_ value: Int) -> Int { value }
+    private func asInt(_ value: Int?) -> Int { value ?? 0 }
 
     private var emptyState: some View {
         ContentUnavailableView(
@@ -1603,7 +1612,7 @@ struct OverallStatisticsView: View {
 
     private var totalMaxPossiblePoints: Int {
         completedQuizzes.reduce(0) { sum, quiz in
-            sum + quiz.safeRounds.reduce(0) { $0 + $1.maxPoints }
+            sum + quiz.safeRounds.reduce(0) { $0 + asInt($1.maxPoints) }
         }
     }
 
@@ -1612,6 +1621,9 @@ struct OverallStatisticsView: View {
             sum + (quiz.sortedTeamsByScore.first?.getTotalScore(for: quiz) ?? 0)
         }
     }
+
+    private func asInt(_ value: Int) -> Int { value }
+    private func asInt(_ value: Int?) -> Int { value ?? 0 }
 
     private var averageTeamsPerQuiz: Double {
         guard !completedQuizzes.isEmpty else { return 0 }

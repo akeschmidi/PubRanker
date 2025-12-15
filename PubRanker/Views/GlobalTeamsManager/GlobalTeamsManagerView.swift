@@ -96,6 +96,7 @@ struct GlobalTeamsManagerView: View {
                 showingEmailComposer: $showingEmailComposer,
                 showingDeleteAlert: $showingDeleteAlert,
                 filteredTeams: filteredTeams,
+                allTeams: allTeams,
                 isMultiSelectMode: $isMultiSelectMode,
                 selectedTeamIDs: $selectedTeamIDs,
                 showingMultiDeleteAlert: $showingMultiDeleteAlert,

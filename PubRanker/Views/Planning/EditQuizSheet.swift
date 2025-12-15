@@ -147,7 +147,7 @@ struct EditQuizSheet: View {
                             
                             statBox(
                                 title: "Max. Punkte",
-                                value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })",
+                                value: "\(quiz.safeRounds.reduce(0) { $0 + ($1.maxPoints ?? 0) })",
                                 icon: "star.fill",
                                 color: Color.appAccent
                             )

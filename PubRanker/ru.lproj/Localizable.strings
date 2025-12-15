@@ -150,6 +150,15 @@
 "common.points.of" = "из %d Очков";
 "common.points.perRound" = "Макс. Очки за Раунд";
 "common.points.custom" = "Индивидуальные Очки за Раунд";
+"common.winner" = "Победитель:";
+"common.visualizations" = "Визуализации";
+"common.pointDistribution" = "Распределение очков";
+"common.performanceOverRounds" = "Динамика по раундам";
+"common.legend" = "Легенда";
+"common.showsTop5" = "Показывает топ-5 команд";
+"common.pointDistributionPerRound" = "Распределение очков по раундам";
+"common.average" = "Среднее";
+"common.maximum" = "Максимум";
 "common.missing" = "%d ещё не хватает";
 "common.delete.confirm" = "Вы действительно хотите удалить \"%@\"? Это действие нельзя отменить.";
 "common.quickSelect" = "Быстрый Выбор";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Выбрать Цвет";
 "teams.rank" = "Место %d";
 "teams.points" = "Очки";
+"teams.confirmed" = "подтверждено";
+"teams.defined" = "определено";
+"teams.assigned" = "назначено";
+"teams.setMax" = "Установить макс";
+"teams.maxTeams" = "Максимум команд";
+"teams.maxTeams.title" = "Лимит команд";
+"teams.maxTeams.header" = "Максимальное количество команд";
+"teams.maxTeams.footer" = "Оставьте пустым для неограниченного";
+"teams.maxTeams.description" = "Определите максимальное количество команд для этой викторины";
+"teams.maxTeams.enable" = "Включить лимит команд";
+"teams.maxTeams.unlimited" = "Неограниченно";
+"teams.status" = "Статус";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Управлять Раундами";
@@ -493,6 +514,7 @@
 "common.email" = "Электронная Почта";
 "common.designSystem" = "Система Дизайна";
 "team.selectFromExisting" = "Выбрать из Существующих (%d)";
+"team.noExistingTeams" = "Нет существующих команд";
 "score.enter.max" = "Ввести Очки (макс. %d за Команду)";
 "score.nextRound" = "Перейти к Следующему Раунду";
 "score.nextRound.name" = "→ %@";
@@ -528,3 +550,18 @@
 "common.teamName" = "Название Команды";
 "common.contactInfo" = "Контактная Информация";
 "common.editTeam" = "Редактировать Команду";
+
+// MARK: - Team Statistics
+"team.statistics" = "Статистика Команды";
+
+// MARK: - Common UI
+"common.start" = "Начать";
+"common.round.status.preparation" = "Подготовка";
+"common.round.status.active" = "Активный";
+"common.round.status.completed" = "Завершён";
+
+"round.noMaxPoints" = "Без макс. очков";
+"round.noMaxPointsShort" = "Без макс. очк";
+"round.unlimited" = "(без ограничений)";
+"round.noMaxPointsSet" = "Максимальный балл не установлен";
+"common.round.create.button" = "Создать раунд";

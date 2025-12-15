@@ -160,7 +160,7 @@ struct PresentationModeView: View {
 
             // Max Punkte Info
             VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
-                Text("MAX. PUNKTE")
+                Text(L10n.CommonUI.maxPointsLabel)
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white.opacity(0.6))
                     .tracking(1)
@@ -170,7 +170,7 @@ struct PresentationModeView: View {
                         .font(.system(size: 20))
                         .foregroundStyle(Color.appSecondary)
 
-                    Text("\(round.maxPoints)")
+                    Text(round.maxPoints.map(String.init) ?? "—")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.appSecondary)
                 }

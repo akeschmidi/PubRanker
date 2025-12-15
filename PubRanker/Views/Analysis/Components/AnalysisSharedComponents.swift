@@ -137,13 +137,13 @@ struct CompletedQuizRow: View {
 
             if let winner = quiz.sortedTeamsByScore.first {
                 HStack(spacing: 8) {
-                    Label("Sieger:", systemImage: "trophy.fill")
+                    Label(L10n.CommonUI.winner, systemImage: "trophy.fill")
                         .font(.caption2)
                         .foregroundStyle(.yellow)
                     Text(winner.name)
                         .font(.caption2)
                         .bold()
-                    Text("(\(winner.totalScore))")
+                    Text("(\(winner.getTotalScore(for: quiz)))")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }

@@ -92,6 +92,9 @@ iOSInjectionProject/
 # macOS
 .DS_Store
 
+# Build Version Tracking
+.build_version
+
 # IDEs
 .vscode/
 .idea/

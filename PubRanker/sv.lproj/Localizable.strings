@@ -150,6 +150,15 @@
 "common.points.of" = "av %d Poäng";
 "common.points.perRound" = "Max. Poäng per Omgång";
 "common.points.custom" = "Individuella Poäng per Omgång";
+"common.winner" = "Vinnare:";
+"common.visualizations" = "Visualiseringar";
+"common.pointDistribution" = "Poängfördelning";
+"common.performanceOverRounds" = "Prestation över rundor";
+"common.legend" = "Förklaring";
+"common.showsTop5" = "Visar topp 5 lag";
+"common.pointDistributionPerRound" = "Poängfördelning per runda";
+"common.average" = "Genomsnitt";
+"common.maximum" = "Maximum";
 "common.missing" = "%d saknas fortfarande";
 "common.delete.confirm" = "Vill du verkligen radera \"%@\"? Denna åtgärd kan inte ångras.";
 "common.quickSelect" = "Snabbval";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Välj Färg";
 "teams.rank" = "Plats %d";
 "teams.points" = "Poäng";
+"teams.confirmed" = "bekräftade";
+"teams.defined" = "definierade";
+"teams.assigned" = "tilldelade";
+"teams.setMax" = "Ange max";
+"teams.maxTeams" = "Maximala lag";
+"teams.maxTeams.title" = "Laggräns";
+"teams.maxTeams.header" = "Maximalt antal lag";
+"teams.maxTeams.footer" = "Lämna tomt för obegränsat";
+"teams.maxTeams.description" = "Definiera maximalt antal lag för detta quiz";
+"teams.maxTeams.enable" = "Aktivera laggräns";
+"teams.maxTeams.unlimited" = "Obegränsat";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Hantera Omgångar";
@@ -546,6 +567,7 @@
 "common.email" = "E-post";
 "common.designSystem" = "Designsystem";
 "team.selectFromExisting" = "Välj från Befintliga (%d)";
+"team.noExistingTeams" = "Inga befintliga lag";
 "score.enter.max" = "Ange Poäng (max. %d per Lag)";
 "score.nextRound" = "Fortsätt till Nästa Omgång";
 "score.nextRound.name" = "→ %@";
@@ -581,3 +603,18 @@
 "common.teamName" = "Lagnamn";
 "common.contactInfo" = "Kontaktinformation";
 "common.editTeam" = "Redigera Lag";
+
+// MARK: - Team Statistics
+"team.statistics" = "Lagstatistik";
+
+// MARK: - Common UI
+"common.start" = "Starta";
+"common.round.status.preparation" = "Förberedelse";
+"common.round.status.active" = "Aktiv";
+"common.round.status.completed" = "Avslutad";
+
+"round.noMaxPoints" = "Inga max poäng";
+"round.noMaxPointsShort" = "Inga max pts";
+"round.unlimited" = "(obegränsat)";
+"round.noMaxPointsSet" = "Ingen maximal poäng satt";
+"common.round.create.button" = "Skapa omgång";

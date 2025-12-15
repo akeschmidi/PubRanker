@@ -17,9 +17,10 @@ class EmailService {
     ///   - subject: Betreff der E-Mail (optional)
     ///   - body: Inhalt der E-Mail (optional)
     static func sendEmail(to teams: [Team], subject: String = "", body: String = "") {
+        // E-Mail-Adressen trimmen und leere/nur-Whitespace Adressen filtern
         let emailAddresses = teams
-            .filter { !$0.email.isEmpty }
-            .map { $0.email }
+            .map { $0.email.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
         
         guard !emailAddresses.isEmpty else {
             showNoEmailAddressesAlert()
@@ -55,35 +56,45 @@ class EmailService {
     ///   - subject: Betreff der E-Mail
     ///   - body: Inhalt der E-Mail
     private static func openMailApp(recipients: String, subject: String, body: String) {
-        var components = URLComponents()
-        components.scheme = "mailto"
-        // Leerer Pfad, da wir BCC verwenden
-        components.path = ""
+        // Logging für Debugging
+        print("📧 E-Mail wird gesendet an \(recipients.components(separatedBy: ",").count) Empfänger")
+        print("📧 Empfänger: \(recipients)")
         
-        var queryItems: [URLQueryItem] = []
+        // Manuelle URL-Erstellung, da URLComponents Kommas in BCC encodiert,
+        // was manche Mail-Clients nicht verstehen
+        var queryParts: [String] = []
         
-        // BCC statt TO verwenden
+        // BCC - Kommas dürfen NICHT encodiert werden für mailto
         if !recipients.isEmpty {
-            queryItems.append(URLQueryItem(name: "bcc", value: recipients))
+            // E-Mail-Adressen einzeln URL-encodieren, aber Kommas beibehalten
+            let encodedRecipients = recipients
+                .components(separatedBy: ",")
+                .compactMap { email -> String? in
+                    let trimmed = email.trimmingCharacters(in: .whitespaces)
+                    return trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                }
+                .joined(separator: ",")
+            queryParts.append("bcc=\(encodedRecipients)")
         }
         
-        if !subject.isEmpty {
-            queryItems.append(URLQueryItem(name: "subject", value: subject))
+        // Subject und Body normal encodieren
+        if !subject.isEmpty, let encodedSubject = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            queryParts.append("subject=\(encodedSubject)")
         }
         
-        if !body.isEmpty {
-            queryItems.append(URLQueryItem(name: "body", value: body))
+        if !body.isEmpty, let encodedBody = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            queryParts.append("body=\(encodedBody)")
         }
         
-        if !queryItems.isEmpty {
-            components.queryItems = queryItems
-        }
+        let urlString = "mailto:?\(queryParts.joined(separator: "&"))"
         
-        guard let url = components.url else {
+        guard let url = URL(string: urlString) else {
             print("❌ Fehler: Konnte mailto-URL nicht erstellen")
+            print("❌ URL-String war: \(urlString)")
             return
         }
         
+        print("📧 Öffne URL: \(url.absoluteString.prefix(200))...")
         NSWorkspace.shared.open(url)
     }
     

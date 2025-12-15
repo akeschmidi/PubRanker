@@ -773,7 +773,7 @@ struct NewQuizSheet: View {
                                                 .font(.body)
                                                 .bold()
 
-                                            Text("\(round.maxPoints) Punkte")
+                                            Text("\(round.maxPoints ?? 0) Punkte")
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                         }

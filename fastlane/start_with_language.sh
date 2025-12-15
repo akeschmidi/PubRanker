@@ -76,3 +76,4 @@ echo "✓ App läuft jetzt mit Sprache: $LANG"
 echo ""
 echo "Tipp: Nach den Screenshots '$0 reset' ausführen"
 echo "      um zur Systemsprache zurückzukehren."
+

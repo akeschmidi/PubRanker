@@ -34,6 +34,9 @@
 "quiz.totalPoints" = "Gesamt Punkte";
 "quiz.delete.confirm" = "Quiz wirklich löschen?";
 "quiz.delete.message" = "Diese Aktion kann nicht rückgängig gemacht werden.";
+"quiz.edit.help" = "Quiz bearbeiten";
+"quiz.delete.help" = "Quiz löschen";
+"quiz.start.help" = "Quiz starten (⌘S)";
 
 // MARK: - Teams
 "team.title" = "Teams";
@@ -54,6 +57,8 @@
 "team.delete.confirm" = "Team löschen?";
 "team.delete.message" = "%@ wird aus dem Quiz entfernt.";
 "team.count" = "%d Teams";
+"team.confirmed" = "Bestätigt";
+"team.confirmed.toggle.help" = "Teilnahme bestätigen/widerrufen";
 "team.management" = "Team-Verwaltung";
 
 // MARK: - Rounds
@@ -324,6 +329,18 @@
 "teams.colorPicker" = "Farbe wählen";
 "teams.rank" = "Rang %d";
 "teams.points" = "Punkte";
+"teams.confirmed" = "bestätigt";
+"teams.defined" = "definiert";
+"teams.assigned" = "zugewiesen";
+"teams.setMax" = "Max festlegen";
+"teams.maxTeams" = "Maximale Teamanzahl";
+"teams.maxTeams.title" = "Team-Limit";
+"teams.maxTeams.header" = "Maximale Anzahl Teams";
+"teams.maxTeams.footer" = "Leer lassen für unbegrenzt";
+"teams.maxTeams.description" = "Definiere die maximale Anzahl Teams für dieses Quiz";
+"teams.maxTeams.enable" = "Team-Limit aktivieren";
+"teams.maxTeams.unlimited" = "Unbegrenzt";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Runden verwalten";
@@ -348,6 +365,8 @@
 "email.send" = "E-Mail senden";
 "email.send.all" = "E-Mail an alle Teams";
 "email.send.quiz" = "E-Mail an Quiz-Teams";
+"email.send.quiz.help" = "E-Mail an %d Teams senden (⌘E)";
+"email.send.teams.help" = "E-Mail an %d Teams senden (⌘E)";
 "email.noAddresses.title" = "Keine E-Mail-Adressen";
 "email.noAddresses.message" = "Keines der ausgewählten Teams hat eine E-Mail-Adresse hinterlegt.";
 "email.quiz.subject" = "Informationen zum Quiz: %@";
@@ -358,7 +377,8 @@
 
 // MARK: - Email Composer
 "email.composer.title" = "E-Mail verfassen";
-"email.composer.quiz.title" = "E-Mail an Teams von: %@";
+"email.composer.quiz.title" = "E-Mail an %@";
+"email.composer.recipientsAvailable" = "%d Empfänger verfügbar";
 "email.composer.all.title" = "E-Mail an alle Teams";
 "email.composer.all.subtitle" = "%d Teams verfügbar";
 "email.composer.search" = "Teams durchsuchen...";
@@ -693,6 +713,7 @@
 "common.contactPerson" = "Kontaktperson";
 "common.email" = "E-Mail";
 "team.selectFromExisting" = "Aus vorhandenen wählen (%d)";
+"team.noExistingTeams" = "Keine vorhandenen Teams";
 "score.enter.max" = "Punkte eingeben (max. %d pro Team)";
 "score.nextRound" = "Weiter zur nächsten Runde";
 "score.nextRound.name" = "→ %@";
@@ -835,3 +856,7 @@
 "round.wizard.createCount" = "%d Runden erstellen";
 "round.wizard.andMore" = "... und %d weitere";
 "round.delete.confirmMessage" = "Möchtest du '%@' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"round.noMaxPoints" = "Keine Max. Punkte";
+"round.noMaxPointsShort" = "Keine Max. Pkt";
+"round.unlimited" = "(unbegrenzt)";
+"round.noMaxPointsSet" = "Keine maximale Punktzahl gesetzt";

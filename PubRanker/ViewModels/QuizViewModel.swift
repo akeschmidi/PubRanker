@@ -63,7 +63,7 @@ final class QuizViewModel {
     }
     
     /// Fügt eine Runde temporär zu einem Quiz hinzu (ohne Speichern)
-    func addTemporaryRound(to quiz: Quiz, name: String, maxPoints: Int = 10) {
+    func addTemporaryRound(to quiz: Quiz, name: String, maxPoints: Int? = nil) {
         if quiz.rounds == nil {
             quiz.rounds = []
         }
@@ -240,15 +240,15 @@ final class QuizViewModel {
     
     // MARK: - Round Management
     
-    func addRound(to quiz: Quiz, name: String, maxPoints: Int = 10) {
+    func addRound(to quiz: Quiz, name: String, maxPoints: Int? = nil) {
         // Wenn wir im Wizard-Modus sind und das Quiz noch nicht gespeichert ist, verwende temporäre Methode
         if isWizardMode && temporaryQuiz?.id == quiz.id {
             addTemporaryRound(to: quiz, name: name, maxPoints: maxPoints)
             return
         }
-        
+
         guard let context = modelContext else { return }
-        
+
         if quiz.rounds == nil {
             quiz.rounds = []
         }
@@ -257,7 +257,7 @@ final class QuizViewModel {
         round.quiz = quiz
         quiz.rounds?.append(round)
         context.insert(round)
-        
+
         saveContext()
         
         // Analytics: Runde erstellt
@@ -290,7 +290,7 @@ final class QuizViewModel {
         saveContext()
     }
     
-    func updateRoundMaxPoints(_ round: Round, maxPoints: Int) {
+    func updateRoundMaxPoints(_ round: Round, maxPoints: Int?) {
         round.maxPoints = maxPoints
         saveContext()
     }
@@ -337,20 +337,13 @@ final class QuizViewModel {
             let quizzes = try context.fetch(quizDescriptor)
             let teams = try context.fetch(teamDescriptor)
             
-            let totalQuizzes = quizzes.count
-            let totalTeams = teams.count
-            let totalRounds = quizzes.reduce(0) { $0 + $1.safeRounds.count }
-            let totalPoints = quizzes.reduce(into: 0) { total, quiz in
+            // Statistiken für zukünftige Analytics-Integration
+            _ = quizzes.count
+            _ = teams.count
+            _ = quizzes.reduce(0) { $0 + $1.safeRounds.count }
+            _ = quizzes.reduce(into: 0) { total, quiz in
                 total += quiz.safeTeams.reduce(0) { $0 + $1.getTotalScore(for: quiz) }
             }
-            
-            // Sende anonymisierte Statistiken
-            // AnalyticsService.shared.sendAnalytics(
-            //     totalQuizzes: totalQuizzes,
-            //     totalTeams: totalTeams,
-            //     totalRounds: totalRounds,
-            //     totalPoints: totalPoints
-            // )
         } catch {
             print("Error fetching analytics data: \(error)")
         }
@@ -497,10 +490,10 @@ struct TeamExportData: Codable {
 struct RoundExportData: Codable {
     let id: String
     let name: String
-    let maxPoints: Int
+    let maxPoints: Int?
     let orderIndex: Int
     let isCompleted: Bool
-    
+
     init(from round: Round) {
         self.id = round.id.uuidString
         self.name = round.name

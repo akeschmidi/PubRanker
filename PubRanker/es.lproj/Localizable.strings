@@ -34,6 +34,9 @@
 "quiz.totalPoints" = "Puntos Totales";
 "quiz.delete.confirm" = "¿Eliminar quiz?";
 "quiz.delete.message" = "Esta acción no se puede deshacer.";
+"quiz.edit.help" = "Editar quiz";
+"quiz.delete.help" = "Eliminar quiz";
+"quiz.start.help" = "Iniciar quiz (⌘S)";
 
 // MARK: - Teams
 "team.title" = "Equipos";
@@ -54,6 +57,8 @@
 "team.delete.confirm" = "¿Eliminar equipo?";
 "team.delete.message" = "%@ será eliminado del quiz.";
 "team.count" = "%d Equipos";
+"team.confirmed" = "Confirmado";
+"team.confirmed.toggle.help" = "Confirmar/cancelar participación";
 "team.management" = "Gestión de Equipos";
 
 // MARK: - Rounds
@@ -150,6 +155,15 @@
 "common.points.of" = "de %d Puntos";
 "common.points.perRound" = "Máx. Puntos por Ronda";
 "common.points.custom" = "Puntos Individuales por Ronda";
+"common.winner" = "Ganador:";
+"common.visualizations" = "Visualizaciones";
+"common.pointDistribution" = "Distribución de puntos";
+"common.performanceOverRounds" = "Rendimiento por rondas";
+"common.legend" = "Leyenda";
+"common.showsTop5" = "Muestra los 5 mejores equipos";
+"common.pointDistributionPerRound" = "Distribución de puntos por ronda";
+"common.average" = "Promedio";
+"common.maximum" = "Máximo";
 "common.missing" = "%d faltan aún";
 "common.delete.confirm" = "¿Realmente desea eliminar \"%@\"? Esta acción no se puede deshacer.";
 "common.quickSelect" = "Selección Rápida";
@@ -324,6 +338,18 @@
 "teams.colorPicker" = "Elegir Color";
 "teams.rank" = "Rango %d";
 "teams.points" = "Puntos";
+"teams.confirmed" = "confirmados";
+"teams.defined" = "definidos";
+"teams.assigned" = "asignados";
+"teams.setMax" = "Establecer máx";
+"teams.maxTeams" = "Equipos máximos";
+"teams.maxTeams.title" = "Límite de equipos";
+"teams.maxTeams.header" = "Número máximo de equipos";
+"teams.maxTeams.footer" = "Dejar vacío para ilimitado";
+"teams.maxTeams.description" = "Define el número máximo de equipos para este quiz";
+"teams.maxTeams.enable" = "Activar límite de equipos";
+"teams.maxTeams.unlimited" = "Ilimitado";
+"teams.status" = "Estado";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Gestionar Rondas";
@@ -385,6 +411,7 @@
 "email.send" = "Enviar Correo";
 "email.send.all" = "Correo a Todos los Equipos";
 "email.send.quiz" = "Correo a Equipos del Quiz";
+"email.send.quiz.help" = "Enviar correo a %d equipos (⌘E)";
 "email.noAddresses.title" = "Sin Direcciones de Correo";
 "email.noAddresses.message" = "Ninguno de los equipos seleccionados tiene una dirección de correo electrónico.";
 "email.quiz.subject" = "Información del Quiz: %@";
@@ -395,7 +422,8 @@
 
 // MARK: - Email Composer
 "email.composer.title" = "Redactar correo electrónico";
-"email.composer.quiz.title" = "Correo electrónico a equipos de: %@";
+"email.composer.quiz.title" = "Correo a %@";
+"email.composer.recipientsAvailable" = "%d destinatarios disponibles";
 "email.composer.all.title" = "Correo electrónico a todos los equipos";
 "email.composer.all.subtitle" = "%d equipos disponibles";
 "email.composer.search" = "Buscar equipos...";
@@ -548,6 +576,7 @@
 "common.email" = "Correo Electrónico";
 "common.designSystem" = "Sistema de Diseño";
 "team.selectFromExisting" = "Seleccionar de Existentes (%d)";
+"team.noExistingTeams" = "No hay equipos existentes";
 "score.enter.max" = "Introducir Puntos (máx. %d por Equipo)";
 "score.nextRound" = "Continuar a la Siguiente Ronda";
 "score.nextRound.name" = "→ %@";
@@ -582,3 +611,18 @@
 "common.teamName" = "Nombre del Equipo";
 "common.contactInfo" = "Información de Contacto";
 "common.editTeam" = "Editar Equipo";
+
+// MARK: - Team Statistics
+"team.statistics" = "Estadísticas del Equipo";
+
+// MARK: - Common UI
+"common.start" = "Iniciar";
+"common.round.status.preparation" = "Preparación";
+"common.round.status.active" = "Activo";
+"common.round.status.completed" = "Completado";
+
+"round.noMaxPoints" = "Sin puntos máx";
+"round.noMaxPointsShort" = "Sin máx pts";
+"round.unlimited" = "(ilimitado)";
+"round.noMaxPointsSet" = "Sin puntuación máxima definida";
+"common.round.create.button" = "Crear ronda";

@@ -150,6 +150,15 @@
 "common.points.of" = "z %d Punktów";
 "common.points.perRound" = "Maks. Punkty na Rundę";
 "common.points.custom" = "Indywidualne Punkty na Rundę";
+"common.winner" = "Zwycięzca:";
+"common.visualizations" = "Wizualizacje";
+"common.pointDistribution" = "Rozkład punktów";
+"common.performanceOverRounds" = "Wyniki w rundach";
+"common.legend" = "Legenda";
+"common.showsTop5" = "Pokazuje top 5 drużyn";
+"common.pointDistributionPerRound" = "Rozkład punktów na rundę";
+"common.average" = "Średnia";
+"common.maximum" = "Maksimum";
 "common.missing" = "%d wciąż brakuje";
 "common.delete.confirm" = "Czy na pewno chcesz usunąć \"%@\"? Tej akcji nie można cofnąć.";
 "common.quickSelect" = "Szybki Wybór";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Wybierz Kolor";
 "teams.rank" = "Miejsce %d";
 "teams.points" = "Punkty";
+"teams.confirmed" = "potwierdzonych";
+"teams.defined" = "zdefiniowanych";
+"teams.assigned" = "przypisanych";
+"teams.setMax" = "Ustaw maks";
+"teams.maxTeams" = "Maksymalna liczba zespołów";
+"teams.maxTeams.title" = "Limit zespołów";
+"teams.maxTeams.header" = "Maksymalna liczba zespołów";
+"teams.maxTeams.footer" = "Pozostaw puste dla nieograniczonej";
+"teams.maxTeams.description" = "Zdefiniuj maksymalną liczbę zespołów dla tego quizu";
+"teams.maxTeams.enable" = "Włącz limit zespołów";
+"teams.maxTeams.unlimited" = "Bez limitu";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Zarządzaj Rundami";
@@ -548,6 +569,7 @@
 "common.email" = "E-mail";
 "common.designSystem" = "System Projektowy";
 "team.selectFromExisting" = "Wybierz z Istniejących (%d)";
+"team.noExistingTeams" = "Brak istniejących zespołów";
 "score.enter.max" = "Wprowadź Punkty (maks. %d na Drużynę)";
 "score.nextRound" = "Przejdź do Następnej Rundy";
 "score.nextRound.name" = "→ %@";
@@ -583,3 +605,18 @@
 "common.teamName" = "Nazwa Drużyny";
 "common.contactInfo" = "Informacje Kontaktowe";
 "common.editTeam" = "Edytuj Drużynę";
+
+// MARK: - Team Statistics
+"team.statistics" = "Statystyki Drużyny";
+
+// MARK: - Common UI
+"common.start" = "Rozpocznij";
+"common.round.status.preparation" = "Przygotowanie";
+"common.round.status.active" = "Aktywna";
+"common.round.status.completed" = "Zakończona";
+
+"round.noMaxPoints" = "Brak maks punktów";
+"round.noMaxPointsShort" = "Brak maks pkt";
+"round.unlimited" = "(bez limitu)";
+"round.noMaxPointsSet" = "Nie ustawiono maksymalnej liczby punktów";
+"common.round.create.button" = "Utwórz rundę";

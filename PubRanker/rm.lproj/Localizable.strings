@@ -150,6 +150,15 @@
 "common.points.of" = "da %d Puncts";
 "common.points.perRound" = "Max. Puncts per Runda";
 "common.points.custom" = "Puncts Individuals per Runda";
+"common.winner" = "Victur:";
+"common.visualizations" = "Visualisaziuns";
+"common.pointDistribution" = "Distribuziun da puncts";
+"common.performanceOverRounds" = "Prestaziun sur runda";
+"common.legend" = "Legenda";
+"common.showsTop5" = "Mussa ils top 5 teams";
+"common.pointDistributionPerRound" = "Distribuziun da puncts per runda";
+"common.average" = "Media";
+"common.maximum" = "Maxim";
 "common.missing" = "%d mancan anc";
 "common.delete.confirm" = "Vulais Vus propi stritgar \"%@\"? Questa acziun na po betg vegnir annullada.";
 "common.quickSelect" = "Selecziun Svelta";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Tscherner Colur";
 "teams.rank" = "Plazza %d";
 "teams.points" = "Puncts";
+"teams.confirmed" = "confermadas";
+"teams.defined" = "definidas";
+"teams.assigned" = "attribuidas";
+"teams.setMax" = "Definir max";
+"teams.maxTeams" = "Gruppas max";
+"teams.maxTeams.title" = "Limita da gruppas";
+"teams.maxTeams.header" = "Dumber maximal da gruppas";
+"teams.maxTeams.footer" = "Laschar vid per illimità";
+"teams.maxTeams.description" = "Definescha il dumber maximal da gruppas per quest quiz";
+"teams.maxTeams.enable" = "Activar la limita da gruppas";
+"teams.maxTeams.unlimited" = "Illimità";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Administrar Rundas";
@@ -546,6 +567,7 @@
 "common.email" = "E-mail";
 "common.designSystem" = "Design System";
 "team.selectFromExisting" = "Tscherner da quels existents (%d)";
+"team.noExistingTeams" = "Naginas gruppas existentas";
 "score.enter.max" = "Endatar Puncts (max. %d per Squadra)";
 "score.nextRound" = "Cuntinuar cun la proxima runda";
 "score.nextRound.name" = "→ %@";
@@ -581,3 +603,18 @@
 "common.teamName" = "Num da l'Equipa";
 "common.contactInfo" = "Infurmaziuns da Contact";
 "common.editTeam" = "Modifitgar Equipa";
+
+// MARK: - Team Statistics
+"team.statistics" = "Statistica da l'Equipa";
+
+// MARK: - Common UI
+"common.start" = "Cumenzar";
+"common.round.status.preparation" = "Preparaziun";
+"common.round.status.active" = "Activ";
+"common.round.status.completed" = "Terminà";
+
+"round.noMaxPoints" = "Nagins puncts max";
+"round.noMaxPointsShort" = "Nagins max pts";
+"round.unlimited" = "(unlimited)";
+"round.noMaxPointsSet" = "Nagin punct maximal definì";
+"common.round.create.button" = "Crear runda";

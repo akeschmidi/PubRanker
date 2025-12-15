@@ -426,9 +426,9 @@ struct TeamScoreDetailsView: View {
                     
                     Group {
                         if let score = team.getScore(for: round) {
-                            Text("\(score) / \(round.maxPoints)")
+                            Text("\(score) / \(round.maxPoints ?? 0)")
                         } else {
-                            Text("– / \(round.maxPoints)")
+                            Text("– / \(round.maxPoints ?? 0)")
                         }
                     }
                     .font(.body)

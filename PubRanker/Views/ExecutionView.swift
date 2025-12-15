@@ -610,9 +610,13 @@ struct ExecutionView: View {
                             // Update display value - allow empty during typing
                             if !filtered.isEmpty {
                                 // Limit to maxPoints digits to prevent overflow
-                                let maxDigits = String(round.maxPoints).count
-                                let limited = String(filtered.prefix(maxDigits))
-                                teamScores[team.id] = limited
+                                if let maxPts = round.maxPoints {
+                                    let maxDigits = String(maxPts).count
+                                    let limited = String(filtered.prefix(maxDigits))
+                                    teamScores[team.id] = limited
+                                } else {
+                                    teamScores[team.id] = filtered
+                                }
                             } else {
                                 // Allow empty field during editing
                                 teamScores[team.id] = ""
@@ -625,7 +629,12 @@ struct ExecutionView: View {
                                     try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
                                     if !Task.isCancelled && focusedTeamId == team.id {
                                         await MainActor.run {
-                                            let clampedValue = min(value, round.maxPoints)
+                                            let clampedValue: Int
+                                            if let maxPts = round.maxPoints {
+                                                clampedValue = min(value, maxPts)
+                                            } else {
+                                                clampedValue = value
+                                            }
                                             // Only save if value actually changed
                                             if clampedValue != team.getScore(for: round) {
                                                 teamScores[team.id] = "\(clampedValue)"
@@ -655,7 +664,12 @@ struct ExecutionView: View {
                         if oldValue == team.id && newValue != team.id {
                             saveTask?.cancel()
                             let currentValue = Int(teamScores[team.id] ?? "0") ?? 0
-                            let clampedValue = min(max(currentValue, 0), round.maxPoints)
+                            let clampedValue: Int
+                            if let maxPts = round.maxPoints {
+                                clampedValue = min(max(currentValue, 0), maxPts)
+                            } else {
+                                clampedValue = max(currentValue, 0)
+                            }
                             teamScores[team.id] = "\(clampedValue)"
                             // Only save if value changed
                             if clampedValue != team.getScore(for: round) {
@@ -667,7 +681,12 @@ struct ExecutionView: View {
                         // Save and clamp when user presses Enter
                         saveTask?.cancel()
                         let currentValue = Int(teamScores[team.id] ?? "0") ?? 0
-                        let clampedValue = min(max(currentValue, 0), round.maxPoints)
+                        let clampedValue: Int
+                        if let maxPts = round.maxPoints {
+                            clampedValue = min(max(currentValue, 0), maxPts)
+                        } else {
+                            clampedValue = max(currentValue, 0)
+                        }
                         teamScores[team.id] = "\(clampedValue)"
                         // Only save if value changed
                         if clampedValue != team.getScore(for: round) {
@@ -686,17 +705,35 @@ struct ExecutionView: View {
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title3)
-                            .foregroundStyle(currentScore < round.maxPoints ? Color.appSuccess : Color.appTextTertiary)
+                            .foregroundStyle({
+                                if let maxPts = round.maxPoints {
+                                    return currentScore < maxPts ? Color.appSuccess : Color.appTextTertiary
+                                } else {
+                                    return Color.appSuccess
+                                }
+                            }())
                     }
                     .buttonStyle(.plain)
-                    .disabled(currentScore >= round.maxPoints)
+                    .disabled({
+                        if let maxPts = round.maxPoints {
+                            return currentScore >= maxPts
+                        } else {
+                            return false
+                        }
+                    }())
                 }
 
                 // Max Points Indicator
-                Text("/ \(round.maxPoints)")
-                    .font(.caption)
-                    .foregroundStyle(Color.appTextSecondary)
-                    .monospacedDigit()
+                if let maxPts = round.maxPoints {
+                    Text("/ \(maxPts)")
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
+                } else {
+                    Text(L10n.Round.unlimited)
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                }
             }
             .padding(.horizontal, AppSpacing.md)
             .padding(.bottom, AppSpacing.md)
@@ -897,14 +934,18 @@ struct ExecutionView: View {
         Int(teamScores[team.id] ?? "0") ?? 0
     }
     
-    private func incrementScore(for team: Team, maxPoints: Int) {
+    private func incrementScore(for team: Team, maxPoints: Int?) {
         let current = getScoreValue(for: team)
-        if current < maxPoints {
+        if let maxPts = maxPoints {
+            if current < maxPts {
+                teamScores[team.id] = "\(current + 1)"
+            }
+        } else {
             teamScores[team.id] = "\(current + 1)"
         }
     }
-    
-    private func decrementScore(for team: Team, maxPoints: Int) {
+
+    private func decrementScore(for team: Team, maxPoints: Int?) {
         let current = getScoreValue(for: team)
         if current > 0 {
             teamScores[team.id] = "\(current - 1)"
@@ -1035,9 +1076,15 @@ struct EditRoundsSheetContent: View {
                                 }
                             }
                             
-                            Text(L10n.Execution.EditRounds.maxPointsDisplay(round.maxPoints))
-                                .font(.caption)
-                                .foregroundStyle(Color.appTextSecondary)
+                            if let maxPoints = round.maxPoints {
+                                Text(L10n.Execution.EditRounds.maxPointsDisplay(maxPoints))
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appTextSecondary)
+                            } else {
+                                Text(L10n.Round.noMaxPoints)
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appTextSecondary)
+                            }
                         }
                         .padding(.vertical, AppSpacing.xxxs)
                         .tag(round)
@@ -1129,10 +1176,16 @@ struct RoundEditDetailContent: View {
                                 .font(.title2)
                                 .bold()
                                 .foregroundStyle(Color.appTextPrimary)
-                            
-                            Text(L10n.Execution.EditRounds.maxPointsDisplay(round.maxPoints))
-                                .font(.subheadline)
-                                .foregroundStyle(Color.appTextSecondary)
+
+                            if let maxPoints = round.maxPoints {
+                                Text(L10n.Execution.EditRounds.maxPointsDisplay(maxPoints))
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.appTextSecondary)
+                            } else {
+                                Text(L10n.Round.noMaxPoints)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.appTextSecondary)
+                            }
                         }
                     }
                     
@@ -1330,7 +1383,7 @@ struct RoundEditDetailContent: View {
     
     private func startRoundEditing() {
         tempRoundName = round.name
-        tempMaxPoints = "\(round.maxPoints)"
+        tempMaxPoints = "\(round.maxPoints ?? 0)"
         editingRoundSettings = true
     }
     
@@ -1382,7 +1435,7 @@ struct TeamEditCardContent: View {
     let team: Team
     let round: Round
     @Binding var currentScore: String
-    let maxPoints: Int
+    let maxPoints: Int?
     
     private var teamColor: Color {
         Color(hex: team.color) ?? Color.appPrimary
@@ -1446,33 +1499,56 @@ struct TeamEditCardContent: View {
                             if filtered != newValue {
                                 currentScore = filtered
                             }
-                            // Begrenze auf maxPoints
-                            if let value = Int(filtered), value > maxPoints {
-                                currentScore = "\(maxPoints)"
+                            // Begrenze auf maxPoints (wenn gesetzt)
+                            if let maxPts = maxPoints, let value = Int(filtered), value > maxPts {
+                                currentScore = "\(maxPts)"
                             }
                         }
                     
                     // Increment
                     Button {
-                        if scoreValue < maxPoints {
+                        if let maxPts = maxPoints {
+                            if scoreValue < maxPts {
+                                currentScore = "\(scoreValue + 1)"
+                            }
+                        } else {
                             currentScore = "\(scoreValue + 1)"
                         }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title)
-                            .foregroundStyle(scoreValue < maxPoints ? Color.appSuccess : Color.appTextTertiary)
+                            .foregroundStyle({
+                                if let maxPts = maxPoints {
+                                    return scoreValue < maxPts ? Color.appSuccess : Color.appTextTertiary
+                                } else {
+                                    return Color.appSuccess
+                                }
+                            }())
                     }
                     .buttonStyle(.plain)
-                    .disabled(scoreValue >= maxPoints)
+                    .disabled({
+                        if let maxPts = maxPoints {
+                            return scoreValue >= maxPts
+                        } else {
+                            return false
+                        }
+                    }())
                     .frame(width: 44, height: 44)
                 }
                 
                 // Max Points Indicator
-                Text("/ \(maxPoints)")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.appTextSecondary)
-                    .bold()
-                    .monospacedDigit()
+                if let maxPts = maxPoints {
+                    Text("/ \(maxPts)")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .bold()
+                        .monospacedDigit()
+                } else {
+                    Text(L10n.Round.unlimited)
+                        .font(.subheadline)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .bold()
+                }
             }
         }
         .padding(AppSpacing.md)

@@ -118,10 +118,16 @@ struct RoundManagementView: View {
                     .foregroundStyle(Color.appTextPrimary)
                 
                 HStack(spacing: AppSpacing.xs) {
-                    Label("\(round.maxPoints) Pkt", systemImage: "star.fill")
-                        .font(.caption)
-                        .foregroundStyle(Color.appTextSecondary)
-                        .monospacedDigit()
+                    if let maxPoints = round.maxPoints {
+                        Label("\(maxPoints) Pkt", systemImage: "star.fill")
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
+                    } else {
+                        Label(L10n.Round.noMaxPoints, systemImage: "star.slash")
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
                     
                     if round.isCompleted {
                         Label(L10n.CommonUI.completed, systemImage: "checkmark.circle.fill")
@@ -334,10 +340,12 @@ struct CurrentRoundBanner: View {
                                 .font(.caption)
                                 .foregroundStyle(Color.appTextSecondary)
                                 .monospacedDigit()
-                            Text(String(format: NSLocalizedString("common.points.maxLabel", comment: "Max points label"), currentRound.maxPoints))
-                                .font(.caption2)
-                                .foregroundStyle(Color.appTextSecondary)
-                                .monospacedDigit()
+                            if let maxPoints = currentRound.maxPoints {
+                                Text(String(format: NSLocalizedString("common.points.maxLabel", comment: "Max points label"), maxPoints))
+                                    .font(.caption2)
+                                    .foregroundStyle(Color.appTextSecondary)
+                                    .monospacedDigit()
+                            }
                         }
                     }
                 }
@@ -439,23 +447,25 @@ struct ScoreCell: View {
                         }
                     
                     // Schnell-Buttons für häufige Werte
-                    HStack(spacing: 6) {
-                        ForEach([0, round.maxPoints / 2, round.maxPoints], id: \.self) { points in
-                            Button {
-                                inputText = "\(points)"
-                                saveScore()
-                            } label: {
-                                Text("\(points)")
-                                    .font(.caption)
-                                    .bold()
-                                    .foregroundStyle(.white)
-                                    .frame(minWidth: 30)
-                                    .padding(.vertical, 4)
-                                    .padding(.horizontal, 8)
-                                    .background(Color.accentColor)
-                                    .clipShape(Capsule())
+                    if let maxPoints = round.maxPoints {
+                        HStack(spacing: 6) {
+                            ForEach([0, maxPoints / 2, maxPoints], id: \.self) { points in
+                                Button {
+                                    inputText = "\(points)"
+                                    saveScore()
+                                } label: {
+                                    Text("\(points)")
+                                        .font(.caption)
+                                        .bold()
+                                        .foregroundStyle(.white)
+                                        .frame(minWidth: 30)
+                                        .padding(.vertical, 4)
+                                        .padding(.horizontal, 8)
+                                        .background(Color.accentColor)
+                                        .clipShape(Capsule())
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -481,30 +491,32 @@ struct ScoreCell: View {
                         }
                         
                         // Info Label
-                        HStack(spacing: 2) {
-                            if let score = currentScore, score > 0 {
-                                Text("\(score)")
+                        if let maxPoints = round.maxPoints {
+                            HStack(spacing: 2) {
+                                if let score = currentScore, score > 0 {
+                                    Text("\(score)")
+                                        .font(.caption)
+                                        .foregroundStyle(Color.appTextSecondary)
+                                    Text("/")
+                                        .font(.caption2)
+                                        .foregroundStyle(Color.appTextSecondary)
+                                }
+                                Text(String(format: NSLocalizedString("score.points", comment: "Points"), maxPoints))
                                     .font(.caption)
                                     .foregroundStyle(Color.appTextSecondary)
-                                Text("/")
-                                    .font(.caption2)
-                                    .foregroundStyle(Color.appTextSecondary)
                             }
-                            Text(String(format: NSLocalizedString("score.points", comment: "Points"), round.maxPoints))
-                                .font(.caption)
-                                .foregroundStyle(Color.appTextSecondary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 2)
+                            .background(Color.appBackgroundSecondary.opacity(0.5))
+                            .clipShape(Capsule())
                         }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 2)
-                        .background(Color.appBackgroundSecondary.opacity(0.5))
-                        .clipShape(Capsule())
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(
                         Group {
                             if let score = currentScore {
-                                if score == round.maxPoints {
+                                if let maxPoints = round.maxPoints, score == maxPoints {
                                     Color.green.opacity(0.15)
                                 } else if score > 0 {
                                     Color.accentColor.opacity(0.08)
@@ -572,7 +584,11 @@ struct ScoreCell: View {
         }
         
         // Validiere eingegebene Zahl (inkl. 0)
-        if let score = Int(inputText), score >= 0, score <= round.maxPoints {
+        if let score = Int(inputText), score >= 0 {
+            // Prüfe maxPoints nur wenn gesetzt
+            if let maxPoints = round.maxPoints, score > maxPoints {
+                return // Ungültige Eingabe - über Limit
+            }
             viewModel.updateScore(for: team, in: round, points: score)
             onDismiss()
         }
@@ -588,6 +604,7 @@ struct EditRoundSheet: View {
     @Bindable var viewModel: QuizViewModel
     @State private var roundName = ""
     @State private var maxPoints = 10
+    @State private var hasMaxPoints = false
     @State private var showingDeleteConfirmation = false
     @FocusState private var focusedField: Bool
     
@@ -616,59 +633,65 @@ struct EditRoundSheet: View {
                     Text(NSLocalizedString("round.name", comment: "Round name"))
                         .font(.headline)
                         .foregroundStyle(Color.appTextPrimary)
-                    
+
                     TextField(NSLocalizedString("round.name.placeholder", comment: "Round name placeholder"), text: $roundName)
                         .textFieldStyle(.roundedBorder)
                         .font(.title3)
                         .focused($focusedField)
                 }
-                
-                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+
+                // Toggle für maximale Punktzahl
+                Toggle(isOn: $hasMaxPoints) {
                     Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
                         .font(.headline)
                         .foregroundStyle(Color.appTextPrimary)
-                    
-                    HStack {
-                        Button {
-                            if maxPoints > 1 {
-                                maxPoints -= 1
-                            }
-                        } label: {
-                            Image(systemName: "minus.circle.fill")
-                                .font(.title)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Text("\(maxPoints)")
-                            .font(.system(size: 48, weight: .bold))
-                            .monospacedDigit()
-                            .frame(minWidth: 100)
-                        
-                        Button {
-                            if maxPoints < 100 {
-                                maxPoints += 1
-                            }
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .frame(maxWidth: .infinity)
                 }
-                
-                // Quick Presets
-                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                    Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
-                        .font(.caption)
-                        .foregroundStyle(Color.appTextSecondary)
-                    
-                    HStack(spacing: AppSpacing.xs) {
-                        ForEach([5, 10, 15, 20], id: \.self) { points in
-                            Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
-                                maxPoints = points
+                .toggleStyle(.switch)
+
+                if hasMaxPoints {
+                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                        HStack {
+                            Button {
+                                if maxPoints > 1 {
+                                    maxPoints -= 1
+                                }
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .font(.title)
                             }
-                            .secondaryGradientButton()
+                            .buttonStyle(.plain)
+
+                            Text("\(maxPoints)")
+                                .font(.system(size: 48, weight: .bold))
+                                .monospacedDigit()
+                                .frame(minWidth: 100)
+
+                            Button {
+                                if maxPoints < 100 {
+                                    maxPoints += 1
+                                }
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+
+                    // Quick Presets
+                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                        Text(NSLocalizedString("common.quickSelect", comment: "Quick select"))
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+
+                        HStack(spacing: AppSpacing.xs) {
+                            ForEach([5, 10, 15, 20], id: \.self) { points in
+                                Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
+                                    maxPoints = points
+                                }
+                                .secondaryGradientButton()
+                            }
                         }
                     }
                 }
@@ -709,7 +732,13 @@ struct EditRoundSheet: View {
         .frame(width: 550, height: 550)
         .onAppear {
             roundName = round.name
-            maxPoints = round.maxPoints
+            if let points = round.maxPoints {
+                maxPoints = points
+                hasMaxPoints = true
+            } else {
+                maxPoints = 10
+                hasMaxPoints = false
+            }
             focusedField = true
         }
         .alert("Runde löschen?", isPresented: $showingDeleteConfirmation) {
@@ -722,20 +751,20 @@ struct EditRoundSheet: View {
             Text("Möchtest du '\(round.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
         }
     }
-    
+
     private func getRoundNumber() -> Int {
         guard let index = quiz.sortedRounds.firstIndex(where: { $0.id == round.id }) else {
             return 0
         }
         return index + 1
     }
-    
+
     private func saveChanges() {
         let trimmedName = roundName.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmedName.isEmpty {
             viewModel.updateRoundName(round, newName: trimmedName)
         }
-        viewModel.updateRoundMaxPoints(round, maxPoints: maxPoints)
+        viewModel.updateRoundMaxPoints(round, maxPoints: hasMaxPoints ? maxPoints : nil)
     }
 }
 
@@ -745,7 +774,8 @@ struct QuickRoundSheet: View {
     let quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     @State private var roundName = ""
-    @State private var maxPoints = 0
+    @State private var maxPoints = 10
+    @State private var hasMaxPoints = false
     @FocusState private var focusedField: Bool
 
     var body: some View {
@@ -781,38 +811,54 @@ struct QuickRoundSheet: View {
                         .focused($focusedField)
                 }
 
-                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                // Toggle für maximale Punktzahl
+                Toggle(isOn: $hasMaxPoints) {
                     Text(NSLocalizedString("round.maxPoints.label", comment: "Maximum points"))
                         .font(.headline)
                         .foregroundStyle(Color.appTextPrimary)
+                }
+                .toggleStyle(.switch)
 
-                    HStack {
-                        Button {
-                            if maxPoints > 0 {
-                                maxPoints -= 1
+                if hasMaxPoints {
+                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                        HStack {
+                            Button {
+                                if maxPoints > 1 {
+                                    maxPoints -= 1
+                                }
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .font(.title)
                             }
-                        } label: {
-                            Image(systemName: "minus.circle.fill")
-                                .font(.title)
-                        }
-                        .buttonStyle(.plain)
+                            .buttonStyle(.plain)
 
-                        Text("\(maxPoints)")
-                            .font(.system(size: 48, weight: .bold))
-                            .monospacedDigit()
-                            .frame(minWidth: 100)
+                            Text("\(maxPoints)")
+                                .font(.system(size: 48, weight: .bold))
+                                .monospacedDigit()
+                                .frame(minWidth: 100)
 
-                        Button {
-                            if maxPoints < 100 {
-                                maxPoints += 1
+                            Button {
+                                if maxPoints < 100 {
+                                    maxPoints += 1
+                                }
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title)
                             }
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title)
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
+                        .frame(maxWidth: .infinity)
+
+                        // Quick Presets
+                        HStack(spacing: AppSpacing.xs) {
+                            ForEach([5, 10, 15, 20], id: \.self) { points in
+                                Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
+                                    maxPoints = points
+                                }
+                                .secondaryGradientButton()
+                            }
+                        }
                     }
-                    .frame(maxWidth: .infinity)
                 }
             }
             .padding(.horizontal, AppSpacing.xxl)
@@ -828,7 +874,7 @@ struct QuickRoundSheet: View {
                 .secondaryGradientButton(size: .large)
 
                 Button(NSLocalizedString("common.round.create.button", comment: "Create round button")) {
-                    viewModel.addRound(to: quiz, name: roundName, maxPoints: maxPoints)
+                    viewModel.addRound(to: quiz, name: roundName, maxPoints: hasMaxPoints ? maxPoints : nil)
                     dismiss()
                 }
                 .keyboardShortcut(.return, modifiers: .command)
@@ -838,7 +884,7 @@ struct QuickRoundSheet: View {
             .padding(.bottom, AppSpacing.md)
             .padding(.horizontal, AppSpacing.xxl)
         }
-        .frame(width: 500, height: 450)
+        .frame(width: 500, height: 500)
         .onAppear {
             focusedField = true
         }
@@ -853,10 +899,11 @@ struct RoundWizardSheet: View {
     
     @State private var numberOfRounds: Int = 6
     @State private var maxPointsPerRound: Int = 10
+    @State private var hasMaxPoints: Bool = false
     @State private var useCustomNames: Bool = false
     @State private var useCustomPoints: Bool = false
     @State private var roundNames: [String] = []
-    @State private var roundPoints: [Int] = []
+    @State private var roundPoints: [Int?] = []
     
     let presetFormats = [
         ("Klassisch", 6, 10),
@@ -1002,57 +1049,62 @@ struct RoundWizardSheet: View {
                         .frame(maxWidth: .infinity)
                     }
                     
-                    // Max Points (nur wenn nicht individuell)
+                    // Max Points Toggle (nur wenn nicht individuell)
                     if !useCustomPoints {
                         VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Image(systemName: "star.circle.fill")
-                                    .foregroundStyle(Color.appSecondary)
-                                Text(NSLocalizedString("common.points.perRound", comment: "Max points per round"))
-                                    .font(.headline)
-                                    .foregroundStyle(Color.appTextPrimary)
-                            }
-                            
-                            HStack {
-                                Button {
-                                    if maxPointsPerRound > 1 {
-                                        maxPointsPerRound -= 1
-                                    }
-                                } label: {
-                                    Image(systemName: "minus.circle.fill")
-                                        .font(.title)
-                                }
-                                .buttonStyle(.plain)
-                                
-                                TextField("", value: $maxPointsPerRound, format: .number)
-                                    .textFieldStyle(.roundedBorder)
-                                    .multilineTextAlignment(.center)
-                                    .font(.system(size: 48, weight: .bold))
-                                    .monospacedDigit()
-                                    .frame(minWidth: 100)
-                                
-                                Button {
-                                    if maxPointsPerRound < 100 {
-                                        maxPointsPerRound += 1
-                                    }
-                                } label: {
-                                    Image(systemName: "plus.circle.fill")
-                                        .font(.title)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            .frame(maxWidth: .infinity)
-                            
-                            // Quick buttons
-                            HStack(spacing: AppSpacing.xxs) {
-                                ForEach([5, 10, 15, 20], id: \.self) { points in
-                                    Button("\(points)") {
-                                        maxPointsPerRound = points
-                                    }
-                                    .secondaryGradientButton()
+                            Toggle(isOn: $hasMaxPoints) {
+                                HStack {
+                                    Image(systemName: "star.circle.fill")
+                                        .foregroundStyle(Color.appSecondary)
+                                    Text(NSLocalizedString("common.points.perRound", comment: "Max points per round"))
+                                        .font(.headline)
+                                        .foregroundStyle(Color.appTextPrimary)
                                 }
                             }
-                            .frame(maxWidth: .infinity)
+                            .toggleStyle(.switch)
+
+                            if hasMaxPoints {
+                                HStack {
+                                    Button {
+                                        if maxPointsPerRound > 1 {
+                                            maxPointsPerRound -= 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "minus.circle.fill")
+                                            .font(.title)
+                                    }
+                                    .buttonStyle(.plain)
+
+                                    TextField("", value: $maxPointsPerRound, format: .number)
+                                        .textFieldStyle(.roundedBorder)
+                                        .multilineTextAlignment(.center)
+                                        .font(.system(size: 48, weight: .bold))
+                                        .monospacedDigit()
+                                        .frame(minWidth: 100)
+
+                                    Button {
+                                        if maxPointsPerRound < 100 {
+                                            maxPointsPerRound += 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.title)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .frame(maxWidth: .infinity)
+
+                                // Quick buttons
+                                HStack(spacing: AppSpacing.xxs) {
+                                    ForEach([5, 10, 15, 20], id: \.self) { points in
+                                        Button("\(points)") {
+                                            maxPointsPerRound = points
+                                        }
+                                        .secondaryGradientButton()
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
                         }
                     }
                     
@@ -1121,19 +1173,28 @@ struct RoundWizardSheet: View {
                                     
                                     if useCustomPoints {
                                         HStack {
-                                            TextField(NSLocalizedString("common.points", comment: "Points"), value: Binding(
-                                                get: { roundPoints.indices.contains(index) ? roundPoints[index] : maxPointsPerRound },
+                                            TextField(NSLocalizedString("common.points", comment: "Points"), text: Binding(
+                                                get: {
+                                                    if roundPoints.indices.contains(index), let points = roundPoints[index] {
+                                                        return "\(points)"
+                                                    }
+                                                    return ""
+                                                },
                                                 set: { newValue in
                                                     while roundPoints.count <= index {
-                                                        roundPoints.append(maxPointsPerRound)
+                                                        roundPoints.append(hasMaxPoints ? maxPointsPerRound : nil)
                                                     }
-                                                    roundPoints[index] = newValue
+                                                    if newValue.isEmpty {
+                                                        roundPoints[index] = nil
+                                                    } else if let intValue = Int(newValue) {
+                                                        roundPoints[index] = intValue
+                                                    }
                                                 }
-                                            ), format: .number)
+                                            ))
                                             .textFieldStyle(.roundedBorder)
                                             .frame(width: 80)
                                             .multilineTextAlignment(.trailing)
-                                            
+
                                             Text(NSLocalizedString("score.pointsUnit", comment: "Points unit"))
                                                 .font(.caption)
                                                 .foregroundStyle(Color.appTextSecondary)
@@ -1158,16 +1219,22 @@ struct RoundWizardSheet: View {
                                         .font(.subheadline)
                                         .bold()
                                     Spacer()
-                                    Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), getRoundPoints(for: index)))
-                                        .font(.caption)
-                                        .foregroundStyle(Color.appTextSecondary)
+                                    if let points = getRoundPoints(for: index) {
+                                        Text(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points))
+                                            .font(.caption)
+                                            .foregroundStyle(Color.appTextSecondary)
+                                    } else {
+                                        Text(L10n.Round.noMaxPoints)
+                                            .font(.caption)
+                                            .foregroundStyle(Color.appTextSecondary)
+                                    }
                                 }
                                 .padding(.horizontal, AppSpacing.xs)
                                 .padding(.vertical, AppSpacing.xxs)
                                 .background(Color.appBackgroundSecondary)
                                 .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                             }
-                            
+
                             if numberOfRounds > 3 {
                                 Text("... und \(numberOfRounds - 3) weitere")
                                     .font(.caption)
@@ -1227,7 +1294,7 @@ struct RoundWizardSheet: View {
     private func updateRoundPoints() {
         if useCustomPoints {
             while roundPoints.count < numberOfRounds {
-                roundPoints.append(maxPointsPerRound)
+                roundPoints.append(hasMaxPoints ? maxPointsPerRound : nil)
             }
         }
     }
@@ -1239,13 +1306,13 @@ struct RoundWizardSheet: View {
         return "Runde \(index + 1)"
     }
     
-    private func getRoundPoints(for index: Int) -> Int {
+    private func getRoundPoints(for index: Int) -> Int? {
         if useCustomPoints && roundPoints.indices.contains(index) {
             return roundPoints[index]
         }
-        return maxPointsPerRound
+        return hasMaxPoints ? maxPointsPerRound : nil
     }
-    
+
     private func createRounds() {
         for index in 0..<numberOfRounds {
             let name = getRoundName(for: index)

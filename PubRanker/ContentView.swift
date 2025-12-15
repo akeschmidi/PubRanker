@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(QuizViewModel.self) private var viewModel
     @State private var selectedWorkflow: WorkflowPhase = .planning
     @State private var showingAboutSheet = false
+    @State private var showingDebugView = false
     @StateObject private var easterEggManager = EasterEggManager()
     
     enum WorkflowPhase: String, CaseIterable, Identifiable {
@@ -132,6 +133,20 @@ struct ContentView: View {
             // Click Counter (oben rechts)
             EasterEggClickCounter(easterEggManager: easterEggManager)
 
+            #if DEBUG
+            // Debug Button
+            Button {
+                showingDebugView = true
+            } label: {
+                Image(systemName: "ladybug")
+                    .font(.title3)
+                    .foregroundStyle(Color.appTextSecondary)
+            }
+            .buttonStyle(.plain)
+            .help("Debug & Testdaten")
+            .padding(.trailing, AppSpacing.xs)
+            #endif
+
             // Help Button
             Button {
                 showingAboutSheet = true
@@ -155,6 +170,9 @@ struct ContentView: View {
         )
         .sheet(isPresented: $showingAboutSheet) {
             AboutSheet()
+        }
+        .sheet(isPresented: $showingDebugView) {
+            DebugDataView()
         }
     }
 }

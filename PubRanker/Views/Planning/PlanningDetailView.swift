@@ -16,6 +16,8 @@ struct PlanningDetailView: View {
     let onEdit: () -> Void
     let onDelete: () -> Void
     
+    @State private var showingEmailComposer = false
+    
     var body: some View {
         VStack(spacing: 0) {
             // Kompakter Header
@@ -26,6 +28,9 @@ struct PlanningDetailView: View {
                 onStart: {
                     viewModel.startQuiz(quiz)
                     selectedWorkflow = .execution
+                },
+                onEmail: {
+                    showingEmailComposer = true
                 }
             )
             
@@ -55,6 +60,9 @@ struct PlanningDetailView: View {
                     RoundManagementView(quiz: quiz, viewModel: viewModel)
                 }
             }
+        }
+        .sheet(isPresented: $showingEmailComposer) {
+            EmailComposerView(teams: quiz.safeTeams, quiz: quiz)
         }
     }
 }

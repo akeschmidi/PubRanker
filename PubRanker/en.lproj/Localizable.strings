@@ -34,6 +34,9 @@
 "quiz.totalPoints" = "Total Points";
 "quiz.delete.confirm" = "Delete quiz?";
 "quiz.delete.message" = "This action cannot be undone.";
+"quiz.edit.help" = "Edit quiz";
+"quiz.delete.help" = "Delete quiz";
+"quiz.start.help" = "Start quiz (⌘S)";
 
 // MARK: - Teams
 "team.title" = "Teams";
@@ -54,6 +57,8 @@
 "team.delete.confirm" = "Delete team?";
 "team.delete.message" = "%@ will be removed from the quiz.";
 "team.count" = "%d Teams";
+"team.confirmed" = "Confirmed";
+"team.confirmed.toggle.help" = "Toggle participation confirmation";
 "team.management" = "Team Management";
 
 // MARK: - Rounds
@@ -85,6 +90,10 @@
 "round.complete" = "Complete Round";
 "round.complete.help" = "Complete current round (⌘K)";
 "round.count" = "%d Rounds";
+"round.noMaxPoints" = "No Max Points";
+"round.noMaxPointsShort" = "No Max Pts";
+"round.unlimited" = "(unlimited)";
+"round.noMaxPointsSet" = "No maximum points set";
 
 // MARK: - Leaderboard
 "leaderboard.title" = "Leaderboard";
@@ -150,6 +159,15 @@
 "common.points.of" = "of %d Points";
 "common.points.perRound" = "Max. Points per Round";
 "common.points.custom" = "Individual Points per Round";
+"common.winner" = "Winner:";
+"common.visualizations" = "Visualizations";
+"common.pointDistribution" = "Point Distribution";
+"common.performanceOverRounds" = "Performance over Rounds";
+"common.legend" = "Legend";
+"common.showsTop5" = "Shows the Top 5 Teams";
+"common.pointDistributionPerRound" = "Point Distribution per Round";
+"common.average" = "Average";
+"common.maximum" = "Maximum";
 "common.missing" = "%d still missing";
 "common.delete.confirm" = "Do you really want to delete \"%@\"? This action cannot be undone.";
 "common.quickSelect" = "Quick Select";
@@ -324,6 +342,18 @@
 "teams.colorPicker" = "Choose Color";
 "teams.rank" = "Rank %d";
 "teams.points" = "Points";
+"teams.confirmed" = "confirmed";
+"teams.defined" = "defined";
+"teams.assigned" = "assigned";
+"teams.setMax" = "Set Max";
+"teams.maxTeams" = "Maximum Teams";
+"teams.maxTeams.title" = "Team Limit";
+"teams.maxTeams.header" = "Maximum Number of Teams";
+"teams.maxTeams.footer" = "Leave empty for unlimited";
+"teams.maxTeams.description" = "Define the maximum number of teams for this quiz";
+"teams.maxTeams.enable" = "Enable team limit";
+"teams.maxTeams.unlimited" = "Unlimited";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Manage Rounds";
@@ -348,6 +378,8 @@
 "email.send" = "Send Email";
 "email.send.all" = "Email to All Teams";
 "email.send.quiz" = "Email to Quiz Teams";
+"email.send.quiz.help" = "Send email to %d teams (⌘E)";
+"email.send.teams.help" = "Send email to %d teams (⌘E)";
 "email.noAddresses.title" = "No Email Addresses";
 "email.noAddresses.message" = "None of the selected teams have an email address.";
 "email.quiz.subject" = "Quiz Information: %@";
@@ -358,7 +390,8 @@
 
 // MARK: - Email Composer
 "email.composer.title" = "Compose Email";
-"email.composer.quiz.title" = "Email to Teams from: %@";
+"email.composer.quiz.title" = "Email to %@";
+"email.composer.recipientsAvailable" = "%d recipients available";
 "email.composer.all.title" = "Email to All Teams";
 "email.composer.all.subtitle" = "%d teams available";
 "email.composer.search" = "Search teams...";
@@ -672,6 +705,7 @@
 "common.email" = "Email";
 "common.designSystem" = "Design System";
 "team.selectFromExisting" = "Select from Existing (%d)";
+"team.noExistingTeams" = "No existing teams";
 "score.enter.max" = "Enter Points (max. %d per Team)";
 "score.nextRound" = "Continue to Next Round";
 "score.nextRound.name" = "→ %@";
@@ -679,3 +713,6 @@
 "score.roundCompleted" = "This round is completed";
 "score.saved.title" = "Points Saved! ✅";
 "score.saved.message" = "Points for %@ have been successfully saved.";
+
+// MARK: - Team Statistics
+"team.statistics" = "Team Statistics";

@@ -75,9 +75,15 @@ struct RoundRowView: View {
                 }
             }
             
-            Text(L10n.CommonUI.maxPoints(round.maxPoints))
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            if let maxPoints = round.maxPoints {
+                Text(L10n.CommonUI.maxPoints(maxPoints))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text(L10n.Round.noMaxPoints)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(.vertical, 2)
     }
@@ -99,10 +105,16 @@ struct RoundEditDetailView: View {
                         Text(round.name)
                             .font(.title2)
                             .bold()
-                        
-                        Text(L10n.CommonUI.maxPointsPerTeam(round.maxPoints))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+
+                        if let maxPoints = round.maxPoints {
+                            Text(L10n.CommonUI.maxPointsPerTeam(maxPoints))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text(L10n.Round.noMaxPointsSet)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                     
                     Spacer()
@@ -246,7 +258,7 @@ struct TeamEditCard: View {
     let team: Team
     let round: Round
     @Binding var currentScore: String
-    let maxPoints: Int
+    let maxPoints: Int?
     
     private var teamColor: Color {
         Color(hex: team.color) ?? .blue
@@ -307,30 +319,52 @@ struct TeamEditCard: View {
                             if filtered != newValue {
                                 currentScore = filtered
                             }
-                            // Begrenze auf maxPoints
-                            if let value = Int(filtered), value > maxPoints {
-                                currentScore = "\(maxPoints)"
+                            // Begrenze auf maxPoints (wenn gesetzt)
+                            if let maxPts = maxPoints, let value = Int(filtered), value > maxPts {
+                                currentScore = "\(maxPts)"
                             }
                         }
-                    
+
                     // Increment
                     Button {
-                        if scoreValue < maxPoints {
+                        if let maxPts = maxPoints {
+                            if scoreValue < maxPts {
+                                currentScore = "\(scoreValue + 1)"
+                            }
+                        } else {
                             currentScore = "\(scoreValue + 1)"
                         }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
-                            .foregroundStyle(scoreValue < maxPoints ? .green : .gray)
+                            .foregroundStyle({
+                                if let maxPts = maxPoints {
+                                    return scoreValue < maxPts ? .green : .gray
+                                } else {
+                                    return .green
+                                }
+                            }())
                     }
                     .buttonStyle(.plain)
-                    .disabled(scoreValue >= maxPoints)
+                    .disabled({
+                        if let maxPts = maxPoints {
+                            return scoreValue >= maxPts
+                        } else {
+                            return false
+                        }
+                    }())
                 }
                 
                 // Max Points Indicator
-                Text("/ \(maxPoints)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if let maxPts = maxPoints {
+                    Text("/ \(maxPts)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text(L10n.Round.unlimited)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .padding()

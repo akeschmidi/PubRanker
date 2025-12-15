@@ -17,12 +17,33 @@ struct SidebarView: View {
     @Binding var showingDeleteAlert: Bool
 
     let filteredTeams: [Team]
+    var allTeams: [Team]? = nil  // Optional - falls nicht gesetzt, wird filteredTeams verwendet
 
-    @Binding var isMultiSelectMode: Bool
-    @Binding var selectedTeamIDs: Set<Team.ID>
-    @Binding var showingMultiDeleteAlert: Bool
+    var isMultiSelectMode: Binding<Bool>? = nil
+    var selectedTeamIDs: Binding<Set<Team.ID>>? = nil
+    var showingMultiDeleteAlert: Binding<Bool>? = nil
 
     let onCreateTestData: (() -> Void)?
+    
+    /// Teams für E-Mail-Zählung (nutzt allTeams falls vorhanden, sonst filteredTeams)
+    private var teamsForEmail: [Team] {
+        allTeams ?? filteredTeams
+    }
+    
+    /// Anzahl der Teams mit E-Mail-Adresse
+    private var teamsWithEmailCount: Int {
+        teamsForEmail.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.count
+    }
+    
+    /// Multi-Select aktiv
+    private var isMultiSelect: Bool {
+        isMultiSelectMode?.wrappedValue ?? false
+    }
+    
+    /// Ausgewählte Team-IDs
+    private var selectedIDs: Set<Team.ID> {
+        selectedTeamIDs?.wrappedValue ?? []
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -55,20 +76,23 @@ struct SidebarView: View {
                 .help("Neues Team erstellen")
                 
                 // E-Mail Button
-                Button {
-                    showingEmailComposer = true
-                } label: {
-                    HStack(spacing: AppSpacing.xxs) {
-                        Image(systemName: "envelope.fill")
-                            .font(.body)
-                        Text(NSLocalizedString("email.send.all", comment: "Email to all teams"))
-                            .font(.body)
-                            .bold()
+                if teamsWithEmailCount > 0 {
+                    Button {
+                        showingEmailComposer = true
+                    } label: {
+                        HStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "envelope.fill")
+                                .font(.body)
+                            Text(NSLocalizedString("email.send", comment: "Send email"))
+                                .font(.body)
+                                .bold()
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
+                    .secondaryGradientButton()
+                    .keyboardShortcut("e", modifiers: .command)
+                    .help(String(format: NSLocalizedString("email.send.teams.help", comment: ""), teamsWithEmailCount))
                 }
-                .accentGradientButton()
-                .help(NSLocalizedString("email.send.all", comment: "Email to all teams"))
 
                 #if DEBUG
                 // Debug Button für Testdaten
@@ -173,37 +197,41 @@ struct SidebarView: View {
                 
                 Spacer()
                 
-                // Löschen Button (ersetzt Auswählen-Button wenn Teams ausgewählt)
-                if isMultiSelectMode && !selectedTeamIDs.isEmpty {
-                    Button {
-                        showingMultiDeleteAlert = true
-                    } label: {
-                        HStack(spacing: AppSpacing.xxs) {
-                            Image(systemName: "trash.fill")
-                                .font(.caption)
-                            Text("\(selectedTeamIDs.count)")
-                                .font(.caption)
-                                .bold()
-                                .monospacedDigit()
+                // Löschen Button und Multi-Select (nur wenn Bindings vorhanden)
+                if let isMultiSelectBinding = isMultiSelectMode,
+                   let selectedIDsBinding = selectedTeamIDs,
+                   let showMultiDeleteBinding = showingMultiDeleteAlert {
+                    if isMultiSelectBinding.wrappedValue && !selectedIDsBinding.wrappedValue.isEmpty {
+                        Button {
+                            showMultiDeleteBinding.wrappedValue = true
+                        } label: {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "trash.fill")
+                                    .font(.caption)
+                                Text("\(selectedIDsBinding.wrappedValue.count)")
+                                    .font(.caption)
+                                    .bold()
+                                    .monospacedDigit()
+                            }
                         }
-                    }
-                    .accentGradientButton()
-                    .help("\(selectedTeamIDs.count) Teams löschen")
-                    .transition(.scale.combined(with: .opacity))
-                } else {
-                    // Multi-Select Toggle Button (nur Icon, kein Text)
-                    Button {
-                        isMultiSelectMode.toggle()
-                        if !isMultiSelectMode {
-                            selectedTeamIDs.removeAll()
+                        .accentGradientButton()
+                        .help("\(selectedIDsBinding.wrappedValue.count) Teams löschen")
+                        .transition(.scale.combined(with: .opacity))
+                    } else {
+                        // Multi-Select Toggle Button (nur Icon, kein Text)
+                        Button {
+                            isMultiSelectBinding.wrappedValue.toggle()
+                            if !isMultiSelectBinding.wrappedValue {
+                                selectedIDsBinding.wrappedValue.removeAll()
+                            }
+                        } label: {
+                            Image(systemName: isMultiSelectBinding.wrappedValue ? "checkmark.circle.fill" : "checkmark.circle")
+                                .font(.caption)
                         }
-                    } label: {
-                        Image(systemName: isMultiSelectMode ? "checkmark.circle.fill" : "checkmark.circle")
-                            .font(.caption)
+                        .secondaryGradientButton()
+                        .help(isMultiSelectBinding.wrappedValue ? "Multi-Select beenden" : "Mehrere Teams auswählen")
+                        .transition(.scale.combined(with: .opacity))
                     }
-                    .secondaryGradientButton()
-                    .help(isMultiSelectMode ? "Multi-Select beenden" : "Mehrere Teams auswählen")
-                    .transition(.scale.combined(with: .opacity))
                 }
             }
             .padding(.horizontal, AppSpacing.xs)
@@ -214,12 +242,12 @@ struct SidebarView: View {
             )
             .padding(.horizontal, AppSpacing.screenPadding)
             .padding(.vertical, AppSpacing.xxs)
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isMultiSelectMode)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isMultiSelect)
             
             Divider()
             
             // Teams List
-            List(selection: isMultiSelectMode ? nil : $selectedTeam) {
+            List(selection: isMultiSelect ? nil : $selectedTeam) {
                 if filteredTeams.isEmpty {
                     ContentUnavailableView(
                         "Keine Teams gefunden",
@@ -230,17 +258,17 @@ struct SidebarView: View {
                 } else {
                     Section {
                         ForEach(filteredTeams) { team in
-                            if isMultiSelectMode {
+                            if isMultiSelect, let selectedIDsBinding = selectedTeamIDs {
                                 MultiSelectTeamRow(
                                     team: team,
-                                    isSelected: selectedTeamIDs.contains(team.id)
+                                    isSelected: selectedIDsBinding.wrappedValue.contains(team.id)
                                 )
                                 .contentShape(Rectangle())
                                 .onTapGesture {
-                                    if selectedTeamIDs.contains(team.id) {
-                                        selectedTeamIDs.remove(team.id)
+                                    if selectedIDsBinding.wrappedValue.contains(team.id) {
+                                        selectedIDsBinding.wrappedValue.remove(team.id)
                                     } else {
-                                        selectedTeamIDs.insert(team.id)
+                                        selectedIDsBinding.wrappedValue.insert(team.id)
                                     }
                                 }
                             } else {
@@ -249,7 +277,7 @@ struct SidebarView: View {
                             }
                         }
                         .onDelete { indexSet in
-                            if !isMultiSelectMode {
+                            if !isMultiSelect {
                                 for index in indexSet {
                                     let team = filteredTeams[index]
                                     selectedTeam = team
@@ -264,16 +292,16 @@ struct SidebarView: View {
                                 .foregroundStyle(Color.appTextSecondary)
                                 .monospacedDigit()
 
-                            if isMultiSelectMode && !filteredTeams.isEmpty {
+                            if isMultiSelect, let selectedIDsBinding = selectedTeamIDs, !filteredTeams.isEmpty {
                                 Spacer()
                                 Button {
-                                    if selectedTeamIDs.count == filteredTeams.count {
-                                        selectedTeamIDs.removeAll()
+                                    if selectedIDsBinding.wrappedValue.count == filteredTeams.count {
+                                        selectedIDsBinding.wrappedValue.removeAll()
                                     } else {
-                                        selectedTeamIDs = Set(filteredTeams.map { $0.id })
+                                        selectedIDsBinding.wrappedValue = Set(filteredTeams.map { $0.id })
                                     }
                                 } label: {
-                                    Text(selectedTeamIDs.count == filteredTeams.count ? "Alle abwählen" : "Alle wählen")
+                                    Text(selectedIDsBinding.wrappedValue.count == filteredTeams.count ? "Alle abwählen" : "Alle wählen")
                                         .font(.caption)
                                         .foregroundStyle(Color.appPrimary)
                                 }

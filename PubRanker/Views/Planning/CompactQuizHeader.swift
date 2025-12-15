@@ -13,6 +13,12 @@ struct CompactQuizHeader: View {
     let onEdit: () -> Void
     let onDelete: () -> Void
     let onStart: () -> Void
+    var onEmail: (() -> Void)? = nil
+    
+    /// Anzahl der Teams mit E-Mail-Adresse
+    private var teamsWithEmailCount: Int {
+        quiz.safeTeams.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.count
+    }
     
     var body: some View {
         HStack(spacing: AppSpacing.sm) {
@@ -44,19 +50,37 @@ struct CompactQuizHeader: View {
             
             // Action Buttons
             HStack(spacing: AppSpacing.xxs) {
+                // E-Mail Button
+                if let onEmail = onEmail, teamsWithEmailCount > 0 {
+                    Button {
+                        onEmail()
+                    } label: {
+                        HStack(spacing: AppSpacing.xxxs) {
+                            Image(systemName: "envelope.fill")
+                                .font(.body)
+                            Text(NSLocalizedString("email.send", comment: "Send email"))
+                                .font(.body)
+                                .bold()
+                        }
+                    }
+                    .secondaryGradientButton()
+                    .keyboardShortcut("e", modifiers: .command)
+                    .help(String(format: NSLocalizedString("email.send.quiz.help", comment: ""), teamsWithEmailCount))
+                }
+                
                 Button {
                     onEdit()
                 } label: {
                     HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: "pencil")
                             .font(.body)
-                        Text("Bearbeiten")
+                        Text(NSLocalizedString("navigation.edit", comment: "Edit"))
                             .font(.body)
                             .bold()
                     }
                 }
                 .primaryGradientButton()
-                .help("Quiz bearbeiten")
+                .help(NSLocalizedString("quiz.edit.help", comment: "Edit quiz"))
                 
                 Button {
                     onDelete()
@@ -64,13 +88,13 @@ struct CompactQuizHeader: View {
                     HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: "trash")
                             .font(.body)
-                        Text("Löschen")
+                        Text(NSLocalizedString("navigation.delete", comment: "Delete"))
                             .font(.body)
                             .bold()
                     }
                 }
                 .accentGradientButton()
-                .help("Quiz löschen")
+                .help(NSLocalizedString("quiz.delete.help", comment: "Delete quiz"))
                 
                 if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
                     Button {
@@ -79,14 +103,14 @@ struct CompactQuizHeader: View {
                         HStack(spacing: AppSpacing.xxxs) {
                             Image(systemName: "play.circle.fill")
                                 .font(.body)
-                            Text("Starten")
+                            Text(NSLocalizedString("common.start", comment: "Start"))
                                 .font(.body)
                                 .bold()
                         }
                     }
                     .successGradientButton()
                     .keyboardShortcut("s", modifiers: .command)
-                    .help("Quiz starten (⌘S)")
+                    .help(NSLocalizedString("quiz.start.help", comment: "Start quiz"))
                 }
             }
         }

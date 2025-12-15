@@ -141,7 +141,7 @@
 "common.sort" = "Sorteren";
 "common.settings" = "Instellingen";
 "common.about" = "Over";
-"common.help" = "Help";
+"common.help" = "Hulp";
 "common.close" = "Sluiten";
 "common.points" = "Punten";
 "common.points.count" = "%d Punten";
@@ -150,6 +150,15 @@
 "common.points.of" = "van %d Punten";
 "common.points.perRound" = "Max. Punten per Ronde";
 "common.points.custom" = "Individuele Punten per Ronde";
+"common.winner" = "Winnaar:";
+"common.visualizations" = "Visualisaties";
+"common.pointDistribution" = "Puntverdeling";
+"common.performanceOverRounds" = "Prestatie over rondes";
+"common.legend" = "Legenda";
+"common.showsTop5" = "Toont de top 5 teams";
+"common.pointDistributionPerRound" = "Puntverdeling per ronde";
+"common.average" = "Gemiddelde";
+"common.maximum" = "Maximum";
 "common.missing" = "%d ontbreken nog";
 "common.delete.confirm" = "Wilt u \"%@\" echt verwijderen? Deze actie kan niet ongedaan worden gemaakt.";
 "common.quickSelect" = "Snelle Selectie";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Kies Kleur";
 "teams.rank" = "Rang %d";
 "teams.points" = "Punten";
+"teams.confirmed" = "bevestigd";
+"teams.defined" = "gedefinieerd";
+"teams.assigned" = "toegewezen";
+"teams.setMax" = "Max instellen";
+"teams.maxTeams" = "Maximum teams";
+"teams.maxTeams.title" = "Team limiet";
+"teams.maxTeams.header" = "Maximum aantal teams";
+"teams.maxTeams.footer" = "Leeg laten voor onbeperkt";
+"teams.maxTeams.description" = "Definieer het maximum aantal teams voor deze quiz";
+"teams.maxTeams.enable" = "Teamlimiet activeren";
+"teams.maxTeams.unlimited" = "Onbeperkt";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Rondes Beheren";
@@ -548,6 +569,7 @@
 "common.email" = "E-mail";
 "common.designSystem" = "Design Systeem";
 "team.selectFromExisting" = "Selecteren uit Bestaande (%d)";
+"team.noExistingTeams" = "Geen bestaande teams";
 "score.enter.max" = "Punten Invoeren (max. %d per Team)";
 "score.nextRound" = "Doorgaan naar Volgende Ronde";
 "score.nextRound.name" = "→ %@";
@@ -583,3 +605,18 @@
 "common.teamName" = "Teamnaam";
 "common.contactInfo" = "Contactinformatie";
 "common.editTeam" = "Team Bewerken";
+
+// MARK: - Team Statistics
+"team.statistics" = "Teamstatistieken";
+
+// MARK: - Common UI
+"common.start" = "Starten";
+"common.round.status.preparation" = "Voorbereiding";
+"common.round.status.active" = "Actief";
+"common.round.status.completed" = "Voltooid";
+
+"round.noMaxPoints" = "Geen max punten";
+"round.noMaxPointsShort" = "Geen max pts";
+"round.unlimited" = "(onbeperkt)";
+"round.noMaxPointsSet" = "Geen maximale score ingesteld";
+"common.round.create.button" = "Ronde aanmaken";

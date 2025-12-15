@@ -5,13 +5,13 @@
 
 // MARK: - App Navigation
 "app.title" = "PubRanker";
-"navigation.back" = "Back";
-"navigation.done" = "Done";
-"navigation.cancel" = "Cancel";
-"navigation.save" = "Save";
-"navigation.edit" = "Edit";
-"navigation.delete" = "Delete";
-"navigation.add" = "Add";
+"navigation.back" = "Tilbage";
+"navigation.done" = "Færdig";
+"navigation.cancel" = "Annuller";
+"navigation.save" = "Gem";
+"navigation.edit" = "Rediger";
+"navigation.delete" = "Slet";
+"navigation.add" = "Tilføj";
 
 // MARK: - Quiz
 "quiz.title" = "Quiz";
@@ -20,10 +20,10 @@
 "quiz.new.description" = "Create a new pub quiz and add teams and rounds";
 "quiz.name" = "Quiz Name";
 "quiz.name.placeholder" = "e.g. Pub Quiz at Lion's, Christmas Quiz...";
-"quiz.location" = "Location";
+"quiz.location" = "Sted";
 "quiz.location.label" = "Venue";
 "quiz.location.placeholder" = "e.g. Lion's Pub";
-"quiz.date" = "Date";
+"quiz.date" = "Dato";
 "quiz.date.label" = "Date & Time";
 "quiz.create" = "Create Quiz";
 "quiz.select.none" = "No Quiz Selected";
@@ -46,8 +46,8 @@
 "team.add.multiple" = "Add Teams";
 "team.name" = "Team Name";
 "team.color" = "Color";
-"team.points" = "Points";
-"team.rank" = "Rank";
+"team.points" = "Point";
+"team.rank" = "Placering";
 "team.wizard" = "Team Wizard";
 "team.wizard.howMany" = "How many teams?";
 "team.wizard.create" = "Create Teams";
@@ -79,8 +79,8 @@
 "round.wizard.create" = "Create Rounds";
 "round.delete.confirm" = "Delete round?";
 "round.delete.message" = "All points for this round will be lost.";
-"round.status.active" = "Active";
-"round.status.completed" = "Completed";
+"round.status.active" = "Aktiv";
+"round.status.completed" = "Afsluttet";
 "round.status.pending" = "Pending";
 "round.complete" = "Complete Round";
 "round.complete.help" = "Complete current round (⌘K)";
@@ -88,12 +88,12 @@
 
 // MARK: - Leaderboard
 "leaderboard.title" = "Leaderboard";
-"leaderboard.rank" = "Rank";
+"leaderboard.rank" = "Placering";
 "leaderboard.rank.position" = "Rank %d";
 "leaderboard.rank.tied" = "(tied)";
 "leaderboard.team" = "Team";
-"leaderboard.points" = "Points";
-"leaderboard.winner" = "Winner";
+"leaderboard.points" = "Point";
+"leaderboard.winner" = "Vinder";
 "leaderboard.podium" = "Podium";
 "leaderboard.topThree" = "Top 3";
 "leaderboard.noTeams" = "No Teams";
@@ -106,17 +106,17 @@
 "score.saved" = "Saved";
 "score.autoSave" = "Auto-Save";
 "score.autoSave.enabled" = "Auto-Save enabled";
-"score.total" = "Total";
+"score.total" = "I alt";
 "score.perRound" = "Per Round";
 
 // MARK: - Alerts & Messages
-"alert.error" = "Error";
-"alert.success" = "Success";
-"alert.warning" = "Warning";
+"alert.error" = "Fejl";
+"alert.success" = "Succes";
+"alert.warning" = "Advarsel";
 "alert.info" = "Information";
 "alert.ok" = "OK";
-"alert.yes" = "Yes";
-"alert.no" = "No";
+"alert.yes" = "Ja";
+"alert.no" = "Nej";
 
 "error.generic" = "An error occurred";
 "error.saveFailed" = "Save failed";
@@ -131,28 +131,37 @@
 "success.created" = "Successfully created";
 
 // MARK: - Common
-"common.name" = "Name";
-"common.description" = "Description";
-"common.date" = "Date";
-"common.time" = "Time";
-"common.location" = "Location";
-"common.search" = "Search";
-"common.filter" = "Filter";
-"common.sort" = "Sort";
-"common.settings" = "Settings";
-"common.about" = "About";
-"common.help" = "Help";
-"common.close" = "Close";
-"common.points" = "Points";
+"common.name" = "Navn";
+"common.description" = "Beskrivelse";
+"common.date" = "Dato";
+"common.time" = "Tid";
+"common.location" = "Sted";
+"common.search" = "Søg";
+"common.filter" = "Filtrer";
+"common.sort" = "Sorter";
+"common.settings" = "Indstillinger";
+"common.about" = "Om";
+"common.help" = "Hjælp";
+"common.close" = "Luk";
+"common.points" = "Point";
 "common.points.count" = "%d Points";
 "common.points.max" = "Max: %d";
 "common.points.maxLabel" = "Max: %d Points";
 "common.points.of" = "of %d Points";
 "common.points.perRound" = "Max. Points per Round";
 "common.points.custom" = "Individual Points per Round";
+"common.winner" = "Vinder:";
+"common.visualizations" = "Visualiseringer";
+"common.pointDistribution" = "Pointfordeling";
+"common.performanceOverRounds" = "Præstation over runder";
+"common.legend" = "Forklaring";
+"common.showsTop5" = "Viser top 5 hold";
+"common.pointDistributionPerRound" = "Pointfordeling pr. runde";
+"common.average" = "Gennemsnit";
+"common.maximum" = "Maksimum";
 "common.missing" = "%d still missing";
 "common.delete.confirm" = "Do you really want to delete \"%@\"? This action cannot be undone.";
-"common.quickSelect" = "Quick Select";
+"common.quickSelect" = "Hurtig valg";
 
 // MARK: - Placeholders
 "placeholder.quizName" = "e.g. October Pub Quiz";
@@ -162,10 +171,10 @@
 "placeholder.points" = "Enter points";
 
 // MARK: - Statistics
-"stats.average" = "Average";
-"stats.highest" = "Highest";
-"stats.lowest" = "Lowest";
-"stats.total" = "Total";
+"stats.average" = "Gennemsnit";
+"stats.highest" = "Højeste";
+"stats.lowest" = "Laveste";
+"stats.total" = "I alt";
 
 // MARK: - Empty States
 "empty.noQuizzes" = "No Quizzes";
@@ -191,7 +200,7 @@
 "setup.dialog.start" = "Start now 🚀";
 
 // MARK: - Export
-"export.title" = "Export";
+"export.title" = "Eksporter";
 "export.json" = "Export as JSON";
 "export.csv" = "Export as CSV";
 "export.success.title" = "Quiz Exported";
@@ -201,10 +210,10 @@
 
 // MARK: - Quiz Status
 "status.live" = "Live";
-"status.completed" = "Completed";
+"status.completed" = "Afsluttet";
 "status.start" = "Start Quiz";
 "status.complete" = "Complete Quiz";
-"status.progress" = "Progress";
+"status.progress" = "Fremskridt";
 "status.roundsCompleted" = "%d of %d Rounds";
 
 // MARK: - Score Display
@@ -217,17 +226,17 @@
 
 // MARK: - CSV Export Headers
 "csv.venue" = "Venue";
-"csv.date" = "Date";
-"csv.completed" = "Completed";
-"csv.yes" = "Yes";
-"csv.no" = "No";
+"csv.date" = "Dato";
+"csv.completed" = "Afsluttet";
+"csv.yes" = "Ja";
+"csv.no" = "Nej";
 "csv.finalRanking" = "FINAL RANKING";
-"csv.rank" = "Rank";
+"csv.rank" = "Placering";
 "csv.team" = "Team";
 "csv.totalScore" = "Total Score";
 "csv.color" = "Color";
 "csv.detailedScores" = "DETAILED SCORES";
-"csv.total" = "Total";
+"csv.total" = "I alt";
 
 // MARK: - Workflow Phases (v1.5)
 "workflow.planning" = "Planlægning";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "Vælg farve";
 "teams.rank" = "Rang %d";
 "teams.points" = "Point";
+"teams.confirmed" = "bekræftet";
+"teams.defined" = "defineret";
+"teams.assigned" = "tildelt";
+"teams.setMax" = "Indstil maks";
+"teams.maxTeams" = "Maksimale hold";
+"teams.maxTeams.title" = "Holdgrænse";
+"teams.maxTeams.header" = "Maksimalt antal hold";
+"teams.maxTeams.footer" = "Lad stå tom for ubegrænset";
+"teams.maxTeams.description" = "Definer det maksimale antal hold for denne quiz";
+"teams.maxTeams.enable" = "Aktivér holdgrænse";
+"teams.maxTeams.unlimited" = "Ubegrænset";
+"teams.status" = "Status";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Administrer runder";
@@ -546,6 +567,7 @@
 "common.email" = "E-mail";
 "common.designSystem" = "Design System";
 "team.selectFromExisting" = "Vælg fra Eksisterende (%d)";
+"team.noExistingTeams" = "Ingen eksisterende hold";
 "score.enter.max" = "Indtast Point (maks. %d per Hold)";
 "score.nextRound" = "Fortsæt til Næste Runde";
 "score.nextRound.name" = "→ %@";
@@ -581,3 +603,18 @@
 "common.teamName" = "Teamnavn";
 "common.contactInfo" = "Kontaktinformation";
 "common.editTeam" = "Rediger Team";
+
+// MARK: - Team Statistics
+"team.statistics" = "Holdstatistik";
+
+// MARK: - Common UI
+"common.start" = "Start";
+"common.round.status.preparation" = "Forberedelse";
+"common.round.status.active" = "Aktiv";
+"common.round.status.completed" = "Afsluttet";
+
+"round.noMaxPoints" = "Ingen maks point";
+"round.noMaxPointsShort" = "Ingen maks pts";
+"round.unlimited" = "(ubegrænset)";
+"round.noMaxPointsSet" = "Ingen maksimal score sat";
+"common.round.create.button" = "Opret runde";

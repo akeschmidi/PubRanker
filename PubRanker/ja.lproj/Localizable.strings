@@ -150,6 +150,15 @@
 "common.points.of" = "%d ポイント中";
 "common.points.perRound" = "ラウンドごとの最大ポイント";
 "common.points.custom" = "ラウンドごとの個別ポイント";
+"common.winner" = "勝者:";
+"common.visualizations" = "ビジュアライゼーション";
+"common.pointDistribution" = "ポイント分布";
+"common.performanceOverRounds" = "ラウンド別推移";
+"common.legend" = "凡例";
+"common.showsTop5" = "上位5チームを表示";
+"common.pointDistributionPerRound" = "ラウンド別ポイント分布";
+"common.average" = "平均";
+"common.maximum" = "最大";
 "common.missing" = "残り %d";
 "common.delete.confirm" = "\"%@\" を本当に削除しますか？この操作は元に戻せません。";
 "common.quickSelect" = "クイック選択";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "色を選択";
 "teams.rank" = "順位 %d";
 "teams.points" = "ポイント";
+"teams.confirmed" = "確認済み";
+"teams.defined" = "定義済み";
+"teams.assigned" = "割り当て済み";
+"teams.setMax" = "最大設定";
+"teams.maxTeams" = "最大チーム数";
+"teams.maxTeams.title" = "チーム制限";
+"teams.maxTeams.header" = "最大チーム数";
+"teams.maxTeams.footer" = "無制限の場合は空欄";
+"teams.maxTeams.description" = "このクイズの最大チーム数を定義";
+"teams.maxTeams.enable" = "チーム制限を有効にする";
+"teams.maxTeams.unlimited" = "無制限";
+"teams.status" = "ステータス";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "ラウンドを管理";
@@ -546,6 +567,7 @@
 "common.email" = "メール";
 "common.designSystem" = "デザインシステム";
 "team.selectFromExisting" = "既存から選択 (%d)";
+"team.noExistingTeams" = "既存のチームがありません";
 "score.enter.max" = "ポイントを入力（チームあたり最大 %d）";
 "score.nextRound" = "次のラウンドに進む";
 "score.nextRound.name" = "→ %@";
@@ -581,3 +603,18 @@
 "common.teamName" = "チーム名";
 "common.contactInfo" = "連絡先情報";
 "common.editTeam" = "チームを編集";
+
+// MARK: - Team Statistics
+"team.statistics" = "チーム統計";
+
+// MARK: - Common UI
+"common.start" = "開始";
+"common.round.status.preparation" = "準備中";
+"common.round.status.active" = "進行中";
+"common.round.status.completed" = "完了";
+
+"round.noMaxPoints" = "最大ポイントなし";
+"round.noMaxPointsShort" = "最大ptなし";
+"round.unlimited" = "(無制限)";
+"round.noMaxPointsSet" = "最大ポイントが設定されていません";
+"common.round.create.button" = "ラウンドを作成";

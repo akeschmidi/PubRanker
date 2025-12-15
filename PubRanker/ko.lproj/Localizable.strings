@@ -5,13 +5,13 @@
 
 // MARK: - App Navigation
 "app.title" = "PubRanker";
-"navigation.back" = "Back";
-"navigation.done" = "Done";
-"navigation.cancel" = "Cancel";
-"navigation.save" = "Save";
-"navigation.edit" = "Edit";
-"navigation.delete" = "Delete";
-"navigation.add" = "Add";
+"navigation.back" = "뒤로";
+"navigation.done" = "완료";
+"navigation.cancel" = "취소";
+"navigation.save" = "저장";
+"navigation.edit" = "편집";
+"navigation.delete" = "삭제";
+"navigation.add" = "추가";
 
 // MARK: - Quiz
 "quiz.title" = "Quiz";
@@ -20,7 +20,7 @@
 "quiz.new.description" = "Create a new pub quiz and add teams and rounds";
 "quiz.name" = "Quiz Name";
 "quiz.name.placeholder" = "e.g. Pub Quiz at Lion's, Christmas Quiz...";
-"quiz.location" = "Location";
+"quiz.location" = "장소";
 "quiz.location.label" = "Venue";
 "quiz.location.placeholder" = "e.g. Lion's Pub";
 "quiz.date" = "Date";
@@ -46,8 +46,8 @@
 "team.add.multiple" = "Add Teams";
 "team.name" = "Team Name";
 "team.color" = "Color";
-"team.points" = "Points";
-"team.rank" = "Rank";
+"team.points" = "점수";
+"team.rank" = "순위";
 "team.wizard" = "Team Wizard";
 "team.wizard.howMany" = "How many teams?";
 "team.wizard.create" = "Create Teams";
@@ -79,8 +79,8 @@
 "round.wizard.create" = "Create Rounds";
 "round.delete.confirm" = "Delete round?";
 "round.delete.message" = "All points for this round will be lost.";
-"round.status.active" = "Active";
-"round.status.completed" = "Completed";
+"round.status.active" = "진행 중";
+"round.status.completed" = "완료";
 "round.status.pending" = "Pending";
 "round.complete" = "Complete Round";
 "round.complete.help" = "Complete current round (⌘K)";
@@ -88,12 +88,12 @@
 
 // MARK: - Leaderboard
 "leaderboard.title" = "Leaderboard";
-"leaderboard.rank" = "Rank";
+"leaderboard.rank" = "순위";
 "leaderboard.rank.position" = "Rank %d";
 "leaderboard.rank.tied" = "(tied)";
 "leaderboard.team" = "Team";
-"leaderboard.points" = "Points";
-"leaderboard.winner" = "Winner";
+"leaderboard.points" = "점수";
+"leaderboard.winner" = "우승자";
 "leaderboard.podium" = "Podium";
 "leaderboard.topThree" = "Top 3";
 "leaderboard.noTeams" = "No Teams";
@@ -111,11 +111,11 @@
 
 // MARK: - Alerts & Messages
 "alert.error" = "Error";
-"alert.success" = "Success";
-"alert.warning" = "Warning";
+"alert.success" = "성공";
+"alert.warning" = "경고";
 "alert.info" = "Information";
 "alert.ok" = "OK";
-"alert.yes" = "Yes";
+"alert.yes" = "예";
 "alert.no" = "No";
 
 "error.generic" = "An error occurred";
@@ -131,28 +131,37 @@
 "success.created" = "Successfully created";
 
 // MARK: - Common
-"common.name" = "Name";
-"common.description" = "Description";
+"common.name" = "이름";
+"common.description" = "설명";
 "common.date" = "Date";
-"common.time" = "Time";
-"common.location" = "Location";
-"common.search" = "Search";
-"common.filter" = "Filter";
-"common.sort" = "Sort";
-"common.settings" = "Settings";
-"common.about" = "About";
-"common.help" = "Help";
-"common.close" = "Close";
-"common.points" = "Points";
+"common.time" = "시간";
+"common.location" = "장소";
+"common.search" = "검색";
+"common.filter" = "필터";
+"common.sort" = "정렬";
+"common.settings" = "설정";
+"common.about" = "정보";
+"common.help" = "도움말";
+"common.close" = "닫기";
+"common.points" = "점수";
 "common.points.count" = "%d Points";
 "common.points.max" = "Max: %d";
 "common.points.maxLabel" = "Max: %d Points";
 "common.points.of" = "of %d Points";
 "common.points.perRound" = "Max. Points per Round";
 "common.points.custom" = "Individual Points per Round";
+"common.winner" = "우승팀:";
+"common.visualizations" = "시각화";
+"common.pointDistribution" = "점수 분포";
+"common.performanceOverRounds" = "라운드별 추이";
+"common.legend" = "범례";
+"common.showsTop5" = "상위 5개 팀 표시";
+"common.pointDistributionPerRound" = "라운드별 점수 분포";
+"common.average" = "평균";
+"common.maximum" = "최대";
 "common.missing" = "%d still missing";
 "common.delete.confirm" = "Do you really want to delete \"%@\"? This action cannot be undone.";
-"common.quickSelect" = "Quick Select";
+"common.quickSelect" = "빠른 선택";
 
 // MARK: - Placeholders
 "placeholder.quizName" = "e.g. October Pub Quiz";
@@ -162,9 +171,9 @@
 "placeholder.points" = "Enter points";
 
 // MARK: - Statistics
-"stats.average" = "Average";
-"stats.highest" = "Highest";
-"stats.lowest" = "Lowest";
+"stats.average" = "평균";
+"stats.highest" = "최고";
+"stats.lowest" = "최저";
 "stats.total" = "Total";
 
 // MARK: - Empty States
@@ -191,7 +200,7 @@
 "setup.dialog.start" = "Start now 🚀";
 
 // MARK: - Export
-"export.title" = "Export";
+"export.title" = "내보내기";
 "export.json" = "Export as JSON";
 "export.csv" = "Export as CSV";
 "export.success.title" = "Quiz Exported";
@@ -201,7 +210,7 @@
 
 // MARK: - Quiz Status
 "status.live" = "Live";
-"status.completed" = "Completed";
+"status.completed" = "완료";
 "status.start" = "Start Quiz";
 "status.complete" = "Complete Quiz";
 "status.progress" = "Progress";
@@ -218,8 +227,8 @@
 // MARK: - CSV Export Headers
 "csv.venue" = "Venue";
 "csv.date" = "Date";
-"csv.completed" = "Completed";
-"csv.yes" = "Yes";
+"csv.completed" = "완료";
+"csv.yes" = "예";
 "csv.no" = "No";
 "csv.finalRanking" = "FINAL RANKING";
 "csv.rank" = "순위";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "색상 선택";
 "teams.rank" = "순위 %d";
 "teams.points" = "포인트";
+"teams.confirmed" = "확인됨";
+"teams.defined" = "정의됨";
+"teams.assigned" = "할당됨";
+"teams.setMax" = "최대 설정";
+"teams.maxTeams" = "최대 팀 수";
+"teams.maxTeams.title" = "팀 제한";
+"teams.maxTeams.header" = "최대 팀 수";
+"teams.maxTeams.footer" = "무제한은 비워두세요";
+"teams.maxTeams.description" = "이 퀴즈의 최대 팀 수를 정의하세요";
+"teams.maxTeams.enable" = "팀 제한 활성화";
+"teams.maxTeams.unlimited" = "무제한";
+"teams.status" = "상태";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "라운드 관리";
@@ -546,6 +567,7 @@
 "common.email" = "이메일";
 "common.designSystem" = "디자인 시스템";
 "team.selectFromExisting" = "기존 항목에서 선택 (%d)";
+"team.noExistingTeams" = "기존 팀이 없습니다";
 "score.enter.max" = "점수 입력 (팀당 최대 %d)";
 "score.nextRound" = "다음 라운드로 계속";
 "score.nextRound.name" = "→ %@";
@@ -581,3 +603,18 @@
 "common.teamName" = "팀 이름";
 "common.contactInfo" = "연락처 정보";
 "common.editTeam" = "팀 편집";
+
+// MARK: - Team Statistics
+"team.statistics" = "팀 통계";
+
+// MARK: - Common UI
+"common.start" = "시작";
+"common.round.status.preparation" = "준비 중";
+"common.round.status.active" = "진행 중";
+"common.round.status.completed" = "완료";
+
+"round.noMaxPoints" = "최대 점수 없음";
+"round.noMaxPointsShort" = "최대 pts 없음";
+"round.unlimited" = "(무제한)";
+"round.noMaxPointsSet" = "최대 점수가 설정되지 않음";
+"common.round.create.button" = "라운드 생성";

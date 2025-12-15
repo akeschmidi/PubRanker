@@ -32,7 +32,7 @@ struct QuickStatsGrid: View {
             
             CompactStatCard(
                 title: "Max. Punkte",
-                value: "\(quiz.safeRounds.reduce(0) { $0 + $1.maxPoints })",
+                value: "\(quiz.safeRounds.reduce(0) { $0 + ($1.maxPoints ?? 0) })",
                 icon: "star.fill",
                 color: Color.appAccent,
                 isComplete: !quiz.safeRounds.isEmpty
@@ -311,10 +311,16 @@ struct CompactRoundCard: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
 
-            Text("\(round.maxPoints) Pkt")
-                .font(.body)
-                .foregroundStyle(Color.appTextSecondary)
-                .monospacedDigit()
+            if let maxPoints = round.maxPoints {
+                Text("\(maxPoints) Pkt")
+                    .font(.body)
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
+            } else {
+                Text(L10n.Round.noMaxPointsShort)
+                    .font(.body)
+                    .foregroundStyle(Color.appTextSecondary)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, AppSpacing.xs)

@@ -5,13 +5,13 @@
 
 // MARK: - App Navigation
 "app.title" = "PubRanker";
-"navigation.back" = "Back";
-"navigation.done" = "Done";
-"navigation.cancel" = "Cancel";
-"navigation.save" = "Save";
-"navigation.edit" = "Edit";
-"navigation.delete" = "Delete";
-"navigation.add" = "Add";
+"navigation.back" = "返回";
+"navigation.done" = "完成";
+"navigation.cancel" = "取消";
+"navigation.save" = "保存";
+"navigation.edit" = "编辑";
+"navigation.delete" = "删除";
+"navigation.add" = "添加";
 
 // MARK: - Quiz
 "quiz.title" = "Quiz";
@@ -20,7 +20,7 @@
 "quiz.new.description" = "Create a new pub quiz and add teams and rounds";
 "quiz.name" = "Quiz Name";
 "quiz.name.placeholder" = "e.g. Pub Quiz at Lion's, Christmas Quiz...";
-"quiz.location" = "Location";
+"quiz.location" = "地点";
 "quiz.location.label" = "Venue";
 "quiz.location.placeholder" = "e.g. Lion's Pub";
 "quiz.date" = "Date";
@@ -46,8 +46,8 @@
 "team.add.multiple" = "Add Teams";
 "team.name" = "Team Name";
 "team.color" = "Color";
-"team.points" = "Points";
-"team.rank" = "Rank";
+"team.points" = "分数";
+"team.rank" = "排名";
 "team.wizard" = "Team Wizard";
 "team.wizard.howMany" = "How many teams?";
 "team.wizard.create" = "Create Teams";
@@ -79,8 +79,8 @@
 "round.wizard.create" = "Create Rounds";
 "round.delete.confirm" = "Delete round?";
 "round.delete.message" = "All points for this round will be lost.";
-"round.status.active" = "Active";
-"round.status.completed" = "Completed";
+"round.status.active" = "进行中";
+"round.status.completed" = "已完成";
 "round.status.pending" = "Pending";
 "round.complete" = "Complete Round";
 "round.complete.help" = "Complete current round (⌘K)";
@@ -88,12 +88,12 @@
 
 // MARK: - Leaderboard
 "leaderboard.title" = "Leaderboard";
-"leaderboard.rank" = "Rank";
+"leaderboard.rank" = "排名";
 "leaderboard.rank.position" = "Rank %d";
 "leaderboard.rank.tied" = "(tied)";
 "leaderboard.team" = "Team";
-"leaderboard.points" = "Points";
-"leaderboard.winner" = "Winner";
+"leaderboard.points" = "分数";
+"leaderboard.winner" = "冠军";
 "leaderboard.podium" = "Podium";
 "leaderboard.topThree" = "Top 3";
 "leaderboard.noTeams" = "No Teams";
@@ -111,11 +111,11 @@
 
 // MARK: - Alerts & Messages
 "alert.error" = "Error";
-"alert.success" = "Success";
-"alert.warning" = "Warning";
+"alert.success" = "成功";
+"alert.warning" = "警告";
 "alert.info" = "Information";
 "alert.ok" = "OK";
-"alert.yes" = "Yes";
+"alert.yes" = "是";
 "alert.no" = "No";
 
 "error.generic" = "An error occurred";
@@ -131,28 +131,37 @@
 "success.created" = "Successfully created";
 
 // MARK: - Common
-"common.name" = "Name";
-"common.description" = "Description";
+"common.name" = "名称";
+"common.description" = "描述";
 "common.date" = "Date";
-"common.time" = "Time";
-"common.location" = "Location";
-"common.search" = "Search";
-"common.filter" = "Filter";
-"common.sort" = "Sort";
-"common.settings" = "Settings";
-"common.about" = "About";
-"common.help" = "Help";
-"common.close" = "Close";
-"common.points" = "Points";
+"common.time" = "时间";
+"common.location" = "地点";
+"common.search" = "搜索";
+"common.filter" = "筛选";
+"common.sort" = "排序";
+"common.settings" = "设置";
+"common.about" = "关于";
+"common.help" = "帮助";
+"common.close" = "关闭";
+"common.points" = "分数";
 "common.points.count" = "%d Points";
 "common.points.max" = "Max: %d";
 "common.points.maxLabel" = "Max: %d Points";
 "common.points.of" = "of %d Points";
 "common.points.perRound" = "Max. Points per Round";
 "common.points.custom" = "Individual Points per Round";
+"common.winner" = "获胜者：";
+"common.visualizations" = "可视化";
+"common.pointDistribution" = "得分分布";
+"common.performanceOverRounds" = "各轮表现";
+"common.legend" = "图例";
+"common.showsTop5" = "显示前 5 名队伍";
+"common.pointDistributionPerRound" = "每轮得分分布";
+"common.average" = "平均值";
+"common.maximum" = "最大值";
 "common.missing" = "%d still missing";
 "common.delete.confirm" = "Do you really want to delete \"%@\"? This action cannot be undone.";
-"common.quickSelect" = "Quick Select";
+"common.quickSelect" = "快速选择";
 
 // MARK: - Placeholders
 "placeholder.quizName" = "e.g. October Pub Quiz";
@@ -162,9 +171,9 @@
 "placeholder.points" = "Enter points";
 
 // MARK: - Statistics
-"stats.average" = "Average";
-"stats.highest" = "Highest";
-"stats.lowest" = "Lowest";
+"stats.average" = "平均";
+"stats.highest" = "最高";
+"stats.lowest" = "最低";
 "stats.total" = "Total";
 
 // MARK: - Empty States
@@ -191,7 +200,7 @@
 "setup.dialog.start" = "Start now 🚀";
 
 // MARK: - Export
-"export.title" = "Export";
+"export.title" = "导出";
 "export.json" = "Export as JSON";
 "export.csv" = "Export as CSV";
 "export.success.title" = "Quiz Exported";
@@ -201,7 +210,7 @@
 
 // MARK: - Quiz Status
 "status.live" = "Live";
-"status.completed" = "Completed";
+"status.completed" = "已完成";
 "status.start" = "Start Quiz";
 "status.complete" = "Complete Quiz";
 "status.progress" = "Progress";
@@ -218,8 +227,8 @@
 // MARK: - CSV Export Headers
 "csv.venue" = "Venue";
 "csv.date" = "Date";
-"csv.completed" = "Completed";
-"csv.yes" = "Yes";
+"csv.completed" = "已完成";
+"csv.yes" = "是";
 "csv.no" = "No";
 "csv.finalRanking" = "FINAL RANKING";
 "csv.rank" = "排名";
@@ -324,6 +333,18 @@
 "teams.colorPicker" = "选择颜色";
 "teams.rank" = "排名 %d";
 "teams.points" = "分数";
+"teams.confirmed" = "已确认";
+"teams.defined" = "已定义";
+"teams.assigned" = "已分配";
+"teams.setMax" = "设置上限";
+"teams.maxTeams" = "最大团队数";
+"teams.maxTeams.title" = "团队限制";
+"teams.maxTeams.header" = "最大团队数量";
+"teams.maxTeams.footer" = "留空表示无限制";
+"teams.maxTeams.description" = "定义此问答的最大团队数";
+"teams.maxTeams.enable" = "启用团队限制";
+"teams.maxTeams.unlimited" = "无限制";
+"teams.status" = "状态";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "管理回合";
@@ -546,6 +567,7 @@
 "common.email" = "电子邮件";
 "common.designSystem" = "设计系统";
 "team.selectFromExisting" = "从现有中选择 (%d)";
+"team.noExistingTeams" = "没有现有团队";
 "score.enter.max" = "输入分数（每队最多 %d）";
 "score.nextRound" = "继续下一轮";
 "score.nextRound.name" = "→ %@";
@@ -581,3 +603,18 @@
 "common.teamName" = "团队名称";
 "common.contactInfo" = "联系信息";
 "common.editTeam" = "编辑团队";
+
+// MARK: - Team Statistics
+"team.statistics" = "团队统计";
+
+// MARK: - Common UI
+"common.start" = "开始";
+"common.round.status.preparation" = "准备中";
+"common.round.status.active" = "进行中";
+"common.round.status.completed" = "已完成";
+
+"round.noMaxPoints" = "无最高分";
+"round.noMaxPointsShort" = "无最高分";
+"round.unlimited" = "(无限制)";
+"round.noMaxPointsSet" = "未设置最高分";
+"common.round.create.button" = "创建轮次";

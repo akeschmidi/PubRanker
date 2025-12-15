@@ -14,7 +14,7 @@ struct QuizChartsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sectionSpacing) {
-            Text("Visualisierungen")
+            Text(L10n.CommonUI.visualizations)
                 .font(.title2)
                 .bold()
                 .foregroundStyle(Color.appTextPrimary)
@@ -43,7 +43,7 @@ struct TeamPointsChart: View {
             HStack {
                 Image(systemName: "chart.bar.fill")
                     .foregroundStyle(Color.appPrimary)
-                Text("Punkteverteilung")
+                Text(L10n.CommonUI.pointDistribution)
                     .font(.headline)
                     .foregroundStyle(Color.appTextPrimary)
             }
@@ -52,20 +52,21 @@ struct TeamPointsChart: View {
             if quiz.safeTeams.isEmpty {
                 ChartEmptyStateView(
                     icon: "chart.bar.fill",
-                    message: "Keine Teams vorhanden",
-                    description: "Füge Teams zum Quiz hinzu, um die Punkteverteilung zu sehen"
+                    message: L10n.Empty.noTeams,
+                    description: L10n.Empty.noTeamsMessage
                 )
             } else {
                 Chart {
                     ForEach(quiz.sortedTeamsByScore) { team in
+                        let score = team.getTotalScore(for: quiz)
                         BarMark(
-                            x: .value("Punkte", team.totalScore),
-                            y: .value("Team", team.name)
+                            x: .value(L10n.CommonUI.points, score),
+                            y: .value(NSLocalizedString("quiz.teams", comment: "Teams"), team.name)
                         )
                         .foregroundStyle(Color.appPrimary)
                         .cornerRadius(AppCornerRadius.xs)
                         .annotation(position: .trailing, alignment: .leading) {
-                            Text("\(team.totalScore)")
+                            Text("\(score)")
                                 .font(.caption)
                                 .foregroundStyle(Color.appTextSecondary)
                                 .monospacedDigit()
@@ -120,7 +121,7 @@ struct RoundPerformanceChart: View {
             HStack {
                 Image(systemName: "chart.line.uptrend.xyaxis")
                     .foregroundStyle(Color.appSecondary)
-                Text("Performance über Runden")
+                Text(L10n.CommonUI.performanceOverRounds)
                     .font(.headline)
                     .foregroundStyle(Color.appTextPrimary)
             }
@@ -129,8 +130,8 @@ struct RoundPerformanceChart: View {
             if quiz.safeTeams.isEmpty || quiz.safeRounds.isEmpty {
                 ChartEmptyStateView(
                     icon: "chart.line.uptrend.xyaxis",
-                    message: quiz.safeTeams.isEmpty ? "Keine Teams vorhanden" : "Keine Runden vorhanden",
-                    description: quiz.safeTeams.isEmpty ? "Füge Teams zum Quiz hinzu" : "Füge Runden zum Quiz hinzu"
+                    message: quiz.safeTeams.isEmpty ? L10n.Empty.noTeams : L10n.Empty.noRounds,
+                    description: quiz.safeTeams.isEmpty ? L10n.Empty.noTeamsMessage : L10n.Empty.noRoundsMessage
                 )
             } else {
                 VStack(spacing: AppSpacing.sm) {
@@ -139,9 +140,9 @@ struct RoundPerformanceChart: View {
                             ForEach(quiz.sortedRounds) { round in
                                 if let score = team.getScore(for: round) {
                                     LineMark(
-                                        x: .value("Runde", round.name),
-                                        y: .value("Punkte", score),
-                                        series: .value("Team", team.name)
+                                        x: .value(NSLocalizedString("quiz.rounds", comment: "Rounds"), round.name),
+                                        y: .value(L10n.CommonUI.points, score),
+                                        series: .value(NSLocalizedString("quiz.teams", comment: "Teams"), team.name)
                                     )
                                     .foregroundStyle(getChartColor(for: index))
                                     .lineStyle(StrokeStyle(lineWidth: 3))
@@ -183,7 +184,7 @@ struct RoundPerformanceChart: View {
 
                     // Custom Legend
                     VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                        Text("Legende")
+                        Text(L10n.CommonUI.legend)
                             .font(.caption)
                             .foregroundStyle(Color.appTextSecondary)
 
@@ -205,7 +206,7 @@ struct RoundPerformanceChart: View {
                     .padding(.horizontal, AppSpacing.screenPadding)
 
                     if quiz.safeTeams.count > 5 {
-                        Text("Zeigt die Top 5 Teams")
+                        Text(L10n.CommonUI.showsTop5)
                             .font(.caption)
                             .foregroundStyle(Color.appTextSecondary)
                             .padding(.horizontal, AppSpacing.screenPadding)
@@ -226,7 +227,7 @@ struct RoundDistributionChart: View {
             HStack {
                 Image(systemName: "chart.bar.xaxis")
                     .foregroundStyle(Color.appAccent)
-                Text("Punkteverteilung pro Runde")
+                Text(L10n.CommonUI.pointDistributionPerRound)
                     .font(.headline)
                     .foregroundStyle(Color.appTextPrimary)
             }
@@ -235,16 +236,18 @@ struct RoundDistributionChart: View {
             if quiz.safeRounds.isEmpty {
                 ChartEmptyStateView(
                     icon: "chart.bar.xaxis",
-                    message: "Keine Runden vorhanden",
-                    description: "Füge Runden zum Quiz hinzu, um die Verteilung zu sehen"
+                    message: L10n.Empty.noRounds,
+                    description: L10n.Empty.noRoundsMessage
                 )
             } else if quiz.safeTeams.isEmpty {
                 ChartEmptyStateView(
                     icon: "chart.bar.xaxis",
-                    message: "Keine Teams vorhanden",
-                    description: "Füge Teams zum Quiz hinzu, um die Verteilung zu sehen"
+                    message: L10n.Empty.noTeams,
+                    description: L10n.Empty.noTeamsMessage
                 )
             } else {
+                let averageLabel = L10n.CommonUI.average
+                let maximumLabel = L10n.CommonUI.maximum
                 Chart {
                     ForEach(quiz.sortedRounds) { round in
                         let avgScore = quiz.safeTeams.reduce(0.0) { total, team in
@@ -253,8 +256,8 @@ struct RoundDistributionChart: View {
                         let maxScore = quiz.safeTeams.compactMap { $0.getScore(for: round) }.max() ?? 0
 
                         BarMark(
-                            x: .value("Runde", round.name),
-                            y: .value("Durchschnitt", avgScore)
+                            x: .value(NSLocalizedString("quiz.rounds", comment: "Rounds"), round.name),
+                            y: .value(averageLabel, avgScore)
                         )
                         .foregroundStyle(Color.appAccent)
                         .cornerRadius(AppCornerRadius.xs)
@@ -266,13 +269,13 @@ struct RoundDistributionChart: View {
                         }
 
                         BarMark(
-                            x: .value("Runde", round.name),
-                            y: .value("Maximum", maxScore)
+                            x: .value(NSLocalizedString("quiz.rounds", comment: "Rounds"), round.name),
+                            y: .value(maximumLabel, maxScore)
                         )
                         .foregroundStyle(Color.appSuccess)
                         .cornerRadius(AppCornerRadius.xs)
                         .annotation(position: .top, alignment: .center) {
-                            Text("Max \(maxScore)")
+                            Text("\(maxScore)")
                                 .font(.caption2)
                                 .foregroundStyle(Color.appTextSecondary)
                                 .monospacedDigit()
@@ -299,8 +302,8 @@ struct RoundDistributionChart: View {
                     }
                 }
                 .chartForegroundStyleScale([
-                    "Durchschnitt": Color.appAccent,
-                    "Maximum": Color.appSuccess
+                    averageLabel: Color.appAccent,
+                    maximumLabel: Color.appSuccess
                 ])
                 .chartLegend(position: .bottom, spacing: AppSpacing.xxs) {
                     HStack(spacing: AppSpacing.md) {
@@ -308,7 +311,7 @@ struct RoundDistributionChart: View {
                             Circle()
                                 .fill(Color.appAccent)
                                 .frame(width: 12, height: 12)
-                            Text("Durchschnitt")
+                            Text(averageLabel)
                                 .font(.caption)
                                 .foregroundStyle(Color.appTextPrimary)
                         }
@@ -316,7 +319,7 @@ struct RoundDistributionChart: View {
                             Circle()
                                 .fill(Color.appSuccess)
                                 .frame(width: 12, height: 12)
-                            Text("Maximum")
+                            Text(maximumLabel)
                                 .font(.caption)
                                 .foregroundStyle(Color.appTextPrimary)
                         }

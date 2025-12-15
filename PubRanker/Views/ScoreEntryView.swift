@@ -27,10 +27,16 @@ struct ScoreEntryView: View {
                     Text(round.name)
                         .font(.title)
                         .bold()
-                    
-                    Text(String(format: NSLocalizedString("score.enter.max", comment: "Enter points max"), round.maxPoints))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+
+                    if let maxPoints = round.maxPoints {
+                        Text(String(format: NSLocalizedString("score.enter.max", comment: "Enter points max"), maxPoints))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text(L10n.Round.noMaxPointsSet)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .padding(.top, 20)
                 
@@ -185,7 +191,11 @@ struct ScoreEntryView: View {
                     set: { newValue in
                         // Only allow numbers
                         let filtered = newValue.filter { $0.isNumber }
-                        if let value = Int(filtered), value <= round.maxPoints {
+                        if let value = Int(filtered) {
+                            // Check maxPoints only if set
+                            if let maxPts = round.maxPoints, value > maxPts {
+                                return
+                            }
                             teamScores[team.id] = filtered
                         } else if filtered.isEmpty {
                             teamScores[team.id] = "0"
@@ -196,7 +206,7 @@ struct ScoreEntryView: View {
                 .frame(width: 60)
                 .multilineTextAlignment(.center)
                 .font(.title3.bold())
-                
+
                 // Plus Button
                 Button {
                     incrementScore(for: team)
@@ -206,12 +216,24 @@ struct ScoreEntryView: View {
                         .foregroundStyle(Color.appSuccess)
                 }
                 .buttonStyle(.plain)
-                .disabled(getScoreValue(for: team) >= round.maxPoints)
-                
-                Text("/ \(round.maxPoints)")
-                    .font(.caption)
-                    .foregroundStyle(Color.appTextSecondary)
-                    .monospacedDigit()
+                .disabled({
+                    if let maxPts = round.maxPoints {
+                        return getScoreValue(for: team) >= maxPts
+                    } else {
+                        return false
+                    }
+                }())
+
+                if let maxPts = round.maxPoints {
+                    Text("/ \(maxPts)")
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
+                } else {
+                    Text(L10n.Round.unlimited)
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                }
             }
         }
         .padding(AppSpacing.md)
@@ -224,7 +246,11 @@ struct ScoreEntryView: View {
     
     private func incrementScore(for team: Team) {
         let current = getScoreValue(for: team)
-        if current < round.maxPoints {
+        if let maxPts = round.maxPoints {
+            if current < maxPts {
+                teamScores[team.id] = "\(current + 1)"
+            }
+        } else {
             teamScores[team.id] = "\(current + 1)"
         }
     }

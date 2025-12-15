@@ -34,6 +34,9 @@
 "quiz.totalPoints" = "Points Totaux";
 "quiz.delete.confirm" = "Supprimer le quiz?";
 "quiz.delete.message" = "Cette action ne peut pas être annulée.";
+"quiz.edit.help" = "Modifier le quiz";
+"quiz.delete.help" = "Supprimer le quiz";
+"quiz.start.help" = "Démarrer le quiz (⌘S)";
 
 // MARK: - Teams
 "team.title" = "Équipes";
@@ -54,6 +57,8 @@
 "team.delete.confirm" = "Supprimer l'équipe?";
 "team.delete.message" = "%@ sera supprimée du quiz.";
 "team.count" = "%d Équipes";
+"team.confirmed" = "Confirmé";
+"team.confirmed.toggle.help" = "Confirmer/annuler la participation";
 "team.management" = "Gestion des Équipes";
 
 // MARK: - Rounds
@@ -79,7 +84,7 @@
 "round.wizard.create" = "Créer des Manches";
 "round.delete.confirm" = "Supprimer la manche?";
 "round.delete.message" = "Tous les points de cette manche seront perdus.";
-"round.status.active" = "Active";
+"round.status.active" = "Actif";
 "round.status.completed" = "Terminée";
 "round.status.pending" = "En attente";
 "round.complete" = "Terminer la Manche";
@@ -150,6 +155,15 @@
 "common.points.of" = "sur %d Points";
 "common.points.perRound" = "Max. Points par Manche";
 "common.points.custom" = "Points Individuels par Manche";
+"common.winner" = "Vainqueur :";
+"common.visualizations" = "Visualisations";
+"common.pointDistribution" = "Répartition des points";
+"common.performanceOverRounds" = "Performance au fil des manches";
+"common.legend" = "Légende";
+"common.showsTop5" = "Affiche le top 5 des équipes";
+"common.pointDistributionPerRound" = "Répartition des points par manche";
+"common.average" = "Moyenne";
+"common.maximum" = "Maximum";
 "common.missing" = "%d manquent encore";
 "common.delete.confirm" = "Voulez-vous vraiment supprimer \"%@\"? Cette action ne peut pas être annulée.";
 "common.quickSelect" = "Sélection Rapide";
@@ -324,6 +338,18 @@
 "teams.colorPicker" = "Choisir la couleur";
 "teams.rank" = "Rang %d";
 "teams.points" = "Points";
+"teams.confirmed" = "confirmées";
+"teams.defined" = "définies";
+"teams.assigned" = "assignées";
+"teams.setMax" = "Définir max";
+"teams.maxTeams" = "Équipes maximum";
+"teams.maxTeams.title" = "Limite d'équipes";
+"teams.maxTeams.header" = "Nombre maximum d'équipes";
+"teams.maxTeams.footer" = "Laisser vide pour illimité";
+"teams.maxTeams.description" = "Définissez le nombre maximum d'équipes pour ce quiz";
+"teams.maxTeams.enable" = "Activer la limite d'équipes";
+"teams.maxTeams.unlimited" = "Illimité";
+"teams.status" = "Statut";
 
 // MARK: - Round Management (v2.0)
 "rounds.manage" = "Gérer les manches";
@@ -385,6 +411,7 @@
 "email.send" = "Envoyer un e-mail";
 "email.send.all" = "E-mail à toutes les équipes";
 "email.send.quiz" = "E-mail aux équipes du quiz";
+"email.send.quiz.help" = "Envoyer un e-mail à %d équipes (⌘E)";
 "email.noAddresses.title" = "Aucune adresse e-mail";
 "email.noAddresses.message" = "Aucune des équipes sélectionnées n'a d'adresse e-mail.";
 "email.quiz.subject" = "Informations sur le quiz: %@";
@@ -395,7 +422,8 @@
 
 // MARK: - Email Composer
 "email.composer.title" = "Rédiger un e-mail";
-"email.composer.quiz.title" = "E-mail aux équipes de : %@";
+"email.composer.quiz.title" = "E-mail à %@";
+"email.composer.recipientsAvailable" = "%d destinataires disponibles";
 "email.composer.all.title" = "E-mail à toutes les équipes";
 "email.composer.all.subtitle" = "%d équipes disponibles";
 "email.composer.search" = "Rechercher des équipes...";
@@ -548,6 +576,7 @@
 "common.email" = "E-mail";
 "common.designSystem" = "Design System";
 "team.selectFromExisting" = "Sélectionner parmi les Existants (%d)";
+"team.noExistingTeams" = "Aucune équipe existante";
 "score.enter.max" = "Entrer les Points (max. %d par Équipe)";
 "score.nextRound" = "Continuer au Tour Suivant";
 "score.nextRound.name" = "→ %@";
@@ -582,3 +611,18 @@
 "common.teamName" = "Nom de l'Équipe";
 "common.contactInfo" = "Informations de Contact";
 "common.editTeam" = "Modifier l'Équipe";
+
+// MARK: - Team Statistics
+"team.statistics" = "Statistiques de l'Équipe";
+
+// MARK: - Common UI
+"common.start" = "Démarrer";
+"common.round.status.preparation" = "Préparation";
+"common.round.status.active" = "Actif";
+"common.round.status.completed" = "Terminé";
+
+"round.noMaxPoints" = "Pas de points max";
+"round.noMaxPointsShort" = "Pas de max pts";
+"round.unlimited" = "(illimité)";
+"round.noMaxPointsSet" = "Aucun point maximum défini";
+"common.round.create.button" = "Créer manche";
