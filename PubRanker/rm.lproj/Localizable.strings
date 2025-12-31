@@ -618,3 +618,10 @@
 "round.unlimited" = "(unlimited)";
 "round.noMaxPointsSet" = "Nagin punct maximal definì";
 "common.round.create.button" = "Crear runda";
+
+"common.additionalPlaces" = "ULTERIURAS PLAZZAS";
+"common.maxPointsLabel" = "PUNCTS MAX.";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Proxima plazza";
+"presentation.reset" = "Reset";

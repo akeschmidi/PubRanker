@@ -3,6 +3,7 @@
 //  PubRanker
 //
 //  Created on 20.10.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
@@ -18,9 +19,8 @@ struct TeamIconView: View {
     
     var body: some View {
         Group {
-            if let imageData = team.imageData, let nsImage = NSImage(data: imageData) {
-                Image(nsImage: nsImage)
-                    .resizable()
+            if let imageData = team.imageData {
+                PlatformImage(data: imageData)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: size, height: size)
                     .clipShape(Circle())

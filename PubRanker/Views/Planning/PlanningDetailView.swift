@@ -15,9 +15,13 @@ struct PlanningDetailView: View {
     let viewModel: QuizViewModel
     let onEdit: () -> Void
     let onDelete: () -> Void
-    
+
     @State private var showingEmailComposer = false
-    
+
+    private var emailAction: (() -> Void)? {
+        return { showingEmailComposer = true }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Kompakter Header
@@ -29,13 +33,11 @@ struct PlanningDetailView: View {
                     viewModel.startQuiz(quiz)
                     selectedWorkflow = .execution
                 },
-                onEmail: {
-                    showingEmailComposer = true
-                }
+                onEmail: emailAction
             )
             
             Divider()
-            
+
             // Tab Picker
             Picker("Ansicht", selection: $selectedDetailTab) {
                 ForEach(PlanningDetailTab.allCases) { tab in
@@ -44,9 +46,15 @@ struct PlanningDetailView: View {
                 }
             }
             .pickerStyle(.segmented)
+            #if os(iOS)
+            .padding(.horizontal, AppSpacing.sm)
+            .padding(.top, AppSpacing.xxs)
+            .padding(.bottom, 0)
+            #else
             .padding(.horizontal, AppSpacing.screenPadding)
-            .padding(.vertical, AppSpacing.xs)
-            
+            .padding(.vertical, AppSpacing.xxxs)
+            #endif
+
             Divider()
             
             // Tab Content

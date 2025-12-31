@@ -3,11 +3,18 @@
 //  PubRanker
 //
 //  Created on 23.11.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
+
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct GlobalEditTeamSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -252,10 +259,17 @@ struct GlobalEditTeamSheet: View {
             let imageData = try Data(contentsOf: url)
             
             // Prüfen ob es tatsächlich ein Bild ist
+            #if os(macOS)
             guard NSImage(data: imageData) != nil else {
                 print("⚠️ Fehler: Datei ist kein gültiges Bild")
                 return
             }
+            #else
+            guard UIImage(data: imageData) != nil else {
+                print("⚠️ Fehler: Datei ist kein gültiges Bild")
+                return
+            }
+            #endif
             
             // Bild speichern
             team.imageData = imageData

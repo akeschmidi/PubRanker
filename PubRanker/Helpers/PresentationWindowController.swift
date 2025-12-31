@@ -2,10 +2,16 @@
 //  PresentationWindowController.swift
 //  PubRanker
 //
-//  Controller for Presentation Mode window on second screen
+//  Controller for Presentation Mode window
+//  macOS: Separate window on second screen
+//  iPadOS: Full-screen overlay in app
+//
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
+
+#if os(macOS)
 import AppKit
 
 class PresentationWindowController: NSWindowController, NSWindowDelegate {
@@ -94,16 +100,20 @@ class PresentationWindowController: NSWindowController, NSWindowDelegate {
         }
     }
 }
+#endif
 
-// MARK: - Presentation Manager
+// MARK: - Presentation Manager (Cross-Platform)
 
 @Observable
 class PresentationManager {
     static let shared = PresentationManager()
 
     private(set) var isPresenting = false
+    private(set) var currentQuiz: Quiz?
+    
+    #if os(macOS)
     private var windowController: PresentationWindowController?
-    private var currentQuiz: Quiz?
+    #endif
 
     private init() {}
 
@@ -115,16 +125,23 @@ class PresentationManager {
         }
 
         currentQuiz = quiz
+        
+        #if os(macOS)
         windowController = PresentationWindowController(quiz: quiz, presentationManager: self)
         windowController?.showPresentation()
+        #endif
+        
         isPresenting = true
     }
 
     func stopPresentation() {
         guard isPresenting else { return }
 
+        #if os(macOS)
         windowController?.closePresentation()
         windowController = nil
+        #endif
+        
         currentQuiz = nil
         isPresenting = false
     }
@@ -139,14 +156,63 @@ class PresentationManager {
     
     func updateQuiz(_ quiz: Quiz) {
         currentQuiz = quiz
+        #if os(macOS)
         windowController?.updateQuiz(quiz)
+        #endif
     }
     
     func handleWindowClosed() {
         // Window was closed by user (e.g., clicking the close button)
         // Update state to reflect that presentation is no longer active
+        #if os(macOS)
         windowController = nil
+        #endif
         currentQuiz = nil
         isPresenting = false
     }
 }
+
+// MARK: - iOS Presentation View (Full Screen Overlay)
+
+#if os(iOS)
+/// Full-screen presentation view for iPad
+/// Shows leaderboard in a beautiful full-screen format suitable for AirPlay/external displays
+struct iPadPresentationOverlay: View {
+    let quiz: Quiz
+    let onDismiss: () -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            // Presentation Content
+            PresentationModeView(quiz: quiz)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button {
+                            onDismiss()
+                            dismiss()
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title2)
+                                Text("Beenden")
+                                    .fontWeight(.medium)
+                            }
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(Color.white.opacity(0.2))
+                            )
+                        }
+                    }
+                }
+                .toolbarBackground(.hidden, for: .navigationBar)
+                .toolbarColorScheme(.dark, for: .navigationBar)
+        }
+        .statusBarHidden(true)
+        .persistentSystemOverlays(.hidden)
+    }
+}
+#endif

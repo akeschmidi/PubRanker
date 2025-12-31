@@ -32,7 +32,11 @@ struct PlanningView: View {
                 plannedQuizzes: plannedQuizzes,
                 viewModel: viewModel
             )
+            #if os(iOS)
+            .navigationSplitViewColumnWidth(min: 280, ideal: 320, max: 380)
+            #else
             .navigationSplitViewColumnWidth(min: 320, ideal: 380, max: 500)
+            #endif
         } detail: {
             if let quiz = selectedQuiz {
                 PlanningDetailView(
@@ -54,7 +58,16 @@ struct PlanningView: View {
                 }
             }
         }
+        #if os(iOS)
+        .navigationSplitViewStyle(.prominentDetail)
+        #else
         .navigationSplitViewStyle(.balanced)
+        #endif
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                EmptyView()
+            }
+        }
         .onAppear {
             viewModel.setContext(modelContext)
             // If navigating from Teams Manager with a selected quiz, use it

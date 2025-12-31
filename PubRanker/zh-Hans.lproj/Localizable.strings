@@ -618,3 +618,10 @@
 "round.unlimited" = "(无限制)";
 "round.noMaxPointsSet" = "未设置最高分";
 "common.round.create.button" = "创建轮次";
+
+"common.additionalPlaces" = "其他排名";
+"common.maxPointsLabel" = "最高分";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "下一位";
+"presentation.reset" = "重置";

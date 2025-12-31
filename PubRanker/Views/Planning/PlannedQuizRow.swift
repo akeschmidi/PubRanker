@@ -63,7 +63,7 @@ struct PlannedQuizRow: View {
                             .font(.body)
                             .bold()
                             .foregroundStyle(.white)
-                            .frame(width: AppSpacing.lg, height: AppSpacing.lg)
+                            .frame(width: max(AppSpacing.lg, AppSpacing.touchTarget), height: max(AppSpacing.lg, AppSpacing.touchTarget))
                             .background(
                                 Circle()
                                     .fill(Color.appPrimary)
@@ -71,7 +71,7 @@ struct PlannedQuizRow: View {
                             .shadow(AppShadow.sm)
                     }
                     .buttonStyle(.plain)
-                    .help("Quiz bearbeiten")
+                    .helpText("Quiz bearbeiten")
                 }
 
                 if let onDelete = onDelete {
@@ -82,7 +82,7 @@ struct PlannedQuizRow: View {
                             .font(.body)
                             .bold()
                             .foregroundStyle(.white)
-                            .frame(width: AppSpacing.lg, height: AppSpacing.lg)
+                            .frame(width: max(AppSpacing.lg, AppSpacing.touchTarget), height: max(AppSpacing.lg, AppSpacing.touchTarget))
                             .background(
                                 Circle()
                                     .fill(Color.appAccent)
@@ -90,7 +90,7 @@ struct PlannedQuizRow: View {
                             .shadow(AppShadow.sm)
                     }
                     .buttonStyle(.plain)
-                    .help("Quiz löschen")
+                    .helpText("Quiz löschen")
                 }
             }
         }

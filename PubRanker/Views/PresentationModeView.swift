@@ -12,11 +12,58 @@ struct PresentationModeView: View {
     @State private var currentTime = Date()
     @State private var previousRankings: [String: Int] = [:]
     @State private var showConfetti = false
+    @State private var visibleRankCount = 0  // Anzahl der sichtbaren Plätze (von unten nach oben)
 
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var sortedTeams: [Team] {
         quiz.sortedTeamsByScore
+    }
+
+    var totalTeams: Int {
+        sortedTeams.count
+    }
+
+    var allTeamsVisible: Bool {
+        visibleRankCount >= totalTeams
+    }
+
+    // Prüft ob ein Team an dieser Position in der Liste sichtbar sein soll
+    // Position ist der Index im sortierten Array (0 = bestes Team, N-1 = schlechtestes Team)
+    func isTeamVisible(atIndex index: Int) -> Bool {
+        guard visibleRankCount > 0 else { return false }
+        // Von unten nach oben: Team ist sichtbar wenn index >= (totalTeams - visibleRankCount)
+        return index >= (totalTeams - visibleRankCount)
+    }
+
+    // Prüft ob mindestens ein Podium-Team (Top 3) sichtbar ist
+    var hasVisiblePodiumTeams: Bool {
+        guard visibleRankCount > 0 else { return false }
+        // Top 3 sind Indices 0, 1, 2
+        return (0..<min(3, totalTeams)).contains { isTeamVisible(atIndex: $0) }
+    }
+
+    // Prüft ob mindestens ein Team ab Position 4 sichtbar ist
+    var hasVisibleAdditionalTeams: Bool {
+        guard totalTeams > 3 && visibleRankCount > 0 else { return false }
+        // Ab Position 4 sind Indices 3...totalTeams-1
+        return (3..<totalTeams).contains { isTeamVisible(atIndex: $0) }
+    }
+
+    var adaptiveGridColumns: [GridItem] {
+        #if os(iOS)
+        // iPad Querformat: 3 Spalten für mehr Teams
+        return [
+            GridItem(.flexible(), spacing: AppSpacing.xs),
+            GridItem(.flexible(), spacing: AppSpacing.xs),
+            GridItem(.flexible(), spacing: AppSpacing.xs)
+        ]
+        #else
+        return [
+            GridItem(.flexible(), spacing: AppSpacing.xs),
+            GridItem(.flexible(), spacing: AppSpacing.xs)
+        ]
+        #endif
     }
 
     var body: some View {
@@ -25,73 +72,125 @@ struct PresentationModeView: View {
             Color.gradientPubTheme
                 .ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                // Header
-                presentationHeader
-                    .padding(.horizontal, AppSpacing.xxxl)
-                    .padding(.top, AppSpacing.md)
-                    .padding(.bottom, AppSpacing.xxs)
-
-                // Aktive Runde Banner
-                if let currentRound = quiz.currentRound {
-                    activeRoundBanner(currentRound)
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Header
+                    presentationHeader
+                        #if os(iOS)
+                        .padding(.horizontal, AppSpacing.lg)
+                        .padding(.top, AppSpacing.xs)
+                        .padding(.bottom, AppSpacing.xxxs)
+                        #else
                         .padding(.horizontal, AppSpacing.xxxl)
-                        .padding(.vertical, AppSpacing.xs)
-                }
+                        .padding(.top, AppSpacing.md)
+                        .padding(.bottom, AppSpacing.xxs)
+                        #endif
 
-                // PODIUM für Top 3
-                if sortedTeams.count >= 3 {
-                    podiumView
-                        .padding(.horizontal, AppSpacing.xxxl)
-                        .padding(.vertical, AppSpacing.md)
-                } else if !sortedTeams.isEmpty {
-                    // Falls weniger als 3 Teams, zeige einfache Podium-Version
-                    simplePodiumView
-                        .padding(.horizontal, AppSpacing.xxxl)
-                        .padding(.vertical, AppSpacing.md)
-                }
-
-                // Weitere Plätze (ab Platz 4)
-                if sortedTeams.count > 3 {
-                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                        Text(L10n.CommonUI.additionalPlaces)
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundStyle(.white.opacity(0.6))
+                    // Aktive Runde Banner
+                    if let currentRound = quiz.currentRound {
+                        activeRoundBanner(currentRound)
+                            #if os(iOS)
+                            .padding(.horizontal, AppSpacing.lg)
+                            .padding(.vertical, AppSpacing.xxxs)
+                            #else
                             .padding(.horizontal, AppSpacing.xxxl)
-                            .padding(.top, AppSpacing.sm)
-                            .padding(.bottom, AppSpacing.xxs)
-
-                        // Grid Layout für mehr Platz
-                        LazyVGrid(
-                            columns: [
-                                GridItem(.flexible(), spacing: AppSpacing.xs),
-                                GridItem(.flexible(), spacing: AppSpacing.xs)
-                            ],
-                            spacing: AppSpacing.xxs
-                        ) {
-                            let rankings = quiz.getTeamRankings()
-                            let remainingRankings = rankings.dropFirst(3)
-                            ForEach(remainingRankings, id: \.team.id) { ranking in
-                                CompactTeamRow(
-                                    team: ranking.team,
-                                    rank: ranking.rank,
-                                    previousRank: previousRankings[ranking.team.id.uuidString] ?? ranking.rank,
-                                    quiz: quiz
-                                )
-                            }
-                        }
-                        .padding(.horizontal, AppSpacing.xxxl)
-                        .padding(.bottom, AppSpacing.md)
+                            .padding(.vertical, AppSpacing.xs)
+                            #endif
                     }
-                }
 
-                Spacer(minLength: 0)
+                    // PODIUM für Top 3
+                    if sortedTeams.count >= 3 && hasVisiblePodiumTeams {
+                        podiumView
+                            #if os(iOS)
+                            .padding(.horizontal, AppSpacing.lg)
+                            .padding(.vertical, AppSpacing.xs)
+                            #else
+                            .padding(.horizontal, AppSpacing.xxxl)
+                            .padding(.vertical, AppSpacing.md)
+                            #endif
+                    } else if !sortedTeams.isEmpty && sortedTeams.count < 3 && hasVisiblePodiumTeams {
+                        // Falls weniger als 3 Teams, zeige einfache Podium-Version
+                        simplePodiumView
+                            #if os(iOS)
+                            .padding(.horizontal, AppSpacing.lg)
+                            .padding(.vertical, AppSpacing.xs)
+                            #else
+                            .padding(.horizontal, AppSpacing.xxxl)
+                            .padding(.vertical, AppSpacing.md)
+                            #endif
+                    }
+
+                    // Weitere Plätze (ab Platz 4)
+                    if sortedTeams.count > 3 && hasVisibleAdditionalTeams {
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            Text(L10n.CommonUI.additionalPlaces)
+                                #if os(iOS)
+                                .font(.system(size: 14, weight: .bold))
+                                #else
+                                .font(.system(size: 18, weight: .bold))
+                                #endif
+                                .foregroundStyle(.white.opacity(0.6))
+                                #if os(iOS)
+                                .padding(.horizontal, AppSpacing.lg)
+                                .padding(.top, AppSpacing.xxs)
+                                #else
+                                .padding(.horizontal, AppSpacing.xxxl)
+                                .padding(.top, AppSpacing.sm)
+                                #endif
+                                .padding(.bottom, AppSpacing.xxs)
+
+                            // Grid Layout für mehr Platz
+                            LazyVGrid(
+                                columns: adaptiveGridColumns,
+                                spacing: AppSpacing.xxs
+                            ) {
+                                let rankings = quiz.getTeamRankings()
+                                let remainingRankings = Array(rankings.dropFirst(3))
+                                ForEach(Array(remainingRankings.enumerated()), id: \.element.team.id) { index, ranking in
+                                    let actualIndex = index + 3  // Index 3, 4, 5...
+                                    if isTeamVisible(atIndex: actualIndex) {
+                                        CompactTeamRow(
+                                            team: ranking.team,
+                                            rank: ranking.rank,
+                                            previousRank: previousRankings[ranking.team.id.uuidString] ?? ranking.rank,
+                                            quiz: quiz
+                                        )
+                                        .transition(.asymmetric(
+                                            insertion: .move(edge: .bottom).combined(with: .opacity),
+                                            removal: .opacity
+                                        ))
+                                    }
+                                }
+                            }
+                            #if os(iOS)
+                            .padding(.horizontal, AppSpacing.lg)
+                            .padding(.bottom, AppSpacing.xs)
+                            #else
+                            .padding(.horizontal, AppSpacing.xxxl)
+                            .padding(.bottom, AppSpacing.md)
+                            #endif
+                        }
+                    }
+
+                    Spacer(minLength: 0)
+                }
             }
 
             // Confetti overlay for round completion
             if showConfetti {
                 ConfettiView()
                     .ignoresSafeArea()
+            }
+
+            // Animation Control Button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    animationControlButton
+                        .padding(.trailing, AppSpacing.xl)
+                        .padding(.bottom, AppSpacing.xl)
+                }
             }
         }
         .onReceive(timer) { _ in
@@ -109,12 +208,21 @@ struct PresentationModeView: View {
 
     private var presentationHeader: some View {
         HStack {
-            // Trophy Icon & Quiz Name
+            // App Icon & Quiz Name
             HStack(spacing: AppSpacing.xs) {
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 32))
-                    .foregroundStyle(Color.gradientSecondary)
-                    .shadow(AppShadow.secondary)
+                // App Icon mit abgerundeten Ecken
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.appBackground)
+                        .frame(width: 48, height: 48)
+
+                    Image("AppIconImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 48, height: 48)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                .shadow(AppShadow.secondary)
 
                 VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                     Text(quiz.name)
@@ -134,6 +242,54 @@ struct PresentationModeView: View {
             }
 
             Spacer()
+        }
+    }
+
+    private var animationControlButton: some View {
+        Button {
+            showNextPlace()
+        } label: {
+            HStack(spacing: AppSpacing.xs) {
+                if allTeamsVisible {
+                    Image(systemName: "arrow.counterclockwise.circle.fill")
+                        .font(.system(size: 24))
+                    Text(L10n.Presentation.reset)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                } else {
+                    Image(systemName: "chevron.up.circle.fill")
+                        .font(.system(size: 24))
+                    Text(L10n.Presentation.nextPlace)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                    if visibleRankCount > 0 {
+                        Text("(\(visibleRankCount)/\(totalTeams))")
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                }
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, AppSpacing.lg)
+            .padding(.vertical, AppSpacing.sm)
+            .background(
+                Capsule()
+                    .fill(allTeamsVisible ? Color.appAccent : Color.appSuccess)
+                    .shadow(color: .black.opacity(0.3), radius: 10, y: 5)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func showNextPlace() {
+        if allTeamsVisible {
+            // Zurücksetzen
+            withAnimation(.easeOut(duration: 0.3)) {
+                visibleRankCount = 0
+            }
+        } else {
+            // Nächsten Platz anzeigen
+            withAnimation(.spring(response: 1.5, dampingFraction: 0.7)) {
+                visibleRankCount += 1
+            }
         }
     }
 
@@ -200,46 +356,70 @@ struct PresentationModeView: View {
     private var podiumView: some View {
         let rankings = quiz.getTeamRankings()
         let topRankings = Array(rankings.prefix(3))
-        
+
         return HStack(alignment: .bottom, spacing: 30) {
-            // 2. Platz (links, niedriger)
+            // 2. Platz (links, niedriger) - Index 1
             if topRankings.count >= 2 {
                 let secondPlace = topRankings[1]
-                PresentationPodiumPlace(
-                    team: secondPlace.team,
-                    rank: secondPlace.rank,
-                    previousRank: previousRankings[secondPlace.team.id.uuidString] ?? secondPlace.rank,
-                    height: 180,
-                    quiz: quiz
-                )
+                if isTeamVisible(atIndex: 1) {
+                    PresentationPodiumPlace(
+                        team: secondPlace.team,
+                        rank: secondPlace.rank,
+                        previousRank: previousRankings[secondPlace.team.id.uuidString] ?? secondPlace.rank,
+                        height: podiumHeight(for: 2),
+                        quiz: quiz
+                    )
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.3).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                } else {
+                    Spacer()
+                }
             } else {
                 Spacer()
             }
 
-            // 1. Platz (mitte, am höchsten)
+            // 1. Platz (mitte, am höchsten) - Index 0
             if !topRankings.isEmpty {
                 let firstPlace = topRankings[0]
-                PresentationPodiumPlace(
-                    team: firstPlace.team,
-                    rank: firstPlace.rank,
-                    previousRank: previousRankings[firstPlace.team.id.uuidString] ?? firstPlace.rank,
-                    height: 220,
-                    quiz: quiz
-                )
+                if isTeamVisible(atIndex: 0) {
+                    PresentationPodiumPlace(
+                        team: firstPlace.team,
+                        rank: firstPlace.rank,
+                        previousRank: previousRankings[firstPlace.team.id.uuidString] ?? firstPlace.rank,
+                        height: podiumHeight(for: 1),
+                        quiz: quiz
+                    )
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.3).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                } else {
+                    Spacer()
+                }
             } else {
                 Spacer()
             }
 
-            // 3. Platz (rechts, am niedrigsten)
+            // 3. Platz (rechts, am niedrigsten) - Index 2
             if topRankings.count >= 3 {
                 let thirdPlace = topRankings[2]
-                PresentationPodiumPlace(
-                    team: thirdPlace.team,
-                    rank: thirdPlace.rank,
-                    previousRank: previousRankings[thirdPlace.team.id.uuidString] ?? thirdPlace.rank,
-                    height: 150,
-                    quiz: quiz
-                )
+                if isTeamVisible(atIndex: 2) {
+                    PresentationPodiumPlace(
+                        team: thirdPlace.team,
+                        rank: thirdPlace.rank,
+                        previousRank: previousRankings[thirdPlace.team.id.uuidString] ?? thirdPlace.rank,
+                        height: podiumHeight(for: 3),
+                        quiz: quiz
+                    )
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.3).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                } else {
+                    Spacer()
+                }
             } else {
                 Spacer()
             }
@@ -250,16 +430,22 @@ struct PresentationModeView: View {
     private var simplePodiumView: some View {
         let rankings = quiz.getTeamRankings()
         let topRankings = Array(rankings.prefix(3))
-        
+
         return HStack(spacing: 40) {
-            ForEach(topRankings, id: \.team.id) { ranking in
-                PresentationPodiumPlace(
-                    team: ranking.team,
-                    rank: ranking.rank,
-                    previousRank: previousRankings[ranking.team.id.uuidString] ?? ranking.rank,
-                    height: 320,
-                    quiz: quiz
-                )
+            ForEach(Array(topRankings.enumerated()), id: \.element.team.id) { index, ranking in
+                if isTeamVisible(atIndex: index) {
+                    PresentationPodiumPlace(
+                        team: ranking.team,
+                        rank: ranking.rank,
+                        previousRank: previousRankings[ranking.team.id.uuidString] ?? ranking.rank,
+                        height: 320,
+                        quiz: quiz
+                    )
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.3).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                }
             }
         }
     }
@@ -269,6 +455,26 @@ struct PresentationModeView: View {
         for (index, team) in sortedTeams.enumerated() {
             previousRankings[team.id.uuidString] = index + 1
         }
+    }
+
+    private func podiumHeight(for rank: Int) -> CGFloat {
+        #if os(iOS)
+        // iPad: Kompaktere Podium-Höhen
+        switch rank {
+        case 1: return 140
+        case 2: return 120
+        case 3: return 100
+        default: return 100
+        }
+        #else
+        // macOS: Original Höhen
+        switch rank {
+        case 1: return 220
+        case 2: return 180
+        case 3: return 160
+        default: return 160
+        }
+        #endif
     }
 }
 
@@ -324,21 +530,7 @@ struct PresentationPodiumPlace: View {
                         .frame(width: 60, height: 60)
                         .shadow(radius: 4, y: 2)
 
-                    VStack(spacing: AppSpacing.xxxs) {
-                        if rank == 1 {
-                            Image(systemName: "crown.fill")
-                                .font(.system(size: 24))
-                                .foregroundStyle(.white)
-                        } else {
-                            Text("#\(rank)")
-                                .font(.system(size: 24, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
-                        }
-
-                        Image(systemName: rankIcon)
-                            .font(.system(size: 12))
-                            .foregroundStyle(.white.opacity(0.9))
-                    }
+                    TeamIconView(team: team, size: 50)
                 }
 
                 // Team Name
@@ -348,12 +540,9 @@ struct PresentationPodiumPlace: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
 
-                // Score mit Team-Farbe
+                // Score mit Team-Icon
                 HStack(spacing: AppSpacing.xxxs) {
-                    Circle()
-                        .fill(teamColor)
-                        .frame(width: 12, height: 12)
-                        .shadow(radius: 3, y: 1)
+                    TeamIconView(team: team, size: 20)
 
                     Text("\(team.getTotalScore(for: quiz))")
                         .font(.system(size: rank == 1 ? 36 : 32, weight: .bold, design: .rounded))
@@ -449,11 +638,8 @@ struct CompactTeamRow: View {
             }
             .frame(width: 20)
 
-            // Team Color
-            Circle()
-                .fill(teamColor)
-                .frame(width: 14, height: 14)
-                .shadow(radius: 3, y: 1)
+            // Team Icon
+            TeamIconView(team: team, size: 14)
 
             // Team Name
             Text(team.name)

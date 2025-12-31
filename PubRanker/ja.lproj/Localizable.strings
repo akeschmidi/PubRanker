@@ -618,3 +618,10 @@
 "round.unlimited" = "(無制限)";
 "round.noMaxPointsSet" = "最大ポイントが設定されていません";
 "common.round.create.button" = "ラウンドを作成";
+
+"common.additionalPlaces" = "その他の順位";
+"common.maxPointsLabel" = "最大ポイント";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "次の順位";
+"presentation.reset" = "リセット";

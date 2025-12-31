@@ -123,7 +123,7 @@ struct EditableRoundRow: View {
                 }
             }
             .primaryGradientButton()
-            .help("Runde bearbeiten")
+            .helpText("Runde bearbeiten")
         }
         .padding(.horizontal, AppSpacing.md)
         .padding(.vertical, AppSpacing.sm)

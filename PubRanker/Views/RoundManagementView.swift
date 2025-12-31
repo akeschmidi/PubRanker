@@ -177,7 +177,7 @@ struct RoundManagementView: View {
                 }
             }
             .primaryGradientButton()
-            .help(NSLocalizedString("common.round.edit.help", comment: "Edit round help"))
+            .helpText(NSLocalizedString("common.round.edit.help", comment: "Edit round help"))
         }
         .padding(AppSpacing.md)
         .appCard(style: .default, cornerRadius: AppCornerRadius.md)
@@ -428,9 +428,14 @@ struct ScoreCell: View {
                 VStack(spacing: 8) {
                     // TextField für direkte Eingabe
                     TextField("", text: $inputText)
+                        #if os(iOS)
+                        .keyboardType(.numberPad)
+                        #endif
                         .textFieldStyle(.plain)
                         .multilineTextAlignment(.center)
-                        .font(.system(size: 32, weight: .bold))
+                        .font(.system(size: 28, weight: .bold))
+                        .monospacedDigit()
+                        .padding(.horizontal, 8)
                         .focused($isFocused)
                         .onSubmit {
                             saveScore()
@@ -539,7 +544,7 @@ struct ScoreCell: View {
                     }
                 }
                 .buttonStyle(.plain)
-                .help(currentScore != nil ? String(format: NSLocalizedString("score.clickToEdit", comment: "Click to edit"), currentScore!) : NSLocalizedString("score.clickToAdd", comment: "Click to add"))
+                .helpText(currentScore != nil ? String(format: NSLocalizedString("score.clickToEdit", comment: "Click to edit"), currentScore!) : NSLocalizedString("score.clickToAdd", comment: "Click to add"))
             }
         }
         .onChange(of: isEditing) { oldValue, newValue in
@@ -1076,6 +1081,9 @@ struct RoundWizardSheet: View {
                                     .buttonStyle(.plain)
 
                                     TextField("", value: $maxPointsPerRound, format: .number)
+                                        #if os(iOS)
+                                        .keyboardType(.numberPad)
+                                        #endif
                                         .textFieldStyle(.roundedBorder)
                                         .multilineTextAlignment(.center)
                                         .font(.system(size: 48, weight: .bold))
@@ -1191,9 +1199,14 @@ struct RoundWizardSheet: View {
                                                     }
                                                 }
                                             ))
+                                            #if os(iOS)
+                                            .keyboardType(.numberPad)
+                                            #endif
                                             .textFieldStyle(.roundedBorder)
-                                            .frame(width: 80)
+                                            .frame(width: 100)
                                             .multilineTextAlignment(.trailing)
+                                            .monospacedDigit()
+                                            .padding(.horizontal, 4)
 
                                             Text(NSLocalizedString("score.pointsUnit", comment: "Points unit"))
                                                 .font(.caption)

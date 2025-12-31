@@ -618,3 +618,10 @@
 "round.unlimited" = "(obegränsat)";
 "round.noMaxPointsSet" = "Ingen maximal poäng satt";
 "common.round.create.button" = "Skapa omgång";
+
+"common.additionalPlaces" = "YTTERLIGARE PLATSER";
+"common.maxPointsLabel" = "MAX. POÄNG";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Nästa plats";
+"presentation.reset" = "Återställ";

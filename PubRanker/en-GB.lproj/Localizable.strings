@@ -607,3 +607,10 @@
 "round.unlimited" = "(unlimited)";
 "round.noMaxPointsSet" = "No maximum points set";
 "common.round.create.button" = "Create Round";
+
+"common.additionalPlaces" = "ADDITIONAL PLACES";
+"common.maxPointsLabel" = "MAX. POINTS";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Next Place";
+"presentation.reset" = "Reset";

@@ -13,7 +13,7 @@ struct SidebarView: View {
     @Binding var sortOption: TeamSortOption
     @Binding var selectedTeam: Team?
     @Binding var showingAddTeamSheet: Bool
-    @Binding var showingEmailComposer: Bool
+    var showingEmailComposer: Binding<Bool>? = nil  // Optional - only on macOS
     @Binding var showingDeleteAlert: Bool
 
     let filteredTeams: [Team]
@@ -48,17 +48,11 @@ struct SidebarView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                    Label("Team-Manager", systemImage: "person.3.fill")
-                        .font(.title2)
-                        .bold()
-                        .foregroundStyle(Color.appTextPrimary)
-                    Text("Teams verwalten und organisieren")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.appTextSecondary)
-                }
-                
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                Label("Team-Manager", systemImage: "person.3.fill")
+                    .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
+
                 // Moderner + Button
                 Button {
                     showingAddTeamSheet = true
@@ -73,12 +67,12 @@ struct SidebarView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .primaryGradientButton()
-                .help("Neues Team erstellen")
+                .helpText("Neues Team erstellen")
                 
                 // E-Mail Button
-                if teamsWithEmailCount > 0 {
+                if teamsWithEmailCount > 0, let emailBinding = showingEmailComposer {
                     Button {
-                        showingEmailComposer = true
+                        emailBinding.wrappedValue = true
                     } label: {
                         HStack(spacing: AppSpacing.xxs) {
                             Image(systemName: "envelope.fill")
@@ -90,8 +84,10 @@ struct SidebarView: View {
                         .frame(maxWidth: .infinity)
                     }
                     .secondaryGradientButton()
+                    #if os(macOS)
                     .keyboardShortcut("e", modifiers: .command)
-                    .help(String(format: NSLocalizedString("email.send.teams.help", comment: ""), teamsWithEmailCount))
+                    #endif
+                    .helpText(String(format: NSLocalizedString("email.send.teams.help", comment: ""), teamsWithEmailCount))
                 }
 
                 #if DEBUG
@@ -110,11 +106,16 @@ struct SidebarView: View {
                         .frame(maxWidth: .infinity)
                     }
                     .secondaryGradientButton()
-                    .help("Erstellt Test-Teams und Quizzes (nur Debug)")
+                    .helpText("Erstellt Test-Teams und Quizzes (nur Debug)")
                 }
                 #endif
             }
+            #if os(iOS)
+            .padding(.horizontal, AppSpacing.sm)
+            .padding(.vertical, 2)
+            #else
             .padding(AppSpacing.md)
+            #endif
             .background(Color.appBackgroundSecondary)
             
             Divider()
@@ -137,7 +138,7 @@ struct SidebarView: View {
                             .font(.body)
                     }
                     .buttonStyle(.plain)
-                    .help("Suche zurücksetzen")
+                    .helpText("Suche zurücksetzen")
                 }
             }
             .padding(AppSpacing.xs)
@@ -150,8 +151,9 @@ struct SidebarView: View {
                     }
             )
             .padding(.horizontal, AppSpacing.screenPadding)
-            .padding(.vertical, AppSpacing.xs)
-            
+            .padding(.top, 0)
+            .padding(.bottom, AppSpacing.xxxs)
+
             Divider()
             
             // Sort Menu und Auswählen Button
@@ -215,7 +217,7 @@ struct SidebarView: View {
                             }
                         }
                         .accentGradientButton()
-                        .help("\(selectedIDsBinding.wrappedValue.count) Teams löschen")
+                        .helpText("\(selectedIDsBinding.wrappedValue.count) Teams löschen")
                         .transition(.scale.combined(with: .opacity))
                     } else {
                         // Multi-Select Toggle Button (nur Icon, kein Text)
@@ -229,7 +231,7 @@ struct SidebarView: View {
                                 .font(.caption)
                         }
                         .secondaryGradientButton()
-                        .help(isMultiSelectBinding.wrappedValue ? "Multi-Select beenden" : "Mehrere Teams auswählen")
+                        .helpText(isMultiSelectBinding.wrappedValue ? "Multi-Select beenden" : "Mehrere Teams auswählen")
                         .transition(.scale.combined(with: .opacity))
                     }
                 }

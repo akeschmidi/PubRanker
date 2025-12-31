@@ -627,3 +627,10 @@
 "round.unlimited" = "(illimitato)";
 "round.noMaxPointsSet" = "Nessun punteggio massimo impostato";
 "common.round.create.button" = "Crea turno";
+
+"common.additionalPlaces" = "POSIZIONI AGGIUNTIVE";
+"common.maxPointsLabel" = "PUNTI MAX.";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Prossimo posto";
+"presentation.reset" = "Ripristina";

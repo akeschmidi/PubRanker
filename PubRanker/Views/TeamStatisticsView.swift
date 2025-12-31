@@ -221,9 +221,8 @@ struct TeamStatisticsView: View {
         VStack(spacing: 16) {
             // Team Icon/Trophy
             HStack(spacing: 20) {
-                if let imageData = stats.teamImageData, let nsImage = NSImage(data: imageData) {
-                    Image(nsImage: nsImage)
-                        .resizable()
+                if let imageData = stats.teamImageData {
+                    PlatformImage(data: imageData)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
@@ -679,9 +678,8 @@ struct TeamStatsRow: View {
     var body: some View {
         HStack(spacing: 12) {
             // Team Icon
-            if let imageData = stats.teamImageData, let nsImage = NSImage(data: imageData) {
-                Image(nsImage: nsImage)
-                    .resizable()
+            if let imageData = stats.teamImageData {
+                PlatformImage(data: imageData)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 36, height: 36)
                     .clipShape(Circle())

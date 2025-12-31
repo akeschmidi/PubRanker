@@ -3,16 +3,23 @@
 //  PubRanker
 //
 //  Created on 23.11.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
+
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
 
 // MARK: - About Sheet
 struct AboutSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showingFeedbackDialog = false
     @State private var showingEmailDialog = false
+    @State private var showingCopiedConfirmation = false
     @State private var selectedTab: AboutTab = .about
     
     var appName: String {
@@ -29,6 +36,14 @@ struct AboutSheet: View {
     
     var copyright: String {
         "iSupport.ch © 2025"
+    }
+    
+    private var platformName: String {
+        #if os(macOS)
+        return "macOS"
+        #else
+        return UIDevice.current.userInterfaceIdiom == .pad ? "iPadOS" : "iOS"
+        #endif
     }
     
     enum AboutTab {
@@ -65,37 +80,17 @@ struct AboutSheet: View {
             aboutContent
             #endif
         }
+        #if os(macOS)
         .frame(width: 1000, height: 800)
+        #endif
     }
     
     private var aboutContent: some View {
         VStack(spacing: 0) {
             // Header
             VStack(spacing: 20) {
-                if let appIcon = NSApplication.shared.applicationIconImage {
-                    Image(nsImage: appIcon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 128, height: 128)
-                        .shadow(AppShadow.lg)
-                } else {
-                    ZStack {
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [.blue, .cyan],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 128, height: 128)
-                        
-                        Image(systemName: "trophy.fill")
-                            .font(.system(size: 64))
-                            .foregroundStyle(.white)
-                    }
-                    .shadow(AppShadow.lg)
-                }
+                // App Icon
+                appIconView
                 
                 VStack(spacing: AppSpacing.xxs) {
                     Text(appName)
@@ -159,7 +154,7 @@ struct AboutSheet: View {
                         VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                             InfoRow(label: L10n.About.Technical.version, value: "\(appVersion) (\(buildNumber))")
                             InfoRow(label: L10n.About.Technical.bundleId, value: Bundle.main.bundleIdentifier ?? "N/A")
-                            InfoRow(label: L10n.About.Technical.platform, value: "macOS")
+                            InfoRow(label: L10n.About.Technical.platform, value: platformName)
                             InfoRow(label: L10n.About.Technical.copyright, value: copyright)
                         }
                     }
@@ -210,25 +205,83 @@ struct AboutSheet: View {
         } message: {
             Text(L10n.About.Feedback.emailMessage)
         }
+        .alert(L10n.About.Feedback.emailCopied, isPresented: $showingCopiedConfirmation) {
+            Button(L10n.Alert.ok, role: .cancel) {}
+        } message: {
+            Text(L10n.About.Feedback.emailCopiedMessage)
+        }
     }
+    
+    // MARK: - App Icon View
+    
+    @ViewBuilder
+    private var appIconView: some View {
+        #if os(macOS)
+        if let appIcon = NSApplication.shared.applicationIconImage {
+            Image(nsImage: appIcon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 128, height: 128)
+                .shadow(AppShadow.lg)
+        } else {
+            fallbackIconView
+        }
+        #else
+        // Auf iOS: Verwende das App Icon aus den Assets
+        if let iconsDictionary = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+           let primaryIconsDictionary = iconsDictionary["CFBundlePrimaryIcon"] as? [String: Any],
+           let iconFiles = primaryIconsDictionary["CFBundleIconFiles"] as? [String],
+           let lastIcon = iconFiles.last,
+           let uiImage = UIImage(named: lastIcon) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 128, height: 128)
+                .clipShape(RoundedRectangle(cornerRadius: 28))
+                .shadow(AppShadow.lg)
+        } else {
+            fallbackIconView
+        }
+        #endif
+    }
+    
+    private var fallbackIconView: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [.blue, .cyan],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 128, height: 128)
+            
+            Image(systemName: "trophy.fill")
+                .font(.system(size: 64))
+                .foregroundStyle(.white)
+        }
+        .shadow(AppShadow.lg)
+    }
+    
+    // MARK: - Actions
     
     private func openAppStoreReview() {
         // App Store Review URL
-        // Format: https://apps.apple.com/app/id[APP_ID]?action=write-review
-        // Für macOS: macappstore://apps.apple.com/app/id[APP_ID]?action=write-review
+        let appId = "6754255330"
         
-        // Fallback: Öffne die App Store Seite (ohne spezifische App-ID)
-        if let url = URL(string: "macappstore://apps.apple.com/app/id6754255330?action=write-review") {
+        #if os(macOS)
+        let urlString = "macappstore://apps.apple.com/app/id\(appId)?action=write-review"
+        if let url = URL(string: urlString) {
             NSWorkspace.shared.open(url)
-        } else {
-            // Alternative: Öffne App Store Connect oder zeige Info
-            let alert = NSAlert()
-            alert.messageText = L10n.About.AppStore.review
-            alert.informativeText = L10n.About.AppStore.notAvailable
-            alert.alertStyle = .informational
-            alert.addButton(withTitle: L10n.Alert.ok)
-            alert.runModal()
         }
+        #else
+        // iOS App Store URL
+        let urlString = "https://apps.apple.com/app/id\(appId)?action=write-review"
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
+        #endif
     }
     
     private func openEmailFeedback() {
@@ -237,22 +290,26 @@ struct AboutSheet: View {
         let body = "Hallo,\n\nich hätte folgende Anregungen für PubRanker:\n\n"
         
         if let url = URL(string: "mailto:\(email)?subject=\(subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&body=\(body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")") {
+            #if os(macOS)
             NSWorkspace.shared.open(url)
+            #else
+            UIApplication.shared.open(url)
+            #endif
         }
     }
     
     private func copyEmailToClipboard() {
+        let email = "ake_schmidi@me.com"
+        
+        #if os(macOS)
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
-        pasteboard.setString("ake_schmidi@me.com", forType: .string)
+        pasteboard.setString(email, forType: .string)
+        #else
+        UIPasteboard.general.string = email
+        #endif
         
-        // Zeige kurze Bestätigung
-        let alert = NSAlert()
-        alert.messageText = L10n.About.Feedback.emailCopied
-        alert.informativeText = L10n.About.Feedback.emailCopiedMessage
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: L10n.Alert.ok)
-        alert.runModal()
+        showingCopiedConfirmation = true
     }
 }
 
@@ -294,4 +351,3 @@ struct InfoRow: View {
         }
     }
 }
-

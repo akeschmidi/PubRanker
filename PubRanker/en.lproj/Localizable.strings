@@ -429,8 +429,8 @@
 "email.template.reminder.body" = "Hi Team,\n\nThis is a friendly reminder about tomorrow's quiz:\n\n📅 Tomorrow at [TIME]\n📍 [VENUE]\n\nDon't forget to bring your A-game!\n\nSee you there!";
 
 "email.template.results.name" = "Results Notification";
-"email.template.results.subject" = "Quiz Results - Congratulations!";
-"email.template.results.body" = "Hello Everyone,\n\nThank you for participating in our pub quiz!\n\nHere are the final results:\n[RESULTS]\n\nCongratulations to all winners! 🎉\n\nUntil next time!";
+"email.template.results.subject" = "🏆 %@ - Results Are In!";
+"email.template.results.body" = "Dear Quiz Participants,\n\nWhat a fantastic evening! Thank you for taking part in our Pub Quiz \"%@\".\n\n📊 Please find the complete leaderboard with all teams and scores attached as PDF.\n\n🎉 Congratulations to all winners and thank you to all teams for the great competition!\n\nWe're already looking forward to the next quiz with you!\n\nBest regards,\nYour Quiz Team";
 
 "email.template.thankyou.name" = "Thank You";
 "email.template.thankyou.subject" = "Thank You for Participating!";
@@ -494,6 +494,17 @@
 "execution.editRounds.warning.limit" = "These will be automatically limited to %d points.";
 "execution.editRounds.round.complete" = "Mark Round as Completed";
 "execution.editRounds.round.reopen" = "Reopen Round";
+
+// Add Team
+"execution.addTeam.title" = "Add Team";
+"execution.addTeam.button" = "Add Team";
+"execution.addTeam.help" = "Add a new or existing team to the running quiz";
+"execution.addTeam.mode.new" = "New Team";
+"execution.addTeam.mode.existing" = "Existing Teams";
+"execution.addTeam.createAndAdd" = "Create and Add";
+"execution.addTeam.addSelected" = "Add %d";
+"execution.addTeam.noAvailableTeams" = "No Teams Available";
+"execution.addTeam.noAvailableTeams.description" = "All teams are already assigned to this quiz. Create a new team or manage teams in the Teams Manager.";
 
 // MARK: - About Sheet
 "about.title" = "About";
@@ -716,3 +727,15 @@
 
 // MARK: - Team Statistics
 "team.statistics" = "Team Statistics";
+
+// Email Results Feature
+"email.results.send" = "Email Results";
+"email.results.generating" = "Generating image...";
+"email.results.attachment.name" = "Leaderboard.png";
+"email.results.error.title" = "Email Error";
+"email.results.error.generation" = "Could not generate leaderboard image. Please use JSON or CSV export instead.";
+"email.results.error.nomail" = "Cannot send email. Please configure an email app.";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Next Place";
+"presentation.reset" = "Reset";

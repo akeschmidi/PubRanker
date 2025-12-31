@@ -3,10 +3,13 @@
 //  PubRanker
 //
 //  Created on 23.11.2025
+//  Note: This view is macOS-only due to HSplitView usage
 //
 
 import SwiftUI
 import SwiftData
+
+#if os(macOS)
 
 struct EmailComposerView: View {
     @Environment(\.dismiss) private var dismiss
@@ -121,7 +124,11 @@ struct EmailComposerView: View {
             }
             .onAppear(perform: initializeEmail)
         }
+        #if os(macOS)
         .frame(minWidth: 1000, idealWidth: 1200, minHeight: 700, idealHeight: 800)
+        #else
+        .frame(minWidth: 320, minHeight: 600)
+        #endif
     }
 
     // MARK: - Team Selection Panel
@@ -245,7 +252,7 @@ struct EmailComposerView: View {
             // Team List
             if teamsWithEmail.isEmpty {
                 ContentUnavailableView {
-                    Label(NSLocalizedString("email.composer.noTeams", comment: ""), systemImage: "person.3.slash")
+                    Label(NSLocalizedString("email.composer.noTeams", comment: ""), systemImage: "person.slash")
                 } description: {
                     Text(NSLocalizedString("email.composer.noTeams.description", comment: ""))
                 }
@@ -596,3 +603,254 @@ struct FlowLayout: Layout {
         }
     }
 }
+#endif
+
+// MARK: - iOS Email Composer
+
+#if os(iOS)
+import MessageUI
+
+/// Simplified Email Composer for iOS/iPadOS
+/// Uses native MFMailComposeViewController for sending
+struct EmailComposerView: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    let teams: [Team]
+    let quiz: Quiz?
+    
+    @State private var selectedTeamIds: Set<UUID> = []
+    @State private var subject: String = ""
+    @State private var emailBody: String = ""
+    @State private var searchText: String = ""
+    @State private var showingMailComposer = false
+    @State private var showingNoMailAlert = false
+    @State private var mailResult: String?
+    
+    init(teams: [Team], quiz: Quiz? = nil) {
+        self.teams = teams
+        self.quiz = quiz
+    }
+    
+    private var filteredTeams: [Team] {
+        let teamsWithEmail = teams.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        
+        if searchText.isEmpty {
+            return teamsWithEmail
+        }
+        
+        return teamsWithEmail.filter { team in
+            team.name.localizedCaseInsensitiveContains(searchText) ||
+            team.email.localizedCaseInsensitiveContains(searchText) ||
+            team.contactPerson.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+    
+    private var selectedTeams: [Team] {
+        filteredTeams.filter { selectedTeamIds.contains($0.id) }
+    }
+    
+    private var allSelected: Bool {
+        !filteredTeams.isEmpty && selectedTeamIds.count == filteredTeams.count
+    }
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Subject & Body
+                VStack(spacing: AppSpacing.sm) {
+                    TextField(NSLocalizedString("email.composer.subject", comment: "Subject"), text: $subject)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $emailBody)
+                            .frame(minHeight: 100, maxHeight: 150)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                        
+                        if emailBody.isEmpty {
+                            Text(NSLocalizedString("email.composer.body.placeholder", comment: "Message placeholder"))
+                                .foregroundStyle(Color.gray.opacity(0.5))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 12)
+                                .allowsHitTesting(false)
+                        }
+                    }
+                }
+                .padding()
+                .background(Color.adaptiveCardBackground)
+                
+                Divider()
+                
+                // Team Selection Header
+                HStack {
+                    Text("\(selectedTeamIds.count) von \(filteredTeams.count) Teams ausgewählt")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.appTextSecondary)
+                    
+                    Spacer()
+                    
+                    Button {
+                        if allSelected {
+                            selectedTeamIds.removeAll()
+                        } else {
+                            selectedTeamIds = Set(filteredTeams.map { $0.id })
+                        }
+                    } label: {
+                        Text(allSelected ? "Keine" : "Alle")
+                            .font(.subheadline)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, AppSpacing.xs)
+                
+                // Search
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(Color.appTextTertiary)
+                    TextField(NSLocalizedString("email.composer.search", comment: "Search teams"), text: $searchText)
+                }
+                .padding(AppSpacing.xs)
+                .background(Color.adaptiveControlBackground)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding(.horizontal)
+                
+                Divider()
+                    .padding(.top, AppSpacing.xs)
+                
+                // Team List
+                List(filteredTeams, selection: $selectedTeamIds) { team in
+                    TeamEmailRow(team: team, isSelected: selectedTeamIds.contains(team.id)) {
+                        if selectedTeamIds.contains(team.id) {
+                            selectedTeamIds.remove(team.id)
+                        } else {
+                            selectedTeamIds.insert(team.id)
+                        }
+                    }
+                }
+                .listStyle(.plain)
+            }
+            .navigationTitle(quiz != nil ? "E-Mail: \(quiz!.name)" : NSLocalizedString("email.composer.title", comment: ""))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(NSLocalizedString("navigation.cancel", comment: "")) {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        sendEmail()
+                    } label: {
+                        Label(NSLocalizedString("email.composer.send", comment: ""), systemImage: "envelope.fill")
+                    }
+                    .disabled(selectedTeams.isEmpty)
+                }
+            }
+            .onAppear {
+                setupDefaults()
+            }
+            .sheet(isPresented: $showingMailComposer) {
+                if EmailService.canUseMailComposer {
+                    MailComposeView(
+                        recipients: selectedTeams.map { $0.email },
+                        subject: subject,
+                        body: emailBody
+                    ) { result in
+                        handleMailResult(result)
+                    }
+                }
+            }
+            .alert("E-Mail", isPresented: $showingNoMailAlert) {
+                Button("OK") {}
+            } message: {
+                Text("E-Mail konnte nicht gesendet werden. Bitte konfiguriere eine E-Mail-App auf diesem Gerät.")
+            }
+        }
+    }
+    
+    private func setupDefaults() {
+        // Pre-select all teams
+        selectedTeamIds = Set(filteredTeams.map { $0.id })
+        
+        // Set default subject and body if quiz is provided
+        if let quiz = quiz {
+            subject = EmailService.defaultSubject(for: quiz)
+            emailBody = EmailService.defaultBody(for: quiz)
+        }
+    }
+    
+    private func sendEmail() {
+        if EmailService.canUseMailComposer {
+            showingMailComposer = true
+        } else {
+            // Fallback to mailto: URL
+            let recipients = selectedTeams.map { $0.email }.joined(separator: ",")
+            EmailService.sendEmail(to: selectedTeams, subject: subject, body: emailBody)
+            dismiss()
+        }
+    }
+    
+    private func handleMailResult(_ result: Result<MFMailComposeResult, Error>) {
+        switch result {
+        case .success(let mailResult):
+            switch mailResult {
+            case .sent:
+                print("✅ E-Mail gesendet")
+            case .saved:
+                print("📝 E-Mail gespeichert")
+            case .cancelled:
+                print("❌ E-Mail abgebrochen")
+            case .failed:
+                print("❌ E-Mail fehlgeschlagen")
+            @unknown default:
+                break
+            }
+        case .failure(let error):
+            print("❌ E-Mail Fehler: \(error.localizedDescription)")
+        }
+        dismiss()
+    }
+}
+
+// MARK: - Team Email Row (iOS)
+
+private struct TeamEmailRow: View {
+    let team: Team
+    let isSelected: Bool
+    let onToggle: () -> Void
+    
+    var body: some View {
+        Button(action: onToggle) {
+            HStack(spacing: AppSpacing.sm) {
+                // Selection indicator
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(isSelected ? Color.appSuccess : Color.appTextTertiary)
+                    .font(.title3)
+                
+                // Team color
+                Circle()
+                    .fill(Color(hex: team.color) ?? .blue)
+                    .frame(width: 12, height: 12)
+                
+                // Team info
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(team.name)
+                        .font(.body)
+                        .foregroundStyle(Color.appTextPrimary)
+                    
+                    Text(team.email)
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                }
+                
+                Spacer()
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+#endif

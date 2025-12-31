@@ -398,6 +398,20 @@ enum L10n {
             static let roundComplete = NSLocalizedString("execution.editRounds.round.complete", comment: "Round complete")
             static let roundReopen = NSLocalizedString("execution.editRounds.round.reopen", comment: "Round reopen")
         }
+
+        enum AddTeam {
+            static let title = NSLocalizedString("execution.addTeam.title", comment: "Add team title")
+            static let button = NSLocalizedString("execution.addTeam.button", comment: "Add team button")
+            static let help = NSLocalizedString("execution.addTeam.help", comment: "Add team help")
+            static let modeNew = NSLocalizedString("execution.addTeam.mode.new", comment: "New team mode")
+            static let modeExisting = NSLocalizedString("execution.addTeam.mode.existing", comment: "Existing teams mode")
+            static let createAndAdd = NSLocalizedString("execution.addTeam.createAndAdd", comment: "Create and add")
+            static func addSelected(_ count: Int) -> String {
+                String(format: NSLocalizedString("execution.addTeam.addSelected", comment: "Add selected teams"), count)
+            }
+            static let noAvailableTeams = NSLocalizedString("execution.addTeam.noAvailableTeams", comment: "No available teams")
+            static let noAvailableTeamsDescription = NSLocalizedString("execution.addTeam.noAvailableTeams.description", comment: "No available teams description")
+        }
     }
     
     // MARK: - About Sheet
@@ -657,6 +671,30 @@ enum L10n {
         static let manageTeams = NSLocalizedString("common.manageTeams", comment: "Manage teams")
         static let newTeam = NSLocalizedString("common.newTeam", comment: "New team")
         static let start = NSLocalizedString("common.start", comment: "Start")
+    }
+
+    // MARK: - Email
+    enum Email {
+        enum Results {
+            static let send = NSLocalizedString("email.results.send", comment: "Email results button")
+            static let generating = NSLocalizedString("email.results.generating", comment: "Generating image status")
+
+            enum Attachment {
+                static let name = NSLocalizedString("email.results.attachment.name", comment: "Attachment filename")
+            }
+
+            enum Error {
+                static let title = NSLocalizedString("email.results.error.title", comment: "Email error title")
+                static let generation = NSLocalizedString("email.results.error.generation", comment: "Image generation error")
+                static let nomail = NSLocalizedString("email.results.error.nomail", comment: "No mail app error")
+            }
+        }
+    }
+
+    // MARK: - Presentation Mode
+    enum Presentation {
+        static let nextPlace = NSLocalizedString("presentation.nextPlace", comment: "Next place button")
+        static let reset = NSLocalizedString("presentation.reset", comment: "Reset button")
     }
 }
 

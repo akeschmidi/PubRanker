@@ -180,6 +180,4 @@ sed -i '' 's/MARKETING_VERSION = 2.2;/MARKETING_VERSION = 2.3;/g' \
 - **Minor (2.2 → 2.3):** Neue Features
 - **Keine Erhöhung:** Bug-Fixes (nur Build-Nummer erhöhen)
 
----
-
-*Zuletzt aktualisiert: Dezember 2024*
+---*Zuletzt aktualisiert: Dezember 2024*

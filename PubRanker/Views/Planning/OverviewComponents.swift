@@ -50,7 +50,7 @@ struct CompactStatCard: View {
     let isComplete: Bool
 
     var body: some View {
-        HStack(spacing: AppSpacing.xs) {
+        VStack(spacing: AppSpacing.xxs) {
             ZStack {
                 Circle()
                     .fill(
@@ -60,33 +60,34 @@ struct CompactStatCard: View {
                             endPoint: .bottomTrailing
                         )
                     )
-                    .frame(width: 56, height: 56)
+                    .frame(width: 44, height: 44)
                     .shadow(AppShadow.sm)
 
                 Image(systemName: icon)
-                    .font(.title2)
+                    .font(.body)
                     .foregroundStyle(color)
             }
-
-            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
-                Text(value)
-                    .font(.system(size: 28, weight: .bold))
-                    .monospacedDigit()
-                    .foregroundStyle(color)
-
-                Text(title)
-                    .font(.subheadline)
-                    .foregroundStyle(Color.appTextSecondary)
+            .overlay(alignment: .topTrailing) {
+                if isComplete {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(Color.appSuccess)
+                        .font(.caption)
+                        .offset(x: 4, y: -4)
+                }
             }
 
-            Spacer()
+            Text(value)
+                .font(.system(size: 20, weight: .bold))
+                .monospacedDigit()
+                .foregroundStyle(color)
 
-            if isComplete {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color.appSuccess)
-                    .font(.title2)
-            }
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(Color.appTextSecondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
+        .frame(maxWidth: .infinity)
         .padding(AppSpacing.sm)
         .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
@@ -104,7 +105,7 @@ struct StatusCardsSection: View {
         HStack(spacing: AppSpacing.xs) {
             StatusCard(
                 title: quiz.safeTeams.isEmpty ? "Teams fehlen" : "Teams bereit",
-                icon: quiz.safeTeams.isEmpty ? "person.3.slash.fill" : "person.3.fill",
+                icon: quiz.safeTeams.isEmpty ? "person.slash.fill" : "person.3.fill",
                 color: quiz.safeTeams.isEmpty ? Color.appAccent : Color.appSuccess
             )
             
@@ -130,17 +131,21 @@ struct StatusCard: View {
     let color: Color
     
     var body: some View {
-        HStack(spacing: AppSpacing.xxs) {
+        VStack(spacing: AppSpacing.xxs) {
             Image(systemName: icon)
                 .foregroundStyle(color)
-                .font(.title3)
+                .font(.title2)
             
             Text(title)
-                .font(.body)
+                .font(.caption)
+                .fontWeight(.medium)
                 .foregroundStyle(color)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)
-        .padding(AppSpacing.md)
+        .padding(AppSpacing.sm)
         .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.sm)

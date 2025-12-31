@@ -43,7 +43,7 @@ struct ScoreEntryView: View {
                 if quiz.safeTeams.isEmpty {
                     ContentUnavailableView(
                         NSLocalizedString("execution.noTeams", comment: "No teams"),
-                        systemImage: "person.3.slash",
+                        systemImage: "person.slash",
                         description: Text(NSLocalizedString("execution.noTeams.description", comment: "No teams description"))
                     )
                 } else {
@@ -202,10 +202,15 @@ struct ScoreEntryView: View {
                         }
                     }
                 ))
+                #if os(iOS)
+                .keyboardType(.numberPad)
+                #endif
                 .textFieldStyle(.roundedBorder)
-                .frame(width: 60)
+                .frame(width: 80)
                 .multilineTextAlignment(.center)
-                .font(.title3.bold())
+                .font(.body.bold())
+                .monospacedDigit()
+                .padding(.horizontal, 4)
 
                 // Plus Button
                 Button {

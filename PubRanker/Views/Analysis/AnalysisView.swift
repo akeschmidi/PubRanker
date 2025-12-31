@@ -7,7 +7,11 @@
 
 import SwiftUI
 import SwiftData
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
 import Charts
 
 struct AnalysisView: View {
@@ -21,6 +25,11 @@ struct AnalysisView: View {
     @State private var quizToDelete: Quiz?
     @State private var showingDeleteConfirmation = false
     @State private var selectedTab: AnalysisTab = .quizAnalysis
+    @State private var isGeneratingImage = false
+    @State private var showingMailComposer = false
+    @State private var generatedImageData: Data?
+    @State private var showingEmailError = false
+    @State private var emailErrorMessage: String?
 
     var completedQuizzes: [Quiz] {
         analyzableQuizzes.filter { $0.isCompleted }
@@ -40,8 +49,13 @@ struct AnalysisView: View {
                 }
             }
             .pickerStyle(.segmented)
+            #if os(iOS)
+            .padding(.horizontal, AppSpacing.sm)
+            .padding(.vertical, 2)
+            #else
             .padding(.horizontal, AppSpacing.screenPadding)
             .padding(.vertical, AppSpacing.xs)
+            #endif
 
             Divider()
 
@@ -75,6 +89,61 @@ struct AnalysisView: View {
                 } else {
                     selectedQuiz = nil
                 }
+            }
+        }
+        #if os(iOS)
+        .sheet(isPresented: $showingMailComposer) {
+            if let pdfData = generatedImageData, let quiz = selectedQuiz {
+                let template = EmailTemplate.results
+                let subject = template.subject(for: quiz)
+                let body = template.body(for: quiz)
+                let recipients = quiz.safeTeams.compactMap { $0.email }.filter { !$0.isEmpty }
+
+                MailComposeView(
+                    recipients: recipients,
+                    subject: subject,
+                    body: body,
+                    attachmentData: pdfData,
+                    attachmentMimeType: "application/pdf",
+                    attachmentFileName: "Rangliste.pdf"
+                )
+            }
+        }
+        #endif
+        .alert(L10n.Email.Results.Error.title, isPresented: $showingEmailError) {
+            Button(L10n.Alert.ok, role: .cancel) {}
+        } message: {
+            if let message = emailErrorMessage {
+                Text(message)
+            }
+        }
+        .overlay {
+            if isGeneratingImage {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+
+                    VStack(spacing: AppSpacing.md) {
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .progressViewStyle(.circular)
+
+                        Text("PDF wird erstellt...")
+                            .font(.headline)
+                            .foregroundStyle(Color.appTextPrimary)
+
+                        Text("Bitte warten")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
+                    .padding(AppSpacing.xl)
+                    .background(
+                        RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                            .fill(Color.appBackground)
+                            .shadow(radius: 20)
+                    )
+                }
+                .transition(.opacity)
             }
         }
     }
@@ -180,6 +249,7 @@ struct AnalysisView: View {
         .navigationTitle("")
         .alert(NSLocalizedString("export.success.title", comment: "Export success title"), isPresented: $showingExportDialog) {
             if let fileURL = exportedFileURL {
+                #if os(macOS)
                 Button(NSLocalizedString("export.showInFinder", comment: "Show in Finder")) {
                     NSWorkspace.shared.selectFile(fileURL.path, inFileViewerRootedAtPath: "")
                 }
@@ -189,6 +259,12 @@ struct AnalysisView: View {
                         picker.show(relativeTo: .zero, of: view, preferredEdge: .minY)
                     }
                 }
+                #else
+                Button(NSLocalizedString("export.share", comment: "Share")) {
+                    // Auf iOS: Share Sheet über UIActivityViewController
+                    // Wird separat über .sheet gehandhabt
+                }
+                #endif
             }
             Button(L10n.Alert.ok) {}
         } message: {
@@ -330,48 +406,50 @@ struct AnalysisView: View {
     }
 
     private func exportSection(_ quiz: Quiz) -> some View {
-        VStack(spacing: AppSpacing.xs) {
+        HStack(spacing: AppSpacing.sm) {
             Text(L10n.Analysis.exportResults)
                 .font(.headline)
                 .foregroundStyle(Color.appTextPrimary)
 
-            HStack(spacing: AppSpacing.sm) {
-                Button {
-                    exportQuiz(quiz: quiz, format: .json)
-                } label: {
-                    VStack(spacing: AppSpacing.xxs) {
-                        Image(systemName: "doc.text.fill")
-                            .font(.largeTitle)
-                            .foregroundStyle(Color.appPrimary)
-                        Text("JSON")
-                            .font(.caption)
-                            .foregroundStyle(Color.appTextPrimary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(AppSpacing.md)
-                }
-                .buttonStyle(.plain)
-                .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+            Spacer()
 
-                Button {
-                    exportQuiz(quiz: quiz, format: .csv)
-                } label: {
-                    VStack(spacing: AppSpacing.xxs) {
-                        Image(systemName: "tablecells.fill")
-                            .font(.largeTitle)
-                            .foregroundStyle(Color.appSuccess)
-                        Text("CSV")
-                            .font(.caption)
-                            .foregroundStyle(Color.appTextPrimary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(AppSpacing.md)
-                }
-                .buttonStyle(.plain)
-                .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+            // JSON Export
+            Button {
+                exportQuiz(quiz: quiz, format: .json)
+            } label: {
+                Label("JSON", systemImage: "doc.text.fill")
             }
+            .primaryGradientButton(size: .small)
+
+            // CSV Export
+            Button {
+                exportQuiz(quiz: quiz, format: .csv)
+            } label: {
+                Label("CSV", systemImage: "tablecells.fill")
+            }
+            .successGradientButton(size: .small)
+
+            // E-Mail Export
+            Button {
+                Task {
+                    await sendResultsEmail(quiz: quiz)
+                }
+            } label: {
+                if isGeneratingImage {
+                    HStack(spacing: AppSpacing.xxs) {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                        Text("E-Mail")
+                    }
+                } else {
+                    Label("E-Mail", systemImage: "envelope.fill")
+                }
+            }
+            .accentGradientButton(size: .small)
+            .disabled(isGeneratingImage)
         }
         .padding(.horizontal, AppSpacing.screenPadding)
+        .padding(.vertical, AppSpacing.xs)
     }
 
     private func winnerPodium(_ quiz: Quiz) -> some View {
@@ -783,6 +861,82 @@ struct AnalysisView: View {
             description: Text(L10n.Analysis.noTeamStatsDescription())
         )
     }
+
+    // MARK: - Email with Leaderboard Image
+
+    @MainActor
+    private func sendResultsEmail(quiz: Quiz) async {
+        withAnimation {
+            isGeneratingImage = true
+        }
+
+        // Kurze Verzögerung damit der Dialog sichtbar wird
+        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
+
+        // PDF generieren
+        guard let pdfData = await LeaderboardImageGenerator.generatePDFData(for: quiz) else {
+            withAnimation {
+                isGeneratingImage = false
+            }
+            emailErrorMessage = L10n.Email.Results.Error.generation
+            showingEmailError = true
+            return
+        }
+
+        generatedImageData = pdfData
+
+        withAnimation {
+            isGeneratingImage = false
+        }
+
+        // E-Mail öffnen
+        #if os(macOS)
+        sendEmailMacOS(quiz: quiz, pdfData: pdfData)
+        #else
+        showingMailComposer = true
+        #endif
+    }
+
+    #if os(macOS)
+    private func sendEmailMacOS(quiz: Quiz, pdfData: Data) {
+        let template = EmailTemplate.results
+        let subject = template.subject(for: quiz)
+        let body = template.body(for: quiz)
+
+        // Temporäre PDF-Datei erstellen
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("Rangliste.pdf")
+
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            print("❌ Fehler beim Schreiben der PDF: \(error)")
+            emailErrorMessage = L10n.Email.Results.Error.generation
+            showingEmailError = true
+            return
+        }
+
+        // NSSharingService für E-Mail verwenden
+        guard let sharingService = NSSharingService(named: .composeEmail) else {
+            emailErrorMessage = L10n.Email.Results.Error.nomail
+            showingEmailError = true
+            return
+        }
+
+        let recipients = quiz.safeTeams.compactMap { $0.email }.filter { !$0.isEmpty }
+        let messageText = "\(subject)\n\n\(body)"
+        let items: [Any] = [messageText, tempURL]
+
+        sharingService.recipients = recipients
+        sharingService.subject = subject
+
+        if sharingService.canPerform(withItems: items) {
+            sharingService.perform(withItems: items)
+        } else {
+            emailErrorMessage = L10n.Email.Results.Error.nomail
+            showingEmailError = true
+        }
+    }
+    #endif
 }
 //
 //  TeamStatisticsView.swift
@@ -1027,9 +1181,8 @@ struct TeamStatisticsView: View {
         VStack(spacing: AppSpacing.sm) {
             // Team Icon/Trophy
             HStack(spacing: AppSpacing.md) {
-                if let imageData = stats.teamImageData, let nsImage = NSImage(data: imageData) {
-                    Image(nsImage: nsImage)
-                        .resizable()
+                if let imageData = stats.teamImageData {
+                    PlatformImage(data: imageData)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
@@ -1523,9 +1676,8 @@ struct TeamStatsRow: View {
     var body: some View {
         HStack(spacing: AppSpacing.xs) {
             // Team Icon
-            if let imageData = stats.teamImageData, let nsImage = NSImage(data: imageData) {
-                Image(nsImage: nsImage)
-                    .resizable()
+            if let imageData = stats.teamImageData {
+                PlatformImage(data: imageData)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 36, height: 36)
                     .clipShape(Circle())

@@ -1,8 +1,9 @@
 //
 //  TeamDetailView.swift
-    //  PubRanker
+//  PubRanker
 //
 //  Created on 23.11.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
@@ -15,183 +16,194 @@ struct TeamDetailView: View {
     @Binding var showingEditSheet: Bool
     @Binding var showingDeleteAlert: Bool
     
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Team Header - Kompakt mit allen Infos
-                HStack(alignment: .top, spacing: AppSpacing.lg) {
-                    // Team Icon
-                    TeamIconView(team: team, size: 100)
-                        .shadow(color: (Color(hex: team.color) ?? Color.appPrimary).opacity(0.3), radius: 12, y: 4)
-
-                    VStack(alignment: .leading, spacing: AppSpacing.sm) {
-                        // Team Name
-                        Text(team.name)
-                            .font(.system(size: 40, weight: .bold, design: .rounded))
-                            .foregroundStyle(Color.appTextPrimary)
-                            .lineLimit(2)
-
-                        // Kompakte Info-Zeilen
-                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                            // Quiz Count
-                            HStack(spacing: AppSpacing.xxs) {
-                                Image(systemName: "link.circle.fill")
-                                    .font(.caption)
-                                    .foregroundStyle(Color(hex: team.color) ?? Color.appPrimary)
-                                    .frame(width: 16)
-                                Text("\(team.quizzes?.count ?? 0) Quiz")
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.appTextSecondary)
-                            }
-
-                            // Kontaktperson
-                            if !team.contactPerson.isEmpty {
-                                HStack(spacing: AppSpacing.xxs) {
-                                    Image(systemName: "person.fill")
-                                        .font(.caption)
-                                        .foregroundStyle(Color.appPrimary)
-                                        .frame(width: 16)
-                                    Text(team.contactPerson)
-                                        .font(.subheadline)
-                                        .foregroundStyle(Color.appTextSecondary)
-                                }
-                            }
-
-                            // E-Mail
-                            if !team.email.isEmpty {
-                                HStack(spacing: AppSpacing.xxs) {
-                                    Image(systemName: "envelope.fill")
-                                        .font(.caption)
-                                        .foregroundStyle(Color.appPrimary)
-                                        .frame(width: 16)
-                                    Text(team.email)
-                                        .font(.subheadline)
-                                        .foregroundStyle(Color.appTextSecondary)
-                                }
-                            }
-
-                            // Erstellt am
-                            HStack(spacing: AppSpacing.xxs) {
-                                Image(systemName: "calendar")
-                                    .font(.caption)
-                                    .foregroundStyle(Color.appPrimary)
-                                    .frame(width: 16)
-                            Text("Erstellt: \(team.createdAt.formatted(date: .abbreviated, time: .omitted))")
-                                .font(.subheadline)
-                                .foregroundStyle(Color.appTextSecondary)
-                            }
-                        }
-                    }
-
-                    Spacer()
-
-                    // Action Buttons - Schöne Buttons rechts
-                    VStack(spacing: AppSpacing.xs) {
-                        Button {
-                            showingEditSheet = true
-                        } label: {
-                            HStack(spacing: AppSpacing.xxs) {
-                                Image(systemName: "pencil")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                                Text("Bearbeiten")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                            }
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, AppSpacing.sm)
-                            .padding(.vertical, AppSpacing.xs)
-                            .frame(minWidth: 120)
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.appPrimary, Color.appPrimary.opacity(0.8)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
-                            .shadow(color: Color.appPrimary.opacity(0.3), radius: 4, y: 2)
-                        }
-                        .buttonStyle(.plain)
-
-                        Button(role: .destructive) {
-                            showingDeleteAlert = true
-                        } label: {
-                            HStack(spacing: AppSpacing.xxs) {
-                                Image(systemName: "trash")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                                Text("Löschen")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                            }
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, AppSpacing.sm)
-                            .padding(.vertical, AppSpacing.xs)
-                            .frame(minWidth: 120)
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.appAccent, Color.appAccent.opacity(0.8)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
-                            .shadow(color: Color.appAccent.opacity(0.3), radius: 4, y: 2)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .padding(.leading, AppSpacing.md)
-                }
-                .padding(AppSpacing.sectionSpacing)
-                .appCard(style: .elevated, cornerRadius: AppCornerRadius.lg)
-
+                // Team Header - Adaptive layout for iPad
+                teamHeaderCard
+                
                 // Quiz-Zuordnungen
-                VStack(alignment: .leading, spacing: AppSpacing.sm) {
-                    HStack(spacing: AppSpacing.xxs) {
-                        Image(systemName: "link.circle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Color.appSecondary)
-                        Text("Quiz-Zuordnungen")
-                            .font(.title3)
-                            .bold()
-                            .foregroundStyle(Color.appTextPrimary)
-                        if let quizzes = team.quizzes, !quizzes.isEmpty {
-                            Text("(\(quizzes.count))")
-                                .font(.title3)
-                                .foregroundStyle(Color.appTextSecondary)
-                                .monospacedDigit()
-                        }
-                    }
-
-                    if let quizzes = team.quizzes, !quizzes.isEmpty {
-                        QuizAssignmentsGroupedView(
-                            quizzes: quizzes,
-                            team: team,
-                            viewModel: viewModel,
-                            selectedWorkflow: $selectedWorkflow
-                        )
-                    } else {
-                        HStack(spacing: AppSpacing.xs) {
-                            Image(systemName: "circle.dotted")
-                                .foregroundStyle(Color.appTextSecondary)
-                                .font(.body)
-                                .frame(width: 24)
-                            Text("Nicht zugeordnet")
-                                .font(.body)
-                                .foregroundStyle(Color.appTextSecondary)
-                            Spacer()
-                        }
-                        .padding(AppSpacing.sm)
-                        .background(Color.appTextTertiary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
-                    }
-                }
-                .padding(AppSpacing.md)
-                .appCard(style: .elevated, cornerRadius: AppCornerRadius.lg)
+                quizAssignmentsSection
             }
             .padding(AppSpacing.sectionSpacing)
         }
+        .background(Color.appBackgroundSecondary)
+    }
+    
+    // MARK: - Team Header Card
+    
+    @ViewBuilder
+    private var teamHeaderCard: some View {
+        VStack(spacing: AppSpacing.md) {
+            // Row 1: Icon + Name
+            HStack(alignment: .center, spacing: AppSpacing.md) {
+                // Team Icon
+                TeamIconView(team: team, size: 70)
+                    .shadow(color: (Color(hex: team.color) ?? Color.appPrimary).opacity(0.3), radius: 6, y: 2)
+                
+                // Team Name
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                    Text(team.name)
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color.appTextPrimary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    // Quiz Count Badge
+                    HStack(spacing: AppSpacing.xxs) {
+                        Image(systemName: "link.circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(Color(hex: team.color) ?? Color.appPrimary)
+                        Text("\(team.quizzes?.count ?? 0) Quiz")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
+                }
+                
+                Spacer(minLength: 0)
+                
+                // Action Buttons - Icon only on iPad
+                #if os(iOS)
+                HStack(spacing: AppSpacing.xs) {
+                    Button {
+                        showingEditSheet = true
+                    } label: {
+                        Image(systemName: "pencil")
+                            .font(.body.weight(.semibold))
+                    }
+                    .primaryGradientButton()
+                    
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.body.weight(.semibold))
+                    }
+                    .accentGradientButton()
+                }
+                #else
+                VStack(spacing: AppSpacing.xs) {
+                    Button {
+                        showingEditSheet = true
+                    } label: {
+                        Label("Bearbeiten", systemImage: "pencil")
+                            .font(.body.weight(.semibold))
+                    }
+                    .primaryGradientButton()
+                    
+                    Button(role: .destructive) {
+                        showingDeleteAlert = true
+                    } label: {
+                        Label("Löschen", systemImage: "trash")
+                            .font(.body.weight(.semibold))
+                    }
+                    .accentGradientButton()
+                }
+                #endif
+            }
+            
+            // Row 2: Contact info - Vertical stack for better fit
+            if !team.contactPerson.isEmpty || !team.email.isEmpty {
+                Divider()
+                
+                VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                    // Kontaktperson
+                    if !team.contactPerson.isEmpty {
+                        HStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "person.fill")
+                                .font(.caption)
+                                .foregroundStyle(Color.appPrimary)
+                                .frame(width: 16)
+                            Text(team.contactPerson)
+                                .font(.subheadline)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .lineLimit(1)
+                        }
+                    }
+                    
+                    // E-Mail
+                    if !team.email.isEmpty {
+                        HStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "envelope.fill")
+                                .font(.caption)
+                                .foregroundStyle(Color.appPrimary)
+                                .frame(width: 16)
+                            Text(team.email)
+                                .font(.subheadline)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .lineLimit(1)
+                        }
+                    }
+                    
+                    // Erstellt am
+                    HStack(spacing: AppSpacing.xxs) {
+                        Image(systemName: "calendar")
+                            .font(.caption)
+                            .foregroundStyle(Color.appPrimary)
+                            .frame(width: 16)
+                        Text("Erstellt: \(team.createdAt.formatted(date: .abbreviated, time: .omitted))")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
+                }
+            }
+        }
+        .padding(AppSpacing.md)
+        .appCard(style: .elevated, cornerRadius: AppCornerRadius.lg)
+    }
+}
+
+// MARK: - Quiz Assignments Section
+
+extension TeamDetailView {
+    @ViewBuilder
+    var quizAssignmentsSection: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            HStack(spacing: AppSpacing.xxs) {
+                Image(systemName: "link.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.appSecondary)
+                Text("Quiz-Zuordnungen")
+                    .font(.title3)
+                    .bold()
+                    .foregroundStyle(Color.appTextPrimary)
+                if let quizzes = team.quizzes, !quizzes.isEmpty {
+                    Text("(\(quizzes.count))")
+                        .font(.title3)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .monospacedDigit()
+                }
+            }
+
+            if let quizzes = team.quizzes, !quizzes.isEmpty {
+                QuizAssignmentsGroupedView(
+                    quizzes: quizzes,
+                    team: team,
+                    viewModel: viewModel,
+                    selectedWorkflow: $selectedWorkflow
+                )
+            } else {
+                HStack(spacing: AppSpacing.xs) {
+                    Image(systemName: "circle.dotted")
+                        .foregroundStyle(Color.appTextSecondary)
+                        .font(.body)
+                        .frame(width: 24)
+                    Text("Nicht zugeordnet")
+                        .font(.body)
+                        .foregroundStyle(Color.appTextSecondary)
+                    Spacer()
+                }
+                .padding(AppSpacing.sm)
+                .background(Color.appTextTertiary.opacity(0.05))
+                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
+            }
+        }
+        .padding(AppSpacing.md)
+        .appCard(style: .elevated, cornerRadius: AppCornerRadius.lg)
     }
 }
 

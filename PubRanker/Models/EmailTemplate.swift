@@ -58,7 +58,34 @@ struct EmailTemplate: Identifiable {
             icon: "calendar.badge.exclamationmark"
         )
     ]
+
+    // MARK: - Static Template Accessors
+
+    static var results: EmailTemplate {
+        templates[2]
+    }
+
+    // MARK: - Quiz-Specific Methods
+
+    func subject(for quiz: Quiz) -> String {
+        String(format: subject, quiz.name)
+    }
+
+    func body(for quiz: Quiz) -> String {
+        var formattedBody = String(format: body, quiz.name)
+
+        if !quiz.venue.isEmpty {
+            formattedBody += "\n" + String(format: NSLocalizedString("email.quiz.body.venue", comment: ""), quiz.venue)
+        }
+
+        formattedBody += "\n" + String(format: NSLocalizedString("email.quiz.body.date", comment: ""), quiz.date.formatted(date: .long, time: .shortened))
+
+        return formattedBody
+    }
 }
+
+
+
 
 
 

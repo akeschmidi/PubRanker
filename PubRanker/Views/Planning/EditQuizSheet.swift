@@ -280,7 +280,7 @@ struct GlobalTeamPickerSheet: View {
                 if availableTeams.isEmpty {
                     ContentUnavailableView(
                         "Keine Teams verfügbar",
-                        systemImage: "person.3.slash",
+                        systemImage: "person.slash",
                         description: Text("Alle Teams sind bereits diesem Quiz zugeordnet")
                     )
                 } else {

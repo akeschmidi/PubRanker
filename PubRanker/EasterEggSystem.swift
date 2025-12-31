@@ -6,7 +6,12 @@
 //
 
 import SwiftUI
+
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
 
 // MARK: - Easter Egg Manager
 class EasterEggManager: ObservableObject {
@@ -144,22 +149,7 @@ struct EasterEggIconView: View {
     
     var body: some View {
         Group {
-            if let appIcon = NSApplication.shared.applicationIconImage {
-                Image(nsImage: appIcon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 32, height: 32)
-            } else {
-                Image(systemName: "trophy.fill")
-                    .font(.title2)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.blue, .cyan],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-            }
+            appIconView
         }
         .scaleEffect(easterEggManager.matrixMode ? 1.2 : 1.0)
         .rotationEffect(.degrees(easterEggManager.matrixMode ? 180 : 0))
@@ -167,6 +157,39 @@ struct EasterEggIconView: View {
         .onTapGesture {
             easterEggManager.handleIconClick()
         }
+    }
+    
+    @ViewBuilder
+    private var appIconView: some View {
+        #if os(macOS)
+        if let appIcon = NSApplication.shared.applicationIconImage {
+            Image(nsImage: appIcon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 32, height: 32)
+        } else {
+            fallbackIcon
+        }
+        #else
+        // Auf iOS: App Icon aus Assets verwenden
+        Image("AppIconImage")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 32, height: 32)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+        #endif
+    }
+    
+    private var fallbackIcon: some View {
+        Image(systemName: "trophy.fill")
+            .font(.title2)
+            .foregroundStyle(
+                LinearGradient(
+                    colors: [.blue, .cyan],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
     }
 }
 

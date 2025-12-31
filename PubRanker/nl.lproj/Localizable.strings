@@ -620,3 +620,10 @@
 "round.unlimited" = "(onbeperkt)";
 "round.noMaxPointsSet" = "Geen maximale score ingesteld";
 "common.round.create.button" = "Ronde aanmaken";
+
+"common.additionalPlaces" = "EXTRA PLAATSEN";
+"common.maxPointsLabel" = "MAX. PUNTEN";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Volgende plaats";
+"presentation.reset" = "Resetten";

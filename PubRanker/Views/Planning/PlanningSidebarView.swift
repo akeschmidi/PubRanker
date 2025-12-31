@@ -35,19 +35,13 @@ struct PlanningSidebarView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            HStack(alignment: .top, spacing: AppSpacing.sm) {
-                VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                    Label("Planung", systemImage: "calendar.badge.plus")
-                        .font(.title2)
-                        .bold()
-                        .foregroundStyle(Color.appTextPrimary)
-                    Text("Quizzes vorbereiten und planen")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.appTextSecondary)
-                }
-                
+            HStack(alignment: .center, spacing: AppSpacing.sm) {
+                Label("Planung", systemImage: "calendar.badge.plus")
+                    .font(.headline)
+                    .foregroundStyle(Color.appTextPrimary)
+
                 Spacer()
-                
+
                 // Moderner + Button
                 Button {
                     showingNewQuizSheet = true
@@ -61,11 +55,17 @@ struct PlanningSidebarView: View {
                 }
                 .primaryGradientButton()
                 .keyboardShortcut("n", modifiers: .command)
-                .help("Neues Quiz erstellen (⌘N)")
+                .helpText("Neues Quiz erstellen (⌘N)")
             }
-            .padding(AppSpacing.md)
+            #if os(iOS)
+            .padding(.horizontal, AppSpacing.sm)
+            .padding(.vertical, 2)
+            #else
+            .padding(.horizontal, AppSpacing.md)
+            .padding(.vertical, AppSpacing.xxxs)
+            #endif
             .background(Color.appBackgroundSecondary)
-            
+
             Divider()
             
             // Quiz List

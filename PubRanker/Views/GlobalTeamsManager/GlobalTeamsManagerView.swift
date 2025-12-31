@@ -85,23 +85,31 @@ struct GlobalTeamsManagerView: View {
         return nil
         #endif
     }
+    
+    @ViewBuilder
+    private var sidebarContent: some View {
+        SidebarView(
+            searchText: $searchText,
+            sortOption: $sortOption,
+            selectedTeam: $selectedTeam,
+            showingAddTeamSheet: $showingAddTeamSheet,
+            showingEmailComposer: $showingEmailComposer,
+            showingDeleteAlert: $showingDeleteAlert,
+            filteredTeams: filteredTeams,
+            allTeams: allTeams,
+            isMultiSelectMode: $isMultiSelectMode,
+            selectedTeamIDs: $selectedTeamIDs,
+            showingMultiDeleteAlert: $showingMultiDeleteAlert,
+            onCreateTestData: onCreateTestDataClosure
+        )
+    }
 
     var body: some View {
         NavigationSplitView(columnVisibility: .constant(.all)) {
-            SidebarView(
-                searchText: $searchText,
-                sortOption: $sortOption,
-                selectedTeam: $selectedTeam,
-                showingAddTeamSheet: $showingAddTeamSheet,
-                showingEmailComposer: $showingEmailComposer,
-                showingDeleteAlert: $showingDeleteAlert,
-                filteredTeams: filteredTeams,
-                allTeams: allTeams,
-                isMultiSelectMode: $isMultiSelectMode,
-                selectedTeamIDs: $selectedTeamIDs,
-                showingMultiDeleteAlert: $showingMultiDeleteAlert,
-                onCreateTestData: onCreateTestDataClosure
-            )
+            sidebarContent
+                #if os(iOS)
+                .navigationSplitViewColumnWidth(min: 280, ideal: 320, max: 380)
+                #endif
         } detail: {
             if allTeams.isEmpty {
                 EmptyStateView {
@@ -111,10 +119,14 @@ struct GlobalTeamsManagerView: View {
                 detailView
             }
         }
+        #if os(iOS)
+        .navigationSplitViewStyle(.prominentDetail)
+        #else
         .navigationSplitViewStyle(.balanced)
+        #endif
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
-                // Empty group to override default sidebar toggle
+                EmptyView()
             }
         }
         .sheet(isPresented: $showingAddTeamSheet) {

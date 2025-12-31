@@ -3,11 +3,15 @@
 //  PubRanker
 //
 //  Created on 20.10.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
 import SwiftData
+
+#if canImport(AppKit)
 import AppKit
+#endif
 
 @main
 struct PubRankerApp: App {
@@ -17,10 +21,14 @@ struct PubRankerApp: App {
         WindowGroup {
             ContentView()
                 .environment(viewModel)
+                #if os(macOS)
                 .background(WindowAccessor())
+                #endif
         }
         .modelContainer(sharedModelContainer)
+        #if os(macOS)
         .windowToolbarStyle(.unifiedCompact(showsTitle: false))
+        #endif
         .commands {
             CommandGroup(replacing: .newItem) {}
         }
@@ -72,7 +80,8 @@ struct PubRankerApp: App {
     }()
 }
 
-// MARK: - Window Accessor for transparent titlebar with visible buttons
+// MARK: - Window Accessor for transparent titlebar (macOS only)
+#if os(macOS)
 struct WindowAccessor: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
@@ -100,3 +109,4 @@ struct WindowAccessor: NSViewRepresentable {
     
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
+#endif

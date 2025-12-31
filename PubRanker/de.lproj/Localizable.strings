@@ -416,8 +416,8 @@
 "email.template.reminder.body" = "Hallo Team,\n\ndies ist eine freundliche Erinnerung an das Quiz von morgen:\n\n📅 Morgen um [TIME]\n📍 [VENUE]\n\nVergesst nicht, euer Bestes zu geben!\n\nBis gleich!";
 
 "email.template.results.name" = "Ergebnis-Benachrichtigung";
-"email.template.results.subject" = "Quiz-Ergebnisse - Herzlichen Glückwunsch!";
-"email.template.results.body" = "Hallo zusammen,\n\nvielen Dank für die Teilnahme an unserem Pub Quiz!\n\nHier sind die Endergebnisse:\n[RESULTS]\n\nHerzlichen Glückwunsch an alle Gewinner! 🎉\n\nBis zum nächsten Mal!";
+"email.template.results.subject" = "🏆 %@ - Die Ergebnisse sind da!";
+"email.template.results.body" = "Liebe Quiz-Teilnehmer,\n\nwas für ein großartiger Abend! Vielen Dank für eure Teilnahme an unserem Pub Quiz \"%@\".\n\n📊 Im Anhang findet ihr die komplette Rangliste mit allen Teams und Punktzahlen als PDF.\n\n🎉 Herzlichen Glückwunsch an alle Gewinner und vielen Dank an alle Teams für den tollen Wettkampf!\n\nWir freuen uns schon auf das nächste Quiz mit euch!\n\nBeste Grüße\nEuer Quiz-Team";
 
 "email.template.thankyou.name" = "Dankeschön";
 "email.template.thankyou.subject" = "Danke für die Teilnahme!";
@@ -481,6 +481,17 @@
 "execution.editRounds.warning.limit" = "Diese werden automatisch auf %d Punkte begrenzt.";
 "execution.editRounds.round.complete" = "Runde als abgeschlossen markieren";
 "execution.editRounds.round.reopen" = "Runde wieder öffnen";
+
+// Add Team
+"execution.addTeam.title" = "Team hinzufügen";
+"execution.addTeam.button" = "Team hinzufügen";
+"execution.addTeam.help" = "Füge ein neues oder bestehendes Team zum laufenden Quiz hinzu";
+"execution.addTeam.mode.new" = "Neues Team";
+"execution.addTeam.mode.existing" = "Bestehende Teams";
+"execution.addTeam.createAndAdd" = "Erstellen und hinzufügen";
+"execution.addTeam.addSelected" = "%d hinzufügen";
+"execution.addTeam.noAvailableTeams" = "Keine Teams verfügbar";
+"execution.addTeam.noAvailableTeams.description" = "Alle Teams sind bereits diesem Quiz zugeordnet. Erstelle ein neues Team oder verwalte Teams im Teams-Manager.";
 
 // MARK: - About Sheet
 "about.title" = "Über";
@@ -860,3 +871,15 @@
 "round.noMaxPointsShort" = "Keine Max. Pkt";
 "round.unlimited" = "(unbegrenzt)";
 "round.noMaxPointsSet" = "Keine maximale Punktzahl gesetzt";
+
+// Email Results Feature
+"email.results.send" = "Ergebnisse per E-Mail";
+"email.results.generating" = "Bild wird erstellt...";
+"email.results.attachment.name" = "Rangliste.png";
+"email.results.error.title" = "E-Mail-Fehler";
+"email.results.error.generation" = "Das Ranglisten-Bild konnte nicht erstellt werden. Bitte verwende den JSON- oder CSV-Export.";
+"email.results.error.nomail" = "E-Mail kann nicht gesendet werden. Bitte konfiguriere eine E-Mail-App.";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Nächster Platz";
+"presentation.reset" = "Zurücksetzen";

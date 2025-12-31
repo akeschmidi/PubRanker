@@ -3,13 +3,13 @@
 //  PubRanker
 //
 //  Created on 30.11.2025
-//  Version 2.0 Design System - Core Components
+//  Version 3.0 Design System - Universal (macOS + iPadOS)
 //
 
 import SwiftUI
 
 /// Modern Card Component with Glassmorphism support
-/// Part of PubRanker 2.0 Design System
+/// Part of PubRanker 3.0 Design System
 struct AppCard<Content: View>: View {
     let content: Content
     var style: CardStyle
@@ -56,12 +56,12 @@ enum CardStyle {
         Group {
             switch self {
             case .default:
-                Color(nsColor: .controlBackgroundColor)
+                Color.adaptiveControlBackground
             case .glassmorphism:
                 Rectangle()
                     .fill(.ultraThinMaterial)
             case .elevated:
-                Color(nsColor: .controlBackgroundColor)
+                Color.adaptiveCardBackground
             case .outlined:
                 Color.clear
             case .gradient(let gradient):
@@ -184,6 +184,9 @@ extension View {
      }
  }
  */
+
+
+
 
 
 

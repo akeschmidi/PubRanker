@@ -84,6 +84,16 @@ enum ButtonSize {
             return AppSpacing.sm
         }
     }
+
+    /// Minimum height to ensure touch target on iPad (44pt HIG)
+    var minHeight: CGFloat? {
+        #if os(iOS)
+        // On iPad, ensure minimum touch target
+        return AppSpacing.touchTarget
+        #else
+        return nil
+        #endif
+    }
 }
 
 /// Primary Gradient Button Style
@@ -100,6 +110,9 @@ struct PrimaryGradientButtonStyle: ButtonStyle {
             .foregroundStyle(.white)
             .padding(.horizontal, size.horizontalPadding)
             .padding(.vertical, size.verticalPadding)
+            .if(size.minHeight != nil) { view in
+                view.frame(minHeight: size.minHeight)
+            }
             .background(
                 RoundedRectangle(cornerRadius: AppCornerRadius.md)
                     .fill(Color.gradientPrimary)
@@ -118,17 +131,20 @@ struct PrimaryGradientButtonStyle: ButtonStyle {
 /// Secondary Gradient Button Style
 struct SecondaryGradientButtonStyle: ButtonStyle {
     var size: ButtonSize
-    
+
     init(size: ButtonSize = .medium) {
         self.size = size
     }
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(size.font)
             .foregroundStyle(.white)
             .padding(.horizontal, size.horizontalPadding)
             .padding(.vertical, size.verticalPadding)
+            .if(size.minHeight != nil) { view in
+                view.frame(minHeight: size.minHeight)
+            }
             .background(
                 RoundedRectangle(cornerRadius: AppCornerRadius.md)
                     .fill(Color.gradientSecondary)
@@ -147,17 +163,20 @@ struct SecondaryGradientButtonStyle: ButtonStyle {
 /// Accent Gradient Button Style
 struct AccentGradientButtonStyle: ButtonStyle {
     var size: ButtonSize
-    
+
     init(size: ButtonSize = .medium) {
         self.size = size
     }
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(size.font)
             .foregroundStyle(.white)
             .padding(.horizontal, size.horizontalPadding)
             .padding(.vertical, size.verticalPadding)
+            .if(size.minHeight != nil) { view in
+                view.frame(minHeight: size.minHeight)
+            }
             .background(
                 RoundedRectangle(cornerRadius: AppCornerRadius.md)
                     .fill(Color.gradientAccent)
@@ -176,17 +195,20 @@ struct AccentGradientButtonStyle: ButtonStyle {
 /// Success Gradient Button Style
 struct SuccessGradientButtonStyle: ButtonStyle {
     var size: ButtonSize
-    
+
     init(size: ButtonSize = .medium) {
         self.size = size
     }
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(size.font)
             .foregroundStyle(.white)
             .padding(.horizontal, size.horizontalPadding)
             .padding(.vertical, size.verticalPadding)
+            .if(size.minHeight != nil) { view in
+                view.frame(minHeight: size.minHeight)
+            }
             .background(
                 RoundedRectangle(cornerRadius: AppCornerRadius.md)
                     .fill(Color.gradientSuccess)

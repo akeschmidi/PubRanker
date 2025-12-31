@@ -3,11 +3,18 @@
 //  PubRanker
 //
 //  Created on 23.11.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
+
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct GlobalAddTeamSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -43,9 +50,8 @@ struct GlobalAddTeamSheet: View {
                         HStack(spacing: AppSpacing.sm) {
                             // Vorschau
                             Group {
-                                if let imageData = imageData, let nsImage = NSImage(data: imageData) {
-                                    Image(nsImage: nsImage)
-                                        .resizable()
+                                if let imageData = imageData {
+                                    PlatformImage(data: imageData)
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 60, height: 60)
                                         .clipShape(Circle())
@@ -190,10 +196,17 @@ struct GlobalAddTeamSheet: View {
             let imageData = try Data(contentsOf: url)
             
             // Prüfen ob es tatsächlich ein Bild ist
+            #if os(macOS)
             guard NSImage(data: imageData) != nil else {
                 print("⚠️ Fehler: Datei ist kein gültiges Bild")
                 return
             }
+            #else
+            guard UIImage(data: imageData) != nil else {
+                print("⚠️ Fehler: Datei ist kein gültiges Bild")
+                return
+            }
+            #endif
             
             // Bild speichern
             self.imageData = imageData

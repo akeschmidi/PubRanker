@@ -162,7 +162,7 @@ struct RoundEditDetailView: View {
                 if quiz.safeTeams.isEmpty {
                     ContentUnavailableView(
                         NSLocalizedString("execution.noTeams", comment: "No teams"),
-                        systemImage: "person.3.slash",
+                        systemImage: "person.slash",
                         description: Text(NSLocalizedString("execution.noTeams.description", comment: "No teams description"))
                     )
                     .frame(maxHeight: 400)
@@ -301,10 +301,15 @@ struct TeamEditCard: View {
                     
                     // Text Field
                     TextField("0", text: $currentScore)
+                        #if os(iOS)
+                        .keyboardType(.numberPad)
+                        #endif
                         .textFieldStyle(.plain)
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .monospacedDigit()
                         .multilineTextAlignment(.center)
-                        .frame(width: 80)
+                        .frame(width: 100)
+                        .padding(.horizontal, 4)
                         .background(
                             RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                                 .fill(Color.appBackgroundSecondary)

@@ -318,7 +318,7 @@ struct TeamSetupWizard: View {
         VStack(spacing: AppSpacing.sectionSpacing) {
             if availableGlobalTeams.isEmpty {
                 VStack(spacing: AppSpacing.md) {
-                    Image(systemName: "person.3.slash.fill")
+                    Image(systemName: "person.slash.fill")
                         .font(.system(size: 48))
                         .foregroundStyle(Color.appTextSecondary)
                     

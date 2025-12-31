@@ -3,11 +3,18 @@
 //  PubRanker
 //
 //  Created on 23.11.2025
+//  Updated for Universal App (macOS + iPadOS) - Version 3.0
 //
 
 import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
+
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct EditableTeamRow: View {
     @Bindable var team: Team
@@ -34,7 +41,7 @@ struct EditableTeamRow: View {
             HStack(spacing: AppSpacing.sm) {
                 // Team-Icon (Bild oder Farbe)
                 TeamIconView(team: team, size: 40)
-                .help(isEditing ? "Team-Icon ändern" : "Team-Icon")
+                .helpText(isEditing ? "Team-Icon ändern" : "Team-Icon")
                 .onTapGesture {
                     if isEditing {
                         showingColorPicker.toggle()
@@ -134,7 +141,9 @@ struct EditableTeamRow: View {
                                     .textFieldStyle(.roundedBorder)
                                 
                                 Toggle("Bestätigt", isOn: $isConfirmed)
+                                    #if os(macOS)
                                     .toggleStyle(.checkbox)
+                                    #endif
                             }
                         }
                     } else {
@@ -207,7 +216,7 @@ struct EditableTeamRow: View {
                             }
                         }
                         .successGradientButton()
-                        .help("Änderungen speichern")
+                        .helpText("Änderungen speichern")
                         
                         // Abbrechen Button (nur im Bearbeitungsmodus)
                         Button {
@@ -221,7 +230,7 @@ struct EditableTeamRow: View {
                             }
                         }
                         .secondaryGradientButton()
-                        .help("Bearbeitung abbrechen")
+                        .helpText("Bearbeitung abbrechen")
                     } else {
                         // Bearbeiten Button (immer sichtbar wenn nicht im Bearbeitungsmodus)
                         Button {
@@ -239,7 +248,7 @@ struct EditableTeamRow: View {
                             }
                         }
                         .primaryGradientButton()
-                        .help("Team bearbeiten")
+                        .helpText("Team bearbeiten")
                         
                         // Löschen Button - Größer und prominenter
                         Button {
@@ -251,7 +260,7 @@ struct EditableTeamRow: View {
                             }
                         }
                         .accentGradientButton()
-                        .help("Team entfernen")
+                        .helpText("Team entfernen")
                     }
                 }
             }
@@ -327,10 +336,17 @@ struct EditableTeamRow: View {
             let imageData = try Data(contentsOf: url)
             
             // Prüfen ob es tatsächlich ein Bild ist
+            #if os(macOS)
             guard NSImage(data: imageData) != nil else {
                 print("⚠️ Fehler: Datei ist kein gültiges Bild")
                 return
             }
+            #else
+            guard UIImage(data: imageData) != nil else {
+                print("⚠️ Fehler: Datei ist kein gültiges Bild")
+                return
+            }
+            #endif
             
             // Bild speichern
             team.imageData = imageData

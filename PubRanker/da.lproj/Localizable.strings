@@ -455,7 +455,7 @@
 
 "email.template.results.name" = "Resultat Meddelelse";
 "email.template.results.subject" = "Quiz Resultater - Tillykke!";
-"email.template.results.body" = "Hej alle sammen,\n\nTak for jeres deltagelse i vores pub quiz!\n\nHer er de endelige resultater:\n[RESULTS]\n\nTillykke til alle vindere! 🎉\n\nTil næste gang!";
+"email.template.results.body" = "Kære quizdeltagere,\n\nSikken fantastisk aften! Tak for jeres deltagelse i vores Pub Quiz \"%@\".\n\n📊 I vedhæftningen finder I den komplette rangliste med alle hold og point som PDF.\n\n🎉 Tillykke til alle vindere og tak til alle hold for den fantastiske konkurrence!\n\nVi glæder os allerede til næste quiz med jer!\n\nMed venlig hilsen\nJeres quizteam";
 
 "email.template.thankyou.name" = "Tak";
 "email.template.thankyou.subject" = "Tak for jeres deltagelse!";
@@ -517,6 +517,17 @@
 "execution.editRounds.warning.limit" = "Disse begrænses automatisk til %d point.";
 "execution.editRounds.round.complete" = "Markér Runde som Afsluttet";
 "execution.editRounds.round.reopen" = "Genåbn Runde";
+
+// Add Team
+"execution.addTeam.title" = "Tilføj hold";
+"execution.addTeam.button" = "Tilføj hold";
+"execution.addTeam.help" = "Tilføj et nyt eller eksisterende hold til den igangværende quiz";
+"execution.addTeam.mode.new" = "Nyt hold";
+"execution.addTeam.mode.existing" = "Eksisterende hold";
+"execution.addTeam.createAndAdd" = "Opret og tilføj";
+"execution.addTeam.addSelected" = "Tilføj %d";
+"execution.addTeam.noAvailableTeams" = "Ingen tilgængelige hold";
+"execution.addTeam.noAvailableTeams.description" = "Alle hold er allerede tildelt denne quiz. Opret et nyt hold eller administrer hold i Holdadministratoren.";
 
 // MARK: - About Sheet
 "about.title" = "Om";
@@ -618,3 +629,10 @@
 "round.unlimited" = "(ubegrænset)";
 "round.noMaxPointsSet" = "Ingen maksimal score sat";
 "common.round.create.button" = "Opret runde";
+
+"common.additionalPlaces" = "YDERLIGERE PLACERINGER";
+"common.maxPointsLabel" = "MAKS. POINT";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Næste plads";
+"presentation.reset" = "Nulstil";

@@ -1,1 +1,4 @@
 Pub Quiz,Quiz,Trivia,Punktezähler,Leaderboard,Teams,Rangliste,Bar,Kneipe,Spieleabend,Quizmaster
+
+
+

@@ -458,7 +458,7 @@ struct TeamRowView: View {
             }
             .toggleStyle(.button)
             .buttonStyle(.plain)
-            .help(NSLocalizedString("team.confirmed.toggle.help", comment: "Toggle participation confirmation"))
+            .helpText(NSLocalizedString("team.confirmed.toggle.help", comment: "Toggle participation confirmation"))
             .onChange(of: isConfirmed) { _, newValue in
                 team.setConfirmed(for: quiz, isConfirmed: newValue)
             }
@@ -472,7 +472,7 @@ struct TeamRowView: View {
                     .foregroundStyle(Color.appTextTertiary)
             }
             .buttonStyle(.plain)
-            .help(NSLocalizedString("team.remove.help", comment: "Remove team help"))
+            .helpText(NSLocalizedString("team.remove.help", comment: "Remove team help"))
         }
         .padding(.horizontal, AppSpacing.xs)
         .padding(.vertical, AppSpacing.xs)

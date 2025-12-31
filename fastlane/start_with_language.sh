@@ -77,3 +77,6 @@ echo ""
 echo "Tipp: Nach den Screenshots '$0 reset' ausführen"
 echo "      um zur Systemsprache zurückzukehren."
 
+
+
+

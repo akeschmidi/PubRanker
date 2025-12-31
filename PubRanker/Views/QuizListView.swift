@@ -30,7 +30,7 @@ struct QuizListView: View {
                         Label("Neues Quiz", systemImage: "plus")
                     }
                     .keyboardShortcut("n", modifiers: .command)
-                    .help("Neues Quiz erstellen (⌘N)")
+                    .helpText("Neues Quiz erstellen (⌘N)")
                 }
                 
                 if let selectedQuiz = selection {
@@ -41,7 +41,7 @@ struct QuizListView: View {
                         } label: {
                             Label("Löschen", systemImage: "trash")
                         }
-                        .help("Ausgewähltes Quiz löschen")
+                        .helpText("Ausgewähltes Quiz löschen")
                     }
                 }
             }
@@ -81,7 +81,11 @@ struct QuizListView: View {
                 selection = activeQuizzes.first
             }
         }
+        #if os(macOS)
         .frame(minWidth: 900, minHeight: 600)
+        #else
+        .frame(minWidth: 320, minHeight: 480)
+        #endif
     }
     
     private func deleteQuiz(_ quiz: Quiz) {

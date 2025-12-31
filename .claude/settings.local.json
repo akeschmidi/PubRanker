@@ -16,7 +16,10 @@
       "Bash(ruby add_files_to_project.rb:*)",
       "Bash(ruby fix_project.rb:*)",
       "Bash(grep:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(ruby fix_execution_sheet.rb:*)",
+      "Bash(ruby -e:*)",
+      "Bash(xcrun simctl:*)"
     ],
     "deny": [],
     "ask": []

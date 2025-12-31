@@ -620,3 +620,10 @@
 "round.unlimited" = "(bez limitu)";
 "round.noMaxPointsSet" = "Nie ustawiono maksymalnej liczby punktów";
 "common.round.create.button" = "Utwórz rundę";
+
+"common.additionalPlaces" = "DODATKOWE MIEJSCA";
+"common.maxPointsLabel" = "MAKS. PUNKTY";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "Następne miejsce";
+"presentation.reset" = "Resetuj";

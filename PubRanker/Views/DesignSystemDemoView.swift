@@ -7,8 +7,11 @@
 //
 
 import SwiftUI
-import AppKit
 import Charts
+
+#if os(macOS)
+import AppKit
+#endif
 
 /// Demo View to showcase the new Design System components
 struct DesignSystemDemoView: View {
@@ -131,10 +134,12 @@ struct DesignSystemDemoView: View {
         let newScheme: ColorScheme = colorScheme == .dark ? .light : .dark
         currentColorScheme = newScheme
         
+        #if os(macOS)
         // Update system appearance for macOS
         if let window = NSApplication.shared.windows.first {
             window.appearance = NSAppearance(named: newScheme == .dark ? .darkAqua : .aqua)
         }
+        #endif
         
         // Save preference
         appearance = newScheme == .dark ? "dark" : "light"
@@ -729,7 +734,7 @@ struct DesignSystemDemoView: View {
                 statRow(label: "Durchschnitt", value: "8.2")
             }
             .padding(AppSpacing.md)
-            .background(Color(nsColor: .controlBackgroundColor))
+            .background(Color.adaptiveControlBackground)
         }
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
         .shadow(AppShadow.md)

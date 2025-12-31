@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+#if os(macOS)
 import AppKit
+#endif
 
 struct QuizDetailView: View {
     @Bindable var quiz: Quiz
@@ -123,7 +125,7 @@ struct QuizDetailView: View {
 struct QuizHeaderView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    @Binding var showingEmailComposer: Bool
+    var showingEmailComposer: Binding<Bool>?  // Optional - only on macOS
     @State private var showingExportDialog = false
     @State private var exportedFileURL: URL?
     
@@ -180,14 +182,14 @@ struct QuizHeaderView: View {
                 // Action Buttons
                 HStack(spacing: AppSpacing.xs) {
                     // E-Mail Button
-                    if !quiz.safeTeams.isEmpty {
+                    if !quiz.safeTeams.isEmpty, let emailBinding = showingEmailComposer {
                         Button {
-                            showingEmailComposer = true
+                            emailBinding.wrappedValue = true
                         } label: {
                             Label(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"), systemImage: "envelope.fill")
                         }
                         .accentGradientButton()
-                        .help(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"))
+                        .helpText(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"))
                     }
                     
                     // Export Button (immer verfügbar, aber prominent bei abgeschlossenen Quizzen)
@@ -211,7 +213,7 @@ struct QuizHeaderView: View {
                         }
                     }
                     .secondaryGradientButton()
-                    .help(NSLocalizedString("export.title", comment: "Export quiz"))
+                    .helpText(NSLocalizedString("export.title", comment: "Export quiz"))
                     
                     if quiz.isActive {
                         Button {
@@ -221,7 +223,7 @@ struct QuizHeaderView: View {
                         }
                         .accentGradientButton()
                         .keyboardShortcut("e", modifiers: .command)
-                        .help(NSLocalizedString("status.complete", comment: "Complete quiz") + " (⌘E)")
+                        .helpText(NSLocalizedString("status.complete", comment: "Complete quiz") + " (⌘E)")
                     } else if !quiz.isCompleted {
                         Button {
                             viewModel.startQuiz(quiz)
@@ -230,7 +232,7 @@ struct QuizHeaderView: View {
                         }
                         .primaryGradientButton()
                         .keyboardShortcut("s", modifiers: .command)
-                        .help(NSLocalizedString("status.start", comment: "Start quiz") + " (⌘S)")
+                        .helpText(NSLocalizedString("status.start", comment: "Start quiz") + " (⌘S)")
                     }
                 }
             }
@@ -264,6 +266,7 @@ struct QuizHeaderView: View {
         )
         .alert(NSLocalizedString("export.success.title", comment: "Export success title"), isPresented: $showingExportDialog) {
             if let fileURL = exportedFileURL {
+                #if os(macOS)
                 Button(NSLocalizedString("export.showInFinder", comment: "Show in Finder")) {
                     NSWorkspace.shared.selectFile(fileURL.path, inFileViewerRootedAtPath: "")
                 }
@@ -273,6 +276,11 @@ struct QuizHeaderView: View {
                         picker.show(relativeTo: .zero, of: view, preferredEdge: .minY)
                     }
                 }
+                #else
+                Button(NSLocalizedString("export.share", comment: "Share")) {
+                    // iOS Share wird über UIActivityViewController gehandhabt
+                }
+                #endif
             }
             Button("OK") {}
         } message: {

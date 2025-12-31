@@ -618,3 +618,10 @@
 "round.unlimited" = "(무제한)";
 "round.noMaxPointsSet" = "최대 점수가 설정되지 않음";
 "common.round.create.button" = "라운드 생성";
+
+"common.additionalPlaces" = "추가 순위";
+"common.maxPointsLabel" = "최대 점수";
+
+// MARK: - Presentation Mode
+"presentation.nextPlace" = "다음 순위";
+"presentation.reset" = "초기화";

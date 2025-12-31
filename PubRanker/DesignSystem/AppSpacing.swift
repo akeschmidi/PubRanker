@@ -3,12 +3,48 @@
 //  PubRanker
 //
 //  Created on 30.11.2025
-//  Version 2.0 Design System
+//  Version 3.0 Design System - Universal (macOS + iPadOS)
 //
 
 import SwiftUI
 
-/// PubRanker 2.0 Spacing System
+#if canImport(AppKit)
+import AppKit
+#elseif canImport(UIKit)
+import UIKit
+#endif
+
+// MARK: - Platform Color Type Alias
+
+#if canImport(AppKit)
+typealias PlatformColor = NSColor
+#else
+typealias PlatformColor = UIColor
+#endif
+
+// MARK: - Platform-Adaptive Background Color
+
+extension Color {
+    /// Adaptive control background color (works on macOS and iOS)
+    static var adaptiveControlBackground: Color {
+        #if os(macOS)
+        return Color(nsColor: .controlBackgroundColor)
+        #else
+        return Color(uiColor: .secondarySystemGroupedBackground)
+        #endif
+    }
+    
+    /// Adaptive card background color
+    static var adaptiveCardBackground: Color {
+        #if os(macOS)
+        return Color(nsColor: .controlBackgroundColor)
+        #else
+        return Color(uiColor: .systemBackground)
+        #endif
+    }
+}
+
+/// PubRanker 3.0 Spacing System
 /// Provides consistent spacing across the app based on 4pt grid
 struct AppSpacing {
 
@@ -63,6 +99,26 @@ struct AppSpacing {
 
     /// Screen edge padding
     static let screenPadding: CGFloat = lg // 24pt
+    
+    // MARK: - Platform-Specific Spacing
+    
+    /// Touch target minimum (44pt for iOS HIG, 28pt for macOS)
+    static var touchTarget: CGFloat {
+        #if os(iOS)
+        return 44
+        #else
+        return 28
+        #endif
+    }
+    
+    /// Adaptive screen padding (larger on iPad for better touch)
+    static var screenPaddingAdaptive: CGFloat {
+        #if os(iOS)
+        return 32
+        #else
+        return 24
+        #endif
+    }
 }
 
 /// PubRanker 2.0 Shadow System
@@ -178,7 +234,7 @@ extension View {
 
     /// Apply card style (padding + background + shadow)
     func cardStyle(
-        background: Color = Color(nsColor: .controlBackgroundColor),
+        background: Color = .adaptiveControlBackground,
         padding: CGFloat = AppSpacing.cardPadding,
         cornerRadius: CGFloat = 12,
         shadow: Shadow = AppShadow.md
