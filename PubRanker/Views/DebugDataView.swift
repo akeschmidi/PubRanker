@@ -15,6 +15,7 @@ struct DebugDataView: View {
     @Query private var teams: [Team]
 
     @State private var showingConfirmation = false
+    @State private var showingCloudKitStatus = false
     @State private var actionToConfirm: DebugAction?
 
     var body: some View {
@@ -77,6 +78,14 @@ struct DebugDataView: View {
                     }
                 }
 
+                Section("CloudKit Sync") {
+                    Button {
+                        showingCloudKitStatus = true
+                    } label: {
+                        Label("CloudKit Status prüfen", systemImage: "icloud.fill")
+                    }
+                }
+
                 Section("Daten verwalten") {
                     Button(role: .destructive) {
                         actionToConfirm = .deleteAll
@@ -111,6 +120,9 @@ struct DebugDataView: View {
                 Button("Abbrechen", role: .cancel) {}
             } message: {
                 Text(actionToConfirm?.message ?? "")
+            }
+            .sheet(isPresented: $showingCloudKitStatus) {
+                CloudKitStatusView()
             }
         }
     }

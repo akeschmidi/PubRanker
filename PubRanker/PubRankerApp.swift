@@ -41,14 +41,19 @@ struct PubRankerApp: App {
             Team.self,
             Round.self
         ])
-        
+
         #if DEBUG
+        print("🔧 DEBUG BUILD - CloudKit Sync ist DEAKTIVIERT")
+        print("   Für CloudKit-Tests: Release-Build verwenden oder Scheme auf Release ändern")
         // Use local storage in debug mode for faster development
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false
         )
         #else
+        print("📦 RELEASE BUILD - CloudKit Sync ist AKTIVIERT")
+        print("   Container: iCloud.com.akeschmidi.PubRanker")
+        print("   Database: .automatic (private)")
         // Use iCloud in release mode
         let configuration = ModelConfiguration(
             schema: schema,
@@ -56,25 +61,29 @@ struct PubRankerApp: App {
             cloudKitDatabase: .automatic
         )
         #endif
-        
+
         do {
             let container = try ModelContainer(for: schema, configurations: [configuration])
-            print("✅ ModelContainer created successfully")
+            print("✅ ModelContainer erfolgreich erstellt")
+            #if !DEBUG
+            print("✅ CloudKit Synchronisation aktiv")
+            print("   Tipp: Prüfe CloudKit Status über Einstellungen → CloudKit Status")
+            #endif
             return container
         } catch {
-            print("❌ ModelContainer Error: \(error)")
-            print("Error details: \(error.localizedDescription)")
-            
+            print("❌ ModelContainer Fehler: \(error)")
+            print("❌ Details: \(error.localizedDescription)")
+
             // Last resort: try in-memory only
             do {
                 let memoryConfiguration = ModelConfiguration(
                     schema: schema,
                     isStoredInMemoryOnly: true
                 )
-                print("⚠️ Using in-memory storage as fallback")
+                print("⚠️ Fallback: In-Memory Speicher (Daten gehen beim Beenden verloren!)")
                 return try ModelContainer(for: schema, configurations: [memoryConfiguration])
             } catch {
-                fatalError("Fatal: Could not create ModelContainer at all: \(error)")
+                fatalError("💥 FATAL: ModelContainer konnte nicht erstellt werden: \(error)")
             }
         }
     }()

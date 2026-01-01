@@ -10,11 +10,13 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(QuizViewModel.self) private var viewModel
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedWorkflow: WorkflowPhase = .planning
     @State private var showingAboutSheet = false
     @State private var showingDebugView = false
+    @State private var syncManager: CloudKitSyncManager?
     @StateObject private var easterEggManager = EasterEggManager()
-    
+
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
@@ -51,7 +53,7 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 // Main Navigation Header
                 mainNavigationHeader
-                
+
                 // Content based on selected workflow phase
                 Group {
                     switch selectedWorkflow {
@@ -69,13 +71,20 @@ struct ContentView: View {
             #if os(macOS)
             .frame(minWidth: 1000, minHeight: 600)
             #endif
-            
+
             // Easter Egg Overlays
             EasterEggOverlayContainer(easterEggManager: easterEggManager)
+        }
+        .onAppear {
+            // CloudKit Sync Manager initialisieren
+            if syncManager == nil {
+                syncManager = CloudKitSyncManager(modelContext: modelContext)
+            }
         }
         .onDisappear {
             easterEggManager.cleanup()
         }
+        .environment(syncManager ?? CloudKitSyncManager(modelContext: modelContext))
     }
     
     // MARK: - Adaptive Layout Properties
@@ -187,6 +196,12 @@ struct ContentView: View {
     private var rightButtons: some View {
         HStack(spacing: 0) {
             EasterEggClickCounter(easterEggManager: easterEggManager)
+
+            #if !DEBUG
+            // CloudKit Sync Button (nur in Release-Builds)
+            CloudKitSyncButton()
+                .padding(.trailing, AppSpacing.xs)
+            #endif
 
             #if DEBUG
             Button {

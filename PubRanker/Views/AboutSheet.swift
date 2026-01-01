@@ -20,6 +20,7 @@ struct AboutSheet: View {
     @State private var showingFeedbackDialog = false
     @State private var showingEmailDialog = false
     @State private var showingCopiedConfirmation = false
+    @State private var showingCloudKitStatus = false
     @State private var selectedTab: AboutTab = .about
     
     var appName: String {
@@ -150,13 +151,33 @@ struct AboutSheet: View {
                         Label(L10n.About.Technical.title, systemImage: "gearshape.fill")
                             .font(.headline)
                             .foregroundStyle(Color.appSecondary)
-                        
+
                         VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                             InfoRow(label: L10n.About.Technical.version, value: "\(appVersion) (\(buildNumber))")
                             InfoRow(label: L10n.About.Technical.bundleId, value: Bundle.main.bundleIdentifier ?? "N/A")
                             InfoRow(label: L10n.About.Technical.platform, value: platformName)
                             InfoRow(label: L10n.About.Technical.copyright, value: copyright)
                         }
+
+                        Button {
+                            showingCloudKitStatus = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "icloud.fill")
+                                    .foregroundStyle(Color.appPrimary)
+                                Text("CloudKit Sync Status prüfen")
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appTextSecondary)
+                            }
+                            .padding(AppSpacing.xs)
+                            .background(
+                                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                                    .fill(Color.appBackgroundSecondary)
+                            )
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(AppSpacing.lg)
@@ -209,6 +230,9 @@ struct AboutSheet: View {
             Button(L10n.Alert.ok, role: .cancel) {}
         } message: {
             Text(L10n.About.Feedback.emailCopiedMessage)
+        }
+        .sheet(isPresented: $showingCloudKitStatus) {
+            CloudKitStatusView()
         }
     }
     

@@ -10,6 +10,7 @@
 		5E7D2346B5FFB61E9D32A3BC /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6C4131EE2A95CAD112CB4D /* SampleData.swift */; };
 		6162445E6BE2984AC99ED20E /* DebugDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B29569B7EA70A674FCF606C /* DebugDataView.swift */; };
 		623B346BEA9D116401AE061A /* LeaderboardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90852C6E34CA0DA8830C83C /* LeaderboardImageView.swift */; };
+		7D4AA614563D00C66AB09263 /* CloudKitSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0718DECE15C029C588121080 /* CloudKitSyncManager.swift */; };
 		8F59D7F291C24541BE40AA86 /* PresentationWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595E33B5B5284F6DABEC5412 /* PresentationWindowController.swift */; };
 		A10000001 /* PubRankerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000 /* PubRankerApp.swift */; };
 		A10000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000002 /* ContentView.swift */; };
@@ -74,16 +75,21 @@
 		C9B345B72EDC6288005D5076 /* DesignSystemDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */; };
 		C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */; };
 		C9LOC00002 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9LOC00001 /* LocalizationManager.swift */; };
+		DC3EA742A4C5CCE165207A3A /* Components/CloudKitSyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF39697F013E4F4CC555F7B /* Components/CloudKitSyncButton.swift */; };
 		DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C523D853111435688C12D13 /* PresentationModeView.swift */; };
+		F47E15B4D6256C6735898EF5 /* CloudKitStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8B11348567845D0793B84D /* CloudKitStatusView.swift */; };
 		F84D88636FDBBED97080456B /* ExecutionAddTeamSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5311E791603FD29DC6C39963 /* ExecutionAddTeamSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0718DECE15C029C588121080 /* CloudKitSyncManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CloudKitSyncManager.swift; sourceTree = "<group>"; };
+		0AF39697F013E4F4CC555F7B /* Components/CloudKitSyncButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Components/CloudKitSyncButton.swift; sourceTree = "<group>"; };
 		1438423B1421CB2040A0F84E /* LeaderboardImageGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LeaderboardImageGenerator.swift; sourceTree = "<group>"; };
 		4C523D853111435688C12D13 /* PresentationModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationModeView.swift; sourceTree = "<group>"; };
 		5311E791603FD29DC6C39963 /* ExecutionAddTeamSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExecutionAddTeamSheet.swift; sourceTree = "<group>"; };
 		595E33B5B5284F6DABEC5412 /* PresentationWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationWindowController.swift; sourceTree = "<group>"; };
 		5B29569B7EA70A674FCF606C /* DebugDataView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DebugDataView.swift; sourceTree = "<group>"; };
+		5C8B11348567845D0793B84D /* CloudKitStatusView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CloudKitStatusView.swift; sourceTree = "<group>"; };
 		9B773E8AF60C254279068231 /* HeaderPaddingModifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HeaderPaddingModifier.swift; sourceTree = "<group>"; };
 		9E6C4131EE2A95CAD112CB4D /* SampleData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		A10000000 /* PubRankerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubRankerApp.swift; sourceTree = "<group>"; };
@@ -232,6 +238,8 @@
 				A10000371 /* AboutSheet.swift */,
 				5B29569B7EA70A674FCF606C /* DebugDataView.swift */,
 				0D81F873947319C6A35D8DAF /* Execution */,
+				5C8B11348567845D0793B84D /* CloudKitStatusView.swift */,
+				AE490C4D164ACD4D2A2533D6 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -254,6 +262,7 @@
 			children = (
 				A10000600 /* EmailService.swift */,
 				1438423B1421CB2040A0F84E /* LeaderboardImageGenerator.swift */,
+				0718DECE15C029C588121080 /* CloudKitSyncManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -294,6 +303,14 @@
 				C941F1FC2EA7FA30004EE1C9 /* Localizable.strings */,
 			);
 			path = PubRanker;
+			sourceTree = "<group>";
+		};
+		AE490C4D164ACD4D2A2533D6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				0AF39697F013E4F4CC555F7B /* Components/CloudKitSyncButton.swift */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 		C928C39C2ED4A09100F38077 /* Charts */ = {
@@ -543,6 +560,9 @@
 				623B346BEA9D116401AE061A /* LeaderboardImageView.swift in Sources */,
 				AC4BB723432A02DA3EB9D398 /* LeaderboardImageGenerator.swift in Sources */,
 				C868045BB349F74A702C075A /* HeaderPaddingModifier.swift in Sources */,
+				F47E15B4D6256C6735898EF5 /* CloudKitStatusView.swift in Sources */,
+				7D4AA614563D00C66AB09263 /* CloudKitSyncManager.swift in Sources */,
+				DC3EA742A4C5CCE165207A3A /* Components/CloudKitSyncButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,7 +642,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 201;
+				CURRENT_PROJECT_VERSION = 245;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -658,9 +678,10 @@
 				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
-				INFOPLIST_KEY_UILaunchStoryboardName = "App-Icon";
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -738,7 +759,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 201;
+				CURRENT_PROJECT_VERSION = 245;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -768,9 +789,10 @@
 				INFOPLIST_KEY_CFBundleDisplayName = PubRanker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 akeschmidi";
-				INFOPLIST_KEY_UILaunchStoryboardName = "App-Icon";
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

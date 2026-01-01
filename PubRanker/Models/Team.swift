@@ -17,6 +17,7 @@ final class Team {
     var roundScores: [RoundScore] = []
     var quizConfirmations: [QuizConfirmation] = []
     var createdAt: Date = Date()
+    var lastModified: Date = Date()
     
     // Team Details
     var contactPerson: String = ""
@@ -34,18 +35,28 @@ final class Team {
         self.totalScore = 0
         self.roundScores = []
         self.createdAt = Date()
+        self.lastModified = Date()
         self.contactPerson = ""
         self.email = ""
         self.isConfirmed = false
     }
     
     func addScore(for round: Round, points: Int) {
-        if let index = roundScores.firstIndex(where: { $0.roundId == round.id }) {
-            roundScores[index].points = points
+        // Erstelle eine neue Kopie des Arrays, um SwiftData/CloudKit zu triggern
+        var updatedScores = roundScores
+
+        if let index = updatedScores.firstIndex(where: { $0.roundId == round.id }) {
+            updatedScores[index].points = points
         } else {
-            roundScores.append(RoundScore(roundId: round.id, roundName: round.name, points: points))
+            updatedScores.append(RoundScore(roundId: round.id, roundName: round.name, points: points))
         }
+
+        // Setze das gesamte Array neu (triggert CloudKit-Sync)
+        roundScores = updatedScores
         calculateTotalScore()
+
+        // Trigger CloudKit-Sync durch lastModified-Update
+        lastModified = Date()
     }
     
     func calculateTotalScore() {
