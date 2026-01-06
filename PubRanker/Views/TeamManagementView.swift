@@ -95,6 +95,9 @@ struct TeamManagementView: View {
                         }
                     }
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .background(Color.appBackground)
             }
             
             // Action Buttons am unteren Rand - IMMER anzeigen
@@ -420,9 +423,17 @@ struct TeamRowView: View {
     @State private var isConfirmed: Bool = false
 
     var body: some View {
-        HStack(spacing: AppSpacing.xs) {
-            // Team Icon
-            TeamIconView(team: team, size: 36)
+        ZStack {
+            // Background to prevent blue highlight
+            if isConfirmed {
+                Color.appBackground
+            } else {
+                Color.appBackground
+            }
+
+            HStack(spacing: AppSpacing.xs) {
+                // Team Icon
+                TeamIconView(team: team, size: 36)
             
             // Team Info
             VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
@@ -473,6 +484,7 @@ struct TeamRowView: View {
             }
             .buttonStyle(.plain)
             .helpText(NSLocalizedString("team.remove.help", comment: "Remove team help"))
+            }
         }
         .padding(.horizontal, AppSpacing.xs)
         .padding(.vertical, AppSpacing.xs)
@@ -483,6 +495,9 @@ struct TeamRowView: View {
                     .stroke(Color.appSuccess.opacity(0.5), lineWidth: 2)
             }
         }
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets(top: AppSpacing.xxs, leading: 0, bottom: AppSpacing.xxs, trailing: 0))
         .alert(NSLocalizedString("team.remove.confirm", comment: "Remove team confirm"), isPresented: $showingDeleteConfirmation) {
             Button(L10n.Navigation.cancel, role: .cancel) {}
             Button(L10n.CommonUI.remove, role: .destructive) {

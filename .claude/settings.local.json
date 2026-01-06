@@ -20,7 +20,10 @@
       "Bash(ruby fix_execution_sheet.rb:*)",
       "Bash(ruby -e:*)",
       "Bash(xcrun simctl:*)",
-      "Bash(git rev-list:*)"
+      "Bash(git rev-list:*)",
+      "Bash(wc:*)",
+      "Bash(comm:*)",
+      "Bash(ruby add_infoplist.rb:*)"
     ],
     "deny": [],
     "ask": []

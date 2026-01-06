@@ -10,11 +10,13 @@ import SwiftData
 
 struct PlannedQuizRow: View {
     let quiz: Quiz
+    let isSelected: Bool
     let onEdit: (() -> Void)?
     let onDelete: (() -> Void)?
-    
-    init(quiz: Quiz, onEdit: (() -> Void)? = nil, onDelete: (() -> Void)? = nil) {
+
+    init(quiz: Quiz, isSelected: Bool = false, onEdit: (() -> Void)? = nil, onDelete: (() -> Void)? = nil) {
         self.quiz = quiz
+        self.isSelected = isSelected
         self.onEdit = onEdit
         self.onDelete = onDelete
     }
@@ -24,12 +26,22 @@ struct PlannedQuizRow: View {
     }
 
     var body: some View {
-        HStack(spacing: AppSpacing.xs) {
+        HStack(spacing: 0) {
+            // Selection Indicator
+            if isSelected {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(Color.appPrimary)
+                    .frame(width: 4)
+                    .padding(.vertical, AppSpacing.xxs)
+            }
+
+            HStack(spacing: AppSpacing.xs) {
             // Quiz Info
             VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(quiz.name)
                     .font(.headline)
                     .foregroundStyle(Color.appTextPrimary)
+                    .lineLimit(2)
 
                 HStack(spacing: AppSpacing.xs) {
                     if !quiz.venue.isEmpty {
@@ -93,9 +105,35 @@ struct PlannedQuizRow: View {
                     .helpText("Quiz löschen")
                 }
             }
+            }
+            .padding(.vertical, AppSpacing.xs)
+            .padding(.horizontal, AppSpacing.sm)
         }
-        .padding(.vertical, AppSpacing.xxxs)
-        .padding(.horizontal, AppSpacing.xxxs)
+        .background(
+            Group {
+                if isSelected {
+                    LinearGradient(
+                        colors: [
+                            Color.appPrimary.opacity(0.15),
+                            Color.appPrimary.opacity(0.08)
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                } else {
+                    Color.clear
+                }
+            }
+        )
+        .cornerRadius(AppCornerRadius.sm)
+        .overlay {
+            if isSelected {
+                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                    .stroke(Color.appPrimary.opacity(0.3), lineWidth: 1)
+            }
+        }
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
     }
 }
 

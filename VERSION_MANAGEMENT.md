@@ -173,11 +173,7 @@ Die Marketing-Version (2.2 → 2.3) wird **manuell** geändert:
 # Alle Vorkommen ersetzen
 sed -i '' 's/MARKETING_VERSION = 2.2;/MARKETING_VERSION = 2.3;/g' \
     PubRanker.xcodeproj/project.pbxproj
-```
-
-### Wann erhöhen?
+```### Wann erhöhen?
 - **Major (1.0 → 2.0):** Große Änderungen, neues Design
 - **Minor (2.2 → 2.3):** Neue Features
-- **Keine Erhöhung:** Bug-Fixes (nur Build-Nummer erhöhen)
-
----*Zuletzt aktualisiert: Dezember 2024*
+- **Keine Erhöhung:** Bug-Fixes (nur Build-Nummer erhöhen)---*Zuletzt aktualisiert: Dezember 2024*

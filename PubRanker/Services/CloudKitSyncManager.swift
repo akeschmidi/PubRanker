@@ -8,34 +8,120 @@
 import Foundation
 import SwiftData
 import Combine
+import CloudKit
 
 @Observable
 @MainActor
 final class CloudKitSyncManager {
-    enum SyncStatus {
+    enum SyncStatus: Equatable {
         case idle
         case syncing
         case success
         case error(String)
+        case notAvailable(String)
     }
 
     private(set) var syncStatus: SyncStatus = .idle
     private(set) var lastSyncDate: Date?
+    private(set) var cloudKitAccountStatus: String = "Prüfe..."
+    private(set) var containerStatus: String = "Prüfe..."
 
     private var eventMonitor: Any?
     private let modelContext: ModelContext
+    
+    // CloudKit Container ID - MUSS mit Entitlements übereinstimmen
+    static let containerIdentifier = "iCloud.com.akeschmidi.PubRanker"
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
 
         #if !DEBUG
         setupNotificationObservers()
+        Task {
+            await checkCloudKitStatus()
+        }
+        #else
+        cloudKitAccountStatus = "Debug-Modus"
+        containerStatus = "CloudKit deaktiviert"
         #endif
     }
 
     deinit {
         // removeObserver ist thread-safe und kann synchron aufgerufen werden
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - CloudKit Status Check
+    
+    func checkCloudKitStatus() async {
+        #if DEBUG
+        cloudKitAccountStatus = "Debug-Modus"
+        containerStatus = "CloudKit deaktiviert"
+        return
+        #else
+        print("🔍 Prüfe CloudKit Status...")
+        
+        // 1. Check iCloud Account Status
+        do {
+            let container = CKContainer(identifier: Self.containerIdentifier)
+            let accountStatus = try await container.accountStatus()
+            
+            switch accountStatus {
+            case .available:
+                cloudKitAccountStatus = "✅ Verfügbar"
+                print("✅ iCloud Account verfügbar")
+            case .noAccount:
+                cloudKitAccountStatus = "❌ Nicht angemeldet"
+                syncStatus = .notAvailable("Nicht bei iCloud angemeldet")
+                print("❌ Kein iCloud Account")
+            case .restricted:
+                cloudKitAccountStatus = "⚠️ Eingeschränkt"
+                syncStatus = .notAvailable("iCloud eingeschränkt")
+                print("⚠️ iCloud eingeschränkt")
+            case .couldNotDetermine:
+                cloudKitAccountStatus = "❓ Unbekannt"
+                print("❓ iCloud Status unbekannt")
+            case .temporarilyUnavailable:
+                cloudKitAccountStatus = "⏳ Temporär nicht verfügbar"
+                print("⏳ iCloud temporär nicht verfügbar")
+            @unknown default:
+                cloudKitAccountStatus = "❓ Unbekannt"
+            }
+            
+            // 2. Check Container Access
+            if accountStatus == .available {
+                let database = container.privateCloudDatabase
+                let recordID = CKRecord.ID(recordName: "syncTest")
+                
+                do {
+                    // Versuche einen Test-Record zu fetchen (wird wahrscheinlich nicht existieren, aber zeigt ob Zugang möglich ist)
+                    _ = try await database.record(for: recordID)
+                    containerStatus = "✅ Container erreichbar"
+                } catch let error as CKError {
+                    if error.code == .unknownItem {
+                        // Das ist OK - heißt nur dass der Test-Record nicht existiert
+                        containerStatus = "✅ Container erreichbar"
+                        print("✅ CloudKit Container erreichbar: \(Self.containerIdentifier)")
+                    } else if error.code == .notAuthenticated {
+                        containerStatus = "❌ Nicht authentifiziert"
+                        print("❌ CloudKit nicht authentifiziert: \(error.localizedDescription)")
+                    } else if error.code == .permissionFailure {
+                        containerStatus = "❌ Keine Berechtigung"
+                        print("❌ CloudKit Berechtigung fehlt: \(error.localizedDescription)")
+                    } else {
+                        containerStatus = "⚠️ \(error.localizedDescription)"
+                        print("⚠️ CloudKit Fehler: \(error)")
+                    }
+                } catch {
+                    containerStatus = "⚠️ \(error.localizedDescription)"
+                    print("⚠️ Unbekannter Fehler: \(error)")
+                }
+            }
+        } catch {
+            cloudKitAccountStatus = "❌ Fehler: \(error.localizedDescription)"
+            print("❌ CloudKit Status Fehler: \(error)")
+        }
+        #endif
     }
 
     // MARK: - Notification Observers
@@ -44,10 +130,19 @@ final class CloudKitSyncManager {
         let center = NotificationCenter.default
 
         // Import-Ereignisse (Daten von CloudKit empfangen)
+        // Dieser Notification-Name funktioniert auch mit SwiftData
         center.addObserver(
             self,
             selector: #selector(handleImportNotification(_:)),
             name: Notification.Name("NSPersistentStoreRemoteChange"),
+            object: nil
+        )
+        
+        // Alternative Notification für SwiftData
+        center.addObserver(
+            self,
+            selector: #selector(handleImportNotification(_:)),
+            name: .NSPersistentStoreRemoteChange,
             object: nil
         )
 
@@ -60,11 +155,16 @@ final class CloudKitSyncManager {
         )
 
         print("✅ CloudKit Sync Manager: Notifications registriert")
+        print("   Container: \(Self.containerIdentifier)")
     }
 
     @objc private func handleImportNotification(_ notification: Notification) {
         Task { @MainActor in
             print("📥 CloudKit: Import-Event empfangen")
+            print("   Notification: \(notification.name.rawValue)")
+            if let userInfo = notification.userInfo {
+                print("   UserInfo: \(userInfo)")
+            }
             syncStatus = .syncing
 
             // Kurze Verzögerung, dann Status zurücksetzen
@@ -83,6 +183,7 @@ final class CloudKitSyncManager {
     @objc private func handleExportNotification(_ notification: Notification) {
         Task { @MainActor in
             print("📤 CloudKit: Export-Event empfangen")
+            print("   Notification: \(notification.name.rawValue)")
             syncStatus = .syncing
 
             try? await Task.sleep(for: .seconds(1))
@@ -101,16 +202,27 @@ final class CloudKitSyncManager {
     func forceSyncNow() async {
         #if DEBUG
         print("⚠️ CloudKit Sync im Debug-Build deaktiviert")
+        syncStatus = .notAvailable("Debug-Build")
         return
         #else
+        // Erst CloudKit Status prüfen
+        await checkCloudKitStatus()
+        
+        if case .notAvailable = syncStatus {
+            print("❌ CloudKit nicht verfügbar - Sync abgebrochen")
+            return
+        }
+        
         print("🔄 Manueller Sync wird ausgelöst...")
+        print("   Container: \(Self.containerIdentifier)")
         syncStatus = .syncing
 
         do {
             // Save erzwingt einen Export zu CloudKit
             try modelContext.save()
+            print("✅ ModelContext gespeichert")
 
-            // Kurze Wartezeit
+            // Kurze Wartezeit für CloudKit
             try await Task.sleep(for: .seconds(2))
 
             syncStatus = .success
@@ -124,6 +236,7 @@ final class CloudKitSyncManager {
             }
         } catch {
             print("❌ Sync-Fehler: \(error.localizedDescription)")
+            print("❌ Details: \(error)")
             syncStatus = .error(error.localizedDescription)
 
             // Nach 5 Sekunden zurück zu idle
@@ -132,6 +245,136 @@ final class CloudKitSyncManager {
                 syncStatus = .idle
             }
         }
+        #endif
+    }
+    
+    /// Holt aktiv neue Daten von CloudKit (Pull)
+    /// Dies triggert einen Import von Remote-Änderungen
+    func pullFromCloud() async {
+        #if DEBUG
+        print("⚠️ CloudKit Sync im Debug-Build deaktiviert")
+        syncStatus = .notAvailable("Debug-Build")
+        return
+        #else
+        // Erst CloudKit Status prüfen
+        await checkCloudKitStatus()
+        
+        if case .notAvailable = syncStatus {
+            print("❌ CloudKit nicht verfügbar - Pull abgebrochen")
+            return
+        }
+        
+        print("📥 Pull von CloudKit wird gestartet...")
+        print("   Container: \(Self.containerIdentifier)")
+        syncStatus = .syncing
+        
+        do {
+            // 1. Speichere lokale Änderungen zuerst
+            if modelContext.hasChanges {
+                try modelContext.save()
+                print("✅ Lokale Änderungen gespeichert")
+            }
+            
+            // 2. Trigger einen Fetch durch eine Subscription-Refresh
+            let container = CKContainer(identifier: Self.containerIdentifier)
+            let database = container.privateCloudDatabase
+            
+            // Fetch alle Subscriptions um einen Refresh zu triggern
+            let subscriptions = try await database.allSubscriptions()
+            print("📋 Aktive Subscriptions: \(subscriptions.count)")
+            
+            // 3. Sende eine Notification um Views zu refreshen
+            // Dies triggert SwiftData dazu, seinen Cache zu aktualisieren
+            NotificationCenter.default.post(
+                name: Notification.Name("PubRankerForceRefresh"),
+                object: nil
+            )
+            
+            // 4. Kurze Wartezeit für CloudKit Import
+            try await Task.sleep(for: .seconds(3))
+            
+            syncStatus = .success
+            lastSyncDate = Date()
+            print("✅ Pull von CloudKit abgeschlossen")
+            
+            // Nach 3 Sekunden zurück zu idle
+            try await Task.sleep(for: .seconds(3))
+            if case .success = syncStatus {
+                syncStatus = .idle
+            }
+        } catch {
+            print("❌ Pull-Fehler: \(error.localizedDescription)")
+            print("❌ Details: \(error)")
+            syncStatus = .error(error.localizedDescription)
+            
+            // Nach 5 Sekunden zurück zu idle
+            try? await Task.sleep(for: .seconds(5))
+            if case .error = syncStatus {
+                syncStatus = .idle
+            }
+        }
+        #endif
+    }
+    
+    /// Führt einen vollständigen Sync durch (Push + Pull)
+    func fullSync() async {
+        print("🔄 Vollständiger Sync wird gestartet...")
+        
+        // Erst pushen (lokale Änderungen hochladen)
+        await forceSyncNow()
+        
+        // Kurze Pause
+        try? await Task.sleep(for: .seconds(1))
+        
+        // Dann pullen (Remote-Änderungen holen)
+        await pullFromCloud()
+        
+        print("✅ Vollständiger Sync abgeschlossen")
+    }
+    
+    /// Führt eine vollständige Diagnose durch und gibt das Ergebnis zurück
+    func runDiagnostics() async -> String {
+        var result = "=== CloudKit Diagnose ===\n\n"
+        
+        #if DEBUG
+        result += "⚠️ DEBUG BUILD - CloudKit deaktiviert\n"
+        result += "Für Sync-Tests einen Release-Build verwenden.\n"
+        return result
+        #else
+        
+        result += "Container: \(Self.containerIdentifier)\n"
+        result += "Account Status: \(cloudKitAccountStatus)\n"
+        result += "Container Status: \(containerStatus)\n"
+        result += "Sync Status: \(statusText)\n"
+        
+        if let lastSync = lastSyncDate {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .medium
+            result += "Letzter Sync: \(formatter.string(from: lastSync))\n"
+        } else {
+            result += "Letzter Sync: Noch nie\n"
+        }
+        
+        // Prüfe iCloud Account
+        let container = CKContainer(identifier: Self.containerIdentifier)
+        do {
+            let status = try await container.accountStatus()
+            result += "\niCloud Account: "
+            switch status {
+            case .available: result += "✅ Verfügbar"
+            case .noAccount: result += "❌ Nicht angemeldet"
+            case .restricted: result += "⚠️ Eingeschränkt"
+            case .couldNotDetermine: result += "❓ Unbekannt"
+            case .temporarilyUnavailable: result += "⏳ Temporär nicht verfügbar"
+            @unknown default: result += "❓ Unbekannt"
+            }
+            result += "\n"
+        } catch {
+            result += "\niCloud Account Check fehlgeschlagen: \(error.localizedDescription)\n"
+        }
+        
+        return result
         #endif
     }
 
@@ -143,6 +386,13 @@ final class CloudKitSyncManager {
         }
         return false
     }
+    
+    var isAvailable: Bool {
+        if case .notAvailable = syncStatus {
+            return false
+        }
+        return true
+    }
 
     var statusIcon: String {
         switch syncStatus {
@@ -151,8 +401,10 @@ final class CloudKitSyncManager {
         case .syncing:
             return "icloud.and.arrow.up.fill"
         case .success:
-            return "icloud.and.arrow.up"
+            return "checkmark.icloud"
         case .error:
+            return "exclamationmark.icloud"
+        case .notAvailable:
             return "icloud.slash"
         }
     }
@@ -166,6 +418,8 @@ final class CloudKitSyncManager {
         case .success:
             return "green"
         case .error:
+            return "orange"
+        case .notAvailable:
             return "red"
         }
     }
@@ -185,6 +439,18 @@ final class CloudKitSyncManager {
             return "Synchronisiert"
         case .error(let message):
             return "Fehler: \(message)"
+        case .notAvailable(let reason):
+            return "Nicht verfügbar: \(reason)"
         }
+    }
+    
+    /// Detaillierter Status für Debug-Zwecke
+    var detailedStatus: String {
+        """
+        CloudKit Status:
+        - Account: \(cloudKitAccountStatus)
+        - Container: \(containerStatus)
+        - Sync: \(statusText)
+        """
     }
 }

@@ -117,6 +117,13 @@ extension Color {
         endPoint: .bottomTrailing
     )
 
+    /// Destructive gradient (red theme)
+    static let gradientDestructive = LinearGradient(
+        colors: [Color(red: 220/255, green: 38/255, blue: 38/255), Color(red: 185/255, green: 28/255, blue: 28/255)],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+
     /// Mixed gradient (primary to secondary)
     static let gradientPubTheme = LinearGradient(
         colors: [appPrimaryDark, appSecondaryLight],

@@ -41,87 +41,138 @@ struct GlobalEditTeamSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Team-Informationen") {
+                Section {
                     TextField("Team-Name", text: $teamName)
                         .textFieldStyle(.roundedBorder)
+                        .font(.body)
 
-                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                        Text("Team-Icon")
-                            .font(.caption)
-                            .foregroundStyle(Color.appTextSecondary)
-                        
-                        HStack(spacing: AppSpacing.sm) {
+                    VStack(alignment: .leading, spacing: AppSpacing.md) {
+                        HStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "photo.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(Color.appPrimary)
+                            Text("Team-Icon")
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
+                        }
+
+                        HStack(spacing: AppSpacing.md) {
                             // Aktuelles Icon anzeigen
-                            TeamIconView(team: team, size: 60)
-                            
-                            VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            TeamIconView(team: team, size: 80)
+                                .shadow(color: (Color(hex: team.color) ?? Color.appPrimary).opacity(0.3), radius: 6, y: 3)
+
+                            VStack(alignment: .leading, spacing: AppSpacing.xs) {
                                 Button {
                                     showingImagePicker = true
                                 } label: {
                                     Label("Bild auswählen", systemImage: "photo")
+                                        .font(.subheadline)
+                                        .frame(maxWidth: .infinity)
                                 }
-                                .primaryGradientButton()
-                                
+                                .primaryGradientButton(size: .small)
+
                                 if team.imageData != nil {
                                     Button {
                                         team.imageData = nil
                                     } label: {
                                         Label("Bild entfernen", systemImage: "trash")
+                                            .font(.subheadline)
+                                            .frame(maxWidth: .infinity)
                                     }
-                                    .accentGradientButton()
+                                    .destructiveGradientButton(size: .small)
                                 }
                             }
+                            .frame(maxWidth: 180)
                         }
+                        .padding(AppSpacing.sm)
+                        .background(Color.appPrimary.opacity(0.05))
+                        .cornerRadius(AppCornerRadius.md)
+                    }
                         
-                        Divider()
-                        
-                        // Farbauswahl
-                        Text("Farbe")
-                            .font(.body)
-                            .foregroundStyle(Color.appTextSecondary)
+                    VStack(alignment: .leading, spacing: AppSpacing.md) {
+                        HStack(spacing: AppSpacing.xxs) {
+                            Image(systemName: "paintpalette.fill")
+                                .font(.title3)
+                                .foregroundStyle(Color.appPrimary)
+                            Text("Team-Farbe")
+                                .font(.headline)
+                                .foregroundStyle(Color.appTextPrimary)
+                        }
 
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: AppSpacing.xs) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: AppSpacing.sm) {
                             ForEach(availableColors, id: \.self) { colorHex in
                                 Circle()
                                     .fill(Color(hex: colorHex) ?? Color.appPrimary)
-                                    .frame(width: 40, height: 40)
+                                    .frame(width: 50, height: 50)
                                     .overlay {
                                         if selectedColor == colorHex {
                                             Circle()
-                                                .stroke(Color.appTextPrimary, lineWidth: 3)
+                                                .stroke(Color.appTextPrimary, lineWidth: 4)
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 2)
+                                                .padding(2)
                                         }
                                     }
-                                    .shadow(AppShadow.sm)
+                                    .shadow(color: (Color(hex: colorHex) ?? Color.appPrimary).opacity(0.4), radius: 4, y: 2)
                                     .onTapGesture {
                                         selectedColor = colorHex
-                                        team.imageData = nil // Bild entfernen wenn Farbe gewählt wird
+                                        team.imageData = nil
                                     }
                             }
                         }
                     }
-                }
-
-                Section("Kontaktinformationen") {
-                    TextField("Kontaktperson (optional)", text: $contactPerson)
-                        .textFieldStyle(.roundedBorder)
-                        .textContentType(.name)
-
-                    TextField("E-Mail (optional)", text: $email)
-                        .textFieldStyle(.roundedBorder)
-                        .textContentType(.emailAddress)
+                } header: {
+                    Label("Team-Informationen", systemImage: "person.3.fill")
+                        .font(.headline)
+                        .foregroundStyle(Color.appPrimary)
                 }
 
                 Section {
-                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                    HStack(spacing: AppSpacing.xs) {
+                        Image(systemName: "person.fill")
+                            .font(.body)
+                            .foregroundStyle(Color.appTextSecondary)
+                        TextField("Kontaktperson (optional)", text: $contactPerson)
+                            .textFieldStyle(.roundedBorder)
+                            .textContentType(.name)
+                    }
+
+                    HStack(spacing: AppSpacing.xs) {
+                        Image(systemName: "envelope.fill")
+                            .font(.body)
+                            .foregroundStyle(Color.appTextSecondary)
+                        TextField("E-Mail (optional)", text: $email)
+                            .textFieldStyle(.roundedBorder)
+                            .textContentType(.emailAddress)
+                    }
+                } header: {
+                    Label("Kontaktinformationen", systemImage: "person.text.rectangle.fill")
+                        .font(.headline)
+                        .foregroundStyle(Color.appPrimary)
+                }
+
+                Section {
+                    VStack(alignment: .leading, spacing: AppSpacing.md) {
                         HStack {
-                            Text("Quiz-Zuordnung")
-                                .font(.title3)
-                                .bold()
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "link.circle.fill")
+                                    .font(.title3)
+                                    .foregroundStyle(Color.appSecondary)
+                                Text("Quiz-Zuordnung")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.appTextPrimary)
+                            }
                             Spacer()
-                            Text("\(selectedQuizIds.count) ausgewählt")
-                                .font(.body)
-                                .foregroundStyle(Color.appTextSecondary)
-                                .monospacedDigit()
+                            HStack(spacing: AppSpacing.xxxs) {
+                                Text("\(selectedQuizIds.count)")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(Color.appSecondary)
+                                    .monospacedDigit()
+                                Text("ausgewählt")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.appTextSecondary)
+                            }
                         }
 
                         if plannedQuizzes.isEmpty {
@@ -184,7 +235,7 @@ struct GlobalEditTeamSheet: View {
                 }
             }
         }
-        .frame(minWidth: 550, minHeight: 600)
+        .frame(minWidth: 700, minHeight: 800)
         .onAppear {
             teamName = team.name
             selectedColor = team.color

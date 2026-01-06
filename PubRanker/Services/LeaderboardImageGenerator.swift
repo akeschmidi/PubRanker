@@ -68,7 +68,6 @@ class LeaderboardImageGenerator {
 
         // Add clickable link annotation in footer area
         // The link area covers the bottom ~150 points of the page (footer area)
-        let pageHeight = pdfPage.bounds(for: .mediaBox).height
         let pageWidth = pdfPage.bounds(for: .mediaBox).width
 
         // Link area: centered in footer, covering QR code and text

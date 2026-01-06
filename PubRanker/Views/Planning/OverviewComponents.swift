@@ -50,49 +50,64 @@ struct CompactStatCard: View {
     let isComplete: Bool
 
     var body: some View {
-        VStack(spacing: AppSpacing.xxs) {
+        VStack(spacing: AppSpacing.xs) {
             ZStack {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [color.opacity(0.2), color.opacity(0.1)],
+                            colors: [color.opacity(0.3), color.opacity(0.15)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
-                    .frame(width: 44, height: 44)
-                    .shadow(AppShadow.sm)
+                    .frame(width: 54, height: 54)
+                    .shadow(color: color.opacity(0.3), radius: 6, y: 3)
 
                 Image(systemName: icon)
-                    .font(.body)
+                    .font(.title2)
+                    .fontWeight(.semibold)
                     .foregroundStyle(color)
             }
             .overlay(alignment: .topTrailing) {
                 if isComplete {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Color.appSuccess)
-                        .font(.caption)
-                        .offset(x: 4, y: -4)
+                        .font(.body)
+                        .background(
+                            Circle()
+                                .fill(Color.appBackground)
+                                .frame(width: 14, height: 14)
+                        )
+                        .offset(x: 6, y: -6)
                 }
             }
 
             Text(value)
-                .font(.system(size: 20, weight: .bold))
+                .font(.system(size: 26, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(color)
 
             Text(title)
-                .font(.caption)
+                .font(.subheadline)
+                .fontWeight(.medium)
                 .foregroundStyle(Color.appTextSecondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity)
-        .padding(AppSpacing.sm)
+        .padding(.vertical, AppSpacing.md)
+        .padding(.horizontal, AppSpacing.sm)
+        .background(
+            LinearGradient(
+                colors: [color.opacity(0.08), color.opacity(0.03)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
         .appCard(style: .default, cornerRadius: AppCornerRadius.md)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
-                .stroke(color.opacity(0.2), lineWidth: AppSpacing.xxxs)
+                .stroke(color.opacity(0.3), lineWidth: 1.5)
         }
     }
 }
@@ -199,53 +214,66 @@ struct CompactTeamCard: View {
     let quiz: Quiz
 
     var body: some View {
-        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-            HStack(spacing: AppSpacing.xs) {
-                TeamIconView(team: team, size: 44)
+        HStack(spacing: AppSpacing.sm) {
+            // Team Icon
+            TeamIconView(team: team, size: 52)
+                .shadow(color: (Color(hex: team.color) ?? Color.appPrimary).opacity(0.3), radius: 4, y: 2)
 
-                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
-                    Text(team.name)
-                        .font(.body)
-                        .bold()
-                        .foregroundStyle(Color.appTextPrimary)
-                        .lineLimit(1)
+            // Team Info
+            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                Text(team.name)
+                    .font(.body)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.appTextPrimary)
+                    .lineLimit(1)
 
-                    if !team.contactPerson.isEmpty {
-                        HStack(spacing: AppSpacing.xxxs) {
-                            Image(systemName: "person.fill")
-                                .font(.caption2)
-                            Text(team.contactPerson)
-                                .font(.caption)
-                        }
-                        .foregroundStyle(Color.appTextSecondary)
-                        .lineLimit(1)
+                if !team.contactPerson.isEmpty {
+                    HStack(spacing: AppSpacing.xxxs) {
+                        Image(systemName: "person.fill")
+                            .font(.caption2)
+                            .foregroundStyle(Color.appTextSecondary)
+                        Text(team.contactPerson)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
+                    .lineLimit(1)
                 }
 
-                Spacer()
-
-                // Status Indicator
-                VStack(spacing: AppSpacing.xxxs) {
-                    if team.isConfirmed(for: quiz) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color.appSuccess)
-                            .font(.title3)
-                    }
-
-                    if !team.email.isEmpty {
+                if !team.email.isEmpty {
+                    HStack(spacing: AppSpacing.xxxs) {
                         Image(systemName: "envelope.fill")
+                            .font(.caption2)
                             .foregroundStyle(Color.appPrimary)
+                        Text(team.email)
                             .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
                     }
+                    .lineLimit(1)
+                }
+            }
+
+            Spacer()
+
+            // Status Indicator
+            if team.isConfirmed(for: quiz) {
+                VStack(spacing: AppSpacing.xxxs) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(Color.appSuccess)
+                        .font(.title2)
+                    Text("Bestätigt")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.appSuccess)
                 }
             }
         }
-        .padding(AppSpacing.xs)
+        .padding(AppSpacing.sm)
         .background(
             LinearGradient(
                 colors: [
-                    (Color(hex: team.color) ?? Color.appPrimary).opacity(0.08),
-                    (Color(hex: team.color) ?? Color.appPrimary).opacity(0.03)
+                    (Color(hex: team.color) ?? Color.appPrimary).opacity(0.12),
+                    (Color(hex: team.color) ?? Color.appPrimary).opacity(0.04)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -254,7 +282,7 @@ struct CompactTeamCard: View {
         .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.sm)
-                .stroke(Color(hex: team.color)?.opacity(0.4) ?? Color.clear, lineWidth: AppSpacing.xxxs)
+                .stroke((Color(hex: team.color) ?? Color.appPrimary).opacity(0.5), lineWidth: 1.5)
         }
     }
 }
@@ -298,38 +326,73 @@ struct CompactRoundsOverview: View {
 struct CompactRoundCard: View {
     let round: Round
     let index: Int
-    
-    var body: some View {
-        VStack(spacing: AppSpacing.xxxs) {
-            Text("R\(index + 1)")
-                .font(.body)
-                .bold()
-                .foregroundStyle(.white)
-                .frame(width: 36, height: 36)
-                .background(Color.appPrimary)
-                .clipShape(Circle())
-                .shadow(AppShadow.sm)
 
+    var body: some View {
+        VStack(spacing: AppSpacing.xs) {
+            // Round Badge
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.appPrimary.opacity(0.9), Color.appPrimary],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 46, height: 46)
+                    .shadow(color: Color.appPrimary.opacity(0.4), radius: 6, y: 3)
+
+                Text("R\(index + 1)")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+            }
+
+            // Round Name
             Text(round.name)
                 .font(.body)
+                .fontWeight(.semibold)
                 .foregroundStyle(Color.appTextPrimary)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.9)
 
+            // Max Points
             if let maxPoints = round.maxPoints {
-                Text("\(maxPoints) Pkt")
-                    .font(.body)
-                    .foregroundStyle(Color.appTextSecondary)
-                    .monospacedDigit()
+                HStack(spacing: AppSpacing.xxxs) {
+                    Image(systemName: "star.fill")
+                        .font(.caption2)
+                        .foregroundStyle(Color.appAccent)
+                    Text("\(maxPoints)")
+                        .font(.body)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color.appAccent)
+                        .monospacedDigit()
+                    Text("Pkt")
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                }
             } else {
                 Text(L10n.Round.noMaxPointsShort)
-                    .font(.body)
+                    .font(.caption)
                     .foregroundStyle(Color.appTextSecondary)
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, AppSpacing.xs)
+        .padding(.vertical, AppSpacing.sm)
+        .padding(.horizontal, AppSpacing.xs)
+        .background(
+            LinearGradient(
+                colors: [Color.appPrimary.opacity(0.08), Color.appPrimary.opacity(0.03)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
         .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+        .overlay {
+            RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                .stroke(Color.appPrimary.opacity(0.3), lineWidth: 1.5)
+        }
     }
 }
 

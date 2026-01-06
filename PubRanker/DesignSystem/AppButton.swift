@@ -224,6 +224,38 @@ struct SuccessGradientButtonStyle: ButtonStyle {
     }
 }
 
+/// Destructive Gradient Button Style (for delete actions)
+struct DestructiveGradientButtonStyle: ButtonStyle {
+    var size: ButtonSize
+
+    init(size: ButtonSize = .medium) {
+        self.size = size
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(size.font)
+            .foregroundStyle(.white)
+            .padding(.horizontal, size.horizontalPadding)
+            .padding(.vertical, size.verticalPadding)
+            .if(size.minHeight != nil) { view in
+                view.frame(minHeight: size.minHeight)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(Color.gradientDestructive)
+                    .opacity(configuration.isPressed ? 0.8 : 1.0)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+            }
+            .shadow(color: Color(red: 220/255, green: 38/255, blue: 38/255).opacity(0.3), radius: 8, y: 4)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.spring(response: 0.2, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+}
+
 // MARK: - View Extensions for easy Button usage
 
 extension View {
@@ -246,7 +278,12 @@ extension View {
     func successGradientButton(size: ButtonSize = .medium) -> some View {
         self.buttonStyle(SuccessGradientButtonStyle(size: size))
     }
-    
+
+    /// Apply Destructive Gradient Button Style
+    func destructiveGradientButton(size: ButtonSize = .medium) -> some View {
+        self.buttonStyle(DestructiveGradientButtonStyle(size: size))
+    }
+
     /// Apply Custom Gradient Button Style
     func gradientButton(
         gradient: LinearGradient = Color.gradientPrimary,

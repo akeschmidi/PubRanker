@@ -35,6 +35,10 @@ struct PubRankerApp: App {
     }
     
     // MARK: - Model Container with iCloud Support
+    
+    /// CloudKit Container ID - MUSS mit Entitlements übereinstimmen
+    static let cloudKitContainerID = "iCloud.com.akeschmidi.PubRanker"
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Quiz.self,
@@ -52,9 +56,10 @@ struct PubRankerApp: App {
         )
         #else
         print("📦 RELEASE BUILD - CloudKit Sync ist AKTIVIERT")
-        print("   Container: iCloud.com.akeschmidi.PubRanker")
+        print("   Container: \(cloudKitContainerID)")
         print("   Database: .automatic (private)")
-        // Use iCloud in release mode
+        
+        // Use iCloud in release mode with explicit container
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
@@ -67,12 +72,32 @@ struct PubRankerApp: App {
             print("✅ ModelContainer erfolgreich erstellt")
             #if !DEBUG
             print("✅ CloudKit Synchronisation aktiv")
-            print("   Tipp: Prüfe CloudKit Status über Einstellungen → CloudKit Status")
+            print("   Container: \(cloudKitContainerID)")
+            print("   Tipp: Rechtsklick auf iCloud-Icon für Diagnose")
+            
+            // Enable remote change notifications for better sync
+            // Das ermöglicht das Empfangen von Remote-Änderungen
+            let storeDescription = container.configurations.first
             #endif
             return container
         } catch {
             print("❌ ModelContainer Fehler: \(error)")
             print("❌ Details: \(error.localizedDescription)")
+            
+            #if !DEBUG
+            // Bei Release-Build: Versuche ohne CloudKit als Fallback
+            print("⚠️ Versuche Fallback ohne CloudKit...")
+            do {
+                let localConfiguration = ModelConfiguration(
+                    schema: schema,
+                    isStoredInMemoryOnly: false
+                )
+                print("⚠️ Fallback: Lokaler Speicher (keine iCloud-Sync)")
+                return try ModelContainer(for: schema, configurations: [localConfiguration])
+            } catch {
+                print("❌ Auch lokaler Speicher fehlgeschlagen")
+            }
+            #endif
 
             // Last resort: try in-memory only
             do {

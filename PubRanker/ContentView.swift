@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     @Environment(QuizViewModel.self) private var viewModel
@@ -16,6 +17,9 @@ struct ContentView: View {
     @State private var showingDebugView = false
     @State private var syncManager: CloudKitSyncManager?
     @StateObject private var easterEggManager = EasterEggManager()
+    
+    /// Trigger für View-Refresh nach CloudKit-Pull
+    @State private var refreshTrigger = UUID()
 
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -84,6 +88,12 @@ struct ContentView: View {
         .onDisappear {
             easterEggManager.cleanup()
         }
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("PubRankerForceRefresh"))) { _ in
+            // Trigger View-Refresh nach CloudKit-Pull
+            print("🔄 Force Refresh empfangen - Views werden aktualisiert")
+            refreshTrigger = UUID()
+        }
+        .id(refreshTrigger)
         .environment(syncManager ?? CloudKitSyncManager(modelContext: modelContext))
     }
     

@@ -39,117 +39,161 @@ struct TeamDetailView: View {
     @ViewBuilder
     private var teamHeaderCard: some View {
         VStack(spacing: AppSpacing.md) {
-            // Row 1: Icon + Name
-            HStack(alignment: .center, spacing: AppSpacing.md) {
+            // Row 1: Icon + Name + Buttons
+            HStack(alignment: .top, spacing: AppSpacing.md) {
                 // Team Icon
-                TeamIconView(team: team, size: 70)
-                    .shadow(color: (Color(hex: team.color) ?? Color.appPrimary).opacity(0.3), radius: 6, y: 2)
-                
-                // Team Name
-                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                TeamIconView(team: team, size: 80)
+                    .shadow(color: (Color(hex: team.color) ?? Color.appPrimary).opacity(0.3), radius: 8, y: 3)
+
+                // Team Name & Info
+                VStack(alignment: .leading, spacing: AppSpacing.xs) {
                     Text(team.name)
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(Color.appTextPrimary)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
-                    
+
                     // Quiz Count Badge
                     HStack(spacing: AppSpacing.xxs) {
                         Image(systemName: "link.circle.fill")
-                            .font(.caption)
+                            .font(.body)
                             .foregroundStyle(Color(hex: team.color) ?? Color.appPrimary)
-                        Text("\(team.quizzes?.count ?? 0) Quiz")
-                            .font(.subheadline)
+                        Text("\(team.quizzes?.count ?? 0) Quiz zugeordnet")
+                            .font(.body)
+                            .fontWeight(.medium)
                             .foregroundStyle(Color.appTextSecondary)
                     }
+
+                    // Bestätigungsstatus
+                    HStack(spacing: AppSpacing.xxs) {
+                        Image(systemName: team.isConfirmed ? "checkmark.circle.fill" : "circle")
+                            .font(.body)
+                            .foregroundStyle(team.isConfirmed ? Color.appSuccess : Color.appTextSecondary)
+                        Text(team.isConfirmed ? "Bestätigt" : "Nicht bestätigt")
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .foregroundStyle(team.isConfirmed ? Color.appSuccess : Color.appTextSecondary)
+                    }
                 }
-                
+
                 Spacer(minLength: 0)
-                
-                // Action Buttons - Icon only on iPad
-                #if os(iOS)
-                HStack(spacing: AppSpacing.xs) {
-                    Button {
-                        showingEditSheet = true
-                    } label: {
-                        Image(systemName: "pencil")
-                            .font(.body.weight(.semibold))
-                    }
-                    .primaryGradientButton()
-                    
-                    Button(role: .destructive) {
-                        showingDeleteAlert = true
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.body.weight(.semibold))
-                    }
-                    .accentGradientButton()
-                }
-                #else
+
+                // Action Buttons - Consistent across platforms
                 VStack(spacing: AppSpacing.xs) {
                     Button {
                         showingEditSheet = true
                     } label: {
                         Label("Bearbeiten", systemImage: "pencil")
                             .font(.body.weight(.semibold))
+                            .frame(minWidth: 120)
                     }
-                    .primaryGradientButton()
-                    
+                    .primaryGradientButton(size: .small)
+
                     Button(role: .destructive) {
                         showingDeleteAlert = true
                     } label: {
                         Label("Löschen", systemImage: "trash")
                             .font(.body.weight(.semibold))
+                            .frame(minWidth: 120)
                     }
-                    .accentGradientButton()
+                    .destructiveGradientButton(size: .small)
                 }
-                #endif
             }
-            
-            // Row 2: Contact info - Vertical stack for better fit
+
+            // Row 2: Kontaktinformationen in Cards
             if !team.contactPerson.isEmpty || !team.email.isEmpty {
                 Divider()
-                
-                VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                    // Kontaktperson
+
+                HStack(spacing: AppSpacing.sm) {
+                    // Kontaktperson Card
                     if !team.contactPerson.isEmpty {
-                        HStack(spacing: AppSpacing.xxs) {
-                            Image(systemName: "person.fill")
-                                .font(.caption)
-                                .foregroundStyle(Color.appPrimary)
-                                .frame(width: 16)
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "person.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appPrimary)
+                                Text("Kontaktperson")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appTextSecondary)
+                                    .textCase(.uppercase)
+                            }
                             Text(team.contactPerson)
-                                .font(.subheadline)
-                                .foregroundStyle(Color.appTextSecondary)
+                                .font(.body)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.appTextPrimary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(AppSpacing.sm)
+                        .background(Color.appPrimary.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
+                    }
+
+                    // E-Mail Card
+                    if !team.email.isEmpty {
+                        VStack(alignment: .leading, spacing: AppSpacing.xxs) {
+                            HStack(spacing: AppSpacing.xxs) {
+                                Image(systemName: "envelope.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appPrimary)
+                                Text("E-Mail")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appTextSecondary)
+                                    .textCase(.uppercase)
+                            }
+                            Text(team.email)
+                                .font(.body)
+                                .fontWeight(.medium)
+                                .foregroundStyle(Color.appTextPrimary)
                                 .lineLimit(1)
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(AppSpacing.sm)
+                        .background(Color.appPrimary.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                     }
-                    
-                    // E-Mail
-                    if !team.email.isEmpty {
+
+                    // Erstellungsdatum Card
+                    VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                         HStack(spacing: AppSpacing.xxs) {
-                            Image(systemName: "envelope.fill")
+                            Image(systemName: "calendar")
                                 .font(.caption)
                                 .foregroundStyle(Color.appPrimary)
-                                .frame(width: 16)
-                            Text(team.email)
-                                .font(.subheadline)
+                            Text("Erstellt am")
+                                .font(.caption)
                                 .foregroundStyle(Color.appTextSecondary)
-                                .lineLimit(1)
+                                .textCase(.uppercase)
                         }
+                        Text(team.createdAt.formatted(date: .abbreviated, time: .omitted))
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Color.appTextPrimary)
                     }
-                    
-                    // Erstellt am
-                    HStack(spacing: AppSpacing.xxs) {
-                        Image(systemName: "calendar")
-                            .font(.caption)
-                            .foregroundStyle(Color.appPrimary)
-                            .frame(width: 16)
-                        Text("Erstellt: \(team.createdAt.formatted(date: .abbreviated, time: .omitted))")
-                            .font(.subheadline)
-                            .foregroundStyle(Color.appTextSecondary)
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(AppSpacing.sm)
+                    .background(Color.appPrimary.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
                 }
+            } else {
+                // Nur Erstellungsdatum, wenn keine Kontaktinfos
+                Divider()
+
+                HStack(spacing: AppSpacing.xxs) {
+                    Image(systemName: "calendar")
+                        .font(.caption)
+                        .foregroundStyle(Color.appPrimary)
+                    Text("Erstellt am")
+                        .font(.caption)
+                        .foregroundStyle(Color.appTextSecondary)
+                        .textCase(.uppercase)
+                    Spacer()
+                    Text(team.createdAt.formatted(date: .abbreviated, time: .omitted))
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.appTextPrimary)
+                }
+                .padding(AppSpacing.sm)
+                .background(Color.appPrimary.opacity(0.08))
+                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
             }
         }
         .padding(AppSpacing.md)

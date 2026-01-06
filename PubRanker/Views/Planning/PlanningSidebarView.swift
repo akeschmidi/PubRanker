@@ -81,6 +81,7 @@ struct PlanningSidebarView: View {
                         ForEach(plannedQuizzes) { quiz in
                             PlannedQuizRow(
                                 quiz: quiz,
+                                isSelected: selectedQuiz?.id == quiz.id,
                                 onEdit: onEditQuiz != nil ? { onEditQuiz?(quiz) } : nil,
                                 onDelete: onDeleteQuiz != nil ? { onDeleteQuiz?(quiz) } : nil
                             )
@@ -89,10 +90,12 @@ struct PlanningSidebarView: View {
                     }
                 }
             }
-            .listStyle(.sidebar)
+            .listStyle(.plain)
             .scrollContentBackground(.hidden)
+            .tint(Color.appPrimary)
         }
         .navigationTitle("")
+        .background(Color.appBackground)
         .sheet(isPresented: $showingNewQuizSheet, onDismiss: {
             // Wähle das neu erstellte Quiz aus
             if let newQuiz = viewModel.selectedQuiz {
