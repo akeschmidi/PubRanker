@@ -9,6 +9,29 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Team Sort Order
+enum TeamSortOrder: String, CaseIterable {
+    case alphabetical = "alphabetical"
+    case rank = "rank"
+    case recentlyAdded = "recentlyAdded"
+
+    var title: String {
+        switch self {
+        case .alphabetical: return "A-Z"
+        case .rank: return "Rang"
+        case .recentlyAdded: return "Neueste"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .alphabetical: return "textformat.abc"
+        case .rank: return "medal"
+        case .recentlyAdded: return "clock"
+        }
+    }
+}
+
 struct ExecutionView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<Quiz> { $0.isActive && !$0.isCompleted }, sort: \Quiz.date, order: .reverse)
@@ -25,6 +48,7 @@ struct ExecutionView: View {
     @State private var showingCancelConfirmation = false
     @State private var showingCompleteConfirmation = false
     @State private var showingAddTeamSheet = false
+    @State private var teamSortOrder: TeamSortOrder = .alphabetical
     
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -302,12 +326,12 @@ struct ExecutionView: View {
                     }
                 }
                 
-                // Right Sidebar - Live Rangliste (nur anzeigen wenn genug Platz)
+                // Right Sidebar - Live Rangliste (immer anzeigen, adaptive Breite)
                 if shouldShowLiveLeaderboard(width: geometry.size.width) {
                     Divider()
 
-                    liveLeaderboard(quiz)
-                        .frame(width: leaderboardWidth)
+                    liveLeaderboard(quiz, compact: geometry.size.width < 900)
+                        .frame(width: leaderboardWidth(for: geometry.size.width))
                 }
             }
         }
@@ -423,14 +447,14 @@ struct ExecutionView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-                .secondaryGradientButton()
+                .secondaryGlassButton()
                 .helpText(L10n.Execution.roundPrevious(previousRound.name))
             } else {
                 Button {
                 } label: {
                     Image(systemName: "chevron.left")
                 }
-                .secondaryGradientButton()
+                .secondaryGlassButton()
                 .disabled(true)
             }
             
@@ -462,7 +486,7 @@ struct ExecutionView: View {
                 .padding(.horizontal, AppSpacing.xs)
                 .padding(.vertical, AppSpacing.xxxs)
             }
-            .secondaryGradientButton()
+            .secondaryGlassButton()
             
             // Next Round
             if let nextRound = getNextRound(quiz: quiz, currentRound: currentRound) {
@@ -471,21 +495,21 @@ struct ExecutionView: View {
                 } label: {
                     Image(systemName: "chevron.right")
                 }
-                .secondaryGradientButton()
+                .secondaryGlassButton()
                 .helpText(L10n.Execution.roundNext(nextRound.name))
             } else {
                 Button {
                 } label: {
                     Image(systemName: "chevron.right")
                 }
-                .secondaryGradientButton()
+                .secondaryGlassButton()
                 .disabled(true)
             }
         }
     }
     
     // MARK: - Scoring Content
-    
+
     private func scoringContent(quiz: Quiz, round: Round) -> some View {
         #if os(iOS)
         // iPad: Kompakte Listen-Darstellung
@@ -522,29 +546,325 @@ struct ExecutionView: View {
             }
         }
         #else
-        // macOS: Original Card Layout
+        // macOS: Tabellarische Darstellung
         ScrollView {
-            VStack(spacing: AppSpacing.md) {
-                if quiz.safeTeams.isEmpty {
-                    ContentUnavailableView(
-                        L10n.Execution.noTeams,
-                        systemImage: "person.slash",
-                        description: Text(L10n.Execution.noTeamsDescription())
-                    )
-                    .frame(maxHeight: 400)
-                } else {
-                    LazyVGrid(columns: scoreCardGridColumns, spacing: AppSpacing.xs) {
-                        ForEach(quiz.safeTeams.sorted(by: naturalSort)) { team in
-                            teamScoreCard(team: team, round: round, quiz: quiz)
+            if quiz.safeTeams.isEmpty {
+                ContentUnavailableView(
+                    L10n.Execution.noTeams,
+                    systemImage: "person.slash",
+                    description: Text(L10n.Execution.noTeamsDescription())
+                )
+                .frame(maxHeight: 400)
+            } else {
+                VStack(spacing: 0) {
+                    // Tabellen-Header mit Sortier-Option
+                    HStack(spacing: 0) {
+                        // Sortier-Menü statt statischer "#"
+                        Menu {
+                            ForEach(TeamSortOrder.allCases, id: \.self) { sortOrder in
+                                Button {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        teamSortOrder = sortOrder
+                                    }
+                                } label: {
+                                    Label(sortOrder.title, systemImage: sortOrder.icon)
+                                    if teamSortOrder == sortOrder {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 2) {
+                                Image(systemName: teamSortOrder.icon)
+                                    .font(.system(size: 10))
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 8))
+                            }
+                            .foregroundStyle(Color.appPrimary)
+                            .frame(width: 36)
+                        }
+                        .buttonStyle(.plain)
+
+                        Text("Team")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, AppSpacing.xs)
+
+                        Text("Punkte")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .frame(width: 160, alignment: .center)
+
+                        if round.maxPoints != nil {
+                            Text("Max")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color.appTextSecondary)
+                                .frame(width: 50, alignment: .center)
                         }
                     }
-                    .padding(.horizontal, AppSpacing.screenPadding)
+                    .padding(.horizontal, AppSpacing.sm)
+                    .padding(.vertical, AppSpacing.xs)
+                    .background(Color.appBackgroundSecondary.opacity(0.5))
+
+                    Divider()
+
+                    // Tabellen-Zeilen mit Sortierung
+                    LazyVStack(spacing: 0) {
+                        ForEach(sortedTeams(for: quiz)) { team in
+                            teamScoreTableRow(team: team, round: round, quiz: quiz)
+
+                            if team.id != sortedTeams(for: quiz).last?.id {
+                                Divider()
+                            }
+                        }
+                    }
                 }
+                .background(Color.appBackground)
+                .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .stroke(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
+                )
+                .padding(.horizontal, AppSpacing.md)
+                .padding(.top, AppSpacing.xs)
             }
-            .padding(.bottom, AppSpacing.screenPadding)
         }
         #endif
     }
+
+    // MARK: - Sorted Teams Helper
+
+    private func sortedTeams(for quiz: Quiz) -> [Team] {
+        let teams = quiz.safeTeams
+        switch teamSortOrder {
+        case .alphabetical:
+            return teams.sorted(by: naturalSort)
+        case .rank:
+            return teams.sorted { team1, team2 in
+                let rank1 = viewModel.getTeamRank(for: team1, in: quiz)
+                let rank2 = viewModel.getTeamRank(for: team2, in: quiz)
+                return rank1 < rank2
+            }
+        case .recentlyAdded:
+            return teams.sorted { $0.createdAt > $1.createdAt }
+        }
+    }
+
+    // MARK: - Team Score Table Row (macOS)
+
+    #if os(macOS)
+    private func teamScoreTableRow(team: Team, round: Round, quiz: Quiz) -> some View {
+        let rank = viewModel.getTeamRank(for: team, in: quiz)
+        let currentScore = getScoreValue(for: team)
+        let teamColor = Color(hex: team.color) ?? Color.appPrimary
+        let savedScore = team.getScore(for: round)
+        let hasScore = (savedScore ?? 0) > 0 || currentScore > 0
+        let isTopThree = rank <= 3
+
+        return HStack(spacing: 0) {
+            // Rang
+            ZStack {
+                if isTopThree {
+                    Image(systemName: "medal.fill")
+                        .foregroundStyle(rank == 1 ? Color.appSecondary : rank == 2 ? Color.appTextSecondary : Color.appPrimary)
+                        .font(.system(size: 14))
+                } else {
+                    Text("\(rank)")
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Color.appTextSecondary)
+                }
+            }
+            .frame(width: 36)
+
+            // Team Name & Color
+            HStack(spacing: AppSpacing.xs) {
+                Circle()
+                    .fill(teamColor)
+                    .frame(width: 12, height: 12)
+                    .shadow(color: teamColor.opacity(0.4), radius: 2, y: 1)
+
+                Text(team.name)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Color.appTextPrimary)
+                    .lineLimit(1)
+
+                // Gespeichert-Indikator
+                if let saved = savedScore, saved > 0 {
+                    HStack(spacing: 2) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.appSuccess)
+                        Text("\(saved)")
+                            .font(.system(size: 11))
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, AppSpacing.xs)
+
+            // Score Input
+            HStack(spacing: AppSpacing.xxs) {
+                // Decrement
+                Button {
+                    decrementScore(for: team, maxPoints: round.maxPoints)
+                    let newValue = getScoreValue(for: team)
+                    if newValue != team.getScore(for: round) {
+                        saveScore(for: team, in: round, points: newValue)
+                    }
+                } label: {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.system(size: 18))
+                        .foregroundStyle(currentScore > 0 ? Color.appAccent : Color.appTextTertiary)
+                }
+                .buttonStyle(.plain)
+                .disabled(currentScore <= 0)
+
+                // TextField
+                TextField("0", text: Binding(
+                    get: {
+                        let value = teamScores[team.id] ?? "0"
+                        return value.isEmpty ? "0" : value
+                    },
+                    set: { newValue in
+                        let filtered = newValue.filter { $0.isNumber }
+                        if !filtered.isEmpty {
+                            if let maxPts = round.maxPoints {
+                                let maxDigits = String(maxPts).count
+                                let limited = String(filtered.prefix(maxDigits))
+                                teamScores[team.id] = limited
+                            } else {
+                                teamScores[team.id] = filtered
+                            }
+                        } else {
+                            teamScores[team.id] = ""
+                        }
+
+                        saveTask?.cancel()
+                        if let value = Int(filtered), value >= 0, focusedTeamId == team.id {
+                            saveTask = Task {
+                                try? await Task.sleep(nanoseconds: 800_000_000)
+                                if !Task.isCancelled && focusedTeamId == team.id {
+                                    await MainActor.run {
+                                        let clampedValue: Int
+                                        if let maxPts = round.maxPoints {
+                                            clampedValue = min(value, maxPts)
+                                        } else {
+                                            clampedValue = value
+                                        }
+                                        if clampedValue != team.getScore(for: round) {
+                                            teamScores[team.id] = "\(clampedValue)"
+                                            saveScore(for: team, in: round, points: clampedValue)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ))
+                .focused($focusedTeamId, equals: team.id)
+                .textFieldStyle(.plain)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .multilineTextAlignment(.center)
+                .frame(width: 50)
+                .padding(.vertical, 4)
+                .padding(.horizontal, 6)
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color.appBackgroundSecondary)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(focusedTeamId == team.id ? teamColor : Color.clear, lineWidth: 2)
+                        )
+                )
+                .onChange(of: focusedTeamId) { oldValue, newValue in
+                    if oldValue == team.id && newValue != team.id {
+                        saveTask?.cancel()
+                        let currentValue = Int(teamScores[team.id] ?? "0") ?? 0
+                        let clampedValue: Int
+                        if let maxPts = round.maxPoints {
+                            clampedValue = min(max(currentValue, 0), maxPts)
+                        } else {
+                            clampedValue = max(currentValue, 0)
+                        }
+                        teamScores[team.id] = "\(clampedValue)"
+                        if clampedValue != team.getScore(for: round) {
+                            saveScore(for: team, in: round, points: clampedValue)
+                        }
+                    }
+                }
+                .onSubmit {
+                    saveTask?.cancel()
+                    let currentValue = Int(teamScores[team.id] ?? "0") ?? 0
+                    let clampedValue: Int
+                    if let maxPts = round.maxPoints {
+                        clampedValue = min(max(currentValue, 0), maxPts)
+                    } else {
+                        clampedValue = max(currentValue, 0)
+                    }
+                    teamScores[team.id] = "\(clampedValue)"
+                    if clampedValue != team.getScore(for: round) {
+                        saveScore(for: team, in: round, points: clampedValue)
+                    }
+                }
+
+                // Increment
+                Button {
+                    incrementScore(for: team, maxPoints: round.maxPoints)
+                    let newValue = getScoreValue(for: team)
+                    if newValue != team.getScore(for: round) {
+                        saveScore(for: team, in: round, points: newValue)
+                    }
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 18))
+                        .foregroundStyle({
+                            if let maxPts = round.maxPoints {
+                                return currentScore < maxPts ? Color.appSuccess : Color.appTextTertiary
+                            } else {
+                                return Color.appSuccess
+                            }
+                        }())
+                }
+                .buttonStyle(.plain)
+                .disabled({
+                    if let maxPts = round.maxPoints {
+                        return currentScore >= maxPts
+                    } else {
+                        return false
+                    }
+                }())
+            }
+            .frame(width: 160)
+
+            // Max Points
+            if let maxPts = round.maxPoints {
+                Text("/ \(maxPts)")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color.appTextSecondary)
+                    .monospacedDigit()
+                    .frame(width: 50, alignment: .center)
+            }
+        }
+        .padding(.horizontal, AppSpacing.sm)
+        .padding(.vertical, AppSpacing.xs)
+        .background(hasScore ? Color.appSuccess.opacity(0.08) : Color.clear)
+        .overlay(alignment: .leading) {
+            // Farbiger Streifen links bei Teams mit Punkten
+            if hasScore {
+                Rectangle()
+                    .fill(Color.appSuccess)
+                    .frame(width: 3)
+            }
+        }
+    }
+    #endif
         
     // MARK: - Team Score Row (iPad)
 
@@ -857,10 +1177,10 @@ struct ExecutionView: View {
                     .keyboardType(.numberPad)
                     #endif
                     .textFieldStyle(.plain)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .multilineTextAlignment(.center)
-                    .frame(width: 100)
+                    .frame(width: 70)
                     .background(
                         RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                             .fill(Color.appBackgroundSecondary)
@@ -953,7 +1273,25 @@ struct ExecutionView: View {
         .appCard(style: isTopThree ? .elevated : .default, cornerRadius: AppCornerRadius.md)
         .overlay(
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
-                .stroke(isTopThree ? teamColor.opacity(0.3) : Color.appTextTertiary.opacity(0.15), lineWidth: 1.5)
+                .stroke(
+                    // Grüner Rahmen wenn Team Punkte hat (gespeichert oder eingegeben > 0)
+                    {
+                        let savedScore = team.getScore(for: round)
+                        let hasScore = (savedScore ?? 0) > 0 || currentScore > 0
+                        if hasScore {
+                            return Color.appSuccess
+                        } else if isTopThree {
+                            return teamColor.opacity(0.3)
+                        } else {
+                            return Color.appTextTertiary.opacity(0.15)
+                        }
+                    }(),
+                    lineWidth: {
+                        let savedScore = team.getScore(for: round)
+                        let hasScore = (savedScore ?? 0) > 0 || currentScore > 0
+                        return hasScore ? 2.5 : 1.5
+                    }()
+                )
         )
     }
     
@@ -1032,59 +1370,66 @@ struct ExecutionView: View {
     #if os(macOS)
     @ViewBuilder
     private func actionButtonsRow_macOS(quiz: Quiz) -> some View {
-        HStack(spacing: AppSpacing.xxs) {
-            // Edit Rounds Button
-            Button {
-                showingEditRoundsSheet = true
-            } label: {
-                Label(L10n.Execution.roundsEdit, systemImage: "pencil.circle")
-            }
-            .secondaryGradientButton()
-            .helpText(L10n.Execution.roundsEditHelp)
+        // ScrollView für kleine Bildschirme
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: AppSpacing.xxs) {
+                // Edit Rounds Button
+                Button {
+                    showingEditRoundsSheet = true
+                } label: {
+                    Label(L10n.Execution.roundsEdit, systemImage: "pencil.circle")
+                        .labelStyle(.titleAndIcon)
+                }
+                .secondaryGlassButton()
+                .helpText(L10n.Execution.roundsEditHelp)
 
-            // Add Team Button
-            Button {
-                showingAddTeamSheet = true
-            } label: {
-                Label(L10n.Execution.AddTeam.button, systemImage: "person.badge.plus")
-            }
-            .secondaryGradientButton()
-            .helpText(L10n.Execution.AddTeam.help)
+                // Add Team Button
+                Button {
+                    showingAddTeamSheet = true
+                } label: {
+                    Label(L10n.Execution.AddTeam.button, systemImage: "person.badge.plus")
+                        .labelStyle(.titleAndIcon)
+                }
+                .secondaryGlassButton()
+                .helpText(L10n.Execution.AddTeam.help)
 
-            // Presentation Mode Button
-            Button {
-                presentationManager.togglePresentation(for: quiz)
-            } label: {
-                Label(
-                    presentationManager.isPresenting ? L10n.Execution.presentationEnd : L10n.Execution.presentationStart,
-                    systemImage: presentationManager.isPresenting ? "rectangle.fill.on.rectangle.fill" : "rectangle.on.rectangle"
-                )
+                // Presentation Mode Button
+                Button {
+                    presentationManager.togglePresentation(for: quiz)
+                } label: {
+                    Label(
+                        presentationManager.isPresenting ? L10n.Execution.presentationEnd : L10n.Execution.presentationStart,
+                        systemImage: presentationManager.isPresenting ? "rectangle.fill.on.rectangle.fill" : "rectangle.on.rectangle"
+                    )
+                    .labelStyle(.titleAndIcon)
+                }
+                .primaryGlassButton()
+                .keyboardShortcut("p", modifiers: .command)
+                .helpText(L10n.Execution.presentationHelp)
+
+                // Cancel Quiz Button
+                Button {
+                    showingCancelConfirmation = true
+                } label: {
+                    Label(L10n.Navigation.cancel, systemImage: "xmark.circle")
+                        .labelStyle(.titleAndIcon)
+                }
+                .accentGlassButton()
+                .helpText(L10n.Execution.cancelHelp)
+
+                // Complete Button
+                Button {
+                    showingCompleteConfirmation = true
+                } label: {
+                    Label(L10n.Execution.complete, systemImage: "flag.checkered")
+                        .labelStyle(.titleAndIcon)
+                }
+                .successGlassButton()
+                .keyboardShortcut("e", modifiers: .command)
+                .helpText(L10n.Execution.completeHelp)
             }
-            .primaryGradientButton()
-            .keyboardShortcut("p", modifiers: .command)
-            .helpText(L10n.Execution.presentationHelp)
-            
-            // Cancel Quiz Button
-            Button {
-                showingCancelConfirmation = true
-            } label: {
-                Label(L10n.Navigation.cancel, systemImage: "xmark.circle")
-            }
-            .accentGradientButton()
-            .helpText(L10n.Execution.cancelHelp)
-            
-            // Complete Button
-            Button {
-                showingCompleteConfirmation = true
-            } label: {
-                Label(L10n.Execution.complete, systemImage: "flag.checkered")
-            }
-            .successGradientButton()
-            .keyboardShortcut("e", modifiers: .command)
-            .helpText(L10n.Execution.completeHelp)
-            
-            Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     #endif
     
@@ -1103,7 +1448,7 @@ struct ExecutionView: View {
                         .font(.subheadline)
                         .frame(maxWidth: .infinity)
                 }
-                .secondaryGradientButton(size: .medium)
+                .secondaryGlassButton(size: .medium)
 
                 // Save All Button
                 Button {
@@ -1113,7 +1458,7 @@ struct ExecutionView: View {
                         .font(.subheadline)
                         .frame(maxWidth: .infinity)
                 }
-                .primaryGradientButton(size: .medium)
+                .primaryGlassButton(size: .medium)
                 .keyboardShortcut(.return, modifiers: .command)
 
                 // Complete Round Button - kompakt
@@ -1132,7 +1477,7 @@ struct ExecutionView: View {
                         .font(.subheadline)
                         .frame(maxWidth: .infinity)
                     }
-                    .successGradientButton(size: .medium)
+                    .successGlassButton(size: .medium)
                 } else if !round.isCompleted {
                     Button {
                         saveAllScores(quiz: quiz, round: round)
@@ -1142,7 +1487,7 @@ struct ExecutionView: View {
                             .font(.subheadline)
                             .frame(maxWidth: .infinity)
                     }
-                    .successGradientButton(size: .medium)
+                    .successGlassButton(size: .medium)
                 }
             }
         }
@@ -1161,7 +1506,7 @@ struct ExecutionView: View {
                         Label(L10n.Execution.reset, systemImage: "arrow.counterclockwise")
                             .frame(maxWidth: .infinity)
                     }
-                    .secondaryGradientButton(size: .large)
+                    .secondaryGlassButton(size: .large)
 
                     Button {
                         saveAllScores(quiz: quiz, round: round)
@@ -1169,7 +1514,7 @@ struct ExecutionView: View {
                         Label(L10n.Execution.saveAll, systemImage: "checkmark.circle.fill")
                             .frame(maxWidth: .infinity)
                     }
-                    .primaryGradientButton(size: .large)
+                    .primaryGlassButton(size: .large)
                     .keyboardShortcut(.return, modifiers: .command)
                 }
 
@@ -1189,7 +1534,7 @@ struct ExecutionView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .successGradientButton(size: .large)
+                    .successGlassButton(size: .large)
                 } else if !round.isCompleted {
                     Button {
                         saveAllScores(quiz: quiz, round: round)
@@ -1201,7 +1546,7 @@ struct ExecutionView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .accentGradientButton(size: .large)
+                    .accentGlassButton(size: .large)
                 }
             }
         }
@@ -1209,75 +1554,82 @@ struct ExecutionView: View {
     }
     
     // MARK: - Live Leaderboard
-    
-    private func liveLeaderboard(_ quiz: Quiz) -> some View {
+
+    private func liveLeaderboard(_ quiz: Quiz, compact: Bool = false) -> some View {
         VStack(spacing: 0) {
-            // Header
+            // Header - kompakter bei kleinem Bildschirm
             HStack {
-                Label(L10n.Execution.leaderboardLive, systemImage: "chart.bar.fill")
-                    .font(.headline)
-                    .foregroundStyle(Color.appTextPrimary)
+                if compact {
+                    // Nur Icon bei kompakter Ansicht
+                    Image(systemName: "chart.bar.fill")
+                        .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
+                } else {
+                    Label(L10n.Execution.leaderboardLive, systemImage: "chart.bar.fill")
+                        .font(.headline)
+                        .foregroundStyle(Color.appTextPrimary)
+                }
                 Spacer()
             }
-            .padding(AppSpacing.md)
-            
+            .padding(compact ? AppSpacing.xs : AppSpacing.md)
+
             Divider()
-            
+
             // Teams List
             ScrollView {
-                LazyVStack(spacing: AppSpacing.xxs) {
+                LazyVStack(spacing: compact ? AppSpacing.xxxs : AppSpacing.xxs) {
                     ForEach(quiz.getTeamRankings(), id: \.team.id) { ranking in
-                        leaderboardRow(team: ranking.team, rank: ranking.rank, quiz: quiz)
+                        leaderboardRow(team: ranking.team, rank: ranking.rank, quiz: quiz, compact: compact)
                             .id("\(ranking.team.id)-\(ranking.team.getTotalScore(for: quiz))") // Force update when score changes
                     }
                 }
-                .padding(AppSpacing.md)
+                .padding(compact ? AppSpacing.xs : AppSpacing.md)
             }
             // Remove animation to improve performance - updates will still happen but without animation lag
         }
         .background(Color.appBackground)
     }
-    
-    private func leaderboardRow(team: Team, rank: Int, quiz: Quiz) -> some View {
+
+    private func leaderboardRow(team: Team, rank: Int, quiz: Quiz, compact: Bool = false) -> some View {
         let teamColor = Color(hex: team.color) ?? Color.appPrimary
         let isTopThree = rank <= 3
 
-        return HStack(spacing: AppSpacing.xs) {
+        return HStack(spacing: compact ? AppSpacing.xxs : AppSpacing.xs) {
             // Rank
             if isTopThree {
-                Image(systemName: rank == 1 ? "medal.fill" : rank == 2 ? "medal.fill" : "medal.fill")
+                Image(systemName: "medal.fill")
                     .foregroundStyle(rank == 1 ? Color.appSecondary : rank == 2 ? Color.appTextSecondary : Color.appPrimary)
-                    .font(.title3)
-                    .frame(width: 32)
+                    .font(compact ? .body : .title3)
+                    .frame(width: compact ? 24 : 32)
             } else {
                 Text("\(rank)")
-                    .font(.headline)
+                    .font(compact ? .subheadline : .headline)
                     .foregroundStyle(Color.appTextSecondary)
-                    .frame(width: 32)
+                    .frame(width: compact ? 24 : 32)
             }
 
             // Team Color & Name
-            HStack(spacing: AppSpacing.xxs) {
+            HStack(spacing: AppSpacing.xxxs) {
                 Circle()
                     .fill(teamColor)
-                    .frame(width: 10, height: 10)
+                    .frame(width: compact ? 8 : 10, height: compact ? 8 : 10)
                 Text(team.name)
-                    .font(.subheadline)
+                    .font(compact ? .caption : .subheadline)
                     .foregroundStyle(Color.appTextPrimary)
                     .lineLimit(1)
             }
 
-            Spacer()
+            Spacer(minLength: 2)
 
             // Score - Simple text without transition for better performance
             Text("\(team.getTotalScore(for: quiz))")
-                .font(.headline)
+                .font(compact ? .subheadline : .headline)
                 .bold()
                 .foregroundStyle(Color.appTextPrimary)
                 .monospacedDigit()
         }
-        .padding(.horizontal, AppSpacing.xs)
-        .padding(.vertical, AppSpacing.xs)
+        .padding(.horizontal, compact ? AppSpacing.xxs : AppSpacing.xs)
+        .padding(.vertical, compact ? AppSpacing.xxs : AppSpacing.xs)
         .background(
             RoundedRectangle(cornerRadius: AppCornerRadius.sm)
                 .fill(isTopThree ? teamColor.opacity(0.1) : Color.appBackgroundSecondary)
@@ -1289,33 +1641,43 @@ struct ExecutionView: View {
     }
     
     // MARK: - Platform-Adaptive Layout
-    
-    /// Determine if live leaderboard should be shown based on available width
+
+    /// Determine if live leaderboard should be shown - immer anzeigen
     private func shouldShowLiveLeaderboard(width: CGFloat) -> Bool {
+        return true
+    }
+
+    /// Leaderboard width based on available space - adaptive
+    private func leaderboardWidth(for totalWidth: CGFloat) -> CGFloat {
         #if os(macOS)
-        return width > 1200
+        // Bei kleinem Fenster: kompaktere Rangliste
+        if totalWidth < 900 {
+            return 200 // Kompakt
+        } else if totalWidth < 1100 {
+            return 250 // Medium
+        } else {
+            return 320 // Voll
+        }
         #else
-        // Auf iPad: Nur in Landscape mit genug Platz oder im Regular Size Class
-        return width > 900 && horizontalSizeClass == .regular
+        return 280
         #endif
     }
-    
-    /// Leaderboard width based on platform
+
+    /// Legacy property for compatibility
     private var leaderboardWidth: CGFloat {
         #if os(macOS)
-        return 320
+        return 280
         #else
         return 280
         #endif
     }
     
-    /// Grid columns for team score cards
+    /// Grid columns for team score cards - adaptive basierend auf verfügbarem Platz
     private var scoreCardGridColumns: [GridItem] {
         #if os(macOS)
+        // Adaptive Spalten: mindestens 180pt pro Karte, max 3 Spalten
         return [
-            GridItem(.flexible(), spacing: AppSpacing.xs),
-            GridItem(.flexible(), spacing: AppSpacing.xs),
-            GridItem(.flexible(), spacing: AppSpacing.xs)
+            GridItem(.adaptive(minimum: 180, maximum: 280), spacing: AppSpacing.xs)
         ]
         #else
         if horizontalSizeClass == .compact {
@@ -1639,12 +2001,12 @@ struct RoundEditDetailContent: View {
                             Button(L10n.Navigation.cancel) {
                                 cancelRoundEditing()
                             }
-                            .secondaryGradientButton()
+                            .secondaryGlassButton()
                             
                             Button(L10n.Navigation.save) {
                                 saveRoundSettings()
                             }
-                            .primaryGradientButton()
+                            .primaryGlassButton()
                         }
                     } else {
                         HStack(spacing: AppSpacing.xs) {
@@ -1653,7 +2015,7 @@ struct RoundEditDetailContent: View {
                             } label: {
                                 Label(L10n.Execution.EditRounds.editSettings, systemImage: "slider.horizontal.3")
                             }
-                            .secondaryGradientButton()
+                            .secondaryGlassButton()
                             .helpText(L10n.Execution.EditRounds.editSettingsHelp)
                             
                             if round.isCompleted {
@@ -1684,7 +2046,7 @@ struct RoundEditDetailContent: View {
                         Button(L10n.Navigation.save) {
                             saveAllScores()
                         }
-                        .primaryGradientButton(size: .small)
+                        .primaryGlassButton(size: .small)
                     }
                     .padding(AppSpacing.md)
                     .background(Color.appAccent.opacity(0.1))
@@ -1767,13 +2129,13 @@ struct RoundEditDetailContent: View {
                         loadCurrentScores()
                         hasChanges = false
                     }
-                    .secondaryGradientButton()
+                    .secondaryGlassButton()
                     .disabled(!hasChanges)
                     
                     Button(L10n.Execution.saveAll) {
                         saveAllScores()
                     }
-                    .primaryGradientButton()
+                    .primaryGlassButton()
                     .disabled(!hasChanges)
                 }
                 
@@ -1782,13 +2144,13 @@ struct RoundEditDetailContent: View {
                         saveAllScores()
                         viewModel.completeRound(round)
                     }
-                    .successGradientButton()
+                    .successGlassButton()
                 } else {
                     Button(L10n.Execution.EditRounds.roundReopen) {
                         round.isCompleted = false
                         viewModel.saveContext()
                     }
-                    .accentGradientButton()
+                    .accentGlassButton()
                 }
             }
             .padding(AppSpacing.md)
@@ -1999,7 +2361,7 @@ struct TeamEditCardContent: View {
             }
         }
         .padding(AppSpacing.md)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.lg)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.lg)
         .overlay(
             RoundedRectangle(cornerRadius: AppCornerRadius.lg)
                 .stroke(teamColor.opacity(0.3), lineWidth: 2)

@@ -17,15 +17,20 @@ final class Round {
     var isCompleted: Bool = false
     var createdAt: Date = Date()
 
+    /// Optionales Bild für die Runde (z.B. Kategorie-Symbol)
+    @Attribute(.externalStorage)
+    var imageData: Data? = nil
+
     @Relationship(deleteRule: .nullify, inverse: \Quiz.rounds)
     var quiz: Quiz?
 
-    init(name: String, maxPoints: Int? = nil, orderIndex: Int = 0) {
+    init(name: String, maxPoints: Int? = nil, orderIndex: Int = 0, imageData: Data? = nil) {
         self.id = UUID()
         self.name = name
         self.maxPoints = maxPoints
         self.orderIndex = orderIndex
         self.isCompleted = false
         self.createdAt = Date()
+        self.imageData = imageData
     }
 }

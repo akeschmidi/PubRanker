@@ -35,6 +35,16 @@ class EmailService {
             return
         }
         
+        #if os(macOS)
+        // Always use NSSharingService on macOS for bodies > 200 chars
+        // mailto: URLs have length limits (~2000 chars total), and URL encoding
+        // of special characters (umlauts, &, newlines) expands significantly
+        if body.count > 200 {
+            sendEmailWithLongBody(recipients: emailAddresses, subject: subject, body: body)
+            return
+        }
+        #endif
+        
         let recipients = emailAddresses.joined(separator: ",")
         openMailApp(recipients: recipients, subject: subject, body: body)
     }
@@ -223,6 +233,40 @@ class EmailService {
             print("🗑️ Temporäre Datei gelöscht")
         }
     }
+    
+    /// Sendet eine E-Mail mit langem Text (ohne Anhang) über NSSharingService
+    /// - Parameters:
+    ///   - recipients: E-Mail-Adressen (BCC)
+    ///   - subject: Betreff
+    ///   - body: Text
+    ///   - completion: Optionaler Callback
+    static func sendEmailWithLongBody(
+        recipients: [String],
+        subject: String,
+        body: String,
+        completion: ((Bool) -> Void)? = nil
+    ) {
+        guard !recipients.isEmpty else {
+            print("⚠️ Keine E-Mail-Adressen vorhanden")
+            completion?(false)
+            return
+        }
+        guard let sharingService = NSSharingService(named: .composeEmail) else {
+            print("❌ Fehler: E-Mail Sharing Service nicht verfügbar")
+            completion?(false)
+            return
+        }
+        sharingService.recipients = recipients
+        sharingService.subject = subject
+        let items: [Any] = [body]
+        if sharingService.canPerform(withItems: items) {
+            sharingService.perform(withItems: items)
+            completion?(true)
+        } else {
+            print("❌ Fehler: E-Mail Service kann nicht ausgeführt werden")
+            completion?(false)
+        }
+    }
     #endif
     
     /// Erstellt einen Standard-Betreff für ein Quiz
@@ -279,7 +323,7 @@ struct MailComposeView: UIViewControllerRepresentable {
            let mimeType = attachmentMimeType,
            let fileName = attachmentFileName {
             composer.addAttachmentData(data, mimeType: mimeType, fileName: fileName)
-            print("✅ Anhang hinzugefügt: \(fileName) (\(data.count / 1024)KB)")
+            print("✅ Anhang hinzugefügt: \(fileName) (\(data.count / 2024)KB)")
         }
 
         return composer
@@ -316,3 +360,4 @@ extension EmailService {
     }
 }
 #endif
+

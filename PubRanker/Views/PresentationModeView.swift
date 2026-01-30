@@ -9,12 +9,11 @@ import SwiftUI
 
 struct PresentationModeView: View {
     @Bindable var quiz: Quiz
-    @State private var currentTime = Date()
+    var onClose: (() -> Void)? = nil
     @State private var previousRankings: [String: Int] = [:]
     @State private var showConfetti = false
     @State private var visibleRankCount = 0  // Anzahl der sichtbaren Plätze (von unten nach oben)
-
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @FocusState private var isFocused: Bool
 
     var sortedTeams: [Team] {
         quiz.sortedTeamsByScore
@@ -68,8 +67,8 @@ struct PresentationModeView: View {
 
     var body: some View {
         ZStack {
-            // Background Gradient
-            Color.gradientPubTheme
+            // Verbesserter Hintergrund mit dunklem Gradient und Muster
+            presentationBackground
                 .ignoresSafeArea()
 
             ScrollView {
@@ -85,18 +84,6 @@ struct PresentationModeView: View {
                         .padding(.top, AppSpacing.md)
                         .padding(.bottom, AppSpacing.xxs)
                         #endif
-
-                    // Aktive Runde Banner
-                    if let currentRound = quiz.currentRound {
-                        activeRoundBanner(currentRound)
-                            #if os(iOS)
-                            .padding(.horizontal, AppSpacing.lg)
-                            .padding(.vertical, AppSpacing.xxxs)
-                            #else
-                            .padding(.horizontal, AppSpacing.xxxl)
-                            .padding(.vertical, AppSpacing.xs)
-                            #endif
-                    }
 
                     // PODIUM für Top 3
                     if sortedTeams.count >= 3 && hasVisiblePodiumTeams {
@@ -146,7 +133,8 @@ struct PresentationModeView: View {
                             ) {
                                 let rankings = quiz.getTeamRankings()
                                 let remainingRankings = Array(rankings.dropFirst(3))
-                                ForEach(Array(remainingRankings.enumerated()), id: \.element.team.id) { index, ranking in
+                                ForEach(remainingRankings.indices, id: \.self) { index in
+                                    let ranking = remainingRankings[index]
                                     let actualIndex = index + 3  // Index 3, 4, 5...
                                     if isTeamVisible(atIndex: actualIndex) {
                                         CompactTeamRow(
@@ -182,27 +170,173 @@ struct PresentationModeView: View {
                     .ignoresSafeArea()
             }
 
-            // Animation Control Button
+            // Steuerungs-Buttons (unten rechts)
             VStack {
                 Spacer()
-                HStack {
+                HStack(spacing: AppSpacing.sm) {
                     Spacer()
+                    closeButton
                     animationControlButton
-                        .padding(.trailing, AppSpacing.xl)
-                        .padding(.bottom, AppSpacing.xl)
                 }
+                .padding(.trailing, AppSpacing.xl)
+                .padding(.bottom, AppSpacing.xl)
             }
         }
-        .onReceive(timer) { _ in
-            currentTime = Date()
+        .focusable()
+        .focused($isFocused)
+        .onKeyPress(.rightArrow) {
+            handleNextPlace()
+            return .handled
         }
-        .onChange(of: sortedTeams.map { $0.getTotalScore(for: quiz) }) { oldScores, newScores in
+        .onKeyPress(.downArrow) {
+            handleNextPlace()
+            return .handled
+        }
+        .onKeyPress(.leftArrow) {
+            handlePreviousPlace()
+            return .handled
+        }
+        .onKeyPress(.upArrow) {
+            handlePreviousPlace()
+            return .handled
+        }
+        .onKeyPress(.space) {
+            handleNextPlace()
+            return .handled
+        }
+        .onKeyPress(.escape) {
+            handleClose()
+            return .handled
+        }
+        .onAppear {
+            updateRankings()
+            isFocused = true
+        }
+        .onChange(of: quiz.safeTeams.count) { _, _ in
+            // Invalidiere Quiz-Cache wenn sich Teams ändern
+            quiz.invalidateScoreCache()
             withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
                 updateRankings()
             }
         }
-        .onAppear {
-            updateRankings()
+        .onChange(of: quiz.safeRounds.count) { _, _ in
+            // Invalidiere Quiz-Cache wenn sich Runden ändern
+            quiz.invalidateScoreCache()
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                updateRankings()
+            }
+        }
+    }
+
+    // MARK: - Verbesserter Hintergrund
+
+    private var presentationBackground: some View {
+        ZStack {
+            // Dunkler Basis-Gradient
+            LinearGradient(
+                colors: [
+                    Color(red: 0.05, green: 0.05, blue: 0.12),
+                    Color(red: 0.08, green: 0.06, blue: 0.15),
+                    Color(red: 0.04, green: 0.04, blue: 0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            // Subtiler Akzent-Glow oben
+            RadialGradient(
+                colors: [
+                    Color.appPrimary.opacity(0.15),
+                    Color.clear
+                ],
+                center: .topLeading,
+                startRadius: 100,
+                endRadius: 600
+            )
+
+            // Subtiler Gold-Glow unten rechts
+            RadialGradient(
+                colors: [
+                    Color.appSecondary.opacity(0.1),
+                    Color.clear
+                ],
+                center: .bottomTrailing,
+                startRadius: 50,
+                endRadius: 500
+            )
+
+            // Subtiles Raster-Muster für mehr Tiefe
+            GeometryReader { geometry in
+                Path { path in
+                    let spacing: CGFloat = 60
+                    for x in stride(from: 0, to: geometry.size.width, by: spacing) {
+                        path.move(to: CGPoint(x: x, y: 0))
+                        path.addLine(to: CGPoint(x: x, y: geometry.size.height))
+                    }
+                    for y in stride(from: 0, to: geometry.size.height, by: spacing) {
+                        path.move(to: CGPoint(x: 0, y: y))
+                        path.addLine(to: CGPoint(x: geometry.size.width, y: y))
+                    }
+                }
+                .stroke(Color.white.opacity(0.03), lineWidth: 1)
+            }
+        }
+    }
+
+    // MARK: - Schließen Button
+
+    private var closeButton: some View {
+        Button {
+            handleClose()
+        } label: {
+            HStack(spacing: AppSpacing.xxs) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 20))
+                Text("Schließen")
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+            }
+            .foregroundStyle(.white.opacity(0.8))
+            .padding(.horizontal, AppSpacing.md)
+            .padding(.vertical, AppSpacing.sm)
+            .background(
+                Capsule()
+                    .fill(.ultraThinMaterial)
+                    .opacity(0.6)
+            )
+            .overlay(
+                Capsule()
+                    .stroke(.white.opacity(0.2), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .keyboardShortcut(.escape, modifiers: [])
+    }
+
+    // MARK: - Keyboard Navigation
+
+    private func handleNextPlace() {
+        if !allTeamsVisible {
+            withAnimation(.spring(response: 1.5, dampingFraction: 0.7)) {
+                visibleRankCount += 1
+            }
+        }
+    }
+
+    private func handlePreviousPlace() {
+        if visibleRankCount > 0 {
+            withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
+                visibleRankCount -= 1
+            }
+        }
+    }
+
+    private func handleClose() {
+        if let onClose = onClose {
+            onClose()
+        } else {
+            #if os(macOS)
+            PresentationManager.shared.stopPresentation()
+            #endif
         }
     }
 
@@ -272,7 +406,7 @@ struct PresentationModeView: View {
             .padding(.vertical, AppSpacing.sm)
             .background(
                 Capsule()
-                    .fill(allTeamsVisible ? Color.appAccent : Color.appSuccess)
+                    .fill(allTeamsVisible ? Color.appSuccess : Color.appPrimary)
                     .shadow(color: .black.opacity(0.3), radius: 10, y: 5)
             )
         }
@@ -291,66 +425,6 @@ struct PresentationModeView: View {
                 visibleRankCount += 1
             }
         }
-    }
-
-    private func activeRoundBanner(_ round: Round) -> some View {
-        HStack(spacing: AppSpacing.md) {
-            // Play Icon
-            ZStack {
-                Circle()
-                    .fill(Color.gradientSuccess)
-                    .frame(width: 50, height: 50)
-                    .shadow(AppShadow.success)
-
-                Image(systemName: "play.fill")
-                    .font(.system(size: 24))
-                    .foregroundStyle(.white)
-            }
-
-            // Runden Info
-            Text(round.name)
-                .font(.system(size: 32, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-
-            Spacer()
-
-            // Max Punkte Info
-            VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
-                Text(L10n.CommonUI.maxPointsLabel)
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.6))
-                    .tracking(1)
-
-                HStack(spacing: AppSpacing.xxxs) {
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 20))
-                        .foregroundStyle(Color.appSecondary)
-
-                    Text(round.maxPoints.map(String.init) ?? "—")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.appSecondary)
-                }
-            }
-        }
-        .padding(.horizontal, AppSpacing.xl)
-        .padding(.vertical, AppSpacing.md)
-        .background(
-            ZStack {
-                // Gradient Background
-                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
-                    .fill(Color.appSuccess.opacity(0.2))
-
-                // Border
-                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
-                    .stroke(Color.appSuccess.opacity(0.5), lineWidth: 2)
-
-                // Glow
-                RoundedRectangle(cornerRadius: AppCornerRadius.lg)
-                    .fill(Color.appSuccess.opacity(0.1))
-                    .blur(radius: 10)
-            }
-        )
-        .shadow(AppShadow.success)
     }
 
     private var podiumView: some View {
@@ -432,7 +506,8 @@ struct PresentationModeView: View {
         let topRankings = Array(rankings.prefix(3))
 
         return HStack(spacing: 40) {
-            ForEach(Array(topRankings.enumerated()), id: \.element.team.id) { index, ranking in
+            ForEach(topRankings.indices, id: \.self) { index in
+                let ranking = topRankings[index]
                 if isTeamVisible(atIndex: index) {
                     PresentationPodiumPlace(
                         team: ranking.team,
@@ -527,18 +602,19 @@ struct PresentationPodiumPlace: View {
                 ZStack {
                     Circle()
                         .fill(rankColor)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 80, height: 80)
                         .shadow(radius: 4, y: 2)
 
-                    TeamIconView(team: team, size: 50)
+                    TeamIconView(team: team, size: 70)
                 }
 
-                // Team Name
+                // Team Name - GROSS für Präsentation
                 Text(team.name)
-                    .font(.system(size: rank == 1 ? 22 : 20, weight: .bold, design: .rounded))
+                    .font(.system(size: rank == 1 ? 36 : 32, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.6)
 
                 // Score mit Team-Icon
                 HStack(spacing: AppSpacing.xxxs) {
@@ -571,11 +647,21 @@ struct PresentationPodiumPlace: View {
                             .stroke(rankColor.opacity(0.6), lineWidth: 3)
                     }
 
-                // Rang-Nummer auf Sockel
-                Text("\(rank)")
-                    .font(.system(size: rank == 1 ? 80 : 70, weight: .black, design: .rounded))
-                    .foregroundStyle(rankColor.opacity(0.2))
-                    .padding(.bottom, AppSpacing.md)
+                // Rang-Nummer auf Sockel - GUT SICHTBAR
+                VStack(spacing: 4) {
+                    Text("\(rank)")
+                        .font(.system(size: rank == 1 ? 100 : 85, weight: .black, design: .rounded))
+                        .foregroundStyle(.white)
+                        .shadow(color: rankColor, radius: 8)
+                        .shadow(color: .black.opacity(0.5), radius: 4, y: 2)
+
+                    // Platz-Label
+                    Text(rank == 1 ? "PLATZ" : "PLATZ")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.7))
+                        .tracking(4)
+                }
+                .padding(.bottom, AppSpacing.sm)
             }
         }
         .frame(width: rank == 1 ? 240 : 220)
@@ -612,68 +698,81 @@ struct CompactTeamRow: View {
     }
 
     var body: some View {
-        HStack(spacing: AppSpacing.xxs) {
-            // Rang
+        HStack(spacing: AppSpacing.sm) {
+            // Rang - GUT SICHTBAR mit farbigem Hintergrund
             ZStack {
+                // Farbiger Hintergrund-Kreis
                 Circle()
-                    .fill(.white.opacity(0.1))
-                    .frame(width: 32, height: 32)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.appPrimary.opacity(0.8),
+                                Color.appPrimary
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 56, height: 56)
+                    .shadow(color: Color.appPrimary.opacity(0.5), radius: 6, y: 2)
 
+                // Rang-Nummer
                 Text("\(rank)")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 28, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.3), radius: 2, y: 1)
             }
 
-            // Rank Change
+            // Rank Change - größer
             Group {
                 if rankChanged {
                     Image(systemName: rankImproved ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
-                        .font(.system(size: 16))
+                        .font(.system(size: 24))
                         .foregroundStyle(rankImproved ? Color.appSuccess : Color.red)
                 } else {
                     Image(systemName: "minus.circle.fill")
-                        .font(.system(size: 16))
+                        .font(.system(size: 24))
                         .foregroundStyle(.white.opacity(0.2))
                 }
             }
-            .frame(width: 20)
+            .frame(width: 30)
 
-            // Team Icon
-            TeamIconView(team: team, size: 14)
+            // Team Icon - größer für bessere Sichtbarkeit
+            TeamIconView(team: team, size: 44)
 
-            // Team Name
+            // Team Name - GROSS für Präsentation
             Text(team.name)
-                .font(.system(size: 17, weight: .semibold, design: .rounded))
+                .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
 
             Spacer(minLength: AppSpacing.xxxs)
 
-            // Score
-            HStack(spacing: AppSpacing.xxxs) {
+            // Score - größer für Präsentation
+            HStack(spacing: AppSpacing.xxs) {
                 Image(systemName: "star.fill")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.white.opacity(0.5))
+                    .font(.system(size: 20))
+                    .foregroundStyle(Color.appSecondary)
 
                 Text("\(team.getTotalScore(for: quiz))")
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .font(.system(size: 32, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .monospacedDigit()
 
                 Text(L10n.CommonUI.points)
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.4))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.5))
             }
         }
-        .padding(.horizontal, AppSpacing.sm)
-        .padding(.vertical, AppSpacing.xxs)
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.vertical, AppSpacing.sm)
         .background(
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
-                .fill(.white.opacity(0.05))
+                .fill(.white.opacity(0.08))
                 .overlay {
                     RoundedRectangle(cornerRadius: AppCornerRadius.md)
-                        .stroke(.white.opacity(0.1), lineWidth: 1)
+                        .stroke(.white.opacity(0.15), lineWidth: 1)
                 }
         )
     }
@@ -683,6 +782,7 @@ struct CompactTeamRow: View {
 
 struct ConfettiView: View {
     @State private var confettiPieces: [ConfettiPiece] = []
+    @State private var animationTimer: Timer?
 
     struct ConfettiPiece: Identifiable {
         let id = UUID()
@@ -707,6 +807,11 @@ struct ConfettiView: View {
             .onAppear {
                 createConfetti(in: geometry.size)
             }
+            .onDisappear {
+                // Cleanup timer
+                animationTimer?.invalidate()
+                animationTimer = nil
+            }
         }
     }
 
@@ -721,7 +826,8 @@ struct ConfettiView: View {
             Color.purple
         ]
 
-        for _ in 0..<100 {
+        // Reduziert von 100 auf 50 Partikel für bessere Performance
+        for _ in 0..<50 {
             let piece = ConfettiPiece(
                 x: CGFloat.random(in: 0...size.width),
                 y: -50,
@@ -736,14 +842,24 @@ struct ConfettiView: View {
     }
 
     private func animateConfetti(in size: CGSize) {
-        Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { timer in
+        // Single timer für alle Partikel - bessere Performance
+        animationTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { timer in
+            var allOffScreen = true
+
             for i in confettiPieces.indices {
                 confettiPieces[i].y += confettiPieces[i].velocity
                 confettiPieces[i].rotation += 5
 
-                if confettiPieces[i].y > size.height + 50 {
-                    timer.invalidate()
+                // Check ob Partikel noch auf dem Screen ist
+                if confettiPieces[i].y <= size.height + 50 {
+                    allOffScreen = false
                 }
+            }
+
+            // Nur invalidieren wenn ALLE Partikel außerhalb sind
+            if allOffScreen {
+                timer.invalidate()
+                animationTimer = nil
             }
         }
     }

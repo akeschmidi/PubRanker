@@ -75,15 +75,21 @@
 		C9B345B72EDC6288005D5076 /* DesignSystemDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B345B62EDC6288005D5076 /* DesignSystemDemoView.swift */; };
 		C9CE32872ED26A2B00629ABA /* Icon_LiqidGlass.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */; };
 		C9LOC00002 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9LOC00001 /* LocalizationManager.swift */; };
-		DC3EA742A4C5CCE165207A3A /* CloudKitSyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF39697F013E4F4CC555F7B /* CloudKitSyncButton.swift */; };
+		DC3EA742A4C5CCE165207A3A /* Components/CloudKitSyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF39697F013E4F4CC555F7B /* Components/CloudKitSyncButton.swift */; };
 		DD892C9919B547C5B318F79A /* PresentationModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C523D853111435688C12D13 /* PresentationModeView.swift */; };
 		F47E15B4D6256C6735898EF5 /* CloudKitStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8B11348567845D0793B84D /* CloudKitStatusView.swift */; };
 		F84D88636FDBBED97080456B /* ExecutionAddTeamSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5311E791603FD29DC6C39963 /* ExecutionAddTeamSheet.swift */; };
+		GLASS001 /* AppGlassEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = GLASS010 /* AppGlassEffect.swift */; };
+		SVC00001 /* QuizService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SVC00010 /* QuizService.swift */; };
+		SVC00002 /* TeamService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SVC00020 /* TeamService.swift */; };
+		SVC00003 /* RoundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SVC00030 /* RoundService.swift */; };
+		SVC00004 /* ScoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SVC00040 /* ScoreService.swift */; };
+		SVC00005 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = SVC00050 /* ExportService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0718DECE15C029C588121080 /* CloudKitSyncManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CloudKitSyncManager.swift; sourceTree = "<group>"; };
-		0AF39697F013E4F4CC555F7B /* CloudKitSyncButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Components/CloudKitSyncButton.swift; sourceTree = "<group>"; };
+		0AF39697F013E4F4CC555F7B /* Components/CloudKitSyncButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Components/CloudKitSyncButton.swift; sourceTree = "<group>"; };
 		1438423B1421CB2040A0F84E /* LeaderboardImageGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LeaderboardImageGenerator.swift; sourceTree = "<group>"; };
 		4C523D853111435688C12D13 /* PresentationModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationModeView.swift; sourceTree = "<group>"; };
 		5311E791603FD29DC6C39963 /* ExecutionAddTeamSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExecutionAddTeamSheet.swift; sourceTree = "<group>"; };
@@ -174,8 +180,13 @@
 		C9CE32862ED26A2B00629ABA /* Icon_LiqidGlass.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon_LiqidGlass.icon; sourceTree = "<group>"; };
 		C9LOC00001 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		E6E3608637A8427BE5505C8A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E857CDECD79DA974E7293A51 /* HeaderPaddingModifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HeaderPaddingModifier.swift; path = Helpers/HeaderPaddingModifier.swift; sourceTree = "<group>"; };
 		F90852C6E34CA0DA8830C83C /* LeaderboardImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LeaderboardImageView.swift; sourceTree = "<group>"; };
+		GLASS010 /* AppGlassEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGlassEffect.swift; sourceTree = "<group>"; };
+		SVC00010 /* QuizService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizService.swift; sourceTree = "<group>"; };
+		SVC00020 /* TeamService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamService.swift; sourceTree = "<group>"; };
+		SVC00030 /* RoundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundService.swift; sourceTree = "<group>"; };
+		SVC00040 /* ScoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreService.swift; sourceTree = "<group>"; };
+		SVC00050 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,7 +263,6 @@
 				A10000374 /* PlatformExtensions.swift */,
 				595E33B5B5284F6DABEC5412 /* PresentationWindowController.swift */,
 				9E6C4131EE2A95CAD112CB4D /* SampleData.swift */,
-				E857CDECD79DA974E7293A51 /* HeaderPaddingModifier.swift */,
 				9B773E8AF60C254279068231 /* HeaderPaddingModifier.swift */,
 			);
 			path = Helpers;
@@ -264,6 +274,11 @@
 				A10000600 /* EmailService.swift */,
 				1438423B1421CB2040A0F84E /* LeaderboardImageGenerator.swift */,
 				0718DECE15C029C588121080 /* CloudKitSyncManager.swift */,
+				SVC00010 /* QuizService.swift */,
+				SVC00020 /* TeamService.swift */,
+				SVC00030 /* RoundService.swift */,
+				SVC00040 /* ScoreService.swift */,
+				SVC00050 /* ExportService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -310,7 +325,7 @@
 		AE490C4D164ACD4D2A2533D6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				0AF39697F013E4F4CC555F7B /* CloudKitSyncButton.swift */,
+				0AF39697F013E4F4CC555F7B /* Components/CloudKitSyncButton.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -393,6 +408,7 @@
 				C9B345AB2EDC6048005D5076 /* AppButton.swift */,
 				C9B345AC2EDC6048005D5076 /* AppCard.swift */,
 				C9B345AD2EDC6048005D5076 /* AppColors.swift */,
+				GLASS010 /* AppGlassEffect.swift */,
 				C9B345AE2EDC6048005D5076 /* AppSpacing.swift */,
 				C9B345AF2EDC6048005D5076 /* COLOR_ASSETS_SETUP.md */,
 			);
@@ -532,6 +548,7 @@
 				C9B345B32EDC6048005D5076 /* AppButton.swift in Sources */,
 				C9B345B42EDC6048005D5076 /* AppSpacing.swift in Sources */,
 				C9B345B52EDC6048005D5076 /* AppCard.swift in Sources */,
+				GLASS001 /* AppGlassEffect.swift in Sources */,
 				A10000358 /* CompactQuizHeader.swift in Sources */,
 				A10000360 /* OverviewComponents.swift in Sources */,
 				A10000362 /* PlanningDetailView.swift in Sources */,
@@ -564,7 +581,12 @@
 				C868045BB349F74A702C075A /* HeaderPaddingModifier.swift in Sources */,
 				F47E15B4D6256C6735898EF5 /* CloudKitStatusView.swift in Sources */,
 				7D4AA614563D00C66AB09263 /* CloudKitSyncManager.swift in Sources */,
-				DC3EA742A4C5CCE165207A3A /* CloudKitSyncButton.swift in Sources */,
+				DC3EA742A4C5CCE165207A3A /* Components/CloudKitSyncButton.swift in Sources */,
+				SVC00001 /* QuizService.swift in Sources */,
+				SVC00002 /* TeamService.swift in Sources */,
+				SVC00003 /* RoundService.swift in Sources */,
+				SVC00004 /* ScoreService.swift in Sources */,
+				SVC00005 /* ExportService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,7 +666,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 247;
+				CURRENT_PROJECT_VERSION = 251;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -678,6 +700,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PubRanker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pub Ranker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,7 +709,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.0.1;
+				MARKETING_VERSION = 3.0.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -754,7 +778,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 247;
+				CURRENT_PROJECT_VERSION = 251;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 34DTFQCK2V;
@@ -782,6 +806,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = PubRanker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pub Ranker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -789,7 +815,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 3.0.1;
+				MARKETING_VERSION = 3.0.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.akeschmidi.PubRanker;

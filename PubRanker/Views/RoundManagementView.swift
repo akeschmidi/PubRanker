@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct RoundManagementView: View {
     @Bindable var quiz: Quiz
@@ -43,18 +44,14 @@ struct RoundManagementView: View {
     
     private var contentArea: some View {
         Group {
-            if quiz.safeRounds.isEmpty || quiz.safeTeams.isEmpty {
+            if quiz.safeRounds.isEmpty {
                 VStack(spacing: AppSpacing.md) {
-                    if quiz.safeTeams.isEmpty {
-                        emptyTeamsView
-                    } else {
-                        emptyRoundsView
-                    }
+                    emptyRoundsView
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
+                // Rundenliste anzeigen - unabhängig davon ob Teams existieren
                 VStack(spacing: 0) {
-                    // Einfache Rundenliste - KEINE Punkteeingabe mehr!
                     ScrollView {
                         VStack(spacing: AppSpacing.xs) {
                             ForEach(Array(quiz.sortedRounds.enumerated()), id: \.element.id) { index, round in
@@ -74,7 +71,7 @@ struct RoundManagementView: View {
                             Label("Runde hinzufügen", systemImage: "plus.circle.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .primaryGradientButton(size: .large)
+                        .primaryGlassButton(size: .large)
                     }
                     .padding(AppSpacing.md)
                     .background(Color.appBackgroundSecondary)
@@ -87,17 +84,48 @@ struct RoundManagementView: View {
     
     private func roundListCard(round: Round, index: Int) -> some View {
         HStack(spacing: AppSpacing.sm) {
-            // Runden-Nummer und Status
+            // Runden-Bild oder Nummer
             VStack(spacing: AppSpacing.xxxs) {
-                Text(L10n.CommonUI.roundNumber(index + 1))
-                    .font(.caption)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .monospacedDigit()
-                    .frame(width: 32, height: 32)
-                    .background(getRoundStatusColor(for: round))
-                    .clipShape(Circle())
-                
+                if let imageData = round.imageData {
+                    // Runden-Bild anzeigen
+                    #if os(macOS)
+                    if let nsImage = NSImage(data: imageData) {
+                        Image(nsImage: nsImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                                    .stroke(getRoundStatusColor(for: round).opacity(0.5), lineWidth: 2)
+                            )
+                    }
+                    #else
+                    if let uiImage = UIImage(data: imageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
+                                    .stroke(getRoundStatusColor(for: round).opacity(0.5), lineWidth: 2)
+                            )
+                    }
+                    #endif
+                } else {
+                    // Fallback: Runden-Nummer
+                    Text(L10n.CommonUI.roundNumber(index + 1))
+                        .font(.caption)
+                        .bold()
+                        .foregroundStyle(.white)
+                        .monospacedDigit()
+                        .frame(width: 44, height: 44)
+                        .background(getRoundStatusColor(for: round))
+                        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.sm))
+                }
+
+                // Status-Indikator
                 if round.isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.caption)
@@ -176,11 +204,11 @@ struct RoundManagementView: View {
                         .font(.body)
                 }
             }
-            .primaryGradientButton()
+            .primaryGlassButton()
             .helpText(NSLocalizedString("common.round.edit.help", comment: "Edit round help"))
         }
         .padding(AppSpacing.md)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(Color.appTextTertiary.opacity(0.2), lineWidth: 1)
@@ -200,27 +228,6 @@ struct RoundManagementView: View {
         }
     }
     
-    private var emptyTeamsView: some View {
-        VStack(spacing: AppSpacing.md) {
-            Image(systemName: "person.3.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(Color.appTextSecondary)
-            
-            VStack(spacing: AppSpacing.xxs) {
-                Text(NSLocalizedString("empty.noTeams", comment: "No teams"))
-                    .font(.title2)
-                    .bold()
-                    .foregroundStyle(Color.appTextPrimary)
-                
-                Text(NSLocalizedString("empty.noTeams.beforeRounds", comment: "Add teams before rounds"))
-                    .font(.body)
-                    .foregroundStyle(Color.appTextSecondary)
-                    .multilineTextAlignment(.center)
-            }
-        }
-        .padding(AppSpacing.screenPadding)
-    }
-    
     private var emptyRoundsView: some View {
         VStack(spacing: AppSpacing.md) {
             Image(systemName: "number.circle.fill")
@@ -228,12 +235,12 @@ struct RoundManagementView: View {
                 .foregroundStyle(Color.appPrimary)
             
             VStack(spacing: AppSpacing.xxs) {
-                Text(NSLocalizedString("empty.noRounds", comment: "No rounds"))
+                Text("Keine Runden")
                     .font(.title2)
                     .bold()
                     .foregroundStyle(Color.appTextPrimary)
                 
-                Text(NSLocalizedString("empty.noRounds.management", comment: "Add rounds to assign points"))
+                Text("Füge Runden hinzu, um das Quiz zu strukturieren")
                     .font(.body)
                     .foregroundStyle(Color.appTextSecondary)
                     .multilineTextAlignment(.center)
@@ -246,7 +253,7 @@ struct RoundManagementView: View {
                     Label(NSLocalizedString("round.new.multiple", comment: "Multiple rounds"), systemImage: "rectangle.stack.fill")
                         .font(.headline)
                 }
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
                 
                 Button {
                     showingAddRoundSheet = true
@@ -254,7 +261,7 @@ struct RoundManagementView: View {
                     Label(NSLocalizedString("round.new.single", comment: "Single round"), systemImage: "plus.circle")
                         .font(.headline)
                 }
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
             }
         }
         .padding(AppSpacing.screenPadding)
@@ -333,7 +340,7 @@ struct CurrentRoundBanner: View {
                             Label(NSLocalizedString("round.complete", comment: "Complete round"), systemImage: "checkmark.circle.fill")
                                 .font(.headline)
                         }
-                        .successGradientButton(size: .large)
+                        .successGlassButton(size: .large)
                     } else {
                         VStack(alignment: .trailing, spacing: AppSpacing.xxxs) {
                             Text(String(format: NSLocalizedString("common.missing", comment: "Missing count"), totalTeams - completedTeamsCount))
@@ -611,29 +618,98 @@ struct EditRoundSheet: View {
     @State private var maxPoints = 10
     @State private var hasMaxPoints = false
     @State private var showingDeleteConfirmation = false
+    @State private var showingImagePicker = false
+    @State private var selectedImageData: Data? = nil
     @FocusState private var focusedField: Bool
     
     var body: some View {
         VStack(spacing: AppSpacing.md) {
             // Header
-            VStack(spacing: AppSpacing.xxs) {
-                Image(systemName: "pencil.circle.fill")
-                    .font(.system(size: 50))
-                    .foregroundStyle(Color.appPrimary)
-                
+            VStack(spacing: AppSpacing.xs) {
                 Text(NSLocalizedString("common.round.edit", comment: "Edit round"))
                     .font(.title2)
                     .bold()
                     .foregroundStyle(Color.appTextPrimary)
-                
+
                 Text(L10n.CommonUI.roundNumber(getRoundNumber()))
                     .font(.subheadline)
                     .foregroundStyle(Color.appTextSecondary)
             }
             .padding(.top, AppSpacing.md)
-            
+
             // Form
             VStack(spacing: AppSpacing.md) {
+                // Runden-Bild
+                HStack(spacing: AppSpacing.md) {
+                    // Bild-Vorschau
+                    Group {
+                        if let imageData = selectedImageData {
+                            #if os(macOS)
+                            if let nsImage = NSImage(data: imageData) {
+                                Image(nsImage: nsImage)
+                                    .resizable()
+                                    .scaledToFill()
+                            }
+                            #else
+                            if let uiImage = UIImage(data: imageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                            }
+                            #endif
+                        } else {
+                            ZStack {
+                                Color.appBackgroundSecondary
+                                Image(systemName: "photo")
+                                    .font(.title2)
+                                    .foregroundStyle(Color.appTextTertiary)
+                            }
+                        }
+                    }
+                    .frame(width: 70, height: 70)
+                    .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.md))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                            .stroke(Color.appTextTertiary.opacity(0.3), lineWidth: 1)
+                    )
+
+                    // Bild Info & Buttons
+                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                        Text("Runden-Bild")
+                            .font(.headline)
+                            .foregroundStyle(Color.appTextPrimary)
+
+                        Text("Optional: Bild für diese Kategorie")
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+
+                        HStack(spacing: AppSpacing.xs) {
+                            Button {
+                                showingImagePicker = true
+                            } label: {
+                                Label(selectedImageData != nil ? "Ändern" : "Auswählen", systemImage: "photo.badge.plus")
+                                    .font(.subheadline)
+                            }
+                            .secondaryGlassButton()
+
+                            if selectedImageData != nil {
+                                Button {
+                                    selectedImageData = nil
+                                } label: {
+                                    Image(systemName: "trash")
+                                        .font(.subheadline)
+                                }
+                                .accentGlassButton()
+                            }
+                        }
+                    }
+
+                    Spacer()
+                }
+
+                Divider()
+
+                // Runden-Name
                 VStack(alignment: .leading, spacing: AppSpacing.xxs) {
                     Text(NSLocalizedString("round.name", comment: "Round name"))
                         .font(.headline)
@@ -695,14 +771,15 @@ struct EditRoundSheet: View {
                                 Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
                                     maxPoints = points
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                     }
                 }
+
             }
             .padding(.horizontal, AppSpacing.xxl)
-            
+
             Spacer()
             
             // Action Buttons
@@ -713,7 +790,7 @@ struct EditRoundSheet: View {
                     Label(L10n.Navigation.delete, systemImage: "trash")
                         .frame(minWidth: 80)
                 }
-                .accentGradientButton(size: .large)
+                .accentGlassButton(size: .large)
                 
                 Spacer()
                 
@@ -721,22 +798,23 @@ struct EditRoundSheet: View {
                     dismiss()
                 }
                 .keyboardShortcut(.escape)
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
                 
                 Button(L10n.Navigation.save) {
                     saveChanges()
                     dismiss()
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
                 .disabled(roundName.isEmpty)
             }
             .padding(.bottom, AppSpacing.md)
             .padding(.horizontal, AppSpacing.xl)
         }
-        .frame(width: 550, height: 550)
+        .frame(width: 550, height: 700)
         .onAppear {
             roundName = round.name
+            selectedImageData = round.imageData
             if let points = round.maxPoints {
                 maxPoints = points
                 hasMaxPoints = true
@@ -745,6 +823,25 @@ struct EditRoundSheet: View {
                 hasMaxPoints = false
             }
             focusedField = true
+        }
+        .fileImporter(
+            isPresented: $showingImagePicker,
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    if url.startAccessingSecurityScopedResource() {
+                        defer { url.stopAccessingSecurityScopedResource() }
+                        if let data = try? Data(contentsOf: url) {
+                            selectedImageData = data
+                        }
+                    }
+                }
+            case .failure(let error):
+                print("Fehler beim Laden des Bildes: \(error)")
+            }
         }
         .alert("Runde löschen?", isPresented: $showingDeleteConfirmation) {
             Button("Abbrechen", role: .cancel) {}
@@ -770,6 +867,10 @@ struct EditRoundSheet: View {
             viewModel.updateRoundName(round, newName: trimmedName)
         }
         viewModel.updateRoundMaxPoints(round, maxPoints: hasMaxPoints ? maxPoints : nil)
+
+        // Bild speichern
+        round.imageData = selectedImageData
+        viewModel.saveContext()
     }
 }
 
@@ -860,7 +961,7 @@ struct QuickRoundSheet: View {
                                 Button(String(format: NSLocalizedString("common.points.count", comment: "Points count"), points)) {
                                     maxPoints = points
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                     }
@@ -876,14 +977,14 @@ struct QuickRoundSheet: View {
                     dismiss()
                 }
                 .keyboardShortcut(.escape)
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
 
                 Button(NSLocalizedString("common.round.create.button", comment: "Create round button")) {
                     viewModel.addRound(to: quiz, name: roundName, maxPoints: hasMaxPoints ? maxPoints : nil)
                     dismiss()
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
                 .disabled(roundName.isEmpty)
             }
             .padding(.bottom, AppSpacing.md)
@@ -1048,7 +1149,7 @@ struct RoundWizardSheet: View {
                                     updateRoundNames()
                                     updateRoundPoints()
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -1108,7 +1209,7 @@ struct RoundWizardSheet: View {
                                         Button("\(points)") {
                                             maxPointsPerRound = points
                                         }
-                                        .secondaryGradientButton()
+                                        .secondaryGlassButton()
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
@@ -1269,7 +1370,7 @@ struct RoundWizardSheet: View {
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
                 
                 Button {
                     createRounds()
@@ -1283,7 +1384,7 @@ struct RoundWizardSheet: View {
                     .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
             }
             .padding(.horizontal, AppSpacing.xxl)
             .padding(.vertical, AppSpacing.sectionSpacing)
@@ -1334,3 +1435,4 @@ struct RoundWizardSheet: View {
         }
     }
 }
+

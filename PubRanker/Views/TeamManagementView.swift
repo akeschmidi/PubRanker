@@ -18,18 +18,10 @@ struct TeamManagementView: View {
     @State private var showingTeamWizard = false
     @State private var showingGlobalTeamPicker = false
 
-    var sortedTeams: [Team] {
-        quiz.safeTeams.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
-    }
+    // Gecachte Arrays für Performance
+    @State private var sortedTeams: [Team] = []
+    @State private var availableGlobalTeams: [Team] = []
 
-    var availableGlobalTeams: [Team] {
-        allTeams.filter { team in
-            // Teams die noch keinem Quiz zugeordnet sind oder nicht diesem Quiz
-            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
-        }
-        .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
-    }
-    
     @State private var showingMaxTeamsEditor = false
     @State private var tempMaxTeams: String = ""
     
@@ -71,7 +63,7 @@ struct TeamManagementView: View {
                             Label(NSLocalizedString("team.new.multiple", comment: "Multiple teams"), systemImage: "person.3.fill")
                                 .font(.headline)
                         }
-                        .primaryGradientButton(size: .large)
+                        .primaryGlassButton(size: .large)
                         
                         Button {
                             showingAddTeamSheet = true
@@ -79,7 +71,7 @@ struct TeamManagementView: View {
                             Label(NSLocalizedString("team.new.single", comment: "Single team"), systemImage: "plus.circle")
                                 .font(.headline)
                         }
-                        .secondaryGradientButton(size: .large)
+                        .secondaryGlassButton(size: .large)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -115,7 +107,7 @@ struct TeamManagementView: View {
                             .frame(maxWidth: .infinity)
                     }
                 }
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
                 .disabled(availableGlobalTeams.isEmpty)
                 .opacity(availableGlobalTeams.isEmpty ? 0.5 : 1.0)
             }
@@ -134,14 +126,38 @@ struct TeamManagementView: View {
         .sheet(isPresented: $showingMaxTeamsEditor) {
             MaxTeamsEditorSheet(quiz: quiz, tempMaxTeams: $tempMaxTeams)
         }
+        .onAppear {
+            updateCachedArrays()
+        }
+        .onChange(of: quiz.safeTeams.count) { _, _ in
+            updateCachedArrays()
+        }
+        .onChange(of: allTeams.count) { _, _ in
+            updateCachedArrays()
+        }
+    }
+
+    private func updateCachedArrays() {
+        // Cache sortedTeams
+        sortedTeams = quiz.safeTeams.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+
+        // Cache availableGlobalTeams
+        availableGlobalTeams = allTeams.filter { team in
+            (team.quizzes?.isEmpty ?? true) || !(team.quizzes?.contains(where: { $0.id == quiz.id }) ?? false)
+        }
+        .sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
     }
 }
 
 // MARK: - Team Management Header
 struct TeamManagementHeader: View {
-    let quiz: Quiz
+    @Bindable var quiz: Quiz
     let onEditMaxTeams: () -> Void
-    
+
+    var allTeamsConfirmed: Bool {
+        !quiz.safeTeams.isEmpty && quiz.safeTeams.allSatisfy { $0.isConfirmed(for: quiz) }
+    }
+
     var body: some View {
         HStack(spacing: AppSpacing.md) {
             // Linke Seite: Team-Status
@@ -149,26 +165,26 @@ struct TeamManagementHeader: View {
                 Image(systemName: "person.3.fill")
                     .font(.title3)
                     .foregroundStyle(Color.appPrimary)
-                
+
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: AppSpacing.xxxs) {
                         Text("\(quiz.confirmedTeamsCount)")
                             .font(.headline)
                             .foregroundStyle(Color.appSuccess)
-                        
+
                         Text(NSLocalizedString("teams.confirmed", comment: "confirmed teams"))
                             .font(.subheadline)
                             .foregroundStyle(Color.appTextSecondary)
-                        
+
                         Text("/")
                             .font(.subheadline)
                             .foregroundStyle(Color.appTextTertiary)
-                        
+
                         if let maxTeams = quiz.maxTeams {
                             Text("\(maxTeams)")
                                 .font(.headline)
                                 .foregroundStyle(Color.appPrimary)
-                            
+
                             Text(NSLocalizedString("teams.defined", comment: "defined teams"))
                                 .font(.subheadline)
                                 .foregroundStyle(Color.appTextSecondary)
@@ -176,7 +192,7 @@ struct TeamManagementHeader: View {
                             Text("\(quiz.safeTeams.count)")
                                 .font(.headline)
                                 .foregroundStyle(Color.appPrimary)
-                            
+
                             Text(NSLocalizedString("teams.assigned", comment: "assigned teams"))
                                 .font(.subheadline)
                                 .foregroundStyle(Color.appTextSecondary)
@@ -184,9 +200,27 @@ struct TeamManagementHeader: View {
                     }
                 }
             }
-            
+
             Spacer()
-            
+
+            // Alle bestätigen Toggle
+            if !quiz.safeTeams.isEmpty {
+                Toggle(isOn: Binding(
+                    get: { allTeamsConfirmed },
+                    set: { newValue in
+                        for team in quiz.safeTeams {
+                            team.setConfirmed(for: quiz, isConfirmed: newValue)
+                        }
+                        // Speichern nach Änderung
+                        try? quiz.modelContext?.save()
+                    }
+                )) {
+                    Text(allTeamsConfirmed ? "Alle abwählen" : "Alle bestätigen")
+                        .font(.subheadline)
+                }
+                .toggleStyle(.switch)
+            }
+
             // Rechte Seite: Max Teams bearbeiten
             Button {
                 onEditMaxTeams()
@@ -198,7 +232,7 @@ struct TeamManagementHeader: View {
                         .font(.body)
                 }
             }
-            .secondaryGradientButton()
+            .secondaryGlassButton()
         }
         .padding(.horizontal, AppSpacing.screenPadding)
         .padding(.vertical, AppSpacing.sm)
@@ -259,7 +293,7 @@ struct MaxTeamsEditorSheet: View {
                     }
                     .toggleStyle(.switch)
                     .padding(AppSpacing.md)
-                    .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+                    .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
                     
                     if hasLimit {
                         // Stepper Card
@@ -321,7 +355,7 @@ struct MaxTeamsEditorSheet: View {
                             }
                         }
                         .padding(AppSpacing.md)
-                        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+                        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
                         
                         // Status Card
                         VStack(spacing: AppSpacing.xs) {
@@ -352,7 +386,7 @@ struct MaxTeamsEditorSheet: View {
                             }
                         }
                         .padding(AppSpacing.md)
-                        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+                        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
                         
                     } else {
                         // Unbegrenzt Card
@@ -367,7 +401,7 @@ struct MaxTeamsEditorSheet: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, AppSpacing.xxl)
-                        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+                        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
                     }
                 }
                 .padding(.horizontal, AppSpacing.lg)
@@ -387,6 +421,8 @@ struct MaxTeamsEditorSheet: View {
                 
                 Button {
                     quiz.maxTeams = hasLimit ? maxTeams : nil
+                    // Speichern nach Änderung
+                    try? quiz.modelContext?.save()
                     dismiss()
                 } label: {
                     HStack(spacing: AppSpacing.xxs) {
@@ -396,7 +432,7 @@ struct MaxTeamsEditorSheet: View {
                     .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
             }
             .padding(AppSpacing.lg)
             .background(Color.appBackgroundSecondary)
@@ -434,56 +470,58 @@ struct TeamRowView: View {
             HStack(spacing: AppSpacing.xs) {
                 // Team Icon
                 TeamIconView(team: team, size: 36)
-            
-            // Team Info
-            VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
-                Text(team.name)
-                    .font(.body)
-                    .bold()
-                    .foregroundStyle(Color.appTextPrimary)
 
-                if !team.contactPerson.isEmpty {
-                    Text(team.contactPerson)
-                        .font(.caption)
-                        .foregroundStyle(Color.appTextSecondary)
+                // Team Info
+                VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
+                    Text(team.name)
+                        .font(.body)
+                        .bold()
+                        .foregroundStyle(Color.appTextPrimary)
+
+                    if !team.contactPerson.isEmpty {
+                        Text(team.contactPerson)
+                            .font(.caption)
+                            .foregroundStyle(Color.appTextSecondary)
+                    }
+
+                    if !team.email.isEmpty {
+                        Text(team.email)
+                            .font(.caption2)
+                            .foregroundStyle(Color.appPrimary)
+                    }
                 }
-                
-                if !team.email.isEmpty {
-                    Text(team.email)
-                        .font(.caption2)
-                        .foregroundStyle(Color.appPrimary)
+
+                Spacer()
+
+                // Bestätigung Toggle
+                Toggle(isOn: $isConfirmed) {
+                    HStack(spacing: AppSpacing.xxxs) {
+                        Image(systemName: isConfirmed ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(isConfirmed ? Color.appSuccess : Color.appTextTertiary)
+                        Text(NSLocalizedString("team.confirmed", comment: "Confirmed"))
+                            .font(.caption)
+                            .foregroundStyle(isConfirmed ? Color.appSuccess : Color.appTextSecondary)
+                    }
                 }
-            }
-
-            Spacer()
-
-            // Bestätigung Toggle
-            Toggle(isOn: $isConfirmed) {
-                HStack(spacing: AppSpacing.xxxs) {
-                    Image(systemName: isConfirmed ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(isConfirmed ? Color.appSuccess : Color.appTextTertiary)
-                    Text(NSLocalizedString("team.confirmed", comment: "Confirmed"))
-                        .font(.caption)
-                        .foregroundStyle(isConfirmed ? Color.appSuccess : Color.appTextSecondary)
+                .toggleStyle(.button)
+                .buttonStyle(.plain)
+                .helpText(NSLocalizedString("team.confirmed.toggle.help", comment: "Toggle participation confirmation"))
+                .onChange(of: isConfirmed) { _, newValue in
+                    team.setConfirmed(for: quiz, isConfirmed: newValue)
+                    // Speichern nach Änderung
+                    try? team.modelContext?.save()
                 }
-            }
-            .toggleStyle(.button)
-            .buttonStyle(.plain)
-            .helpText(NSLocalizedString("team.confirmed.toggle.help", comment: "Toggle participation confirmation"))
-            .onChange(of: isConfirmed) { _, newValue in
-                team.setConfirmed(for: quiz, isConfirmed: newValue)
-            }
 
-            // Entfernen Button
-            Button {
-                showingDeleteConfirmation = true
-            } label: {
-                Image(systemName: "trash")
-                    .font(.body)
-                    .foregroundStyle(Color.appTextTertiary)
-            }
-            .buttonStyle(.plain)
-            .helpText(NSLocalizedString("team.remove.help", comment: "Remove team help"))
+                // Entfernen Button
+                Button {
+                    showingDeleteConfirmation = true
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.body)
+                        .foregroundStyle(Color.appTextTertiary)
+                }
+                .buttonStyle(.plain)
+                .helpText(NSLocalizedString("team.remove.help", comment: "Remove team help"))
             }
         }
         .padding(.horizontal, AppSpacing.xs)
@@ -508,6 +546,13 @@ struct TeamRowView: View {
         }
         .onAppear {
             isConfirmed = team.isConfirmed(for: quiz)
+        }
+        .onChange(of: quiz.confirmedTeamsCount) { _, _ in
+            // Aktualisiere lokalen State wenn sich die Bestätigungen ändern
+            let newValue = team.isConfirmed(for: quiz)
+            if isConfirmed != newValue {
+                isConfirmed = newValue
+            }
         }
     }
 }
@@ -735,7 +780,7 @@ struct TeamWizardSheet: View {
                                     numberOfTeams = count
                                     updateTeamNames()
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -836,7 +881,7 @@ struct TeamWizardSheet: View {
                         Label(L10n.CommonUI.addTeam, systemImage: "plus.circle.fill")
                             .frame(maxWidth: .infinity)
                     }
-                    .primaryGradientButton(size: .large)
+                    .primaryGlassButton(size: .large)
                     
                     if !availableGlobalTeams.isEmpty {
                         Button {
@@ -845,7 +890,7 @@ struct TeamWizardSheet: View {
                             Label(String(format: NSLocalizedString("team.selectFromExisting", comment: "Select from existing"), availableGlobalTeams.count), systemImage: "square.stack.3d.up.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .secondaryGradientButton(size: .large)
+                        .secondaryGlassButton(size: .large)
                     }
                 }
                 
@@ -860,7 +905,7 @@ struct TeamWizardSheet: View {
                             .frame(maxWidth: .infinity)
                     }
                     .keyboardShortcut(.escape)
-                    .secondaryGradientButton(size: .large)
+                    .secondaryGlassButton(size: .large)
                     
                     Button {
                         createTeams()
@@ -874,7 +919,7 @@ struct TeamWizardSheet: View {
                         .frame(maxWidth: .infinity)
                     }
                     .keyboardShortcut(.return, modifiers: .command)
-                    .primaryGradientButton(size: .large)
+                    .primaryGlassButton(size: .large)
                 }
             }
             .padding(.horizontal, AppSpacing.xxl)
