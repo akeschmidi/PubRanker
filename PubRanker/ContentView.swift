@@ -80,6 +80,9 @@ struct ContentView: View {
             EasterEggOverlayContainer(easterEggManager: easterEggManager)
         }
         .onAppear {
+            // ViewModel mit ModelContext initialisieren (WICHTIG für alle Services)
+            viewModel.setContext(modelContext)
+            
             // CloudKit Sync Manager initialisieren
             if syncManager == nil {
                 syncManager = CloudKitSyncManager(modelContext: modelContext)
@@ -132,7 +135,6 @@ struct ContentView: View {
 
     private var titleSection: some View {
         HStack(spacing: AppSpacing.xs) {
-            EasterEggIconView(easterEggManager: easterEggManager)
             #if os(macOS)
             EasterEggTitleView(easterEggManager: easterEggManager)
             #else
@@ -149,21 +151,35 @@ struct ContentView: View {
     }
 
     private var workflowPicker: some View {
-        HStack(spacing: AppSpacing.xxs) {
+        HStack(spacing: AppSpacing.xxxs) {
             ForEach(WorkflowPhase.allCases) { phase in
                 phaseButton(for: phase)
             }
         }
         #if os(iOS)
-        .padding(2)
+        .padding(3)
         #else
-        .padding(AppSpacing.xxxs)
+        .padding(4)
         #endif
         .background(
-            RoundedRectangle(cornerRadius: AppCornerRadius.md)
-                .fill(Color.appBackgroundSecondary.opacity(0.9))
-                .shadow(radius: 2, y: 1)
+            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                .fill(Color.black.opacity(0.15))
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0.15),
+                                    Color.white.opacity(0.05)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                )
         )
+        .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
     }
 
     private func phaseButton(for phase: WorkflowPhase) -> some View {
@@ -183,8 +199,9 @@ struct ContentView: View {
             .frame(width: navigationButtonWidth)
             .padding(.vertical, AppSpacing.xs)
             .background(phaseBackground(for: phase))
+            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(GlassTabButtonStyle(isSelected: selectedWorkflow == phase))
         #if os(macOS)
         .help(phase.description)
         #endif
@@ -193,12 +210,37 @@ struct ContentView: View {
     private func phaseBackground(for phase: WorkflowPhase) -> some View {
         Group {
             if selectedWorkflow == phase {
-                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
-                    .fill(Color.appPrimary)
-                    .shadow(radius: 2, y: 1)
+                // Aktiver Tab - sauber und elegant
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.appPrimary.opacity(0.95),
+                                Color.appPrimary
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .overlay {
+                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.25),
+                                        Color.white.opacity(0.1)
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ),
+                                lineWidth: 1
+                            )
+                    }
+                    .shadow(color: Color.appPrimary.opacity(0.25), radius: 8, x: 0, y: 2)
             } else {
-                RoundedRectangle(cornerRadius: AppCornerRadius.sm)
-                    .fill(Color.appBackgroundSecondary.opacity(0.5))
+                // Inaktive Tabs - transparent und zurückhaltend
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(Color.clear)
             }
         }
     }
@@ -248,6 +290,27 @@ struct ContentView: View {
     }
 }
 
+// MARK: - Glass Tab Button Style (macOS 26 Liquid Glass Design)
+
+struct GlassTabButtonStyle: ButtonStyle {
+    let isSelected: Bool
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .opacity(configuration.isPressed ? 0.8 : 1.0)
+            .animation(.spring(response: 0.2, dampingFraction: 0.7), value: configuration.isPressed)
+            #if os(macOS)
+            .onHover { hovering in
+                if hovering && !isSelected {
+                    NSCursor.pointingHand.push()
+                } else {
+                    NSCursor.pop()
+                }
+            }
+            #endif
+    }
+}
 
 #Preview {
     ContentView()

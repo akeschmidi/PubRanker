@@ -192,14 +192,14 @@ struct AboutSheet: View {
                 } label: {
                     Label(L10n.About.Feedback.rate, systemImage: "star.fill")
                 }
-                .secondaryGradientButton()
+                .secondaryGlassButton()
                 
                 Spacer()
                 
                 Button(L10n.Common.close) {
                     dismiss()
                 }
-                .primaryGradientButton()
+                .primaryGlassButton()
                 .keyboardShortcut(.escape)
             }
             .padding(AppSpacing.md)

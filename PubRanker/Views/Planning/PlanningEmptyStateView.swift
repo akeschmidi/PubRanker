@@ -63,7 +63,7 @@ struct PlanningEmptyStateView: View {
                     }
                     .frame(maxWidth: 300)
                 }
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
                 .keyboardShortcut("n", modifiers: .command)
                 .shadow(AppShadow.lg)
             }

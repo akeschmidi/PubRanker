@@ -45,6 +45,8 @@ struct AppCard<Content: View>: View {
 enum CardStyle {
     case `default`
     case glassmorphism
+    case glass  // New: Liquid Glass Design (macOS 26)
+    case glassProminent  // New: Prominent Glass Effect
     case elevated
     case outlined
     case gradient(Gradient)
@@ -52,31 +54,50 @@ enum CardStyle {
     case secondary
     case accent
     
+    @ViewBuilder
     var background: some View {
-        Group {
-            switch self {
-            case .default:
-                Color.adaptiveControlBackground
-            case .glassmorphism:
-                Rectangle()
-                    .fill(.ultraThinMaterial)
-            case .elevated:
-                Color.adaptiveCardBackground
-            case .outlined:
-                Color.clear
-            case .gradient(let gradient):
-                Rectangle()
-                    .fill(gradient)
-            case .primary:
-                Rectangle()
-                    .fill(Color.gradientPrimary)
-            case .secondary:
-                Rectangle()
-                    .fill(Color.gradientSecondary)
-            case .accent:
-                Rectangle()
-                    .fill(Color.gradientAccent)
-            }
+        switch self {
+        case .default:
+            Color.adaptiveControlBackground
+        case .glassmorphism:
+            Rectangle()
+                .fill(.ultraThinMaterial)
+        case .glass:
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.1), Color.white.opacity(0.05), Color.clear],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        case .glassProminent:
+            Rectangle()
+                .fill(.thinMaterial)
+                .overlay(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.15), Color.white.opacity(0.08), Color.clear],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        case .elevated:
+            Color.adaptiveCardBackground
+        case .outlined:
+            Color.clear
+        case .gradient(let gradient):
+            Rectangle()
+                .fill(gradient)
+        case .primary:
+            Rectangle()
+                .fill(Color.gradientPrimary)
+        case .secondary:
+            Rectangle()
+                .fill(Color.gradientSecondary)
+        case .accent:
+            Rectangle()
+                .fill(Color.gradientAccent)
         }
     }
     
@@ -86,6 +107,8 @@ enum CardStyle {
             return Color.secondary.opacity(0.1)
         case .glassmorphism:
             return Color.white.opacity(0.2)
+        case .glass, .glassProminent:
+            return Color.white.opacity(0.25)
         case .outlined:
             return Color.secondary.opacity(0.3)
         case .gradient, .primary, .secondary, .accent:
@@ -108,6 +131,10 @@ enum CardStyle {
             return AppShadow.sm
         case .glassmorphism:
             return AppShadow.md
+        case .glass:
+            return AppShadow.md
+        case .glassProminent:
+            return AppShadow.lg
         case .elevated:
             return AppShadow.lg
         case .outlined:

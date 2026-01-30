@@ -617,9 +617,7 @@
 "round.noMaxPointsShort" = "Nagins max pts";
 "round.unlimited" = "(unlimited)";
 "round.noMaxPointsSet" = "Nagin punct maximal definì";
-"common.round.create.button" = "Crear runda";
-
-"common.additionalPlaces" = "ULTERIURAS PLAZZAS";
+"common.round.create.button" = "Crear runda";"common.additionalPlaces" = "ULTERIURAS PLAZZAS";
 "common.maxPointsLabel" = "PUNCTS MAX.";
 
 // MARK: - Presentation Mode

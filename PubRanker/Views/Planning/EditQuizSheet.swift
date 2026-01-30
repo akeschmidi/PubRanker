@@ -19,6 +19,7 @@ struct EditQuizSheet: View {
     @State private var venueName: String = ""
     @State private var quizDate: Date = Date()
     @State private var showingDeleteConfirmation = false
+    @State private var totalMaxPoints: Int = 0
     
     var body: some View {
         NavigationStack {
@@ -54,7 +55,15 @@ struct EditQuizSheet: View {
             quizName = quiz.name
             venueName = quiz.venue
             quizDate = quiz.date
+            updateTotalMaxPoints()
         }
+        .onChange(of: quiz.safeRounds.count) { _, _ in
+            updateTotalMaxPoints()
+        }
+    }
+
+    private func updateTotalMaxPoints() {
+        totalMaxPoints = quiz.safeRounds.reduce(0) { $0 + ($1.maxPoints ?? 0) }
     }
     
     private var detailsView: some View {
@@ -147,7 +156,7 @@ struct EditQuizSheet: View {
                             
                             statBox(
                                 title: "Max. Punkte",
-                                value: "\(quiz.safeRounds.reduce(0) { $0 + ($1.maxPoints ?? 0) })",
+                                value: "\(totalMaxPoints)",
                                 icon: "star.fill",
                                 color: Color.appAccent
                             )
@@ -243,6 +252,8 @@ struct EditQuizSheet: View {
         quiz.name = quizName.trimmingCharacters(in: .whitespacesAndNewlines)
         quiz.venue = venueName.trimmingCharacters(in: .whitespacesAndNewlines)
         quiz.date = quizDate
+        // Speichern nach Änderung
+        try? modelContext.save()
     }
     
     private func deleteQuiz() {
@@ -274,6 +285,10 @@ struct GlobalTeamPickerSheet: View {
         return teams.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
     }
 
+    var allSelected: Bool {
+        !filteredTeams.isEmpty && filteredTeams.allSatisfy { selectedTeams.contains($0.id) }
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -284,6 +299,36 @@ struct GlobalTeamPickerSheet: View {
                         description: Text("Alle Teams sind bereits diesem Quiz zugeordnet")
                     )
                 } else {
+                    // Alle auswählen Toggle
+                    HStack {
+                        Toggle(isOn: Binding(
+                            get: { allSelected },
+                            set: { newValue in
+                                if newValue {
+                                    selectedTeams = Set(filteredTeams.map { $0.id })
+                                } else {
+                                    selectedTeams.removeAll()
+                                }
+                            }
+                        )) {
+                            Text(allSelected ? "Alle abwählen" : "Alle auswählen")
+                                .font(.subheadline)
+                        }
+                        .toggleStyle(.switch)
+
+                        Spacer()
+
+                        Text("\(selectedTeams.count)/\(filteredTeams.count)")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.appTextSecondary)
+                            .monospacedDigit()
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, AppSpacing.xs)
+                    .background(Color.appBackgroundSecondary)
+
+                    Divider()
+
                     List(filteredTeams, selection: $selectedTeams) { team in
                         HStack(spacing: AppSpacing.xs) {
                             TeamIconView(team: team, size: AppSpacing.xl)
@@ -348,7 +393,7 @@ struct GlobalTeamPickerSheet: View {
                         addSelectedTeams()
                         dismiss()
                     }
-                    .primaryGradientButton()
+                    .primaryGlassButton()
                     .disabled(selectedTeams.isEmpty)
                 }
             }

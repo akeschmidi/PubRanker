@@ -162,13 +162,9 @@ fastlane release
 
 ## 🔄 Marketing-Version ändern
 
-Die Marketing-Version (2.2 → 2.3) wird **manuell** geändert:
-
-### In Xcode:
+Die Marketing-Version (2.2 → 2.3) wird **manuell** geändert:### In Xcode:
 1. Target → General → Identity → Version
-2. Neuen Wert eingeben (z.B. "2.3")
-
-### Per Script:
+2. Neuen Wert eingeben (z.B. "2.3")### Per Script:
 ```bash
 # Alle Vorkommen ersetzen
 sed -i '' 's/MARKETING_VERSION = 2.2;/MARKETING_VERSION = 2.3;/g' \

@@ -30,7 +30,19 @@ struct PlanningView: View {
                 selectedQuiz: $selectedQuiz,
                 showingNewQuizSheet: $showingNewQuizSheet,
                 plannedQuizzes: plannedQuizzes,
-                viewModel: viewModel
+                viewModel: viewModel,
+                onEditQuiz: { quiz in
+                    selectedQuiz = quiz
+                    showingEditQuizSheet = true
+                },
+                onDeleteQuiz: { quiz in
+                    quizToDelete = quiz
+                    showingDeleteConfirmation = true
+                },
+                onStartQuiz: { quiz in
+                    viewModel.startQuiz(quiz)
+                    selectedWorkflow = .execution
+                }
             )
             #if os(iOS)
             .navigationSplitViewColumnWidth(min: 280, ideal: 320, max: 380)
@@ -43,14 +55,7 @@ struct PlanningView: View {
                     quiz: quiz,
                     selectedDetailTab: $selectedDetailTab,
                     selectedWorkflow: $selectedWorkflow,
-                    viewModel: viewModel,
-                    onEdit: {
-                        showingEditQuizSheet = true
-                    },
-                    onDelete: {
-                        quizToDelete = quiz
-                        showingDeleteConfirmation = true
-                    }
+                    viewModel: viewModel
                 )
             } else {
                 PlanningEmptyStateView {

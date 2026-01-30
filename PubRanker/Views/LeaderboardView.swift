@@ -10,11 +10,17 @@ import SwiftUI
 struct LeaderboardView: View {
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
-    
+
+    @State private var cachedRankings: [(team: Team, rank: Int)] = []
+
     // Calculate ranks with tied teams getting the same rank (Dense Ranking)
     // Example: Team A=100pts (Rank 1), Team B=100pts (Rank 1), Team C=95pts (Rank 2)
     private func calculateRanks() -> [(team: Team, rank: Int)] {
         return quiz.getTeamRankings()
+    }
+
+    private func updateRankingsCache() {
+        cachedRankings = quiz.getTeamRankings()
     }
     
     var body: some View {
@@ -71,8 +77,7 @@ struct LeaderboardView: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         // Podium View for Top 3 ranks (may include more than 3 teams if tied)
-                        let rankedTeams = calculateRanks()
-                        let topRanks = rankedTeams.filter { $0.rank <= 3 }
+                        let topRanks = cachedRankings.filter { $0.rank <= 3 }
                         if topRanks.count >= 3 {
                             PodiumView(rankedTeams: topRanks, quiz: quiz)
                                 .padding(.bottom, AppSpacing.md)
@@ -81,19 +86,30 @@ struct LeaderboardView: View {
 
                         // All Teams List
                         LazyVStack(spacing: AppSpacing.xxs) {
-                            ForEach(calculateRanks(), id: \.team.id) { item in
+                            ForEach(cachedRankings, id: \.team.id) { item in
+                                let isShared = cachedRankings.filter { $0.rank == item.rank }.count > 1
                                 LeaderboardRowView(
                                     team: item.team,
                                     rank: item.rank,
                                     quiz: quiz,
-                                    isTopThree: item.rank <= 3
+                                    isTopThree: item.rank <= 3,
+                                    isSharedRank: isShared
                                 )
                                 .transition(.move(edge: .trailing).combined(with: .opacity))
                             }
                         }
-                        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: calculateRanks().map { $0.rank })
+                        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: cachedRankings.map { $0.rank })
                     }
                     .padding(AppSpacing.sectionSpacing)
+                }
+                .onAppear {
+                    updateRankingsCache()
+                }
+                .onChange(of: quiz.safeTeams.count) { _, _ in
+                    updateRankingsCache()
+                }
+                .onChange(of: quiz.safeRounds.count) { _, _ in
+                    updateRankingsCache()
                 }
             }
         }
@@ -292,13 +308,7 @@ struct LeaderboardRowView: View {
     let rank: Int
     let quiz: Quiz
     let isTopThree: Bool
-    
-    // Check if this team shares the rank with others
-    private var isSharedRank: Bool {
-        let rankings = quiz.getTeamRankings()
-        let teamsWithSameRank = rankings.filter { $0.rank == rank }
-        return teamsWithSameRank.count > 1
-    }
+    let isSharedRank: Bool
     
     var body: some View {
         HStack(spacing: 20) {

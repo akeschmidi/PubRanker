@@ -69,7 +69,7 @@ struct GlobalEditTeamSheet: View {
                                         .font(.subheadline)
                                         .frame(maxWidth: .infinity)
                                 }
-                                .primaryGradientButton(size: .small)
+                                .primaryGlassButton(size: .small)
 
                                 if team.imageData != nil {
                                     Button {
@@ -79,7 +79,7 @@ struct GlobalEditTeamSheet: View {
                                             .font(.subheadline)
                                             .frame(maxWidth: .infinity)
                                     }
-                                    .destructiveGradientButton(size: .small)
+                                    .destructiveGlassButton(size: .small)
                                 }
                             }
                             .frame(maxWidth: 180)

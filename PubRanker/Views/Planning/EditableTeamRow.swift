@@ -62,19 +62,20 @@ struct EditableTeamRow: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, AppSpacing.xxs)
                         }
-                        .primaryGradientButton()
+                        .primaryGlassButton()
                         
                         // Bild entfernen, wenn vorhanden
                         if team.imageData != nil {
                             Button {
                                 team.imageData = nil
+                                viewModel.saveContext()
                                 showingColorPicker = false
                             } label: {
                                 Label("Bild entfernen", systemImage: "trash")
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, AppSpacing.xxs)
                             }
-                            .accentGradientButton()
+                            .accentGlassButton()
                         }
                         
                         Divider()
@@ -103,6 +104,7 @@ struct EditableTeamRow: View {
                                     .onTapGesture {
                                         team.color = colorHex
                                         team.imageData = nil // Bild entfernen wenn Farbe gewählt wird
+                                        viewModel.saveContext()
                                         showingColorPicker = false
                                     }
                             }
@@ -215,7 +217,7 @@ struct EditableTeamRow: View {
                                     .font(.body)
                             }
                         }
-                        .successGradientButton()
+                        .successGlassButton()
                         .helpText("Änderungen speichern")
                         
                         // Abbrechen Button (nur im Bearbeitungsmodus)
@@ -229,7 +231,7 @@ struct EditableTeamRow: View {
                                     .font(.body)
                             }
                         }
-                        .secondaryGradientButton()
+                        .secondaryGlassButton()
                         .helpText("Bearbeitung abbrechen")
                     } else {
                         // Bearbeiten Button (immer sichtbar wenn nicht im Bearbeitungsmodus)
@@ -247,7 +249,7 @@ struct EditableTeamRow: View {
                                     .font(.body)
                             }
                         }
-                        .primaryGradientButton()
+                        .primaryGlassButton()
                         .helpText("Team bearbeiten")
                         
                         // Löschen Button - Größer und prominenter
@@ -259,7 +261,7 @@ struct EditableTeamRow: View {
                                     .font(.body)
                             }
                         }
-                        .accentGradientButton()
+                        .accentGlassButton()
                         .helpText("Team entfernen")
                     }
                 }
@@ -267,7 +269,7 @@ struct EditableTeamRow: View {
             .padding(.horizontal, AppSpacing.md)
             .padding(.vertical, isEditing ? AppSpacing.md : AppSpacing.sm)
         }
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(
@@ -350,6 +352,7 @@ struct EditableTeamRow: View {
             
             // Bild speichern
             team.imageData = imageData
+            viewModel.saveContext()
             print("✅ Bild erfolgreich geladen: \(url.lastPathComponent)")
         } catch {
             print("❌ Fehler beim Laden des Bildes: \(error.localizedDescription)")

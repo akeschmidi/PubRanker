@@ -156,7 +156,7 @@ struct ExecutionAddTeamSheet: View {
                             } label: {
                                 Label("Bild auswählen", systemImage: "photo")
                             }
-                            .primaryGradientButton()
+                            .primaryGlassButton()
 
                             if imageData != nil {
                                 Button {
@@ -164,7 +164,7 @@ struct ExecutionAddTeamSheet: View {
                                 } label: {
                                     Label("Bild entfernen", systemImage: "trash")
                                 }
-                                .accentGradientButton()
+                                .accentGlassButton()
                             }
                         }
                     }

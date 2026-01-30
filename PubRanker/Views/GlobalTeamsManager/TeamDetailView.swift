@@ -87,7 +87,7 @@ struct TeamDetailView: View {
                             .font(.body.weight(.semibold))
                             .frame(minWidth: 120)
                     }
-                    .primaryGradientButton(size: .small)
+                    .primaryGlassButton(size: .small)
 
                     Button(role: .destructive) {
                         showingDeleteAlert = true
@@ -96,7 +96,7 @@ struct TeamDetailView: View {
                             .font(.body.weight(.semibold))
                             .frame(minWidth: 120)
                     }
-                    .destructiveGradientButton(size: .small)
+                    .destructiveGlassButton(size: .small)
                 }
             }
 

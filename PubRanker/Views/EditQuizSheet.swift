@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EditQuizSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Bindable var quiz: Quiz
     @Bindable var viewModel: QuizViewModel
     
@@ -85,6 +86,8 @@ struct EditQuizSheet: View {
         quiz.name = quizName.trimmingCharacters(in: .whitespacesAndNewlines)
         quiz.venue = venueName.trimmingCharacters(in: .whitespacesAndNewlines)
         quiz.date = quizDate
+        // Speichern nach Änderung
+        try? modelContext.save()
     }
     
     private func deleteQuiz() {

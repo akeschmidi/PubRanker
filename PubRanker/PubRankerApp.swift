@@ -47,45 +47,39 @@ struct PubRankerApp: App {
         ])
 
         #if DEBUG
-        print("🔧 DEBUG BUILD - CloudKit Sync ist DEAKTIVIERT")
-        print("   Für CloudKit-Tests: Release-Build verwenden oder Scheme auf Release ändern")
-        // Use local storage in debug mode for faster development
-        let configuration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false
-        )
+        print("🔧 DEBUG BUILD - CloudKit Sync ist AKTIVIERT")
+        print("   Container: \(cloudKitContainerID)")
+        print("   Database: .automatic (private)")
+        print("   ⚠️ CloudKit ist im Debug-Modus aktiv für Sync-Tests")
         #else
         print("📦 RELEASE BUILD - CloudKit Sync ist AKTIVIERT")
         print("   Container: \(cloudKitContainerID)")
         print("   Database: .automatic (private)")
-        
-        // Use iCloud in release mode with explicit container
+        #endif
+
+        // Use iCloud with CloudKit in both debug and release mode
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
             cloudKitDatabase: .automatic
         )
-        #endif
 
         do {
             let container = try ModelContainer(for: schema, configurations: [configuration])
             print("✅ ModelContainer erfolgreich erstellt")
-            #if !DEBUG
             print("✅ CloudKit Synchronisation aktiv")
             print("   Container: \(cloudKitContainerID)")
             print("   Tipp: Rechtsklick auf iCloud-Icon für Diagnose")
-            
+
             // Enable remote change notifications for better sync
             // Das ermöglicht das Empfangen von Remote-Änderungen
             let storeDescription = container.configurations.first
-            #endif
             return container
         } catch {
             print("❌ ModelContainer Fehler: \(error)")
             print("❌ Details: \(error.localizedDescription)")
-            
-            #if !DEBUG
-            // Bei Release-Build: Versuche ohne CloudKit als Fallback
+
+            // Versuche ohne CloudKit als Fallback
             print("⚠️ Versuche Fallback ohne CloudKit...")
             do {
                 let localConfiguration = ModelConfiguration(
@@ -97,7 +91,6 @@ struct PubRankerApp: App {
             } catch {
                 print("❌ Auch lokaler Speicher fehlgeschlagen")
             }
-            #endif
 
             // Last resort: try in-memory only
             do {

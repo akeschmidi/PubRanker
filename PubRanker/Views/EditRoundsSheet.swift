@@ -145,7 +145,7 @@ struct RoundEditDetailView: View {
                         Button(L10n.Navigation.save) {
                             saveAllScores()
                         }
-                        .primaryGradientButton()
+                        .primaryGlassButton()
                     }
                     .padding()
                     .background(Color.appAccent.opacity(0.1))
@@ -197,13 +197,13 @@ struct RoundEditDetailView: View {
                         loadCurrentScores()
                         hasChanges = false
                     }
-                    .secondaryGradientButton()
+                    .secondaryGlassButton()
                     .disabled(!hasChanges)
                     
                     Button(L10n.Execution.saveAll) {
                         saveAllScores()
                     }
-                    .primaryGradientButton()
+                    .primaryGlassButton()
                     .disabled(!hasChanges)
                 }
                 
@@ -212,13 +212,13 @@ struct RoundEditDetailView: View {
                         saveAllScores()
                         viewModel.completeRound(round)
                     }
-                    .successGradientButton()
+                    .successGlassButton()
                 } else {
                     Button(NSLocalizedString("execution.editRounds.round.reopen", comment: "Reopen round")) {
                         round.isCompleted = false
                         viewModel.saveContext()
                     }
-                    .accentGradientButton()
+                    .accentGlassButton()
                 }
             }
             .padding(AppSpacing.md)

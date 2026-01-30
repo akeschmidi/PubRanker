@@ -37,100 +37,20 @@ struct GlobalAddTeamSheet: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("Team-Informationen") {
-                    TextField("Team-Name", text: $teamName)
-                        .textFieldStyle(.roundedBorder)
-
-                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                        Text("Team-Icon")
-                            .font(.caption)
-                            .foregroundStyle(Color.appTextSecondary)
-                        
-                        HStack(spacing: AppSpacing.sm) {
-                            // Vorschau
-                            Group {
-                                if let imageData = imageData {
-                                    PlatformImage(data: imageData)
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 60, height: 60)
-                                        .clipShape(Circle())
-                                        .overlay {
-                                            Circle()
-                                                .stroke(Color.white.opacity(0.6), lineWidth: 2)
-                                        }
-                                        .shadow(AppShadow.sm)
-                                } else {
-                                    Circle()
-                                        .fill(Color(hex: selectedColor) ?? Color.appPrimary)
-                                        .frame(width: 60, height: 60)
-                                        .overlay {
-                                            Circle()
-                                                .stroke(Color.white.opacity(0.6), lineWidth: 2)
-                                        }
-                                        .shadow(AppShadow.sm)
-                                }
-                            }
-                            
-                            VStack(alignment: .leading, spacing: AppSpacing.xxs) {
-                                Button {
-                                    showingImagePicker = true
-                                } label: {
-                                    Label("Bild auswählen", systemImage: "photo")
-                                }
-                                .primaryGradientButton()
-                                
-                                if imageData != nil {
-                                    Button {
-                                        imageData = nil
-                                    } label: {
-                                        Label("Bild entfernen", systemImage: "trash")
-                                    }
-                                    .accentGradientButton()
-                                }
-                            }
-                        }
-                        
-                        Divider()
-                        
-                        // Farbauswahl
-                        Text("Farbe")
-                            .font(.body)
-                            .foregroundStyle(Color.appTextSecondary)
-
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: AppSpacing.xs) {
-                            ForEach(availableColors, id: \.self) { colorHex in
-                                Circle()
-                                    .fill(Color(hex: colorHex) ?? Color.appPrimary)
-                                    .frame(width: 40, height: 40)
-                                    .overlay {
-                                        if selectedColor == colorHex {
-                                            Circle()
-                                                .stroke(Color.appTextPrimary, lineWidth: 3)
-                                        }
-                                    }
-                                    .shadow(AppShadow.sm)
-                                    .onTapGesture {
-                                        selectedColor = colorHex
-                                        imageData = nil // Bild entfernen wenn Farbe gewählt wird
-                                    }
-                            }
-                        }
+            ZStack(alignment: .bottom) {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        teamInformationSection
+                        contactInformationSection
                     }
                 }
-
-                Section("Kontaktinformationen") {
-                    TextField("Kontaktperson (optional)", text: $contactPerson)
-                        .textFieldStyle(.roundedBorder)
-                        .textContentType(.name)
-
-                    TextField("E-Mail (optional)", text: $email)
-                        .textFieldStyle(.roundedBorder)
-                        .textContentType(.emailAddress)
-                }
+                
+                bottomActionBar
             }
-            .formStyle(.grouped)
             .navigationTitle("Neues Team erstellen")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
             .fileImporter(
                 isPresented: $showingImagePicker,
                 allowedContentTypes: [.image],
@@ -145,24 +65,296 @@ struct GlobalAddTeamSheet: View {
                     print("Fehler beim Auswählen des Bildes: \(error.localizedDescription)")
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
-                        dismiss()
-                    }
+        }
+        .frame(minWidth: 550, minHeight: 700)
+    }
+    
+    // MARK: - Team Information Section
+    
+    private var teamInformationSection: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.md) {
+            Text("Team-Informationen")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.appTextPrimary)
+            
+            teamNameField
+            
+            Divider()
+                .padding(.vertical, AppSpacing.xxxs)
+            
+            teamIconSection
+            
+            Divider()
+                .padding(.vertical, AppSpacing.xxxs)
+            
+            colorSelectionSection
+        }
+        .padding(AppSpacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: AppCornerRadius.xl)
+                .fill(.ultraThinMaterial)
+        )
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.top, AppSpacing.md)
+    }
+    
+    private var teamNameField: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
+            Text("Team-Name")
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.appTextSecondary)
+                .textCase(.uppercase)
+            
+            TextField("z.B. Die wilden Sieben", text: $teamName)
+                .textFieldStyle(.plain)
+                .font(.body)
+                .padding(.horizontal, AppSpacing.md)
+                .padding(.vertical, AppSpacing.sm)
+                .background(
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .fill(.ultraThinMaterial)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .strokeBorder(
+                            teamName.isEmpty ? Color.appPrimary.opacity(0.5) : Color.appSuccess,
+                            lineWidth: teamName.isEmpty ? 1 : 2
+                        )
                 }
-
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Erstellen") {
-                        createTeam()
-                        dismiss()
+        }
+    }
+    
+    private var teamIconSection: some View {
+        VStack(spacing: AppSpacing.sm) {
+            Text("Team-Icon")
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.appTextSecondary)
+                .textCase(.uppercase)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            VStack(spacing: AppSpacing.sm) {
+                iconPreview
+                iconButtons
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
+    
+    private var iconPreview: some View {
+        Group {
+            if let imageData = imageData {
+                PlatformImage(data: imageData)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+                    .overlay {
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3), lineWidth: 2)
                     }
-                    .disabled(teamName.isEmpty)
+                    .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 8)
+            } else {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                (Color(hex: selectedColor) ?? Color.appPrimary).opacity(0.9),
+                                (Color(hex: selectedColor) ?? Color.appPrimary)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 100, height: 100)
+                    .overlay {
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3), lineWidth: 2)
+                    }
+                    .shadow(color: (Color(hex: selectedColor) ?? Color.appPrimary).opacity(0.3), radius: 20, x: 0, y: 8)
+            }
+        }
+    }
+    
+    private var iconButtons: some View {
+        HStack(spacing: AppSpacing.sm) {
+            Button {
+                showingImagePicker = true
+            } label: {
+                Label("Bild wählen", systemImage: "photo")
+                    .font(.subheadline)
+            }
+            .secondaryGlassButton(size: .small)
+            
+            if imageData != nil {
+                Button {
+                    imageData = nil
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.subheadline)
+                }
+                .destructiveGlassButton(size: .small)
+            }
+        }
+    }
+    
+    private var colorSelectionSection: some View {
+        VStack(spacing: AppSpacing.sm) {
+            Text("Farbe")
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.appTextSecondary)
+                .textCase(.uppercase)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: AppSpacing.sm), count: 6), spacing: AppSpacing.sm) {
+                ForEach(availableColors, id: \.self) { colorHex in
+                    colorCircleButton(for: colorHex)
                 }
             }
         }
-        .frame(minWidth: 500, minHeight: 450)
     }
+    
+    private func colorCircleButton(for colorHex: String) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                selectedColor = colorHex
+                imageData = nil
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(Color(hex: colorHex) ?? Color.appPrimary)
+                    .frame(width: 48, height: 48)
+                
+                if selectedColor == colorHex {
+                    Circle()
+                        .strokeBorder(Color.white, lineWidth: 3)
+                        .frame(width: 48, height: 48)
+                    Circle()
+                        .strokeBorder(Color.appTextPrimary, lineWidth: 2)
+                        .frame(width: 56, height: 56)
+                }
+            }
+            .shadow(color: (Color(hex: colorHex) ?? Color.appPrimary).opacity(0.3), radius: 8, x: 0, y: 4)
+            .scaleEffect(selectedColor == colorHex ? 1.0 : 0.9)
+        }
+        .buttonStyle(.plain)
+    }
+    
+    // MARK: - Contact Information Section
+    
+    private var contactInformationSection: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.md) {
+            Text("Kontaktinformationen")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.appTextPrimary)
+            
+            contactPersonField
+            emailField
+        }
+        .padding(AppSpacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: AppCornerRadius.xl)
+                .fill(.ultraThinMaterial)
+        )
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.top, AppSpacing.sm)
+        .padding(.bottom, 80)
+    }
+    
+    private var contactPersonField: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
+            Text("Kontaktperson (optional)")
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.appTextSecondary)
+                .textCase(.uppercase)
+            
+            TextField("Name der Kontaktperson", text: $contactPerson)
+                .textFieldStyle(.plain)
+                .font(.body)
+                .textContentType(.name)
+                .padding(.horizontal, AppSpacing.md)
+                .padding(.vertical, AppSpacing.sm)
+                .background(
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .fill(.ultraThinMaterial)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
+                }
+        }
+    }
+    
+    private var emailField: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.xs) {
+            Text("E-Mail (optional)")
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.appTextSecondary)
+                .textCase(.uppercase)
+            
+            TextField("team@beispiel.de", text: $email)
+                .textFieldStyle(.plain)
+                .font(.body)
+                .textContentType(.emailAddress)
+                #if os(iOS)
+                .keyboardType(.emailAddress)
+                .autocapitalization(.none)
+                #endif
+                .padding(.horizontal, AppSpacing.md)
+                .padding(.vertical, AppSpacing.sm)
+                .background(
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .fill(.ultraThinMaterial)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                        .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
+                }
+        }
+    }
+    
+    // MARK: - Bottom Action Bar
+    
+    private var bottomActionBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            
+            HStack(spacing: AppSpacing.sm) {
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Abbrechen")
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                }
+                .secondaryGlassButton(size: .large)
+                
+                Button {
+                    createTeam()
+                    dismiss()
+                } label: {
+                    Text("Team erstellen")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
+                }
+                .primaryGlassButton(size: .large)
+                .disabled(teamName.isEmpty)
+                .opacity(teamName.isEmpty ? 0.5 : 1.0)
+            }
+            .padding(AppSpacing.md)
+        }
+        .background(.ultraThinMaterial)
+    }
+    
+    // MARK: - Actions
 
     private func createTeam() {
         let team = Team(name: teamName, color: selectedColor)

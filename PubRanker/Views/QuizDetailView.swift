@@ -188,7 +188,7 @@ struct QuizHeaderView: View {
                         } label: {
                             Label(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"), systemImage: "envelope.fill")
                         }
-                        .accentGradientButton()
+                        .accentGlassButton()
                         .helpText(NSLocalizedString("email.send.quiz", comment: "Email to quiz teams"))
                     }
                     
@@ -212,7 +212,7 @@ struct QuizHeaderView: View {
                             Image(systemName: "square.and.arrow.up")
                         }
                     }
-                    .secondaryGradientButton()
+                    .secondaryGlassButton()
                     .helpText(NSLocalizedString("export.title", comment: "Export quiz"))
                     
                     if quiz.isActive {
@@ -221,7 +221,7 @@ struct QuizHeaderView: View {
                         } label: {
                             Label(NSLocalizedString("status.complete", comment: "Complete quiz"), systemImage: "flag.checkered")
                         }
-                        .accentGradientButton()
+                        .accentGlassButton()
                         .keyboardShortcut("e", modifiers: .command)
                         .helpText(NSLocalizedString("status.complete", comment: "Complete quiz") + " (⌘E)")
                     } else if !quiz.isCompleted {
@@ -230,7 +230,7 @@ struct QuizHeaderView: View {
                         } label: {
                             Label(NSLocalizedString("status.start", comment: "Start quiz"), systemImage: "play.fill")
                         }
-                        .primaryGradientButton()
+                        .primaryGlassButton()
                         .keyboardShortcut("s", modifiers: .command)
                         .helpText(NSLocalizedString("status.start", comment: "Start quiz") + " (⌘S)")
                     }

@@ -183,34 +183,11 @@ struct iPadPresentationOverlay: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationStack {
-            // Presentation Content
-            PresentationModeView(quiz: quiz)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button {
-                            onDismiss()
-                            dismiss()
-                        } label: {
-                            HStack(spacing: 6) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.title2)
-                                Text("Beenden")
-                                    .fontWeight(.medium)
-                            }
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(
-                                Capsule()
-                                    .fill(Color.white.opacity(0.2))
-                            )
-                        }
-                    }
-                }
-                .toolbarBackground(.hidden, for: .navigationBar)
-                .toolbarColorScheme(.dark, for: .navigationBar)
-        }
+        // Presentation Content mit eingebautem Schließen-Button
+        PresentationModeView(quiz: quiz, onClose: {
+            onDismiss()
+            dismiss()
+        })
         .statusBarHidden(true)
         .persistentSystemOverlays(.hidden)
     }

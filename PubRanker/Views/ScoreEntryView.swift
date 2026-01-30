@@ -66,7 +66,7 @@ struct ScoreEntryView: View {
                             Label(L10n.Execution.reset, systemImage: "arrow.counterclockwise")
                                 .frame(maxWidth: .infinity)
                         }
-                        .secondaryGradientButton(size: .large)
+                        .secondaryGlassButton(size: .large)
                         
                         Button {
                             saveAllScores()
@@ -74,7 +74,7 @@ struct ScoreEntryView: View {
                             Label(L10n.Navigation.save, systemImage: "checkmark.circle.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .primaryGradientButton(size: .large)
+                        .primaryGlassButton(size: .large)
                         .keyboardShortcut(.return, modifiers: .command)
                     }
                     .padding(.horizontal, AppSpacing.screenPadding)
@@ -98,7 +98,7 @@ struct ScoreEntryView: View {
                             .frame(maxWidth: .infinity)
                             .padding(AppSpacing.md)
                         }
-                        .primaryGradientButton(size: .large)
+                        .primaryGlassButton(size: .large)
                         .padding(.horizontal, AppSpacing.screenPadding)
                         .padding(.top, AppSpacing.xxs)
                     } else if !round.isCompleted {
@@ -114,7 +114,7 @@ struct ScoreEntryView: View {
                             .frame(maxWidth: .infinity)
                             .padding(AppSpacing.md)
                         }
-                        .accentGradientButton(size: .large)
+                        .accentGlassButton(size: .large)
                         .padding(.horizontal, AppSpacing.screenPadding)
                         .padding(.top, AppSpacing.xxs)
                     }
@@ -153,15 +153,20 @@ struct ScoreEntryView: View {
     }
     
     private func teamScoreRow(for team: Team) -> some View {
-        HStack(spacing: 16) {
+        let hasExistingScore = team.hasScore(for: round)
+        let scoreValue = getScoreValue(for: team)
+        // Grüner Rahmen wenn: gespeicherter Score ODER eingegebener Wert > 0
+        let showGreenBorder = hasExistingScore || scoreValue > 0
+
+        return HStack(spacing: 16) {
             // Team Info
             HStack(spacing: 12) {
                 TeamIconView(team: team, size: 16)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(team.name)
                         .font(.headline)
-                    
+
                     if let currentScore = team.getScore(for: round) {
                         Text("Aktuell: \(currentScore) Punkte")
                             .font(.caption)
@@ -169,9 +174,9 @@ struct ScoreEntryView: View {
                     }
                 }
             }
-            
+
             Spacer()
-            
+
             // Score Input
             HStack(spacing: 8) {
                 // Minus Button
@@ -183,8 +188,8 @@ struct ScoreEntryView: View {
                         .foregroundStyle(Color.appAccent)
                 }
                 .buttonStyle(.plain)
-                .disabled(getScoreValue(for: team) <= 0)
-                
+                .disabled(scoreValue <= 0)
+
                 // Text Field
                 TextField("0", text: Binding(
                     get: { teamScores[team.id] ?? "0" },
@@ -223,7 +228,7 @@ struct ScoreEntryView: View {
                 .buttonStyle(.plain)
                 .disabled({
                     if let maxPts = round.maxPoints {
-                        return getScoreValue(for: team) >= maxPts
+                        return scoreValue >= maxPts
                     } else {
                         return false
                     }
@@ -242,7 +247,15 @@ struct ScoreEntryView: View {
             }
         }
         .padding(AppSpacing.md)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
+        .overlay {
+            // Grüner Rahmen wenn Team Punkte hat (gespeichert oder eingegeben)
+            RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                .stroke(
+                    showGreenBorder ? Color.appSuccess : Color.appTextTertiary.opacity(0.2),
+                    lineWidth: showGreenBorder ? 2.5 : 1
+                )
+        }
     }
     
     private func getScoreValue(for team: Team) -> Int {

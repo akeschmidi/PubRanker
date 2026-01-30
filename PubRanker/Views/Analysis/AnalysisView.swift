@@ -41,21 +41,15 @@ struct AnalysisView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Tab Selector
-            Picker("Ansicht", selection: $selectedTab) {
-                ForEach(AnalysisTab.allCases, id: \.self) { tab in
-                    Label(tab.rawValue, systemImage: tab.icon)
-                        .tag(tab)
-                }
-            }
-            .pickerStyle(.segmented)
-            #if os(iOS)
-            .padding(.horizontal, AppSpacing.sm)
-            .padding(.vertical, 2)
-            #else
-            .padding(.horizontal, AppSpacing.screenPadding)
-            .padding(.vertical, AppSpacing.xs)
-            #endif
+            // Custom Glass Tab Selector
+            glassTabSelector
+                #if os(iOS)
+                .padding(.horizontal, AppSpacing.sm)
+                .padding(.vertical, AppSpacing.xs)
+                #else
+                .padding(.horizontal, AppSpacing.screenPadding)
+                .padding(.vertical, AppSpacing.xs)
+                #endif
 
             Divider()
 
@@ -144,6 +138,100 @@ struct AnalysisView: View {
                     )
                 }
                 .transition(.opacity)
+            }
+        }
+    }
+    
+    // MARK: - Glass Tab Selector
+    
+    private var glassTabSelector: some View {
+        HStack(spacing: AppSpacing.xxxs) {
+            ForEach(AnalysisTab.allCases, id: \.self) { tab in
+                analysisTabButton(for: tab)
+            }
+        }
+        .padding(4)
+        .background(
+            RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                .fill(Color.black.opacity(0.15))
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppCornerRadius.lg)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0.15),
+                                    Color.white.opacity(0.05)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                )
+        )
+        .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
+    }
+    
+    private func analysisTabButton(for tab: AnalysisTab) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                selectedTab = tab
+            }
+        } label: {
+            HStack(spacing: AppSpacing.xxs) {
+                Image(systemName: tab.icon)
+                    .font(.body)
+                Text(tab.rawValue)
+                    .font(.body)
+                    .fontWeight(selectedTab == tab ? .semibold : .regular)
+            }
+            .foregroundStyle(selectedTab == tab ? .white : Color.appTextPrimary)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, AppSpacing.sm)
+            .padding(.vertical, AppSpacing.xs)
+            .background(analysisTabBackground(for: tab))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(GlassTabButtonStyle(isSelected: selectedTab == tab))
+        #if os(macOS)
+        .help(tab.rawValue)
+        #endif
+    }
+    
+    private func analysisTabBackground(for tab: AnalysisTab) -> some View {
+        Group {
+            if selectedTab == tab {
+                // Aktiver Tab mit Accent Color
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.appAccent.opacity(0.95),
+                                Color.appAccent
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .overlay {
+                        RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.25),
+                                        Color.white.opacity(0.1)
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ),
+                                lineWidth: 1
+                            )
+                    }
+                    .shadow(color: Color.appAccent.opacity(0.25), radius: 8, x: 0, y: 2)
+            } else {
+                // Inaktive Tabs - transparent
+                RoundedRectangle(cornerRadius: AppCornerRadius.md)
+                    .fill(Color.clear)
             }
         }
     }
@@ -419,7 +507,7 @@ struct AnalysisView: View {
             } label: {
                 Label("JSON", systemImage: "doc.text.fill")
             }
-            .primaryGradientButton(size: .small)
+            .primaryGlassButton(size: .small)
 
             // CSV Export
             Button {
@@ -427,7 +515,7 @@ struct AnalysisView: View {
             } label: {
                 Label("CSV", systemImage: "tablecells.fill")
             }
-            .successGradientButton(size: .small)
+            .successGlassButton(size: .small)
 
             // E-Mail Export
             Button {
@@ -445,7 +533,7 @@ struct AnalysisView: View {
                     Label("E-Mail", systemImage: "envelope.fill")
                 }
             }
-            .accentGradientButton(size: .small)
+            .accentGlassButton(size: .small)
             .disabled(isGeneratingImage)
         }
         .padding(.horizontal, AppSpacing.screenPadding)
@@ -742,7 +830,7 @@ struct AnalysisView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, AppSpacing.md)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.sm)
     }
 
     private func roundBreakdown(_ quiz: Quiz) -> some View {
@@ -874,14 +962,7 @@ struct AnalysisView: View {
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
 
         // PDF generieren
-        guard let pdfData = await LeaderboardImageGenerator.generatePDFData(for: quiz) else {
-            withAnimation {
-                isGeneratingImage = false
-            }
-            emailErrorMessage = L10n.Email.Results.Error.generation
-            showingEmailError = true
-            return
-        }
+        let pdfData = await LeaderboardImageGenerator.generatePDFData(for: quiz)
 
         generatedImageData = pdfData
 
@@ -891,7 +972,16 @@ struct AnalysisView: View {
 
         // E-Mail öffnen
         #if os(macOS)
-        sendEmailMacOS(quiz: quiz, pdfData: pdfData)
+        if let pdfData = pdfData {
+            sendEmailMacOS(quiz: quiz, pdfData: pdfData)
+        } else {
+            // Kein PDF: Sende E-Mail mit langem Textkörper via EmailService
+            EmailService.sendEmailWithLongBody(
+                recipients: quiz.safeTeams.compactMap { $0.email }.filter { !$0.isEmpty },
+                subject: EmailTemplate.results.subject(for: quiz),
+                body: EmailTemplate.results.body(for: quiz)
+            )
+        }
         #else
         showingMailComposer = true
         #endif
@@ -1447,7 +1537,7 @@ struct TeamStatisticsView: View {
             }
         }
         .padding(AppSpacing.sm)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(rankColor(performance.rank).opacity(0.3), lineWidth: 2)
@@ -1471,7 +1561,7 @@ struct TeamStatisticsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, AppSpacing.md)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.sm)
     }
 
     private func podiumBadge(place: Int, count: Int, color: Color, total: Int) -> some View {
@@ -1958,7 +2048,7 @@ struct OverallStatisticsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, AppSpacing.md)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.sm)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.sm)
     }
 
     private func quizCard(quiz: Quiz) -> some View {
@@ -2019,7 +2109,7 @@ struct OverallStatisticsView: View {
             }
         }
         .padding(AppSpacing.sm)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(Color.appAccent.opacity(0.3), lineWidth: 2)

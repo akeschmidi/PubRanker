@@ -122,7 +122,7 @@ struct TeamSetupWizard: View {
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
                 
                 Button {
                     if mode == .createNew {
@@ -145,7 +145,7 @@ struct TeamSetupWizard: View {
                     .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
             }
             .padding(.horizontal, AppSpacing.xxl)
             .padding(.vertical, AppSpacing.sectionSpacing)
@@ -213,7 +213,7 @@ struct TeamSetupWizard: View {
                                     numberOfTeams = count
                                     updateTeamNames()
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -238,7 +238,7 @@ struct TeamSetupWizard: View {
                                 Label("Zufällige Namen", systemImage: "shuffle")
                                     .font(.caption)
                             }
-                            .secondaryGradientButton()
+                            .secondaryGlassButton()
                         }
                         
                         VStack(spacing: 12) {
@@ -346,7 +346,7 @@ struct TeamSetupWizard: View {
                             Label("Team hinzufügen", systemImage: "plus.circle.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .primaryGradientButton(size: .large)
+                        .primaryGlassButton(size: .large)
                         
                         Button {
                             showingGlobalTeamPicker = true
@@ -354,7 +354,7 @@ struct TeamSetupWizard: View {
                             Label("Aus vorhandenen wählen (\(availableGlobalTeams.count))", systemImage: "square.stack.3d.up.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .secondaryGradientButton(size: .large)
+                        .secondaryGlassButton(size: .large)
                     }
                 }
                 .padding(.vertical, AppSpacing.md)

@@ -55,7 +55,7 @@ struct EmptyStateView: View {
                 Label("Erstes Team erstellen", systemImage: "plus.circle.fill")
                     .font(.body)
             }
-            .primaryGradientButton(size: .large)
+            .primaryGlassButton(size: .large)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

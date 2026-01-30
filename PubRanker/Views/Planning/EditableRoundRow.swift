@@ -122,12 +122,12 @@ struct EditableRoundRow: View {
                         .font(.body)
                 }
             }
-            .primaryGradientButton()
+            .primaryGlassButton()
             .helpText("Runde bearbeiten")
         }
         .padding(.horizontal, AppSpacing.md)
         .padding(.vertical, AppSpacing.sm)
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.md)
                 .stroke(

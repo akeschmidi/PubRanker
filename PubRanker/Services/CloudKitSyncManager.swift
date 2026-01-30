@@ -35,15 +35,10 @@ final class CloudKitSyncManager {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
 
-        #if !DEBUG
         setupNotificationObservers()
         Task {
             await checkCloudKitStatus()
         }
-        #else
-        cloudKitAccountStatus = "Debug-Modus"
-        containerStatus = "CloudKit deaktiviert"
-        #endif
     }
 
     deinit {
@@ -54,11 +49,6 @@ final class CloudKitSyncManager {
     // MARK: - CloudKit Status Check
     
     func checkCloudKitStatus() async {
-        #if DEBUG
-        cloudKitAccountStatus = "Debug-Modus"
-        containerStatus = "CloudKit deaktiviert"
-        return
-        #else
         print("🔍 Prüfe CloudKit Status...")
         
         // 1. Check iCloud Account Status
@@ -121,7 +111,6 @@ final class CloudKitSyncManager {
             cloudKitAccountStatus = "❌ Fehler: \(error.localizedDescription)"
             print("❌ CloudKit Status Fehler: \(error)")
         }
-        #endif
     }
 
     // MARK: - Notification Observers
@@ -200,11 +189,6 @@ final class CloudKitSyncManager {
     // MARK: - Manual Sync
 
     func forceSyncNow() async {
-        #if DEBUG
-        print("⚠️ CloudKit Sync im Debug-Build deaktiviert")
-        syncStatus = .notAvailable("Debug-Build")
-        return
-        #else
         // Erst CloudKit Status prüfen
         await checkCloudKitStatus()
         
@@ -245,17 +229,11 @@ final class CloudKitSyncManager {
                 syncStatus = .idle
             }
         }
-        #endif
     }
-    
+
     /// Holt aktiv neue Daten von CloudKit (Pull)
     /// Dies triggert einen Import von Remote-Änderungen
     func pullFromCloud() async {
-        #if DEBUG
-        print("⚠️ CloudKit Sync im Debug-Build deaktiviert")
-        syncStatus = .notAvailable("Debug-Build")
-        return
-        #else
         // Erst CloudKit Status prüfen
         await checkCloudKitStatus()
         
@@ -306,16 +284,15 @@ final class CloudKitSyncManager {
             print("❌ Pull-Fehler: \(error.localizedDescription)")
             print("❌ Details: \(error)")
             syncStatus = .error(error.localizedDescription)
-            
+
             // Nach 5 Sekunden zurück zu idle
             try? await Task.sleep(for: .seconds(5))
             if case .error = syncStatus {
                 syncStatus = .idle
             }
         }
-        #endif
     }
-    
+
     /// Führt einen vollständigen Sync durch (Push + Pull)
     func fullSync() async {
         print("🔄 Vollständiger Sync wird gestartet...")
@@ -336,12 +313,12 @@ final class CloudKitSyncManager {
     func runDiagnostics() async -> String {
         var result = "=== CloudKit Diagnose ===\n\n"
         
-        #if DEBUG
-        result += "⚠️ DEBUG BUILD - CloudKit deaktiviert\n"
-        result += "Für Sync-Tests einen Release-Build verwenden.\n"
-        return result
+        #if os(macOS)
+        result += "Plattform: macOS\n"
         #else
-        
+        result += "Plattform: iPadOS/iOS\n"
+        #endif
+
         result += "Container: \(Self.containerIdentifier)\n"
         result += "Account Status: \(cloudKitAccountStatus)\n"
         result += "Container Status: \(containerStatus)\n"
@@ -360,7 +337,8 @@ final class CloudKitSyncManager {
         let container = CKContainer(identifier: Self.containerIdentifier)
         do {
             let status = try await container.accountStatus()
-            result += "\niCloud Account: "
+            result += "\n--- iCloud Status ---\n"
+            result += "Account: "
             switch status {
             case .available: result += "✅ Verfügbar"
             case .noAccount: result += "❌ Nicht angemeldet"
@@ -370,12 +348,64 @@ final class CloudKitSyncManager {
             @unknown default: result += "❓ Unbekannt"
             }
             result += "\n"
+            
+            // Prüfe User Record ID
+            if status == .available {
+                do {
+                    let userID = try await container.userRecordID()
+                    result += "User ID: \(userID.recordName.prefix(20))...\n"
+                } catch {
+                    result += "User ID: ❌ Nicht abrufbar\n"
+                }
+                
+                // Prüfe ob Records existieren
+                result += "\n--- CloudKit Daten ---\n"
+                let database = container.privateCloudDatabase
+                
+                // Versuche CD_Quiz Records zu zählen (SwiftData Prefix)
+                let quizQuery = CKQuery(recordType: "CD_Quiz", predicate: NSPredicate(value: true))
+                do {
+                    let (results, _) = try await database.records(matching: quizQuery, resultsLimit: 100)
+                    result += "Quizze in CloudKit: \(results.count)\n"
+                } catch {
+                    result += "Quizze: ❌ Abfrage fehlgeschlagen (\(error.localizedDescription))\n"
+                }
+                
+                let teamQuery = CKQuery(recordType: "CD_Team", predicate: NSPredicate(value: true))
+                do {
+                    let (results, _) = try await database.records(matching: teamQuery, resultsLimit: 100)
+                    result += "Teams in CloudKit: \(results.count)\n"
+                } catch {
+                    result += "Teams: ❌ Abfrage fehlgeschlagen (\(error.localizedDescription))\n"
+                }
+                
+                // Prüfe Subscriptions
+                do {
+                    let subscriptions = try await database.allSubscriptions()
+                    result += "Subscriptions: \(subscriptions.count)\n"
+                } catch {
+                    result += "Subscriptions: ❌ Nicht abrufbar\n"
+                }
+            }
         } catch {
-            result += "\niCloud Account Check fehlgeschlagen: \(error.localizedDescription)\n"
+            result += "\niCloud Check fehlgeschlagen: \(error.localizedDescription)\n"
         }
         
+        // Lokale Daten zählen
+        result += "\n--- Lokale Daten ---\n"
+        do {
+            let quizDescriptor = FetchDescriptor<Quiz>()
+            let quizCount = try modelContext.fetchCount(quizDescriptor)
+            result += "Lokale Quizze: \(quizCount)\n"
+            
+            let teamDescriptor = FetchDescriptor<Team>()
+            let teamCount = try modelContext.fetchCount(teamDescriptor)
+            result += "Lokale Teams: \(teamCount)\n"
+        } catch {
+            result += "Lokale Daten: ❌ Fehler beim Zählen\n"
+        }
+
         return result
-        #endif
     }
 
     // MARK: - Status Helpers

@@ -161,35 +161,16 @@ struct EasterEggIconView: View {
     
     @ViewBuilder
     private var appIconView: some View {
-        #if os(macOS)
-        if let appIcon = NSApplication.shared.applicationIconImage {
-            Image(nsImage: appIcon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 32, height: 32)
-        } else {
-            fallbackIcon
-        }
-        #else
-        // Auf iOS: App Icon aus Assets verwenden
+        // App Icon aus Assets verwenden (für beide Plattformen)
         Image("AppIconImage")
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 32, height: 32)
+            #if os(iOS)
             .clipShape(RoundedRectangle(cornerRadius: 6))
-        #endif
-    }
-    
-    private var fallbackIcon: some View {
-        Image(systemName: "trophy.fill")
-            .font(.title2)
-            .foregroundStyle(
-                LinearGradient(
-                    colors: [.blue, .cyan],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
+            #else
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            #endif
     }
 }
 
@@ -200,24 +181,14 @@ struct EasterEggTitleView: View {
     var body: some View {
         HStack(spacing: AppSpacing.xs) {
             // App Icon Badge
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: easterEggManager.matrixMode 
-                                ? [.green, .green.opacity(0.7)]
-                                : [Color.appPrimaryDark, Color.appPrimaryLight],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 40, height: 40)
-                    .shadow(AppShadow.sm)
-                
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(.white)
-            }
+            Image("AppIconImage")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 40, height: 40)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .shadow(AppShadow.sm)
+                .scaleEffect(easterEggManager.matrixMode ? 1.1 : 1.0)
+                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: easterEggManager.matrixMode)
             
             // Title Text
             VStack(alignment: .leading, spacing: AppSpacing.xxxs) {

@@ -156,7 +156,7 @@ struct TeamCard: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                 }
-                .primaryGradientButton(size: .small)
+                .primaryGlassButton(size: .small)
 
                 Button(role: .destructive) {
                     onDelete()
@@ -166,12 +166,12 @@ struct TeamCard: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                 }
-                .destructiveGradientButton(size: .small)
+                .destructiveGlassButton(size: .small)
             }
             .padding(AppSpacing.sm)
             .background(Color.appBackgroundSecondary.opacity(0.5))
         }
-        .appCard(style: .default, cornerRadius: AppCornerRadius.md)
+        .appCard(style: .glass, cornerRadius: AppCornerRadius.md)
         .sheet(isPresented: $showingEditSheet) {
             GlobalEditTeamSheet(team: team, viewModel: viewModel)
         }

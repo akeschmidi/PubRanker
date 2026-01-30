@@ -11,14 +11,10 @@ import SwiftData
 struct PlannedQuizRow: View {
     let quiz: Quiz
     let isSelected: Bool
-    let onEdit: (() -> Void)?
-    let onDelete: (() -> Void)?
 
     init(quiz: Quiz, isSelected: Bool = false, onEdit: (() -> Void)? = nil, onDelete: (() -> Void)? = nil) {
         self.quiz = quiz
         self.isSelected = isSelected
-        self.onEdit = onEdit
-        self.onDelete = onDelete
     }
 
     private var confirmedTeamsCount: Int {
@@ -35,7 +31,6 @@ struct PlannedQuizRow: View {
                     .padding(.vertical, AppSpacing.xxs)
             }
 
-            HStack(spacing: AppSpacing.xs) {
             // Quiz Info
             VStack(alignment: .leading, spacing: AppSpacing.xxxs) {
                 Text(quiz.name)
@@ -62,52 +57,10 @@ struct PlannedQuizRow: View {
                         .foregroundStyle(Color.appTextSecondary)
                 }
             }
-            
-            Spacer()
-            
-            // Action Buttons
-            HStack(spacing: AppSpacing.xxs) {
-                if let onEdit = onEdit {
-                    Button {
-                        onEdit()
-                    } label: {
-                        Image(systemName: "pencil")
-                            .font(.body)
-                            .bold()
-                            .foregroundStyle(.white)
-                            .frame(width: max(AppSpacing.lg, AppSpacing.touchTarget), height: max(AppSpacing.lg, AppSpacing.touchTarget))
-                            .background(
-                                Circle()
-                                    .fill(Color.appPrimary)
-                            )
-                            .shadow(AppShadow.sm)
-                    }
-                    .buttonStyle(.plain)
-                    .helpText("Quiz bearbeiten")
-                }
-
-                if let onDelete = onDelete {
-                    Button {
-                        onDelete()
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.body)
-                            .bold()
-                            .foregroundStyle(.white)
-                            .frame(width: max(AppSpacing.lg, AppSpacing.touchTarget), height: max(AppSpacing.lg, AppSpacing.touchTarget))
-                            .background(
-                                Circle()
-                                    .fill(Color.appAccent)
-                            )
-                            .shadow(AppShadow.sm)
-                    }
-                    .buttonStyle(.plain)
-                    .helpText("Quiz löschen")
-                }
-            }
-            }
             .padding(.vertical, AppSpacing.xs)
             .padding(.horizontal, AppSpacing.sm)
+
+            Spacer()
         }
         .background(
             Group {

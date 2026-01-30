@@ -26,10 +26,27 @@ struct EmailComposerView: View {
     @State private var searchText: String = ""
     @State private var showTemplates: Bool = false
     @State private var filterMode: FilterMode = .allTeams
+    @State private var sortOption: EmailTeamSortOption = .nameAsc
 
     enum FilterMode {
         case allTeams
         case byQuiz
+    }
+
+    enum EmailTeamSortOption: String, CaseIterable {
+        case nameAsc = "A → Z"
+        case nameDesc = "Z → A"
+        case contactPerson = "Kontaktperson"
+        case email = "E-Mail"
+
+        var icon: String {
+            switch self {
+            case .nameAsc: return "arrow.up"
+            case .nameDesc: return "arrow.down"
+            case .contactPerson: return "person"
+            case .email: return "envelope"
+            }
+        }
     }
 
     init(teams: [Team], quiz: Quiz? = nil) {
@@ -61,7 +78,18 @@ struct EmailComposerView: View {
     }
 
     var teamsWithEmail: [Team] {
-        filteredTeams.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        let filtered = filteredTeams.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+
+        switch sortOption {
+        case .nameAsc:
+            return filtered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .nameDesc:
+            return filtered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
+        case .contactPerson:
+            return filtered.sorted { $0.contactPerson.localizedCaseInsensitiveCompare($1.contactPerson) == .orderedAscending }
+        case .email:
+            return filtered.sorted { $0.email.localizedCaseInsensitiveCompare($1.email) == .orderedAscending }
+        }
     }
 
     var selectedTeams: [Team] {
@@ -103,11 +131,15 @@ struct EmailComposerView: View {
             }
             .navigationTitle(emailComposerTitle)
             .navigationSubtitle(emailComposerSubtitle)
+            .toolbarBackground(.visible, for: .windowToolbar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(NSLocalizedString("navigation.cancel", comment: "")) {
+                    Button {
                         dismiss()
+                    } label: {
+                        Text(NSLocalizedString("navigation.cancel", comment: ""))
                     }
+                    .secondaryGlassButton()
                     .keyboardShortcut(.cancelAction)
                 }
 
@@ -118,7 +150,7 @@ struct EmailComposerView: View {
                         Label(NSLocalizedString("email.composer.send", comment: ""), systemImage: "envelope.open.fill")
                     }
                     .disabled(selectedTeams.isEmpty || subject.isEmpty)
-                    .primaryGradientButton()
+                    .primaryGlassButton()
                     .keyboardShortcut(.return, modifiers: .command)
                 }
             }
@@ -135,17 +167,46 @@ struct EmailComposerView: View {
 
     private var teamSelectionPanel: some View {
         VStack(spacing: 0) {
-            // Header with count
+            // Header with count and sort
             HStack {
                 Text(NSLocalizedString("quiz.teams", comment: ""))
                     .font(.headline)
+
                 Spacer()
+
+                // Sort Dropdown
+                Menu {
+                    ForEach(EmailTeamSortOption.allCases, id: \.self) { option in
+                        Button {
+                            sortOption = option
+                        } label: {
+                            Label(option.rawValue, systemImage: option.icon)
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: sortOption.icon)
+                            .font(.caption)
+                        Text(sortOption.rawValue)
+                            .font(.caption)
+                        Image(systemName: "chevron.down")
+                            .font(.caption2)
+                    }
+                    .foregroundStyle(Color.appPrimary)
+                    .padding(.horizontal, AppSpacing.xs)
+                    .padding(.vertical, AppSpacing.xxs)
+                    .background(Color.appPrimary.opacity(0.1))
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+
                 Text("\(selectedTeams.count)/\(teamsWithEmail.count)")
                     .font(.subheadline)
                     .foregroundStyle(Color.appTextSecondary)
                     .monospacedDigit()
             }
             .padding()
+            .padding(.top, 50)
             .background(.background)
 
             Divider()
@@ -226,7 +287,7 @@ struct EmailComposerView: View {
 
             Divider()
 
-            // Select All
+            // Select All Toggle
             HStack {
                 Toggle(isOn: Binding(
                     get: { allSelected },
@@ -238,13 +299,15 @@ struct EmailComposerView: View {
                         }
                     }
                 )) {
-                    Text(NSLocalizedString("email.composer.selectAll", comment: ""))
+                    Text(allSelected ? "Alle abwählen" : "Alle auswählen")
                         .font(.subheadline)
                 }
-                .toggleStyle(.checkbox)
+                .toggleStyle(.switch)
+
+                Spacer()
             }
             .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.vertical, AppSpacing.xs)
             .background(.background)
 
             Divider()
@@ -287,87 +350,90 @@ struct EmailComposerView: View {
     // MARK: - Email Composer Panel
 
     private var emailComposerPanel: some View {
-        VStack(spacing: 0) {
-            // Recipients Section (Compact, wraps automatically)
-            if !selectedTeams.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text(NSLocalizedString("email.composer.to", comment: ""))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        Text(String(format: NSLocalizedString("email.composer.recipientCount", comment: ""), selectedTeams.count, selectedTeams.count == 1 ? "" : "s"))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    FlowLayout(spacing: 6) {
-                        ForEach(selectedTeams) { team in
-                            RecipientTag(team: team) {
-                                selectedTeamIds.remove(team.id)
+        ScrollView {
+            VStack(spacing: 0) {
+                // Recipients Section (Compact, wraps automatically)
+                if !selectedTeams.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(NSLocalizedString("email.composer.to", comment: ""))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Text(String(format: NSLocalizedString("email.composer.recipientCount", comment: ""), selectedTeams.count, selectedTeams.count == 1 ? "" : "s"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        FlowLayout(spacing: 6) {
+                            ForEach(selectedTeams) { team in
+                                RecipientTag(team: team) {
+                                    selectedTeamIds.remove(team.id)
+                                }
                             }
                         }
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, AppSpacing.md)
+                    .background(Color.appBackgroundSecondary.opacity(0.3))
+
+                    Divider()
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 60)
-                .background(Color.appBackgroundSecondary.opacity(0.3))
 
-                Divider()
-            }
-
-            // Subject Field (Always visible, fixed size)
-            VStack(alignment: .leading, spacing: 8) {
-                Text(NSLocalizedString("email.composer.subject", comment: ""))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                TextField(NSLocalizedString("email.composer.subject.placeholder", comment: ""), text: $subject)
-                    .textFieldStyle(.roundedBorder)
-            }
-            .padding()
-            .frame(height: 70)
-
-            Divider()
-
-            // Message Body (Takes remaining space)
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text(NSLocalizedString("email.composer.body", comment: ""))
+                // Subject Field
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(NSLocalizedString("email.composer.subject", comment: ""))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
-                    Spacer()
+                    TextField(NSLocalizedString("email.composer.subject.placeholder", comment: ""), text: $subject)
+                        .textFieldStyle(.roundedBorder)
+                }
+                .padding()
 
-                    Button {
-                        showTemplates = true
-                    } label: {
-                        Label(NSLocalizedString("email.composer.insertTemplate", comment: ""), systemImage: "doc.text")
-                            .font(.caption)
-                    }
-                    .buttonStyle(.borderless)
-                    .popover(isPresented: $showTemplates) {
-                        TemplatePickerView { template in
-                            applyTemplate(template)
-                            showTemplates = false
+                Divider()
+
+                // Message Body
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(NSLocalizedString("email.composer.body", comment: ""))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        Spacer()
+
+                        Button {
+                            showTemplates = true
+                        } label: {
+                            Label(NSLocalizedString("email.composer.insertTemplate", comment: ""), systemImage: "doc.text")
+                                .font(.caption)
+                        }
+                        .buttonStyle(.borderless)
+                        .popover(isPresented: $showTemplates) {
+                            TemplatePickerView { template in
+                                applyTemplate(template)
+                                showTemplates = false
+                            }
                         }
                     }
-                }
-                .padding(.horizontal)
-                .padding(.top)
-
-                TextEditor(text: $emailBody)
-                    .font(.body)
-                    .scrollContentBackground(.hidden)
-                    .background(Color.appBackground)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-                    }
                     .padding(.horizontal)
-                    .padding(.bottom)
+                    .padding(.top)
+
+                    TextEditor(text: $emailBody)
+                        .font(.body)
+                        .scrollContentBackground(.hidden)
+                        .background(Color.appBackground)
+                        .frame(minHeight: 300)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                }
             }
-            .frame(maxHeight: .infinity)
+            .padding(.top, 50)
         }
+        .scrollClipDisabled(false)
         .background(Color(nsColor: .textBackgroundColor))
     }
 

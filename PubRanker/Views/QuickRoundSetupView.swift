@@ -191,7 +191,7 @@ struct QuickRoundSetupView: View {
                                 Button("\(points)") {
                                     maxPointsPerRound = points
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -289,7 +289,7 @@ struct QuickRoundSetupView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)
-                .secondaryGradientButton(size: .large)
+                .secondaryGlassButton(size: .large)
                 
                 Button {
                     createRounds()
@@ -303,7 +303,7 @@ struct QuickRoundSetupView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.return, modifiers: .command)
-                .primaryGradientButton(size: .large)
+                .primaryGlassButton(size: .large)
             }
             .padding(.horizontal, AppSpacing.xxl)
             .padding(.vertical, AppSpacing.sectionSpacing)

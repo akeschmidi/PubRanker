@@ -24,16 +24,14 @@ struct SidebarView: View {
     var showingMultiDeleteAlert: Binding<Bool>? = nil
 
     let onCreateTestData: (() -> Void)?
-    
+
     /// Teams für E-Mail-Zählung (nutzt allTeams falls vorhanden, sonst filteredTeams)
     private var teamsForEmail: [Team] {
         allTeams ?? filteredTeams
     }
-    
-    /// Anzahl der Teams mit E-Mail-Adresse
-    private var teamsWithEmailCount: Int {
-        teamsForEmail.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.count
-    }
+
+    /// Anzahl der Teams mit E-Mail-Adresse (gecacht für Performance)
+    @State private var teamsWithEmailCount: Int = 0
     
     /// Multi-Select aktiv
     private var isMultiSelect: Bool {
@@ -66,7 +64,7 @@ struct SidebarView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .primaryGradientButton()
+                .primaryGlassButton()
                 .helpText("Neues Team erstellen")
                 
                 // E-Mail Button
@@ -83,7 +81,7 @@ struct SidebarView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .secondaryGradientButton()
+                    .secondaryGlassButton()
                     #if os(macOS)
                     .keyboardShortcut("e", modifiers: .command)
                     #endif
@@ -105,7 +103,7 @@ struct SidebarView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .secondaryGradientButton()
+                    .secondaryGlassButton()
                     .helpText("Erstellt Test-Teams und Quizzes (nur Debug)")
                 }
                 #endif
@@ -199,7 +197,7 @@ struct SidebarView: View {
                 
                 Spacer()
                 
-                // Löschen Button und Multi-Select (nur wenn Bindings vorhanden)
+                // Löschen Button (nur wenn Multi-Select aktiv und Teams ausgewählt)
                 if let isMultiSelectBinding = isMultiSelectMode,
                    let selectedIDsBinding = selectedTeamIDs,
                    let showMultiDeleteBinding = showingMultiDeleteAlert {
@@ -216,22 +214,8 @@ struct SidebarView: View {
                                     .monospacedDigit()
                             }
                         }
-                        .accentGradientButton()
+                        .accentGlassButton()
                         .helpText("\(selectedIDsBinding.wrappedValue.count) Teams löschen")
-                        .transition(.scale.combined(with: .opacity))
-                    } else {
-                        // Multi-Select Toggle Button (nur Icon, kein Text)
-                        Button {
-                            isMultiSelectBinding.wrappedValue.toggle()
-                            if !isMultiSelectBinding.wrappedValue {
-                                selectedIDsBinding.wrappedValue.removeAll()
-                            }
-                        } label: {
-                            Image(systemName: isMultiSelectBinding.wrappedValue ? "checkmark.circle.fill" : "checkmark.circle")
-                                .font(.caption)
-                        }
-                        .secondaryGradientButton()
-                        .helpText(isMultiSelectBinding.wrappedValue ? "Multi-Select beenden" : "Mehrere Teams auswählen")
                         .transition(.scale.combined(with: .opacity))
                     }
                 }
@@ -245,6 +229,31 @@ struct SidebarView: View {
             .padding(.horizontal, AppSpacing.screenPadding)
             .padding(.vertical, AppSpacing.xxs)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isMultiSelect)
+
+            // Multi-Select Toggle (unterhalb der Sortierung)
+            if let isMultiSelectBinding = isMultiSelectMode,
+               let selectedIDsBinding = selectedTeamIDs {
+                HStack {
+                    Toggle(isOn: Binding(
+                        get: { isMultiSelectBinding.wrappedValue },
+                        set: { newValue in
+                            isMultiSelectBinding.wrappedValue = newValue
+                            if !newValue {
+                                selectedIDsBinding.wrappedValue.removeAll()
+                            }
+                        }
+                    )) {
+                        Text(isMultiSelectBinding.wrappedValue ? "Auswahl beenden" : "Mehrere auswählen")
+                            .font(.subheadline)
+                    }
+                    .toggleStyle(.switch)
+
+                    Spacer()
+                }
+                .padding(.horizontal, AppSpacing.screenPadding)
+                .padding(.vertical, AppSpacing.xs)
+                .background(Color.appBackgroundSecondary.opacity(0.3))
+            }
             
             Divider()
             
@@ -318,6 +327,16 @@ struct SidebarView: View {
         }
         .navigationTitle("")
         .frame(minWidth: 280, idealWidth: 320)
+        .onAppear {
+            updateTeamsWithEmailCount()
+        }
+        .onChange(of: teamsForEmail.count) { _, _ in
+            updateTeamsWithEmailCount()
+        }
+    }
+
+    private func updateTeamsWithEmailCount() {
+        teamsWithEmailCount = teamsForEmail.filter { !$0.email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.count
     }
 }
 

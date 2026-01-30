@@ -15,14 +15,16 @@ struct PlanningSidebarView: View {
     let viewModel: QuizViewModel
     let onEditQuiz: ((Quiz) -> Void)?
     let onDeleteQuiz: ((Quiz) -> Void)?
-    
+    let onStartQuiz: ((Quiz) -> Void)?
+
     init(
         selectedQuiz: Binding<Quiz?>,
         showingNewQuizSheet: Binding<Bool>,
         plannedQuizzes: [Quiz],
         viewModel: QuizViewModel,
         onEditQuiz: ((Quiz) -> Void)? = nil,
-        onDeleteQuiz: ((Quiz) -> Void)? = nil
+        onDeleteQuiz: ((Quiz) -> Void)? = nil,
+        onStartQuiz: ((Quiz) -> Void)? = nil
     ) {
         self._selectedQuiz = selectedQuiz
         self._showingNewQuizSheet = showingNewQuizSheet
@@ -30,6 +32,7 @@ struct PlanningSidebarView: View {
         self.viewModel = viewModel
         self.onEditQuiz = onEditQuiz
         self.onDeleteQuiz = onDeleteQuiz
+        self.onStartQuiz = onStartQuiz
     }
     
     var body: some View {
@@ -42,7 +45,7 @@ struct PlanningSidebarView: View {
 
                 Spacer()
 
-                // Moderner + Button
+                // Moderner + Button mit Liquid Glass Design
                 Button {
                     showingNewQuizSheet = true
                 } label: {
@@ -53,7 +56,7 @@ struct PlanningSidebarView: View {
                             .font(.headline)
                     }
                 }
-                .primaryGradientButton()
+                .primaryGlassButton()
                 .keyboardShortcut("n", modifiers: .command)
                 .helpText("Neues Quiz erstellen (⌘N)")
             }
@@ -81,9 +84,7 @@ struct PlanningSidebarView: View {
                         ForEach(plannedQuizzes) { quiz in
                             PlannedQuizRow(
                                 quiz: quiz,
-                                isSelected: selectedQuiz?.id == quiz.id,
-                                onEdit: onEditQuiz != nil ? { onEditQuiz?(quiz) } : nil,
-                                onDelete: onDeleteQuiz != nil ? { onDeleteQuiz?(quiz) } : nil
+                                isSelected: selectedQuiz?.id == quiz.id
                             )
                             .tag(quiz)
                         }
@@ -93,6 +94,12 @@ struct PlanningSidebarView: View {
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
             .tint(Color.appPrimary)
+
+            // Action Buttons für ausgewähltes Quiz
+            if let quiz = selectedQuiz {
+                Divider()
+                quizActionButtons(for: quiz)
+            }
         }
         .navigationTitle("")
         .background(Color.appBackground)
@@ -104,6 +111,67 @@ struct PlanningSidebarView: View {
         }) {
             NewQuizSheet(viewModel: viewModel)
         }
+    }
+
+    // MARK: - Quiz Action Buttons
+
+    @ViewBuilder
+    private func quizActionButtons(for quiz: Quiz) -> some View {
+        VStack(spacing: AppSpacing.xs) {
+            // Quiz starten (nur wenn Teams und Runden vorhanden) - Liquid Glass Design
+            if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
+                Button {
+                    onStartQuiz?(quiz)
+                } label: {
+                    HStack {
+                        Image(systemName: "play.fill")
+                        Text("Quiz starten")
+                            .font(.headline)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .successGlassButton()
+                .keyboardShortcut("s", modifiers: .command)
+            }
+
+            HStack(spacing: AppSpacing.xs) {
+                // Bearbeiten - Liquid Glass Design
+                Button {
+                    onEditQuiz?(quiz)
+                } label: {
+                    HStack {
+                        Image(systemName: "pencil")
+                        Text("Bearbeiten")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .secondaryGlassButton()
+
+                // Löschen - Liquid Glass Design
+                Button {
+                    onDeleteQuiz?(quiz)
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Löschen")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .destructiveGlassButton()
+            }
+        }
+        #if os(iOS)
+        .padding(.horizontal, AppSpacing.sm)
+        .padding(.vertical, AppSpacing.xs)
+        #else
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.vertical, AppSpacing.sm)
+        #endif
+        .background(
+            Rectangle()
+                .fill(.clear)
+                .glassEffect(.regular)
+        )
     }
 }
 

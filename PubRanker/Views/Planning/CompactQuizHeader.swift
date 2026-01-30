@@ -11,10 +11,13 @@ import SwiftData
 
 struct CompactQuizHeader: View {
     let quiz: Quiz
-    let onEdit: () -> Void
-    let onDelete: () -> Void
-    let onStart: () -> Void
+    var onEdit: (() -> Void)? = nil
+    var onDelete: (() -> Void)? = nil
+    var onStart: (() -> Void)? = nil
     var onEmail: (() -> Void)? = nil
+
+    /// Zeigt die Action-Buttons an (Standard: false für Sidebar-Buttons)
+    var showActionButtons: Bool = false
     
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -56,8 +59,10 @@ struct CompactQuizHeader: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Action Buttons
-            actionButtons
+            // Action Buttons (optional)
+            if showActionButtons {
+                actionButtons
+            }
         }
         .padding(.horizontal, AppSpacing.sm)
         .padding(.top, 0)
@@ -94,7 +99,10 @@ struct CompactQuizHeader: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                actionButtons
+                // Action Buttons (optional)
+                if showActionButtons {
+                    actionButtons
+                }
             }
         }
         .padding(.horizontal, AppSpacing.md)
@@ -127,35 +135,39 @@ struct CompactQuizHeader: View {
                 .foregroundStyle(.white)
             }
 
-            Button {
-                onEdit()
-            } label: {
-                Image(systemName: "pencil")
-                    .font(.body)
-                    .frame(width: AppSpacing.touchTarget, height: AppSpacing.touchTarget)
+            if let onEdit = onEdit {
+                Button {
+                    onEdit()
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.body)
+                        .frame(width: AppSpacing.touchTarget, height: AppSpacing.touchTarget)
+                }
+                .buttonStyle(.plain)
+                .background(
+                    Circle()
+                        .fill(Color.appPrimary)
+                )
+                .foregroundStyle(.white)
             }
-            .buttonStyle(.plain)
-            .background(
-                Circle()
-                    .fill(Color.appPrimary)
-            )
-            .foregroundStyle(.white)
 
-            Button {
-                onDelete()
-            } label: {
-                Image(systemName: "trash")
-                    .font(.body)
-                    .frame(width: AppSpacing.touchTarget, height: AppSpacing.touchTarget)
+            if let onDelete = onDelete {
+                Button {
+                    onDelete()
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.body)
+                        .frame(width: AppSpacing.touchTarget, height: AppSpacing.touchTarget)
+                }
+                .buttonStyle(.plain)
+                .background(
+                    Circle()
+                        .fill(Color.appAccent)
+                )
+                .foregroundStyle(.white)
             }
-            .buttonStyle(.plain)
-            .background(
-                Circle()
-                    .fill(Color.appAccent)
-            )
-            .foregroundStyle(.white)
 
-            if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
+            if let onStart = onStart, !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
                 Button {
                     onStart()
                 } label: {
@@ -172,9 +184,9 @@ struct CompactQuizHeader: View {
             }
         }
         #else
-        // macOS: Full labels with keyboard shortcuts
+        // macOS: Full labels with keyboard shortcuts - Liquid Glass Design
         HStack(spacing: AppSpacing.xxs) {
-            // E-Mail Button
+            // E-Mail Button - Glass Design
             if let onEmail = onEmail, teamsWithEmailCount > 0 {
                 Button {
                     onEmail()
@@ -187,40 +199,44 @@ struct CompactQuizHeader: View {
                             .bold()
                     }
                 }
-                .secondaryGradientButton()
+                .secondaryGlassButton()
                 .keyboardShortcut("e", modifiers: .command)
                 .helpText(String(format: NSLocalizedString("email.send.quiz.help", comment: ""), teamsWithEmailCount))
             }
             
-            Button {
-                onEdit()
-            } label: {
-                HStack(spacing: AppSpacing.xxxs) {
-                    Image(systemName: "pencil")
-                        .font(.body)
-                    Text(NSLocalizedString("navigation.edit", comment: "Edit"))
-                        .font(.body)
-                        .bold()
+            if let onEdit = onEdit {
+                Button {
+                    onEdit()
+                } label: {
+                    HStack(spacing: AppSpacing.xxxs) {
+                        Image(systemName: "pencil")
+                            .font(.body)
+                        Text(NSLocalizedString("navigation.edit", comment: "Edit"))
+                            .font(.body)
+                            .bold()
+                    }
                 }
+                .primaryGlassButton()
+                .helpText(NSLocalizedString("quiz.edit.help", comment: "Edit quiz"))
             }
-            .primaryGradientButton()
-            .helpText(NSLocalizedString("quiz.edit.help", comment: "Edit quiz"))
-            
-            Button {
-                onDelete()
-            } label: {
-                HStack(spacing: AppSpacing.xxxs) {
-                    Image(systemName: "trash")
-                        .font(.body)
-                    Text(NSLocalizedString("navigation.delete", comment: "Delete"))
-                        .font(.body)
-                        .bold()
+
+            if let onDelete = onDelete {
+                Button {
+                    onDelete()
+                } label: {
+                    HStack(spacing: AppSpacing.xxxs) {
+                        Image(systemName: "trash")
+                            .font(.body)
+                        Text(NSLocalizedString("navigation.delete", comment: "Delete"))
+                            .font(.body)
+                            .bold()
+                    }
                 }
+                .destructiveGlassButton()
+                .helpText(NSLocalizedString("quiz.delete.help", comment: "Delete quiz"))
             }
-            .accentGradientButton()
-            .helpText(NSLocalizedString("quiz.delete.help", comment: "Delete quiz"))
-            
-            if !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
+
+            if let onStart = onStart, !quiz.safeTeams.isEmpty && !quiz.safeRounds.isEmpty {
                 Button {
                     onStart()
                 } label: {
@@ -232,7 +248,7 @@ struct CompactQuizHeader: View {
                             .bold()
                     }
                 }
-                .successGradientButton()
+                .successGlassButton()
                 .keyboardShortcut("s", modifiers: .command)
                 .helpText(NSLocalizedString("quiz.start.help", comment: "Start quiz"))
             }

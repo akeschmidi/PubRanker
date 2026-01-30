@@ -293,6 +293,8 @@ struct NewQuizSheet: View {
             focusedField = .name
             // Wizard-Modus aktivieren
             viewModel.isWizardMode = true
+            // Sicherstellen, dass der Context gesetzt ist
+            viewModel.setContext(modelContext)
         }
         .onDisappear {
             // Wenn der Wizard abgebrochen wird, Wizard-Modus beenden
@@ -572,7 +574,7 @@ struct NewQuizSheet: View {
                                     Label("Mehrere Teams", systemImage: "person.3.fill")
                                         .font(.headline)
                                 }
-                                .primaryGradientButton(size: .large)
+                                .primaryGlassButton(size: .large)
 
                                 Button {
                                     showingAddTeam = true
@@ -580,7 +582,7 @@ struct NewQuizSheet: View {
                                     Label("Einzelnes Team", systemImage: "plus.circle")
                                         .font(.headline)
                                 }
-                                .secondaryGradientButton(size: .large)
+                                .secondaryGlassButton(size: .large)
                             }
                             
                             if let quiz = createdQuiz, !availableGlobalTeams(for: quiz).isEmpty {
@@ -590,7 +592,7 @@ struct NewQuizSheet: View {
                                     Label("Aus vorhandenen wählen (\(availableGlobalTeams(for: quiz).count))", systemImage: "square.stack.3d.up.fill")
                                         .font(.headline)
                                 }
-                                .secondaryGradientButton(size: .large)
+                                .secondaryGlassButton(size: .large)
                             }
                         }
                     }
@@ -630,14 +632,14 @@ struct NewQuizSheet: View {
                                 } label: {
                                     Label("Mehrere Teams", systemImage: "person.3.fill")
                                 }
-                                .primaryGradientButton()
+                                .primaryGlassButton()
 
                                 Button {
                                     showingAddTeam = true
                                 } label: {
                                     Label("Einzelnes Team", systemImage: "plus.circle")
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                             
                             if !availableGlobalTeams(for: quiz).isEmpty {
@@ -646,7 +648,7 @@ struct NewQuizSheet: View {
                                 } label: {
                                     Label("Aus vorhandenen wählen (\(availableGlobalTeams(for: quiz).count))", systemImage: "square.stack.3d.up.fill")
                                 }
-                                .secondaryGradientButton()
+                                .secondaryGlassButton()
                             }
                         }
                         .padding(.horizontal, 40)
@@ -745,7 +747,7 @@ struct NewQuizSheet: View {
                                 Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
                                     .font(.headline)
                             }
-                            .primaryGradientButton(size: .large)
+                            .primaryGlassButton(size: .large)
 
                             Button {
                                 showingAddRound = true
@@ -753,7 +755,7 @@ struct NewQuizSheet: View {
                                 Label("Einzelne Runde", systemImage: "plus.circle")
                                     .font(.headline)
                             }
-                            .secondaryGradientButton(size: .large)
+                            .secondaryGlassButton(size: .large)
                         }
                     }
                     .frame(maxHeight: .infinity)
@@ -799,14 +801,14 @@ struct NewQuizSheet: View {
                             } label: {
                                 Label("Mehrere Runden", systemImage: "rectangle.stack.fill")
                             }
-                            .primaryGradientButton()
+                            .primaryGlassButton()
 
                             Button {
                                 showingAddRound = true
                             } label: {
                                 Label("Einzelne Runde", systemImage: "plus.circle")
                             }
-                            .secondaryGradientButton()
+                            .secondaryGlassButton()
                         }
                         .padding(.horizontal, 40)
                         .padding(.bottom, 16)
@@ -852,7 +854,7 @@ struct NewQuizSheet: View {
                 .frame(maxWidth: .infinity)
             }
             .keyboardShortcut(.escape)
-            .secondaryGradientButton(size: .large)
+            .secondaryGlassButton(size: .large)
 
             // Next/Create Button
             Button {
@@ -887,7 +889,7 @@ struct NewQuizSheet: View {
                 .frame(maxWidth: .infinity)
             }
             .keyboardShortcut(.return, modifiers: .command)
-            .primaryGradientButton(size: .large)
+            .primaryGlassButton(size: .large)
             .disabled(!canProceed)
         }
         .padding(.horizontal, AppSpacing.xxl)
