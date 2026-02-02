@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftData
+import os.log
+
+private let logger = Logger(subsystem: "com.pubranker", category: "TeamService")
 
 /// Service für Team-bezogene Operationen
 /// Verantwortlich für: Teams erstellen, löschen, aktualisieren, Quiz-Zuordnungen
@@ -28,20 +31,31 @@ final class TeamService {
     ///   - email: E-Mail-Adresse
     ///   - isConfirmed: Ob das Team bestätigt ist
     ///   - imageData: Optionales Bild
-    /// - Returns: Das erstellte Team oder nil bei Fehler
-    @discardableResult
+    /// - Returns: Das erstellte Team
+    /// - Throws: ServiceError wenn Validierung oder Speichern fehlschlägt
     func addTeam(
         to quiz: Quiz,
         name: String,
-        color: String = "#007AFF",
+        color: String = "AppConstants.defaultTeamColor",
         contactPerson: String = "",
         email: String = "",
         isConfirmed: Bool = false,
         imageData: Data? = nil
-    ) -> Team? {
-        let team = Team(name: name, color: color)
-        team.contactPerson = contactPerson
-        team.email = email
+    ) throws -> Team {
+        // Validierung
+        let sanitizedName = name.sanitizedName
+        guard sanitizedName.isValidName else {
+            throw ServiceError.validationFailed(field: "Name", reason: "Team-Name darf nicht leer sein")
+        }
+
+        let sanitizedEmail = email.sanitizedEmail
+        guard sanitizedEmail.isValidEmail else {
+            throw ServiceError.validationFailed(field: "E-Mail", reason: "Ungültiges E-Mail-Format")
+        }
+
+        let team = Team(name: sanitizedName, color: color)
+        team.contactPerson = contactPerson.sanitizedName
+        team.email = sanitizedEmail
         team.imageData = imageData
         team.setConfirmed(for: quiz, isConfirmed: isConfirmed)
         team.quizzes = [quiz]
@@ -57,10 +71,11 @@ final class TeamService {
 
         do {
             try modelContext.save()
+            logger.info("Team '\(sanitizedName)' zu Quiz '\(quiz.name)' hinzugefügt")
             return team
         } catch {
-            print("Error adding team: \(error)")
-            return nil
+            logger.error("Fehler beim Hinzufügen des Teams '\(sanitizedName)': \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 
@@ -76,7 +91,7 @@ final class TeamService {
     func addTemporaryTeam(
         to quiz: Quiz,
         name: String,
-        color: String = "#007AFF",
+        color: String = "AppConstants.defaultTeamColor",
         contactPerson: String = "",
         email: String = "",
         isConfirmed: Bool = false,
@@ -99,12 +114,11 @@ final class TeamService {
     /// - Parameters:
     ///   - team: Das existierende Team
     ///   - quiz: Das Quiz, dem das Team hinzugefügt werden soll
-    /// - Returns: true bei Erfolg, false wenn Team bereits im Quiz oder bei Fehler
-    @discardableResult
-    func addExistingTeam(_ team: Team, to quiz: Quiz) -> Bool {
+    /// - Throws: ServiceError.alreadyExists wenn Team bereits im Quiz, oder saveFailed bei Speicherfehler
+    func addExistingTeam(_ team: Team, to quiz: Quiz) throws {
         // Prüfe ob Team bereits im Quiz ist
         if quiz.teams?.contains(where: { $0.id == team.id }) ?? false {
-            return false
+            throw ServiceError.alreadyExists(entityType: "Team", name: team.name)
         }
 
         // Füge Quiz zur Team's quizzes Liste hinzu
@@ -126,10 +140,10 @@ final class TeamService {
 
         do {
             try modelContext.save()
-            return true
+            logger.info("Bestehendes Team '\(team.name)' zu Quiz '\(quiz.name)' hinzugefügt")
         } catch {
-            print("Error adding existing team: \(error)")
-            return false
+            logger.error("Fehler beim Hinzufügen des bestehenden Teams '\(team.name)': \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 
@@ -137,9 +151,10 @@ final class TeamService {
     /// - Parameters:
     ///   - team: Das zu entfernende Team
     ///   - quiz: Das Quiz, aus dem das Team entfernt werden soll
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
-    func deleteTeam(_ team: Team, from quiz: Quiz) -> Bool {
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func deleteTeam(_ team: Team, from quiz: Quiz) throws {
+        let teamName = team.name
+
         // Team aus dem Quiz entfernen
         if let index = quiz.teams?.firstIndex(where: { $0.id == team.id }) {
             quiz.teams?.remove(at: index)
@@ -156,10 +171,10 @@ final class TeamService {
 
         do {
             try modelContext.save()
-            return true
+            logger.info("Team '\(teamName)' aus Quiz '\(quiz.name)' entfernt")
         } catch {
-            print("Error deleting team from quiz: \(error)")
-            return false
+            logger.error("Fehler beim Entfernen des Teams '\(teamName)' aus Quiz: \(error.localizedDescription)")
+            throw ServiceError.deleteFailed(underlying: error)
         }
     }
 
@@ -167,17 +182,22 @@ final class TeamService {
     /// - Parameters:
     ///   - team: Das zu aktualisierende Team
     ///   - newName: Der neue Name
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
-    func updateTeamName(_ team: Team, newName: String) -> Bool {
-        team.name = newName
+    /// - Throws: ServiceError wenn Validierung oder Speichern fehlschlägt
+    func updateTeamName(_ team: Team, newName: String) throws {
+        let sanitizedName = newName.sanitizedName
+        guard sanitizedName.isValidName else {
+            throw ServiceError.validationFailed(field: "Name", reason: "Team-Name darf nicht leer sein")
+        }
+
+        let oldName = team.name
+        team.name = sanitizedName
 
         do {
             try modelContext.save()
-            return true
+            logger.info("Team umbenannt: '\(oldName)' -> '\(sanitizedName)'")
         } catch {
-            print("Error updating team name: \(error)")
-            return false
+            logger.error("Fehler beim Umbenennen des Teams '\(oldName)': \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 
@@ -188,17 +208,22 @@ final class TeamService {
     ///   - email: E-Mail-Adresse
     ///   - isConfirmed: Bestätigungsstatus
     ///   - quiz: Optional: Quiz für Quiz-spezifische Bestätigung
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
+    /// - Throws: ServiceError wenn Validierung oder Speichern fehlschlägt
     func updateTeamDetails(
         _ team: Team,
         contactPerson: String,
         email: String,
         isConfirmed: Bool,
         forQuiz quiz: Quiz? = nil
-    ) -> Bool {
-        team.contactPerson = contactPerson
-        team.email = email
+    ) throws {
+        // E-Mail validieren
+        let sanitizedEmail = email.sanitizedEmail
+        guard sanitizedEmail.isValidEmail else {
+            throw ServiceError.validationFailed(field: "E-Mail", reason: "Ungültiges E-Mail-Format")
+        }
+
+        team.contactPerson = contactPerson.sanitizedName
+        team.email = sanitizedEmail
 
         if let quiz = quiz {
             // Quiz-spezifische Bestätigung setzen
@@ -210,10 +235,10 @@ final class TeamService {
 
         do {
             try modelContext.save()
-            return true
+            logger.info("Team-Details für '\(team.name)' aktualisiert")
         } catch {
-            print("Error updating team details: \(error)")
-            return false
+            logger.error("Fehler beim Aktualisieren der Team-Details für '\(team.name)': \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 }

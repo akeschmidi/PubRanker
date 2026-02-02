@@ -104,7 +104,7 @@ struct DebugDataView: View {
             .navigationTitle("Debug & Testdaten")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Schließen") {
+                    Button(L10n.Common.close) {
                         dismiss()
                     }
                 }
@@ -117,7 +117,7 @@ struct DebugDataView: View {
                 Button(actionToConfirm?.confirmButtonText ?? "Bestätigen", role: actionToConfirm?.isDestructive == true ? .destructive : nil) {
                     performAction(actionToConfirm)
                 }
-                Button("Abbrechen", role: .cancel) {}
+                Button(L10n.Navigation.cancel, role: .cancel) {}
             } message: {
                 Text(actionToConfirm?.message ?? "")
             }

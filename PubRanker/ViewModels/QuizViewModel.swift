@@ -8,9 +8,11 @@
 import Foundation
 import SwiftData
 import Observation
+import os.log
 
 @Observable
 final class QuizViewModel {
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "PubRanker", category: "QuizViewModel")
     var modelContext: ModelContext?
     var selectedQuiz: Quiz?
     var searchText: String = ""
@@ -78,8 +80,11 @@ final class QuizViewModel {
     func createQuiz(name: String, venue: String) {
         guard let service = quizService else { return }
 
-        if let quiz = service.createQuiz(name: name, venue: venue) {
+        do {
+            let quiz = try service.createQuiz(name: name, venue: venue)
             selectedQuiz = quiz
+        } catch {
+            Self.logger.error("Fehler beim Erstellen des Quiz: \(error.localizedDescription)")
         }
     }
 
@@ -94,46 +99,62 @@ final class QuizViewModel {
     /// Speichert ein Quiz final mit allen Teams und Runden in den Context
     func saveQuizFinal(_ quiz: Quiz) {
         guard let service = quizService else {
-            print("❌ QuizViewModel.saveQuizFinal: quizService ist nil - modelContext nicht gesetzt!")
+            Self.logger.error("QuizViewModel.saveQuizFinal: quizService ist nil - modelContext nicht gesetzt!")
             return
         }
 
-        if service.saveQuizFinal(quiz) {
-            print("✅ Quiz erfolgreich gespeichert: \(quiz.name)")
+        do {
+            try service.saveQuizFinal(quiz)
+            Self.logger.info("Quiz erfolgreich gespeichert: \(quiz.name)")
             selectedQuiz = quiz
-        } else {
-            print("❌ Fehler beim Speichern des Quiz: \(quiz.name)")
+        } catch {
+            Self.logger.error("Fehler beim Speichern des Quiz: \(error.localizedDescription)")
         }
     }
 
     func deleteQuiz(_ quiz: Quiz) {
         guard let service = quizService else { return }
 
-        if service.deleteQuiz(quiz) {
+        do {
+            try service.deleteQuiz(quiz)
             if selectedQuiz?.id == quiz.id {
                 selectedQuiz = nil
             }
+        } catch {
+            Self.logger.error("Fehler beim Löschen des Quiz: \(error.localizedDescription)")
         }
     }
 
     func startQuiz(_ quiz: Quiz) {
         guard let service = quizService else { return }
-        service.startQuiz(quiz)
+        do {
+            try service.startQuiz(quiz)
+        } catch {
+            Self.logger.error("Fehler beim Starten des Quiz: \(error.localizedDescription)")
+        }
     }
 
     func completeQuiz(_ quiz: Quiz) {
         guard let service = quizService else { return }
-        service.completeQuiz(quiz)
+        do {
+            try service.completeQuiz(quiz)
+        } catch {
+            Self.logger.error("Fehler beim Abschließen des Quiz: \(error.localizedDescription)")
+        }
     }
 
     func cancelQuiz(_ quiz: Quiz) {
         guard let service = quizService else { return }
-        service.cancelQuiz(quiz)
+        do {
+            try service.cancelQuiz(quiz)
+        } catch {
+            Self.logger.error("Fehler beim Abbrechen des Quiz: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Team Management
 
-    func addTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
+    func addTeam(to quiz: Quiz, name: String, color: String = AppConstants.defaultTeamColor, contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
         // Wenn wir im Wizard-Modus sind und das Quiz noch nicht gespeichert ist, verwende temporäre Methode
         if isWizardMode && temporaryQuiz?.id == quiz.id {
             addTemporaryTeam(to: quiz, name: name, color: color, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed, imageData: imageData)
@@ -141,19 +162,23 @@ final class QuizViewModel {
         }
 
         guard let service = teamService else { return }
-        service.addTeam(
-            to: quiz,
-            name: name,
-            color: color,
-            contactPerson: contactPerson,
-            email: email,
-            isConfirmed: isConfirmed,
-            imageData: imageData
-        )
+        do {
+            _ = try service.addTeam(
+                to: quiz,
+                name: name,
+                color: color,
+                contactPerson: contactPerson,
+                email: email,
+                isConfirmed: isConfirmed,
+                imageData: imageData
+            )
+        } catch {
+            Self.logger.error("Fehler beim Hinzufügen des Teams: \(error.localizedDescription)")
+        }
     }
 
     /// Fügt ein Team temporär zu einem Quiz hinzu (ohne Speichern) - für Wizard-Mode
-    func addTemporaryTeam(to quiz: Quiz, name: String, color: String = "#007AFF", contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
+    func addTemporaryTeam(to quiz: Quiz, name: String, color: String = AppConstants.defaultTeamColor, contactPerson: String = "", email: String = "", isConfirmed: Bool = false, imageData: Data? = nil) {
         guard let service = teamService else { return }
         service.addTemporaryTeam(
             to: quiz,
@@ -168,22 +193,38 @@ final class QuizViewModel {
 
     func addExistingTeam(_ team: Team, to quiz: Quiz) {
         guard let service = teamService else { return }
-        service.addExistingTeam(team, to: quiz)
+        do {
+            try service.addExistingTeam(team, to: quiz)
+        } catch {
+            Self.logger.error("Fehler beim Hinzufügen des bestehenden Teams: \(error.localizedDescription)")
+        }
     }
 
     func deleteTeam(_ team: Team, from quiz: Quiz) {
         guard let service = teamService else { return }
-        service.deleteTeam(team, from: quiz)
+        do {
+            try service.deleteTeam(team, from: quiz)
+        } catch {
+            Self.logger.error("Fehler beim Entfernen des Teams: \(error.localizedDescription)")
+        }
     }
 
     func updateTeamName(_ team: Team, newName: String) {
         guard let service = teamService else { return }
-        service.updateTeamName(team, newName: newName)
+        do {
+            try service.updateTeamName(team, newName: newName)
+        } catch {
+            Self.logger.error("Fehler beim Aktualisieren des Team-Namens: \(error.localizedDescription)")
+        }
     }
 
     func updateTeamDetails(_ team: Team, contactPerson: String, email: String, isConfirmed: Bool, forQuiz quiz: Quiz? = nil) {
         guard let service = teamService else { return }
-        service.updateTeamDetails(team, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed, forQuiz: quiz)
+        do {
+            try service.updateTeamDetails(team, contactPerson: contactPerson, email: email, isConfirmed: isConfirmed, forQuiz: quiz)
+        } catch {
+            Self.logger.error("Fehler beim Aktualisieren der Team-Details: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Round Management
@@ -196,7 +237,11 @@ final class QuizViewModel {
         }
 
         guard let service = roundService else { return }
-        service.addRound(to: quiz, name: name, maxPoints: maxPoints)
+        do {
+            _ = try service.addRound(to: quiz, name: name, maxPoints: maxPoints)
+        } catch {
+            Self.logger.error("Fehler beim Hinzufügen der Runde: \(error.localizedDescription)")
+        }
     }
 
     /// Fügt eine Runde temporär zu einem Quiz hinzu (ohne Speichern) - für Wizard-Mode
@@ -207,34 +252,58 @@ final class QuizViewModel {
 
     func deleteRound(_ round: Round, from quiz: Quiz) {
         guard let service = roundService else { return }
-        service.deleteRound(round, from: quiz)
+        do {
+            try service.deleteRound(round, from: quiz)
+        } catch {
+            Self.logger.error("Fehler beim Löschen der Runde: \(error.localizedDescription)")
+        }
     }
 
     func completeRound(_ round: Round) {
         guard let service = roundService else { return }
-        service.completeRound(round)
+        do {
+            try service.completeRound(round)
+        } catch {
+            Self.logger.error("Fehler beim Abschließen der Runde: \(error.localizedDescription)")
+        }
     }
 
     func updateRoundName(_ round: Round, newName: String) {
         guard let service = roundService else { return }
-        service.updateRoundName(round, newName: newName)
+        do {
+            try service.updateRoundName(round, newName: newName)
+        } catch {
+            Self.logger.error("Fehler beim Aktualisieren des Runden-Namens: \(error.localizedDescription)")
+        }
     }
 
     func updateRoundMaxPoints(_ round: Round, maxPoints: Int?) {
         guard let service = roundService else { return }
-        service.updateRoundMaxPoints(round, maxPoints: maxPoints)
+        do {
+            try service.updateRoundMaxPoints(round, maxPoints: maxPoints)
+        } catch {
+            Self.logger.error("Fehler beim Aktualisieren der maximalen Punkte: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Score Management
 
     func updateScore(for team: Team, in round: Round, points: Int) {
         guard let service = scoreService else { return }
-        service.updateScore(for: team, in: round, points: points)
+        do {
+            try service.updateScore(for: team, in: round, points: points)
+        } catch {
+            Self.logger.error("Fehler beim Aktualisieren des Scores: \(error.localizedDescription)")
+        }
     }
 
     func clearScore(for team: Team, in round: Round) {
         guard let service = scoreService else { return }
-        service.clearScore(for: team, in: round)
+        do {
+            try service.clearScore(for: team, in: round)
+        } catch {
+            Self.logger.error("Fehler beim Löschen des Scores: \(error.localizedDescription)")
+        }
     }
 
     func getTeamRank(for team: Team, in quiz: Quiz) -> Int {
@@ -264,7 +333,7 @@ final class QuizViewModel {
         do {
             try context.save()
         } catch {
-            print("Error saving context: \(error)")
+            Self.logger.error("Error saving context: \(error)")
         }
     }
 }

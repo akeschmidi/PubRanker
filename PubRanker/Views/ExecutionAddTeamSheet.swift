@@ -26,7 +26,7 @@ struct ExecutionAddTeamSheet: View {
 
     // New team form states
     @State private var teamName = ""
-    @State private var selectedColor = "#007AFF"
+    @State private var selectedColor = AppConstants.defaultTeamColor
     @State private var contactPerson = ""
     @State private var email = ""
     @State private var showingImagePicker = false
@@ -52,11 +52,7 @@ struct ExecutionAddTeamSheet: View {
         }
     }
 
-    let availableColors = [
-        "#007AFF", "#FF3B30", "#34C759", "#FF9500",
-        "#5856D6", "#FF2D55", "#5AC8FA", "#FFCC00",
-        "#AF52DE", "#00C7BE", "#32ADE6", "#FF6482"
-    ]
+    let availableColors = AppConstants.teamColorPalette
 
     // Filter out teams already in the quiz
     private var availableTeams: [Team] {

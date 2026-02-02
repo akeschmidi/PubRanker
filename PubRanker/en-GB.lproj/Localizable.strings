@@ -614,6 +614,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "Next Place";
 "presentation.reset" = "Reset";
+"presentation.place" = "PLACE";
+"presentation.close" = "Close";
 
 // MARK: - Additional Missing Translations
 "analysis.bestRanking" = "Best Ranking";

@@ -151,7 +151,7 @@ struct TeamCard: View {
                 Button {
                     showingEditSheet = true
                 } label: {
-                    Label("Bearbeiten", systemImage: "pencil")
+                    Label(L10n.Navigation.edit, systemImage: "pencil")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
@@ -161,7 +161,7 @@ struct TeamCard: View {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label("Löschen", systemImage: "trash")
+                    Label(L10n.Navigation.delete, systemImage: "trash")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)

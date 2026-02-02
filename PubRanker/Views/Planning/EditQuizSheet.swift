@@ -24,10 +24,10 @@ struct EditQuizSheet: View {
     var body: some View {
         NavigationStack {
             detailsView
-                .navigationTitle("Quiz bearbeiten")
+                .navigationTitle(L10n.Quiz.editTitle)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Schliessen") {
+                        Button(L10n.Common.close) {
                             saveChanges()
                             dismiss()
                         }
@@ -37,17 +37,17 @@ struct EditQuizSheet: View {
                         Button(role: .destructive) {
                             showingDeleteConfirmation = true
                         } label: {
-                            Label("Löschen", systemImage: "trash")
+                            Label(L10n.Navigation.delete, systemImage: "trash")
                         }
                     }
                 }
-                .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
-                    Button("Abbrechen", role: .cancel) {}
-                    Button("Löschen", role: .destructive) {
+                .alert(L10n.Quiz.Delete.confirm, isPresented: $showingDeleteConfirmation) {
+                    Button(L10n.Navigation.cancel, role: .cancel) {}
+                    Button(L10n.Navigation.delete, role: .destructive) {
                         deleteQuiz()
                     }
                 } message: {
-                    Text("Möchtest du das Quiz '\(quiz.name)' wirklich löschen?")
+                    Text(L10n.Quiz.Delete.confirmMessage(quiz.name))
                 }
         }
         .frame(minWidth: 600, minHeight: 500)
@@ -383,13 +383,13 @@ struct GlobalTeamPickerSheet: View {
             .navigationTitle("Teams hinzufügen")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button(L10n.Navigation.cancel) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("\(selectedTeams.count) hinzufügen") {
+                    Button(L10n.Quiz.addCount(selectedTeams.count)) {
                         addSelectedTeams()
                         dismiss()
                     }

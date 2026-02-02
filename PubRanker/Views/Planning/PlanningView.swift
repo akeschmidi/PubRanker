@@ -106,11 +106,11 @@ struct PlanningView: View {
                 GlobalTeamPickerSheet(quiz: quiz, availableTeams: availableGlobalTeams(for: quiz), modelContext: modelContext)
             }
         }
-        .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
-            Button("Abbrechen", role: .cancel) {
+        .alert(L10n.Quiz.Delete.confirm, isPresented: $showingDeleteConfirmation) {
+            Button(L10n.Navigation.cancel, role: .cancel) {
                 quizToDelete = nil
             }
-            Button("Löschen", role: .destructive) {
+            Button(L10n.Navigation.delete, role: .destructive) {
                 if let quiz = quizToDelete {
                     viewModel.deleteQuiz(quiz)
                     quizToDelete = nil
@@ -118,7 +118,7 @@ struct PlanningView: View {
             }
         } message: {
             if let quiz = quizToDelete {
-                Text("Möchtest du das Quiz '\(quiz.name)' wirklich löschen?")
+                Text(L10n.Quiz.Delete.confirmMessage(quiz.name))
             }
         }
     }

@@ -17,9 +17,9 @@ enum TeamSortOrder: String, CaseIterable {
 
     var title: String {
         switch self {
-        case .alphabetical: return "A-Z"
-        case .rank: return "Rang"
-        case .recentlyAdded: return "Neueste"
+        case .alphabetical: return L10n.TeamSort.alphabetical
+        case .rank: return L10n.TeamSort.rank
+        case .recentlyAdded: return L10n.TeamSort.recentlyAdded
         }
     }
 
@@ -85,7 +85,7 @@ struct ExecutionView: View {
             } message: {
                 cancelConfirmationMessage
             }
-            .confirmationDialog("Quiz beenden", isPresented: $showingCompleteConfirmation) {
+            .confirmationDialog(L10n.Execution.Complete.title, isPresented: $showingCompleteConfirmation) {
                 completeConfirmationButtons
             } message: {
                 completeConfirmationMessage
@@ -160,7 +160,7 @@ struct ExecutionView: View {
 
     @ViewBuilder
     private var completeConfirmationButtons: some View {
-        Button("Quiz beenden", role: .destructive) {
+        Button(L10n.Execution.Complete.confirm, role: .destructive) {
             if let quiz = selectedQuiz {
                 viewModel.completeQuiz(quiz)
                 selectedWorkflow = .analysis
@@ -170,7 +170,7 @@ struct ExecutionView: View {
     }
 
     private var completeConfirmationMessage: some View {
-        Text("Möchten Sie dieses Quiz wirklich beenden? Alle Ergebnisse werden gespeichert und das Quiz wird in die Auswertung verschoben.")
+        Text(L10n.Execution.Complete.message)
     }
     
     private func setupInitialState() {
@@ -538,7 +538,7 @@ struct ExecutionView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Fertig") {
+                Button(L10n.Navigation.done) {
                     focusedTeamId = nil
                 }
                 .font(.headline)
@@ -724,6 +724,8 @@ struct ExecutionView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(currentScore <= 0)
+                .accessibilityLabel("Punkt abziehen für \(team.name)")
+                .accessibilityHint("Aktueller Stand: \(currentScore) Punkte")
 
                 // TextField
                 TextField("0", text: Binding(
@@ -813,6 +815,8 @@ struct ExecutionView: View {
                         saveScore(for: team, in: round, points: clampedValue)
                     }
                 }
+                .accessibilityLabel("Punktestand für \(team.name)")
+                .accessibilityValue("\(currentScore) Punkte")
 
                 // Increment
                 Button {
@@ -840,6 +844,8 @@ struct ExecutionView: View {
                         return false
                     }
                 }())
+                .accessibilityLabel("Punkt hinzufügen für \(team.name)")
+                .accessibilityHint("Aktueller Stand: \(currentScore) Punkte")
             }
             .frame(width: 160)
 
@@ -1313,6 +1319,8 @@ struct ExecutionView: View {
             .buttonStyle(.plain)
             .background(Circle().fill(Color.appSecondary))
             .foregroundStyle(.white)
+            .accessibilityLabel(L10n.Execution.roundsEdit)
+            .accessibilityHint(L10n.Execution.roundsEditHelp)
 
             // Add Team Button
             Button {
@@ -1325,6 +1333,8 @@ struct ExecutionView: View {
             .buttonStyle(.plain)
             .background(Circle().fill(Color.appSecondary))
             .foregroundStyle(.white)
+            .accessibilityLabel(L10n.Execution.AddTeam.button)
+            .accessibilityHint(L10n.Execution.AddTeam.help)
 
             // Presentation Mode Button
             Button {
@@ -1337,6 +1347,8 @@ struct ExecutionView: View {
             .buttonStyle(.plain)
             .background(Circle().fill(Color.appPrimary))
             .foregroundStyle(.white)
+            .accessibilityLabel(L10n.Execution.presentationStart)
+            .accessibilityHint(L10n.Execution.presentationHelp)
 
             Spacer()
 
@@ -1351,6 +1363,8 @@ struct ExecutionView: View {
             .buttonStyle(.plain)
             .background(Circle().fill(Color.appAccent))
             .foregroundStyle(.white)
+            .accessibilityLabel(L10n.Execution.Cancel.title)
+            .accessibilityHint(L10n.Execution.cancelHelp)
 
             // Complete Button
             Button {
@@ -1363,6 +1377,8 @@ struct ExecutionView: View {
             .buttonStyle(.plain)
             .background(Circle().fill(Color.appSuccess))
             .foregroundStyle(.white)
+            .accessibilityLabel(L10n.Execution.complete)
+            .accessibilityHint(L10n.Execution.completeHelp)
         }
     }
     #endif
@@ -1483,7 +1499,7 @@ struct ExecutionView: View {
                         saveAllScores(quiz: quiz, round: round)
                         viewModel.completeRound(round)
                     } label: {
-                        Label("Fertig", systemImage: "flag.checkered")
+                        Label(L10n.Navigation.done, systemImage: "flag.checkered")
                             .font(.subheadline)
                             .frame(maxWidth: .infinity)
                     }

@@ -140,29 +140,29 @@ struct GlobalTeamsManagerView: View {
                 GlobalEditTeamSheet(team: team, viewModel: viewModel)
             }
         }
-        .alert("Team löschen", isPresented: $showingDeleteAlert) {
-            Button("Abbrechen", role: .cancel) {
+        .alert(L10n.Team.Delete.confirm, isPresented: $showingDeleteAlert) {
+            Button(L10n.Navigation.cancel, role: .cancel) {
                 selectedTeam = nil
             }
-            Button("Löschen", role: .destructive) {
+            Button(L10n.Navigation.delete, role: .destructive) {
                 if let team = selectedTeam {
                     deleteTeam(team)
                 }
             }
         } message: {
             if let team = selectedTeam {
-                Text("Möchten Sie das Team '\(team.name)' wirklich löschen?")
+                Text(L10n.Team.deleteConfirmMessage(team.name))
             }
         }
-        .alert("Teams löschen", isPresented: $showingMultiDeleteAlert) {
-            Button("Abbrechen", role: .cancel) {
+        .alert(L10n.CommonUI.deleteTeamsConfirm(selectedTeamIDs.count), isPresented: $showingMultiDeleteAlert) {
+            Button(L10n.Navigation.cancel, role: .cancel) {
                 // Keep selection
             }
-            Button("Alle \(selectedTeamIDs.count) Teams löschen", role: .destructive) {
+            Button(L10n.CommonUI.deleteTeamsConfirm(selectedTeamIDs.count), role: .destructive) {
                 deleteMultipleTeams()
             }
         } message: {
-            Text("Möchten Sie wirklich \(selectedTeamIDs.count) Teams löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+            Text(L10n.CommonUI.deleteTeamsConfirm(selectedTeamIDs.count))
         }
         .onAppear {
             if selectedTeam == nil && !allTeams.isEmpty {

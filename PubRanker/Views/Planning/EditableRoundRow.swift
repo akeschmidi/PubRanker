@@ -118,12 +118,12 @@ struct EditableRoundRow: View {
                 HStack(spacing: AppSpacing.xxs) {
                     Image(systemName: "pencil")
                         .font(.body)
-                    Text("Bearbeiten")
+                    Text(L10n.Navigation.edit)
                         .font(.body)
                 }
             }
             .primaryGlassButton()
-            .helpText("Runde bearbeiten")
+            .helpText(NSLocalizedString("common.round.edit.help", comment: "Edit round help"))
         }
         .padding(.horizontal, AppSpacing.md)
         .padding(.vertical, AppSpacing.sm)

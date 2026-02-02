@@ -291,18 +291,12 @@ struct AboutSheet: View {
     // MARK: - Actions
     
     private func openAppStoreReview() {
-        // App Store Review URL
-        let appId = "6754255330"
-        
         #if os(macOS)
-        let urlString = "macappstore://apps.apple.com/app/id\(appId)?action=write-review"
-        if let url = URL(string: urlString) {
+        if let url = URL(string: AppConstants.macAppStoreReviewURL) {
             NSWorkspace.shared.open(url)
         }
         #else
-        // iOS App Store URL
-        let urlString = "https://apps.apple.com/app/id\(appId)?action=write-review"
-        if let url = URL(string: urlString) {
+        if let url = URL(string: AppConstants.iOSAppStoreReviewURL) {
             UIApplication.shared.open(url)
         }
         #endif

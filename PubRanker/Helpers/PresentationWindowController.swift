@@ -138,10 +138,15 @@ class PresentationManager {
         guard isPresenting else { return }
 
         #if os(macOS)
-        windowController?.closePresentation()
+        // Wichtig: windowController erst nach dem Schließen auf nil setzen
+        // closePresentation() hat einen Delay, also warten wir
+        let controller = windowController
         windowController = nil
+
+        // Direkt schließen ohne Fullscreen-Toggle für schnelleres Schließen
+        controller?.window?.close()
         #endif
-        
+
         currentQuiz = nil
         isPresenting = false
     }
@@ -183,11 +188,34 @@ struct iPadPresentationOverlay: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        // Presentation Content mit eingebautem Schließen-Button
-        PresentationModeView(quiz: quiz, onClose: {
-            onDismiss()
-            dismiss()
-        })
+        NavigationStack {
+            // Presentation Content
+            PresentationModeView(quiz: quiz)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button {
+                            onDismiss()
+                            dismiss()
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title2)
+                                Text("Beenden")
+                                    .fontWeight(.medium)
+                            }
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(Color.white.opacity(0.2))
+                            )
+                        }
+                    }
+                }
+                .toolbarBackground(.hidden, for: .navigationBar)
+                .toolbarColorScheme(.dark, for: .navigationBar)
+        }
         .statusBarHidden(true)
         .persistentSystemOverlays(.hidden)
     }

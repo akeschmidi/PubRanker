@@ -12,6 +12,7 @@
 "navigation.edit" = "Edit";
 "navigation.delete" = "Delete";
 "navigation.add" = "Add";
+"navigation.next" = "Next";
 
 // MARK: - Quiz
 "quiz.title" = "Quiz";
@@ -506,6 +507,16 @@
 "execution.addTeam.noAvailableTeams" = "No Teams Available";
 "execution.addTeam.noAvailableTeams.description" = "All teams are already assigned to this quiz. Create a new team or manage teams in the Teams Manager.";
 
+// Complete Quiz
+"execution.complete.title" = "Complete Quiz";
+"execution.complete.confirm" = "Complete Quiz";
+"execution.complete.message" = "Do you really want to complete this quiz? All results will be saved and the quiz will be moved to analysis.";
+
+// MARK: - Team Sort Order
+"teamSort.alphabetical" = "A-Z";
+"teamSort.rank" = "Rank";
+"teamSort.recentlyAdded" = "Recent";
+
 // MARK: - About Sheet
 "about.title" = "About";
 "about.quizMasterHub" = "QuizMaster Hub";
@@ -739,6 +750,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "Next Place";
 "presentation.reset" = "Reset";
+"presentation.place" = "PLACE";
+"presentation.close" = "Close";
 
 // MARK: - Additional Missing Translations
 "analysis.bestRanking" = "Best Ranking";

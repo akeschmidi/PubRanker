@@ -15,6 +15,7 @@ enum L10n {
         static let edit = NSLocalizedString("navigation.edit", comment: "Edit button")
         static let delete = NSLocalizedString("navigation.delete", comment: "Delete button")
         static let add = NSLocalizedString("navigation.add", comment: "Add button")
+        static let next = NSLocalizedString("navigation.next", comment: "Next/Continue button")
     }
     
     // MARK: - Quiz
@@ -313,6 +314,13 @@ enum L10n {
         static let noScoresMessage = NSLocalizedString("empty.noScores.message", comment: "No scores message")
     }
     
+    // MARK: - Team Sort Order
+    enum TeamSort {
+        static let alphabetical = NSLocalizedString("teamSort.alphabetical", comment: "Alphabetical sort")
+        static let rank = NSLocalizedString("teamSort.rank", comment: "Rank sort")
+        static let recentlyAdded = NSLocalizedString("teamSort.recentlyAdded", comment: "Recently added sort")
+    }
+
     // MARK: - Execution View
     enum Execution {
         static let liveQuiz = NSLocalizedString("execution.liveQuiz", comment: "Live Quiz")
@@ -367,6 +375,12 @@ enum L10n {
             static let title = NSLocalizedString("execution.cancel.title", comment: "Cancel quiz title")
             static let returnToPlanning = NSLocalizedString("execution.cancel.returnToPlanning", comment: "Return to planning")
             static let message = NSLocalizedString("execution.cancel.message", comment: "Cancel message")
+        }
+
+        enum Complete {
+            static let title = NSLocalizedString("execution.complete.title", comment: "Complete quiz title")
+            static let confirm = NSLocalizedString("execution.complete.confirm", comment: "Complete quiz confirm button")
+            static let message = NSLocalizedString("execution.complete.message", comment: "Complete quiz message")
         }
         
         enum EditRounds {
@@ -695,6 +709,8 @@ enum L10n {
     enum Presentation {
         static let nextPlace = NSLocalizedString("presentation.nextPlace", comment: "Next place button")
         static let reset = NSLocalizedString("presentation.reset", comment: "Reset button")
+        static let place = NSLocalizedString("presentation.place", comment: "Place label on podium")
+        static let close = NSLocalizedString("presentation.close", comment: "Close button")
     }
 }
 

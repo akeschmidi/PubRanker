@@ -625,6 +625,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "下一位";
 "presentation.reset" = "重置";
+"presentation.place" = "名";
+"presentation.close" = "关闭";
 
 // MARK: - Additional Missing Translations
 "analysis.bestRanking" = "最佳排名";

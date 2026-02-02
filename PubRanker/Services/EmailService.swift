@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import os.log
 
 #if os(macOS)
 import AppKit
@@ -18,6 +19,7 @@ import MessageUI
 
 /// Service zum Versenden von E-Mails an Teams
 class EmailService {
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "PubRanker", category: "Email")
     
     /// Öffnet die Mail-App mit einer E-Mail an alle Teams
     /// - Parameters:
@@ -75,8 +77,8 @@ class EmailService {
     ///   - body: Inhalt der E-Mail
     private static func openMailApp(recipients: String, subject: String, body: String) {
         // Logging für Debugging
-        print("📧 E-Mail wird gesendet an \(recipients.components(separatedBy: ",").count) Empfänger")
-        print("📧 Empfänger: \(recipients)")
+        logger.info("E-Mail wird gesendet an \(recipients.components(separatedBy: ",").count) Empfänger")
+        logger.debug("Empfänger: \(recipients)")
         
         // Manuelle URL-Erstellung, da URLComponents Kommas in BCC encodiert,
         // was manche Mail-Clients nicht verstehen
@@ -107,12 +109,12 @@ class EmailService {
         let urlString = "mailto:?\(queryParts.joined(separator: "&"))"
         
         guard let url = URL(string: urlString) else {
-            print("❌ Fehler: Konnte mailto-URL nicht erstellen")
-            print("❌ URL-String war: \(urlString)")
+            logger.error("Konnte mailto-URL nicht erstellen")
+            logger.debug("URL-String war: \(urlString)")
             return
         }
-        
-        print("📧 Öffne URL: \(url.absoluteString.prefix(200))...")
+
+        logger.debug("Öffne URL: \(url.absoluteString.prefix(200))...")
         
         #if os(macOS)
         NSWorkspace.shared.open(url)
@@ -133,7 +135,7 @@ class EmailService {
         #else
         // Auf iOS wird das Alert über SwiftUI gehandhabt
         // Der Aufrufer sollte den Fehlerfall behandeln
-        print("⚠️ Keine E-Mail-Adressen vorhanden")
+        logger.warning("Keine E-Mail-Adressen vorhanden")
         #endif
     }
     
@@ -173,7 +175,7 @@ class EmailService {
             .filter { !$0.isEmpty }
 
         guard !recipients.isEmpty else {
-            print("⚠️ Keine E-Mail-Adressen vorhanden")
+            logger.warning("Keine E-Mail-Adressen vorhanden")
             completion(false)
             return
         }
@@ -182,7 +184,7 @@ class EmailService {
         guard let tiffData = image.tiffRepresentation,
               let bitmap = NSBitmapImageRep(data: tiffData),
               let pngData = bitmap.representation(using: .png, properties: [:]) else {
-            print("❌ Fehler: Konnte Bild nicht in PNG konvertieren")
+            logger.error("Konnte Bild nicht in PNG konvertieren")
             completion(false)
             return
         }
@@ -192,16 +194,16 @@ class EmailService {
 
         do {
             try pngData.write(to: tempURL)
-            print("✅ Temporäre Datei erstellt: \(tempURL.path)")
+            logger.debug("Temporäre Datei erstellt: \(tempURL.path)")
         } catch {
-            print("❌ Fehler beim Schreiben der temporären Datei: \(error)")
+            logger.error("Fehler beim Schreiben der temporären Datei: \(error)")
             completion(false)
             return
         }
 
         // NSSharingService für E-Mail verwenden
         guard let sharingService = NSSharingService(named: .composeEmail) else {
-            print("❌ Fehler: E-Mail Sharing Service nicht verfügbar")
+            logger.error("E-Mail Sharing Service nicht verfügbar")
             completion(false)
             return
         }
@@ -216,12 +218,12 @@ class EmailService {
 
         // Prüfen ob Service verfügbar ist
         guard sharingService.canPerform(withItems: items) else {
-            print("❌ Fehler: E-Mail Service kann nicht ausgeführt werden")
+            logger.error("E-Mail Service kann nicht ausgeführt werden")
             completion(false)
             return
         }
 
-        print("📧 Sende E-Mail mit Anhang an \(recipients.count) Empfänger (BCC)")
+        logger.info("Sende E-Mail mit Anhang an \(recipients.count) Empfänger (BCC)")
 
         // E-Mail-Composer öffnen
         sharingService.perform(withItems: items)
@@ -230,7 +232,7 @@ class EmailService {
         // Temporäre Datei nach kurzer Verzögerung löschen
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             try? FileManager.default.removeItem(at: tempURL)
-            print("🗑️ Temporäre Datei gelöscht")
+            Self.logger.debug("Temporäre Datei gelöscht")
         }
     }
     
@@ -247,12 +249,12 @@ class EmailService {
         completion: ((Bool) -> Void)? = nil
     ) {
         guard !recipients.isEmpty else {
-            print("⚠️ Keine E-Mail-Adressen vorhanden")
+            logger.warning("Keine E-Mail-Adressen vorhanden")
             completion?(false)
             return
         }
         guard let sharingService = NSSharingService(named: .composeEmail) else {
-            print("❌ Fehler: E-Mail Sharing Service nicht verfügbar")
+            logger.error("E-Mail Sharing Service nicht verfügbar")
             completion?(false)
             return
         }
@@ -263,7 +265,7 @@ class EmailService {
             sharingService.perform(withItems: items)
             completion?(true)
         } else {
-            print("❌ Fehler: E-Mail Service kann nicht ausgeführt werden")
+            logger.error("E-Mail Service kann nicht ausgeführt werden")
             completion?(false)
         }
     }

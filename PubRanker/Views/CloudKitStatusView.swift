@@ -74,7 +74,7 @@ struct CloudKitStatusView: View {
             .navigationTitle("CloudKit Status")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Schließen") { dismiss() }
+                    Button(L10n.Common.close) { dismiss() }
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button {

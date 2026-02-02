@@ -29,11 +29,7 @@ struct EditableTeamRow: View {
     @State private var showingDeleteConfirmation = false
     @State private var showingImagePicker = false
     
-    let availableColors = [
-        "#007AFF", "#FF3B30", "#34C759", "#FF9500",
-        "#5856D6", "#FF2D55", "#5AC8FA", "#FFCC00",
-        "#AF52DE", "#00C7BE", "#32ADE6", "#FF6482"
-    ]
+    let availableColors = AppConstants.teamColorPalette
     
     var body: some View {
         VStack(spacing: 0) {
@@ -213,7 +209,7 @@ struct EditableTeamRow: View {
                             HStack(spacing: AppSpacing.xxs) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(.body)
-                                Text("Speichern")
+                                Text(L10n.Navigation.save)
                                     .font(.body)
                             }
                         }
@@ -227,7 +223,7 @@ struct EditableTeamRow: View {
                             HStack(spacing: AppSpacing.xxs) {
                                 Image(systemName: "xmark.circle.fill")
                                     .font(.body)
-                                Text("Abbrechen")
+                                Text(L10n.Navigation.cancel)
                                     .font(.body)
                             }
                         }
@@ -245,7 +241,7 @@ struct EditableTeamRow: View {
                             HStack(spacing: AppSpacing.xxs) {
                                 Image(systemName: "pencil")
                                     .font(.body)
-                                Text("Bearbeiten")
+                                Text(L10n.Navigation.edit)
                                     .font(.body)
                             }
                         }
@@ -284,13 +280,13 @@ struct EditableTeamRow: View {
                     lineWidth: AppSpacing.xxxs
                 )
         }
-        .alert("Team entfernen?", isPresented: $showingDeleteConfirmation) {
-            Button("Abbrechen", role: .cancel) {}
-            Button("Entfernen", role: .destructive) {
+        .alert(L10n.Team.Delete.confirm, isPresented: $showingDeleteConfirmation) {
+            Button(L10n.Navigation.cancel, role: .cancel) {}
+            Button(L10n.CommonUI.remove, role: .destructive) {
                 viewModel.deleteTeam(team, from: quiz)
             }
         } message: {
-            Text("'\(team.name)' wird aus diesem Quiz entfernt, bleibt aber im globalen Team-Manager erhalten.")
+            Text(L10n.Team.Delete.removeFromQuiz(team.name))
         }
         .fileImporter(
             isPresented: $showingImagePicker,

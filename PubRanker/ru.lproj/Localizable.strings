@@ -572,6 +572,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "Следующее место";
 "presentation.reset" = "Сбросить";
+"presentation.place" = "МЕСТО";
+"presentation.close" = "Закрыть";
 
 // MARK: - Additional Missing Translations
 "analysis.bestRanking" = "Лучший Рейтинг";

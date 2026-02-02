@@ -285,7 +285,7 @@ struct QuickRoundSetupView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Abbrechen")
+                    Text(L10n.Navigation.cancel)
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)

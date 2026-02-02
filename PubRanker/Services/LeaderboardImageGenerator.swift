@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os.log
 
 #if os(macOS)
 import AppKit
@@ -17,6 +18,7 @@ typealias PlatformNativeImage = UIImage
 #endif
 
 class LeaderboardImageGenerator {
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "PubRanker", category: "LeaderboardImage")
 
     /// Generates a platform-specific image from the leaderboard view
     /// - Parameter quiz: The quiz to generate the leaderboard for
@@ -53,13 +55,13 @@ class LeaderboardImageGenerator {
 
         #if os(macOS)
         guard let image = renderer.nsImage else {
-            print("❌ Failed to generate leaderboard image")
+            logger.error("Failed to generate leaderboard image")
             return nil
         }
 
         // Create PDF with PDFKit to add clickable link
         guard let pdfPage = PDFPage(image: image) else {
-            print("❌ Failed to create PDF page from image")
+            logger.error("Failed to create PDF page from image")
             return nil
         }
 
@@ -78,7 +80,7 @@ class LeaderboardImageGenerator {
             height: 120  // Footer height
         )
 
-        if let url = URL(string: "https://apps.apple.com/ch/app/pubranker/id6754255330") {
+        if let url = URL(string: AppConstants.appStoreURL) {
             let annotation = PDFAnnotation(bounds: linkRect, forType: .link, withProperties: nil)
             annotation.url = url
             annotation.backgroundColor = .clear
@@ -86,7 +88,7 @@ class LeaderboardImageGenerator {
         }
 
         guard let pdfData = pdfDocument.dataRepresentation() else {
-            print("❌ Failed to get PDF data")
+            logger.error("Failed to get PDF data")
             return nil
         }
 
@@ -95,7 +97,7 @@ class LeaderboardImageGenerator {
 
         #else
         guard let image = renderer.uiImage else {
-            print("❌ Failed to generate leaderboard image")
+            logger.error("Failed to generate leaderboard image")
             return nil
         }
 
@@ -119,7 +121,7 @@ class LeaderboardImageGenerator {
     @MainActor
     static func generatePNGData(for quiz: Quiz) async -> Data? {
         guard let image = await generateImage(for: quiz) else {
-            print("❌ Failed to generate leaderboard image")
+            logger.error("Failed to generate leaderboard image")
             return nil
         }
 
@@ -128,21 +130,21 @@ class LeaderboardImageGenerator {
         guard let tiffData = image.tiffRepresentation,
               let bitmap = NSBitmapImageRep(data: tiffData),
               let pngData = bitmap.representation(using: NSBitmapImageRep.FileType.png, properties: [:]) else {
-            print("❌ Failed to convert NSImage to PNG data")
+            logger.error("Failed to convert NSImage to PNG data")
             return nil
         }
 
-        print("✅ Generated leaderboard PNG: \(pngData.count / 1024)KB")
+        logger.info("Generated leaderboard PNG: \(pngData.count / 1024)KB")
         return pngData
 
         #else
         // Convert UIImage to PNG data
         guard let pngData = image.pngData() else {
-            print("❌ Failed to convert UIImage to PNG data")
+            logger.error("Failed to convert UIImage to PNG data")
             return nil
         }
 
-        print("✅ Generated leaderboard PNG: \(pngData.count / 1024)KB")
+        logger.info("Generated leaderboard PNG: \(pngData.count / 1024)KB")
         return pngData
         #endif
     }

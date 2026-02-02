@@ -843,14 +843,14 @@ struct EditRoundSheet: View {
                 print("Fehler beim Laden des Bildes: \(error)")
             }
         }
-        .alert("Runde löschen?", isPresented: $showingDeleteConfirmation) {
-            Button("Abbrechen", role: .cancel) {}
-            Button("Löschen", role: .destructive) {
+        .alert(L10n.Round.Delete.confirm, isPresented: $showingDeleteConfirmation) {
+            Button(L10n.Navigation.cancel, role: .cancel) {}
+            Button(L10n.Navigation.delete, role: .destructive) {
                 viewModel.deleteRound(round, from: quiz)
                 dismiss()
             }
         } message: {
-            Text("Möchtest du '\(round.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+            Text(L10n.Round.Delete.confirmMessage(round.name))
         }
     }
 

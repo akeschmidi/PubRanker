@@ -425,15 +425,19 @@ extension SampleData {
             isStoredInMemoryOnly: true
         )
 
-        let container = try! ModelContainer(
-            for: schema,
-            configurations: configuration
-        )
+        do {
+            let container = try ModelContainer(
+                for: schema,
+                configurations: configuration
+            )
 
-        let context = container.mainContext
-        setupFullDemo(in: context)
+            let context = container.mainContext
+            setupFullDemo(in: context)
 
-        return container
+            return container
+        } catch {
+            fatalError("Failed to create preview ModelContainer: \(error.localizedDescription)")
+        }
     }
 }
 #endif

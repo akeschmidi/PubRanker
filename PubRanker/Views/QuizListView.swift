@@ -39,9 +39,9 @@ struct QuizListView: View {
                             quizToDelete = selectedQuiz
                             showingDeleteConfirmation = true
                         } label: {
-                            Label("Löschen", systemImage: "trash")
+                            Label(L10n.Navigation.delete, systemImage: "trash")
                         }
-                        .helpText("Ausgewähltes Quiz löschen")
+                        .helpText(NSLocalizedString("quiz.delete.help", comment: "Delete quiz help"))
                     }
                 }
             }
@@ -52,10 +52,10 @@ struct QuizListView: View {
                 NewQuizSheet(viewModel: viewModel)
             }
             .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation, presenting: quizToDelete) { quiz in
-                Button("Abbrechen", role: .cancel) {
+                Button(L10n.Navigation.cancel, role: .cancel) {
                     quizToDelete = nil
                 }
-                Button("Löschen", role: .destructive) {
+                Button(L10n.Navigation.delete, role: .destructive) {
                     deleteQuiz(quiz)
                 }
             } message: { quiz in
@@ -145,7 +145,7 @@ struct QuizListView: View {
             quizToDelete = quiz
             showingDeleteConfirmation = true
         } label: {
-            Label("Löschen", systemImage: "trash")
+            Label(L10n.Navigation.delete, systemImage: "trash")
         }
     }
     
@@ -849,7 +849,7 @@ struct NewQuizSheet: View {
             } label: {
                 HStack {
                     Image(systemName: currentStep == .details ? "xmark" : "chevron.left")
-                    Text(currentStep == .details ? "Abbrechen" : "Zurück")
+                    Text(currentStep == .details ? L10n.Navigation.cancel : L10n.Navigation.back)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -883,7 +883,7 @@ struct NewQuizSheet: View {
                 }
             } label: {
                 HStack {
-                    Text(currentStep == .rounds ? "Fertig" : "Weiter")
+                    Text(currentStep == .rounds ? L10n.Navigation.done : L10n.Navigation.next)
                     Image(systemName: currentStep == .rounds ? "checkmark.circle.fill" : "chevron.right")
                 }
                 .frame(maxWidth: .infinity)

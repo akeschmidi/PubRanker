@@ -141,7 +141,7 @@ struct PlanningSidebarView: View {
                 } label: {
                     HStack {
                         Image(systemName: "pencil")
-                        Text("Bearbeiten")
+                        Text(L10n.Navigation.edit)
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -153,7 +153,7 @@ struct PlanningSidebarView: View {
                 } label: {
                     HStack {
                         Image(systemName: "trash")
-                        Text("Löschen")
+                        Text(L10n.Navigation.delete)
                     }
                     .frame(maxWidth: .infinity)
                 }

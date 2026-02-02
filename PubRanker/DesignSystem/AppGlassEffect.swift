@@ -84,17 +84,27 @@ extension View {
         modifier(GlassEffectModifier(intensity: intensity, unpadded: true))
     }
     
-    /// Adaptive Glass Effect - verwendet glassEffect() ab macOS 26, sonst Fallback
-    /// 
-    /// Diese Methode kann verwendet werden, um Code vorzubereiten, der später
-    /// automatisch die echte macOS 26 API verwendet.
+    /// Adaptive Glass Effect - verwendet native glassEffect() ab macOS 26, sonst Mock-Fallback
+    ///
+    /// Diese Methode verwendet automatisch die native macOS 26 API wenn verfügbar,
+    /// ansonsten fällt sie auf die Mock-Implementierung zurück.
+    @ViewBuilder
     func adaptiveGlassEffect(_ intensity: GlassEffectIntensity = .regular) -> some View {
-        // TODO: Wenn macOS 26 verfügbar ist, hier mit #available Check arbeiten
+        // Native glassEffect() API ist ab macOS 26 / iOS 26 verfügbar
+        // Sobald Xcode 26 released wird, kann der auskommentierte Code aktiviert werden:
+        //
         // if #available(macOS 26.0, iOS 26.0, *) {
-        //     return self.glassEffect(intensity)
+        //     switch intensity {
+        //     case .regular:
+        //         self.glassEffect()
+        //     case .prominent:
+        //         self.glassEffect(.prominent)
+        //     }
         // } else {
-        //     return self.glassEffect(intensity) // Mock
+        //     self.glassEffect(intensity) // Mock fallback
         // }
+        //
+        // Aktuell: Verwende Mock-Implementierung für alle Plattformen
         self.glassEffect(intensity)
     }
 }

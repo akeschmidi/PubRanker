@@ -53,26 +53,26 @@ struct EditQuizSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button(L10n.Navigation.cancel) {
                         dismiss()
                     }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Sichern") {
+                    Button(L10n.Navigation.save) {
                         saveChanges()
                         dismiss()
                     }
                     .disabled(quizName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
-            .alert("Quiz löschen?", isPresented: $showingDeleteConfirmation) {
-                Button("Abbrechen", role: .cancel) {}
-                Button("Löschen", role: .destructive) {
+            .alert(L10n.Quiz.Delete.confirm, isPresented: $showingDeleteConfirmation) {
+                Button(L10n.Navigation.cancel, role: .cancel) {}
+                Button(L10n.Navigation.delete, role: .destructive) {
                     deleteQuiz()
                 }
             } message: {
-                Text("Möchtest du '\(quiz.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+                Text(L10n.Quiz.Delete.confirmMessage(quiz.name))
             }
         }
         .onAppear {

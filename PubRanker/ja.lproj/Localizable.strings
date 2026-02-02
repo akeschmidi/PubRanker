@@ -625,6 +625,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "次の順位";
 "presentation.reset" = "リセット";
+"presentation.place" = "位";
+"presentation.close" = "閉じる";
 
 // MARK: - Additional Missing Translations
 "analysis.bestRanking" = "最高ランキング";

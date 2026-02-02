@@ -105,18 +105,18 @@ struct GlobalTeamsManagerView: View {
                 GlobalEditTeamSheet(team: team, viewModel: viewModel)
             }
         }
-        .alert("Team löschen", isPresented: $showingDeleteAlert) {
-            Button("Abbrechen", role: .cancel) {
+        .alert(L10n.Team.Delete.confirm, isPresented: $showingDeleteAlert) {
+            Button(L10n.Navigation.cancel, role: .cancel) {
                 selectedTeam = nil
             }
-            Button("Löschen", role: .destructive) {
+            Button(L10n.Navigation.delete, role: .destructive) {
                 if let team = selectedTeam {
                     deleteTeam(team)
                 }
             }
         } message: {
             if let team = selectedTeam {
-                Text("Möchten Sie das Team '\(team.name)' wirklich löschen?")
+                Text(L10n.Team.deleteConfirmMessage(team.name))
             }
         }
         .onAppear {
@@ -244,11 +244,7 @@ struct GlobalTeamsManagerView: View {
         ]
         
         // Farben für Teams
-        let colors = [
-            "#007AFF", "#FF3B30", "#34C759", "#FF9500",
-            "#5856D6", "#FF2D55", "#5AC8FA", "#FFCC00",
-            "#AF52DE", "#00C7BE", "#32ADE6", "#FF6482"
-        ]
+        let colors = AppConstants.teamColorPalette
         
         // Erstelle 3-5 Quizzes mit verschiedenen Themen
         let numberOfQuizzes = Int.random(in: 3...5)

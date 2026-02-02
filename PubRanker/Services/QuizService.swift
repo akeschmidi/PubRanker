@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftData
+import os.log
+
+private let logger = Logger(subsystem: "com.pubranker", category: "QuizService")
 
 /// Service für Quiz-bezogene Operationen
 /// Verantwortlich für: Quiz erstellen, löschen, Status ändern
@@ -24,18 +27,24 @@ final class QuizService {
     ///   - name: Name des Quiz
     ///   - venue: Veranstaltungsort
     ///   - date: Datum des Quiz
-    /// - Returns: Das erstellte Quiz oder nil bei Fehler
-    @discardableResult
-    func createQuiz(name: String, venue: String = "", date: Date = Date()) -> Quiz? {
-        let quiz = Quiz(name: name, venue: venue, date: date)
+    /// - Returns: Das erstellte Quiz
+    /// - Throws: ServiceError wenn Validierung oder Speichern fehlschlägt
+    func createQuiz(name: String, venue: String = "", date: Date = Date()) throws -> Quiz {
+        let sanitizedName = name.sanitizedName
+        guard sanitizedName.isValidName else {
+            throw ServiceError.validationFailed(field: "Name", reason: "Quiz-Name darf nicht leer sein")
+        }
+
+        let quiz = Quiz(name: sanitizedName, venue: venue.sanitizedName, date: date)
         modelContext.insert(quiz)
 
         do {
             try modelContext.save()
+            logger.info("Quiz '\(sanitizedName)' erfolgreich erstellt")
             return quiz
         } catch {
-            print("Error creating quiz: \(error)")
-            return nil
+            logger.error("Fehler beim Erstellen des Quiz: \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 
@@ -51,23 +60,18 @@ final class QuizService {
 
     /// Speichert ein temporäres Quiz final mit allen verknüpften Entities
     /// - Parameter quiz: Das zu speichernde Quiz mit Teams und Runden
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
-    func saveQuizFinal(_ quiz: Quiz) -> Bool {
-        print("📝 QuizService.saveQuizFinal: Starte Speicherung für '\(quiz.name)'")
-        print("   - Teams: \(quiz.teams?.count ?? 0)")
-        print("   - Runden: \(quiz.rounds?.count ?? 0)")
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func saveQuizFinal(_ quiz: Quiz) throws {
+        logger.debug("Starte Speicherung für Quiz '\(quiz.name)' mit \(quiz.teams?.count ?? 0) Teams und \(quiz.rounds?.count ?? 0) Runden")
 
         // Quiz in Context einfügen
         modelContext.insert(quiz)
-        print("   ✓ Quiz in Context eingefügt")
 
         // Alle Teams in Context einfügen
         if let teams = quiz.teams {
             for team in teams {
                 modelContext.insert(team)
             }
-            print("   ✓ \(teams.count) Teams in Context eingefügt")
         }
 
         // Alle Runden in Context einfügen
@@ -75,32 +79,30 @@ final class QuizService {
             for round in rounds {
                 modelContext.insert(round)
             }
-            print("   ✓ \(rounds.count) Runden in Context eingefügt")
         }
 
         do {
             try modelContext.save()
-            print("✅ QuizService.saveQuizFinal: Erfolgreich gespeichert!")
-            return true
+            logger.info("Quiz '\(quiz.name)' erfolgreich gespeichert")
         } catch {
-            print("❌ QuizService.saveQuizFinal: Fehler beim Speichern: \(error)")
-            return false
+            logger.error("Fehler beim Speichern des Quiz '\(quiz.name)': \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 
     /// Löscht ein Quiz aus der Datenbank
     /// - Parameter quiz: Das zu löschende Quiz
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
-    func deleteQuiz(_ quiz: Quiz) -> Bool {
+    /// - Throws: ServiceError wenn das Löschen fehlschlägt
+    func deleteQuiz(_ quiz: Quiz) throws {
+        let quizName = quiz.name
         modelContext.delete(quiz)
 
         do {
             try modelContext.save()
-            return true
+            logger.info("Quiz '\(quizName)' erfolgreich gelöscht")
         } catch {
-            print("Error deleting quiz: \(error)")
-            return false
+            logger.error("Fehler beim Löschen des Quiz '\(quizName)': \(error.localizedDescription)")
+            throw ServiceError.deleteFailed(underlying: error)
         }
     }
 
@@ -108,22 +110,27 @@ final class QuizService {
 
     /// Startet ein Quiz (setzt isActive = true)
     /// - Parameter quiz: Das zu startende Quiz
-    func startQuiz(_ quiz: Quiz) {
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func startQuiz(_ quiz: Quiz) throws {
         quiz.isActive = true
-        saveContext()
+        try saveContext()
+        logger.info("Quiz '\(quiz.name)' gestartet")
     }
 
     /// Schließt ein Quiz ab (setzt isActive = false, isCompleted = true)
     /// - Parameter quiz: Das abzuschließende Quiz
-    func completeQuiz(_ quiz: Quiz) {
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func completeQuiz(_ quiz: Quiz) throws {
         quiz.isActive = false
         quiz.isCompleted = true
-        saveContext()
+        try saveContext()
+        logger.info("Quiz '\(quiz.name)' abgeschlossen")
     }
 
     /// Bricht ein Quiz ab und setzt es zurück
     /// - Parameter quiz: Das abzubrechende Quiz
-    func cancelQuiz(_ quiz: Quiz) {
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func cancelQuiz(_ quiz: Quiz) throws {
         quiz.isActive = false
         quiz.isCompleted = false
 
@@ -132,16 +139,18 @@ final class QuizService {
             round.isCompleted = false
         }
 
-        saveContext()
+        try saveContext()
+        logger.info("Quiz '\(quiz.name)' abgebrochen")
     }
 
     // MARK: - Helper
 
-    private func saveContext() {
+    private func saveContext() throws {
         do {
             try modelContext.save()
         } catch {
-            print("Error saving context: \(error)")
+            logger.error("Fehler beim Speichern des Contexts: \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 }

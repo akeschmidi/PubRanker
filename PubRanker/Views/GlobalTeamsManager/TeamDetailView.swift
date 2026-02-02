@@ -83,7 +83,7 @@ struct TeamDetailView: View {
                     Button {
                         showingEditSheet = true
                     } label: {
-                        Label("Bearbeiten", systemImage: "pencil")
+                        Label(L10n.Navigation.edit, systemImage: "pencil")
                             .font(.body.weight(.semibold))
                             .frame(minWidth: 120)
                     }
@@ -92,7 +92,7 @@ struct TeamDetailView: View {
                     Button(role: .destructive) {
                         showingDeleteAlert = true
                     } label: {
-                        Label("Löschen", systemImage: "trash")
+                        Label(L10n.Navigation.delete, systemImage: "trash")
                             .font(.body.weight(.semibold))
                             .frame(minWidth: 120)
                     }

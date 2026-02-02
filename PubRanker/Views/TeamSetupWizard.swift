@@ -118,7 +118,7 @@ struct TeamSetupWizard: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Abbrechen")
+                    Text(L10n.Navigation.cancel)
                         .frame(maxWidth: .infinity)
                 }
                 .keyboardShortcut(.escape)
@@ -139,7 +139,7 @@ struct TeamSetupWizard: View {
                             Text("\(numberOfTeams) Teams erstellen")
                                 .monospacedDigit()
                         } else {
-                            Text("Fertig")
+                            Text(L10n.Navigation.done)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -384,10 +384,7 @@ struct TeamSetupWizard: View {
     }
     
     private func getTeamColorHex(for index: Int) -> String {
-        let colors = [
-            "#007AFF", "#FF3B30", "#34C759", "#FF9500", "#AF52DE", "#FF2D55",
-            "#32ADE6", "#FFCC00", "#00C7BE", "#5856D6", "#A2845E", "#30B0C7"
-        ]
+        let colors = AppConstants.teamColorPalette
         return colors[index % colors.count]
     }
     

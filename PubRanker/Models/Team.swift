@@ -12,7 +12,7 @@ import SwiftData
 final class Team {
     var id: UUID = UUID()
     var name: String = ""
-    var color: String = "#007AFF"
+    var color: String = "AppConstants.defaultTeamColor"
     var totalScore: Int = 0
     var roundScores: [RoundScore] = []
     var quizConfirmations: [QuizConfirmation] = []
@@ -22,13 +22,15 @@ final class Team {
     // Team Details
     var contactPerson: String = ""
     var email: String = ""
-    var isConfirmed: Bool = false // Deprecated: Verwende isConfirmed(for:) stattdessen
+    /// Globaler Bestätigungsstatus des Teams (für Team-Verwaltung ohne Quiz-Kontext).
+    /// Für quiz-spezifische Bestätigung verwende `isConfirmed(for:)` und `setConfirmed(for:isConfirmed:)`.
+    var isConfirmed: Bool = false
     var imageData: Data? = nil
     
     @Relationship(deleteRule: .nullify, inverse: \Quiz.teams)
     var quizzes: [Quiz]?
     
-    init(name: String, color: String = "#007AFF") {
+    init(name: String, color: String = "AppConstants.defaultTeamColor") {
         self.id = UUID()
         self.name = name
         self.color = color

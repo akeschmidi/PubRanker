@@ -633,6 +633,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "Place suivante";
 "presentation.reset" = "Réinitialiser";
+"presentation.place" = "PLACE";
+"presentation.close" = "Fermer";
 
 // MARK: - Traductions Manquantes
 "analysis.bestRanking" = "Meilleur classement";

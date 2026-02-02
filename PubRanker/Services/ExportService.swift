@@ -7,10 +7,12 @@
 
 import Foundation
 import SwiftData
+import os.log
 
 /// Service für Export-bezogene Operationen
 /// Verantwortlich für: Quiz als JSON oder CSV exportieren
 final class ExportService {
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "PubRanker", category: "Export")
 
     // MARK: - Export Functions
 
@@ -100,7 +102,7 @@ final class ExportService {
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
             return fileURL
         } catch {
-            print("Error saving export: \(error)")
+            Self.logger.error("Error saving export: \(error)")
             return nil
         }
     }

@@ -25,18 +25,14 @@ struct GlobalEditTeamSheet: View {
     private var plannedQuizzes: [Quiz]
 
     @State private var teamName = ""
-    @State private var selectedColor = "#007AFF"
+    @State private var selectedColor = AppConstants.defaultTeamColor
     @State private var contactPerson = ""
     @State private var email = ""
     @State private var isConfirmed = false
     @State private var selectedQuizIds: Set<UUID> = []
     @State private var showingImagePicker = false
 
-    let availableColors = [
-        "#007AFF", "#FF3B30", "#34C759", "#FF9500",
-        "#5856D6", "#FF2D55", "#5AC8FA", "#FFCC00",
-        "#AF52DE", "#00C7BE", "#32ADE6", "#FF6482"
-    ]
+    let availableColors = AppConstants.teamColorPalette
 
     var body: some View {
         NavigationStack {
@@ -221,13 +217,13 @@ struct GlobalEditTeamSheet: View {
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button(L10n.Navigation.cancel) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Speichern") {
+                    Button(L10n.Navigation.save) {
                         saveChanges()
                         dismiss()
                     }

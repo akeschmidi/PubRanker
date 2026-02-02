@@ -9,10 +9,12 @@ import Foundation
 import SwiftData
 import Combine
 import CloudKit
+import os.log
 
 @Observable
 @MainActor
 final class CloudKitSyncManager {
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "PubRanker", category: "CloudKitSync")
     enum SyncStatus: Equatable {
         case idle
         case syncing
@@ -49,31 +51,31 @@ final class CloudKitSyncManager {
     // MARK: - CloudKit Status Check
     
     func checkCloudKitStatus() async {
-        print("🔍 Prüfe CloudKit Status...")
-        
+        Self.logger.debug("Prüfe CloudKit Status...")
+
         // 1. Check iCloud Account Status
         do {
             let container = CKContainer(identifier: Self.containerIdentifier)
             let accountStatus = try await container.accountStatus()
-            
+
             switch accountStatus {
             case .available:
                 cloudKitAccountStatus = "✅ Verfügbar"
-                print("✅ iCloud Account verfügbar")
+                Self.logger.info("iCloud Account verfügbar")
             case .noAccount:
                 cloudKitAccountStatus = "❌ Nicht angemeldet"
                 syncStatus = .notAvailable("Nicht bei iCloud angemeldet")
-                print("❌ Kein iCloud Account")
+                Self.logger.warning("Kein iCloud Account")
             case .restricted:
                 cloudKitAccountStatus = "⚠️ Eingeschränkt"
                 syncStatus = .notAvailable("iCloud eingeschränkt")
-                print("⚠️ iCloud eingeschränkt")
+                Self.logger.warning("iCloud eingeschränkt")
             case .couldNotDetermine:
                 cloudKitAccountStatus = "❓ Unbekannt"
-                print("❓ iCloud Status unbekannt")
+                Self.logger.notice("iCloud Status unbekannt")
             case .temporarilyUnavailable:
                 cloudKitAccountStatus = "⏳ Temporär nicht verfügbar"
-                print("⏳ iCloud temporär nicht verfügbar")
+                Self.logger.notice("iCloud temporär nicht verfügbar")
             @unknown default:
                 cloudKitAccountStatus = "❓ Unbekannt"
             }
@@ -91,25 +93,25 @@ final class CloudKitSyncManager {
                     if error.code == .unknownItem {
                         // Das ist OK - heißt nur dass der Test-Record nicht existiert
                         containerStatus = "✅ Container erreichbar"
-                        print("✅ CloudKit Container erreichbar: \(Self.containerIdentifier)")
+                        Self.logger.info("CloudKit Container erreichbar: \(Self.containerIdentifier)")
                     } else if error.code == .notAuthenticated {
                         containerStatus = "❌ Nicht authentifiziert"
-                        print("❌ CloudKit nicht authentifiziert: \(error.localizedDescription)")
+                        Self.logger.error("CloudKit nicht authentifiziert: \(error.localizedDescription)")
                     } else if error.code == .permissionFailure {
                         containerStatus = "❌ Keine Berechtigung"
-                        print("❌ CloudKit Berechtigung fehlt: \(error.localizedDescription)")
+                        Self.logger.error("CloudKit Berechtigung fehlt: \(error.localizedDescription)")
                     } else {
                         containerStatus = "⚠️ \(error.localizedDescription)"
-                        print("⚠️ CloudKit Fehler: \(error)")
+                        Self.logger.warning("CloudKit Fehler: \(error)")
                     }
                 } catch {
                     containerStatus = "⚠️ \(error.localizedDescription)"
-                    print("⚠️ Unbekannter Fehler: \(error)")
+                    Self.logger.warning("Unbekannter Fehler: \(error)")
                 }
             }
         } catch {
             cloudKitAccountStatus = "❌ Fehler: \(error.localizedDescription)"
-            print("❌ CloudKit Status Fehler: \(error)")
+            Self.logger.error("CloudKit Status Fehler: \(error)")
         }
     }
 
@@ -143,16 +145,16 @@ final class CloudKitSyncManager {
             object: nil
         )
 
-        print("✅ CloudKit Sync Manager: Notifications registriert")
-        print("   Container: \(Self.containerIdentifier)")
+        Self.logger.info("CloudKit Sync Manager: Notifications registriert")
+        Self.logger.debug("Container: \(Self.containerIdentifier)")
     }
 
     @objc private func handleImportNotification(_ notification: Notification) {
         Task { @MainActor in
-            print("📥 CloudKit: Import-Event empfangen")
-            print("   Notification: \(notification.name.rawValue)")
+            Self.logger.debug("CloudKit: Import-Event empfangen")
+            Self.logger.trace("Notification: \(notification.name.rawValue)")
             if let userInfo = notification.userInfo {
-                print("   UserInfo: \(userInfo)")
+                Self.logger.trace("UserInfo: \(userInfo)")
             }
             syncStatus = .syncing
 
@@ -171,8 +173,8 @@ final class CloudKitSyncManager {
 
     @objc private func handleExportNotification(_ notification: Notification) {
         Task { @MainActor in
-            print("📤 CloudKit: Export-Event empfangen")
-            print("   Notification: \(notification.name.rawValue)")
+            Self.logger.debug("CloudKit: Export-Event empfangen")
+            Self.logger.trace("Notification: \(notification.name.rawValue)")
             syncStatus = .syncing
 
             try? await Task.sleep(for: .seconds(1))
@@ -193,25 +195,25 @@ final class CloudKitSyncManager {
         await checkCloudKitStatus()
         
         if case .notAvailable = syncStatus {
-            print("❌ CloudKit nicht verfügbar - Sync abgebrochen")
+            Self.logger.warning("CloudKit nicht verfügbar - Sync abgebrochen")
             return
         }
-        
-        print("🔄 Manueller Sync wird ausgelöst...")
-        print("   Container: \(Self.containerIdentifier)")
+
+        Self.logger.info("Manueller Sync wird ausgelöst...")
+        Self.logger.debug("Container: \(Self.containerIdentifier)")
         syncStatus = .syncing
 
         do {
             // Save erzwingt einen Export zu CloudKit
             try modelContext.save()
-            print("✅ ModelContext gespeichert")
+            Self.logger.debug("ModelContext gespeichert")
 
             // Kurze Wartezeit für CloudKit
             try await Task.sleep(for: .seconds(2))
 
             syncStatus = .success
             lastSyncDate = Date()
-            print("✅ Manueller Sync abgeschlossen")
+            Self.logger.info("Manueller Sync abgeschlossen")
 
             // Nach 3 Sekunden zurück zu idle
             try await Task.sleep(for: .seconds(3))
@@ -219,8 +221,8 @@ final class CloudKitSyncManager {
                 syncStatus = .idle
             }
         } catch {
-            print("❌ Sync-Fehler: \(error.localizedDescription)")
-            print("❌ Details: \(error)")
+            Self.logger.error("Sync-Fehler: \(error.localizedDescription)")
+            Self.logger.debug("Details: \(error)")
             syncStatus = .error(error.localizedDescription)
 
             // Nach 5 Sekunden zurück zu idle
@@ -238,28 +240,28 @@ final class CloudKitSyncManager {
         await checkCloudKitStatus()
         
         if case .notAvailable = syncStatus {
-            print("❌ CloudKit nicht verfügbar - Pull abgebrochen")
+            Self.logger.warning("CloudKit nicht verfügbar - Pull abgebrochen")
             return
         }
-        
-        print("📥 Pull von CloudKit wird gestartet...")
-        print("   Container: \(Self.containerIdentifier)")
+
+        Self.logger.info("Pull von CloudKit wird gestartet...")
+        Self.logger.debug("Container: \(Self.containerIdentifier)")
         syncStatus = .syncing
-        
+
         do {
             // 1. Speichere lokale Änderungen zuerst
             if modelContext.hasChanges {
                 try modelContext.save()
-                print("✅ Lokale Änderungen gespeichert")
+                Self.logger.debug("Lokale Änderungen gespeichert")
             }
-            
+
             // 2. Trigger einen Fetch durch eine Subscription-Refresh
             let container = CKContainer(identifier: Self.containerIdentifier)
             let database = container.privateCloudDatabase
-            
+
             // Fetch alle Subscriptions um einen Refresh zu triggern
             let subscriptions = try await database.allSubscriptions()
-            print("📋 Aktive Subscriptions: \(subscriptions.count)")
+            Self.logger.debug("Aktive Subscriptions: \(subscriptions.count)")
             
             // 3. Sende eine Notification um Views zu refreshen
             // Dies triggert SwiftData dazu, seinen Cache zu aktualisieren
@@ -270,19 +272,19 @@ final class CloudKitSyncManager {
             
             // 4. Kurze Wartezeit für CloudKit Import
             try await Task.sleep(for: .seconds(3))
-            
+
             syncStatus = .success
             lastSyncDate = Date()
-            print("✅ Pull von CloudKit abgeschlossen")
-            
+            Self.logger.info("Pull von CloudKit abgeschlossen")
+
             // Nach 3 Sekunden zurück zu idle
             try await Task.sleep(for: .seconds(3))
             if case .success = syncStatus {
                 syncStatus = .idle
             }
         } catch {
-            print("❌ Pull-Fehler: \(error.localizedDescription)")
-            print("❌ Details: \(error)")
+            Self.logger.error("Pull-Fehler: \(error.localizedDescription)")
+            Self.logger.debug("Details: \(error)")
             syncStatus = .error(error.localizedDescription)
 
             // Nach 5 Sekunden zurück zu idle
@@ -295,18 +297,18 @@ final class CloudKitSyncManager {
 
     /// Führt einen vollständigen Sync durch (Push + Pull)
     func fullSync() async {
-        print("🔄 Vollständiger Sync wird gestartet...")
-        
+        Self.logger.info("Vollständiger Sync wird gestartet...")
+
         // Erst pushen (lokale Änderungen hochladen)
         await forceSyncNow()
-        
+
         // Kurze Pause
         try? await Task.sleep(for: .seconds(1))
-        
+
         // Dann pullen (Remote-Änderungen holen)
         await pullFromCloud()
-        
-        print("✅ Vollständiger Sync abgeschlossen")
+
+        Self.logger.info("Vollständiger Sync abgeschlossen")
     }
     
     /// Führt eine vollständige Diagnose durch und gibt das Ergebnis zurück

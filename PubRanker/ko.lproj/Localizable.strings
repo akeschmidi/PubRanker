@@ -625,6 +625,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "다음 순위";
 "presentation.reset" = "초기화";
+"presentation.place" = "위";
+"presentation.close" = "닫기";
 
 // MARK: - Additional Missing Translations
 "analysis.bestRanking" = "최고 순위";

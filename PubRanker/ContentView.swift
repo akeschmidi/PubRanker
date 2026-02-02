@@ -202,6 +202,9 @@ struct ContentView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(GlassTabButtonStyle(isSelected: selectedWorkflow == phase))
+        .accessibilityLabel(phase.rawValue)
+        .accessibilityHint(phase.description)
+        .accessibilityAddTraits(selectedWorkflow == phase ? [.isSelected] : [])
         #if os(macOS)
         .help(phase.description)
         #endif
@@ -264,6 +267,8 @@ struct ContentView: View {
                     .foregroundStyle(Color.appTextSecondary)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Debug & Testdaten")
+            .accessibilityHint("Öffnet die Debug-Ansicht mit Testdaten")
             #if os(macOS)
             .help("Debug & Testdaten")
             #endif
@@ -278,6 +283,8 @@ struct ContentView: View {
                     .foregroundStyle(Color.appTextSecondary)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("App-Informationen")
+            .accessibilityHint("Zeigt Informationen über die App an")
             #if os(macOS)
             .help("App-Informationen")
             #endif

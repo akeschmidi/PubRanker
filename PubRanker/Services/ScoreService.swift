@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftData
+import os.log
+
+private let logger = Logger(subsystem: "com.pubranker", category: "ScoreService")
 
 /// Service für Score-bezogene Operationen
 /// Verantwortlich für: Punkte aktualisieren, löschen, Cache invalidieren
@@ -24,9 +27,8 @@ final class ScoreService {
     ///   - team: Das Team
     ///   - round: Die Runde
     ///   - points: Die Punktzahl
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
-    func updateScore(for team: Team, in round: Round, points: Int) -> Bool {
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func updateScore(for team: Team, in round: Round, points: Int) throws {
         team.addScore(for: round, points: points)
 
         // Invalidiere Quiz-Cache wenn vorhanden
@@ -34,10 +36,10 @@ final class ScoreService {
 
         do {
             try modelContext.save()
-            return true
+            logger.debug("Score für Team '\(team.name)' in Runde '\(round.name)' auf \(points) aktualisiert")
         } catch {
-            print("Error updating score: \(error)")
-            return false
+            logger.error("Fehler beim Aktualisieren des Scores für Team '\(team.name)': \(error.localizedDescription)")
+            throw ServiceError.saveFailed(underlying: error)
         }
     }
 
@@ -45,9 +47,8 @@ final class ScoreService {
     /// - Parameters:
     ///   - team: Das Team
     ///   - round: Die Runde
-    /// - Returns: true bei Erfolg, false bei Fehler
-    @discardableResult
-    func clearScore(for team: Team, in round: Round) -> Bool {
+    /// - Throws: ServiceError wenn das Speichern fehlschlägt
+    func clearScore(for team: Team, in round: Round) throws {
         team.roundScores.removeAll(where: { $0.roundId == round.id })
         team.calculateTotalScore()
 
@@ -56,10 +57,10 @@ final class ScoreService {
 
         do {
             try modelContext.save()
-            return true
+            logger.debug("Score für Team '\(team.name)' in Runde '\(round.name)' gelöscht")
         } catch {
-            print("Error clearing score: \(error)")
-            return false
+            logger.error("Fehler beim Löschen des Scores für Team '\(team.name)': \(error.localizedDescription)")
+            throw ServiceError.deleteFailed(underlying: error)
         }
     }
 

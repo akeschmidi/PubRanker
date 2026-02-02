@@ -8,10 +8,13 @@
 
 import SwiftUI
 import SwiftData
+import os.log
 
 #if canImport(AppKit)
 import AppKit
 #endif
+
+private let appLogger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "PubRanker", category: "App")
 
 @main
 struct PubRankerApp: App {
@@ -47,14 +50,14 @@ struct PubRankerApp: App {
         ])
 
         #if DEBUG
-        print("🔧 DEBUG BUILD - CloudKit Sync ist AKTIVIERT")
-        print("   Container: \(cloudKitContainerID)")
-        print("   Database: .automatic (private)")
-        print("   ⚠️ CloudKit ist im Debug-Modus aktiv für Sync-Tests")
+        appLogger.info("DEBUG BUILD - CloudKit Sync ist AKTIVIERT")
+        appLogger.debug("Container: \(cloudKitContainerID)")
+        appLogger.debug("Database: .automatic (private)")
+        appLogger.notice("CloudKit ist im Debug-Modus aktiv für Sync-Tests")
         #else
-        print("📦 RELEASE BUILD - CloudKit Sync ist AKTIVIERT")
-        print("   Container: \(cloudKitContainerID)")
-        print("   Database: .automatic (private)")
+        appLogger.info("RELEASE BUILD - CloudKit Sync ist AKTIVIERT")
+        appLogger.debug("Container: \(cloudKitContainerID)")
+        appLogger.debug("Database: .automatic (private)")
         #endif
 
         // Use iCloud with CloudKit in both debug and release mode
@@ -66,30 +69,30 @@ struct PubRankerApp: App {
 
         do {
             let container = try ModelContainer(for: schema, configurations: [configuration])
-            print("✅ ModelContainer erfolgreich erstellt")
-            print("✅ CloudKit Synchronisation aktiv")
-            print("   Container: \(cloudKitContainerID)")
-            print("   Tipp: Rechtsklick auf iCloud-Icon für Diagnose")
+            appLogger.info("ModelContainer erfolgreich erstellt")
+            appLogger.info("CloudKit Synchronisation aktiv")
+            appLogger.debug("Container: \(cloudKitContainerID)")
+            appLogger.debug("Tipp: Rechtsklick auf iCloud-Icon für Diagnose")
 
             // Enable remote change notifications for better sync
             // Das ermöglicht das Empfangen von Remote-Änderungen
             let storeDescription = container.configurations.first
             return container
         } catch {
-            print("❌ ModelContainer Fehler: \(error)")
-            print("❌ Details: \(error.localizedDescription)")
+            appLogger.error("ModelContainer Fehler: \(error)")
+            appLogger.debug("Details: \(error.localizedDescription)")
 
             // Versuche ohne CloudKit als Fallback
-            print("⚠️ Versuche Fallback ohne CloudKit...")
+            appLogger.warning("Versuche Fallback ohne CloudKit...")
             do {
                 let localConfiguration = ModelConfiguration(
                     schema: schema,
                     isStoredInMemoryOnly: false
                 )
-                print("⚠️ Fallback: Lokaler Speicher (keine iCloud-Sync)")
+                appLogger.warning("Fallback: Lokaler Speicher (keine iCloud-Sync)")
                 return try ModelContainer(for: schema, configurations: [localConfiguration])
             } catch {
-                print("❌ Auch lokaler Speicher fehlgeschlagen")
+                appLogger.error("Auch lokaler Speicher fehlgeschlagen")
             }
 
             // Last resort: try in-memory only
@@ -98,10 +101,10 @@ struct PubRankerApp: App {
                     schema: schema,
                     isStoredInMemoryOnly: true
                 )
-                print("⚠️ Fallback: In-Memory Speicher (Daten gehen beim Beenden verloren!)")
+                appLogger.warning("Fallback: In-Memory Speicher (Daten gehen beim Beenden verloren!)")
                 return try ModelContainer(for: schema, configurations: [memoryConfiguration])
             } catch {
-                fatalError("💥 FATAL: ModelContainer konnte nicht erstellt werden: \(error)")
+                fatalError("FATAL: ModelContainer konnte nicht erstellt werden: \(error)")
             }
         }
     }()

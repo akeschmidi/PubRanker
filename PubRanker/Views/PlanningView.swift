@@ -95,7 +95,7 @@ struct PlanningView: View {
             }
         } message: {
             if let quiz = quizToDelete {
-                Text("Möchtest du '\(quiz.name)' wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.")
+                Text(L10n.Quiz.Delete.confirmMessage(quiz.name))
             }
         }
     }

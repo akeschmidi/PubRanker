@@ -23,7 +23,10 @@
       "Bash(git rev-list:*)",
       "Bash(wc:*)",
       "Bash(comm:*)",
-      "Bash(ruby add_infoplist.rb:*)"
+      "Bash(ruby add_infoplist.rb:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []

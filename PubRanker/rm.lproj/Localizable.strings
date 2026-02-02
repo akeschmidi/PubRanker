@@ -623,6 +623,8 @@
 // MARK: - Presentation Mode
 "presentation.nextPlace" = "Proxima plazza";
 "presentation.reset" = "Reset";
+"presentation.place" = "PLAZZA";
+"presentation.close" = "Serrar";
 
 // MARK: - Translaziuns Mancantas
 "analysis.bestRanking" = "Meglra Plazzaziun";
